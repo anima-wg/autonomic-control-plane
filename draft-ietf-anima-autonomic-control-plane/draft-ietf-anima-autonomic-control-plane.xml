@@ -13,8 +13,9 @@
 	<front>
 		<title abbrev="An Autonomic Control Plane">An Autonomic Control Plane</title>
 		<author role="editor" fullname="Michael H. Behringer" initials="M." surname="Behringer">
-			<email>mchael.h.behringer@gmail.com</email>
-			</address>
+			<address>
+			    <email>mchael.h.behringer@gmail.com</email>
+                        </address>
 		</author>
 		<author fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
 			<organization abbrev="Huawei">
