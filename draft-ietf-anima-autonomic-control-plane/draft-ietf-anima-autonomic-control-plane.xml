@@ -13,16 +13,7 @@
 	<front>
 		<title abbrev="An Autonomic Control Plane">An Autonomic Control Plane</title>
 		<author role="editor" fullname="Michael H. Behringer" initials="M." surname="Behringer">
-			<organization>Cisco Systems</organization>
-			<address>
-				<postal>
-					<street>Building D, 45 Allee des Ormes</street>
-					<city>Mougins</city>
-					<region/>
-					<code>06250</code>
-					<country>France</country>
-				</postal>
-			<email>mbehring@cisco.com</email>
+			<email>mchael.h.behringer@gmail.com</email>
 			</address>
 		</author>
 		<author fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
