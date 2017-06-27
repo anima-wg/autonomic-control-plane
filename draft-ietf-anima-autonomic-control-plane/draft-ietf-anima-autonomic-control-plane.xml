@@ -808,7 +808,7 @@ details.</t>
 			<section title="draft-ietf-anima-autonomic-control-plane-07">
 				<t><list style="symbols">
                                 <t>Changed author association.</t>
-                                <t>Improved ACP connect setion (after confusion about term came up in stale connectivity review). Added picture, defined complete terminology.</t>
+                                <t>Improved ACP connect setion (after confusion about term came up in stable connectivity review). Added picture, defined complete terminology.</t>
 				</list></t>
   
 			</section>

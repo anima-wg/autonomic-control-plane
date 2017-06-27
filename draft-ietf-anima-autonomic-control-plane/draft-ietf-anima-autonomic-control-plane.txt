@@ -1867,7 +1867,7 @@ Internet-Draft         An Autonomic Control Plane             March 2017
    o  Changed author association.
 
    o  Improved ACP connect setion (after confusion about term came up in
-      stale connectivity review).  Added picture, defined complete
+      stable connectivity review).  Added picture, defined complete
       terminology.
 
 14.  References
