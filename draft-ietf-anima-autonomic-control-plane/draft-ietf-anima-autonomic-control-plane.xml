@@ -9,7 +9,7 @@
 <?rfc iprnotified="no" ?>
 <!-- Change to "yes" if someone has disclosed IPR for the draft -->
 <?rfc compact="yes"?>
-<rfc ipr="trust200902" docName="draft-ietf-anima-autonomic-control-plane-06" category="std">
+<rfc ipr="trust200902" docName="draft-ietf-anima-autonomic-control-plane-07" category="std">
 	<front>
 		<title abbrev="An Autonomic Control Plane">An Autonomic Control Plane</title>
 		<author role="editor" fullname="Michael H. Behringer" initials="M." surname="Behringer">
@@ -580,12 +580,38 @@ details.</t>
 		<!-- self-creation -->
 
 		<section anchor="workarounds" title="Workarounds for Non-Autonomic Nodes">
-			<section anchor="NMS" title="Connecting a Non-Autonomic Controller / NMS system">
+			<section anchor="NMS" title="Non-Autonomic Controller / NMS system (ACP connect)">
 				<t>The Autonomic Control Plane can be used by management systems, such as controllers or network management system (NMS) hosts (henceforth called simply "NMS hosts"), to connect to devices through it. For this, an NMS host must have access to the ACP. The ACP is a self-protecting overlay network, which allows by default access only to trusted, autonomic systems. Therefore, a traditional, non-autonomic NMS system does not have access to the ACP by default, just like any other external device.</t>
-				<t>If the NMS host is not autonomic, i.e., it does not support autonomic negotiation of the ACP, then it can be brought into the ACP by explicit configuration. On an adjacent autonomic node with ACP, the interface with the NMS host can be configured as "ACP Connect". In this case, all devices on this port, including the NMS host, is entirely and exclusively inside the ACP. It would likely require a second interface outside the ACP for connections between the NMS host and administrators, or Internet based services. This mode of connecting an NMS host has security consequences: All systems and processes connected to this implicitly trusted "ACP Connect" interface have access to all autonomic nodes on the entire ACP, without further authentication. Thus, this connection must be physically controlled. </t>
-				<t>The non-autonomic NMS host must be routed in the ACP. This involves two parts: 1) the NMS host must point default to the AN device for the ULA prefix used inside the ACP, and 2) the prefix used between AN node and NMS host must be announced into the ACP, and distributed there. </t>
-				<t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment. </t>
-				<t>If an NMS host is autonomic itself, it negotiates access to the ACP with its neighbor, like any other autonomic node. </t>
+			        <t>If the NMS host is not autonomic, i.e., it does not support autonomic negotiation of the ACP, then it can be brought into the ACP by explicit configuration. To support connections to adjacent non-autonomic nodes, an autonomic node with ACP must support "ACP connect" (sometimes also connect "autonomic connect"):</t>
+
+				<t>"ACP connect" is a function on an autonomic device that we call an "ACP edge device". With "ACP connect", interfaces on the device can be configured to be put into the ACP VRF. The ACP is then accessible to other (NOC) systems on such an interface without those systems having to support any ACP discovery or ACP channel setup. This is also called "native" access to the ACP because to those (NOC) systems the interface looks like a normal network interface (without any encryption/novel-signaling).</t>
+
+				<t><figure title="ACP connect" anchor='acp-connect'>
+   				<artwork>
+                                   data-plane "native" (no ACP)
+                                              .
+  +-----------+           +-----------+       .         +-------------+
+  |           |           | Autonomic |       v         |             |+
+  |           |           | Device    |-----------------|             |+
+  | Autonomic |-----------|"ACP edge  |                 | NOC Device  ||
+  | Device    |    ^      | device"   O-----------------| "NMS hosts" ||
+  |           |    .      |           | .          ^    |             ||
+  +-----------+    .      +-----------+  .         .    +-------------+|
+                   .                     .         .     +-------------+
+            data-plane "native"          .    ACP "native" (unencrypted)
+            + ACP auto-negotiated        .
+              and encrypted         ACP connect interface
+                                        eg: "vrf ACP native" (config)
+				</artwork>
+				</figure></t>
+
+				<t>ACP connect has security consequences: All systems and processes connected via ACP connect have access to all autonomic nodes on the entire ACP, without further authentication. Thus, the ACP connect interface and (NOC) systems connected to it must be physically controlled/secured. </t>
+
+				<t>The ACP connect interface must be configured with some IPv6 address prefix. This prefix could use the ACP address prefix or could be different. It must be distributed into the ACP routing protocol unless the ACP device is the root of the ACP routing protocol (eg: when all other autonomic devices have a default route in the ACP towards it). The NOC hosts must route the ACP address prefix to the ACP edge devices address on the ACP connect interface.</t>
+
+<t>An ACP connect interface provides exclusively access to only the ACP. This is likely insufficient for many NOC hosts. Instead, they would likely require a second interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or even for direct access to the data plane. The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment. </t>
+
+				<t>Note: If an NMS host is autonomic itself, it negotiates access to the ACP with its neighbor, like any other autonomic node and then runs a normal (encrypted) ACP connection to the neighbor. </t>
 			</section>
 			<!-- NMS -->
 			
@@ -776,6 +802,13 @@ details.</t>
                                 <t>detailed dTLS profile - dTLS with any additional negotiation/signaling channel.</t>
                                 <t>Fixed up text for ACP/GRE encap. Removed text claiming its incompatible with non-GRE IPsec and detailled it.</t>
                                 <t>Added text to suggest admin down interfaces should still run ACP.</t>
+				</list></t>
+  
+			</section>
+			<section title="draft-ietf-anima-autonomic-control-plane-07">
+				<t><list style="symbols">
+                                <t>Changed author association.</t>
+                                <t>Improved ACP connect setion (after confusion about term came up in stale connectivity review). Added picture, defined complete terminology.</t>
 				</list></t>
   
 			</section>
