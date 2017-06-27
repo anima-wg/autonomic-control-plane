@@ -86,7 +86,7 @@ this complexity extends into that automation software.</t>
 OAM networks for the communications infrastructure in service providers. This concept
 was standardized in G.7712/Y.1703 and called "Data Communications Networks" (DCN). These
 where (and still are) physically separate IP(/MPLS) networks that provide access to OAM
-interfaces of all equipment that had to be managed, from PSTN (Public Switched Telephone Tetwork)
+interfaces of all equipment that had to be managed, from PSTN (Public Switched Telephone Network)
 switches over optical equipment
  to nowadays ethernet and IP/MPLS production network equipment.</t>
 
@@ -133,12 +133,12 @@ ACP to build actual OAM solutions. This is the current scope of this document.</
 components interact and <xref target="RFC7575" /> for
 concepts and terminology of ANI and autonomic networks.</t>
 
-<t>This section describes stable connectibity for centralized OAM operations via ACP/ANI
-starting by what we expect to be the most likely easiest short-term deployment option.  It
+<t>This section describes stable connectivity for centralized OAM operations via ACP/ANI
+starting by what we expect to be the easiest short-term deployment option.  It
 then describes limitation/challenges of that approach and their solutions/workarounds to finish
 with the preferred target option of autonomic NOC devices in <xref target="autonomic-devices" />.</t>
 
-<t>This order was choosen because it helps to explain how simple one can start using the ACP,
+<t>This order was choosen because it helps to explain how simple initial use of ACP can be,
 how difficult workarounds can become (and therefore what to avoid), and finally because one very
 promising long-term solution alternative is exactly like the most easy short-term solution only virtualized
 and automated.</t>
@@ -183,7 +183,7 @@ stable connectivity for management of any network: IPv4 only, dual-stack or IPv6
 <t>This setup is sufficient for troubleshooting OAM operations such as SSH into network
 devices, NMS that perform SNMP read operations for status checking, for software
 downloads into autonomic devices and so on. In conjunction with otherwise unmodified
-OAM operations via separate NMS hosts/applications it can provide a good subset of the 
+OAM operations via separate NMS hosts it can provide a good subset of the 
 interesting stable connectivity goals from the ACP.</t>
 
 <t>Because the ACP provides 'only' for IPv6 connectivity, and because the addressing
@@ -200,7 +200,7 @@ the ACP address of that device could be mapped to devicename-acp.noc.exmaple.com
       <!-- simple -->
       <section anchor="limitations" title="Challenges and limitation of simple connectivity">
 
-<t>This simple connectivity of non-autonomic NOC application devices suffers from a range of possible challenges (operators may not be able to do it this way) or limitations (operator can not achieve desired goals with this setup). The following list summarizes these and the following sections describe additional mechanisms to overcome them.</t>
+<t>This simple connectivity of non-autonomic NMS hosts suffers from a range of possible challenges (operators may not be able to do it this way) or limitations (operator can not achieve desired goals with this setup). The following list summarizes these and the following sections describe additional mechanisms to overcome them.</t>
 
 <t>Note that these challenges and limitations exist because the ACP is primarily designed to
 support distributed ASA in the most leightweight fashion but not mandatorily require support
@@ -210,14 +210,14 @@ describes additional (short term) workarounds and (long term) extensions.</t>
 <t>
         <list style="numbers">
 
-<t>Limitation: NOC applications can not directly probe whether the desired so called 'data-plane'
+<t>Limitation: NMS hosts can not directly probe whether the desired so called 'data-plane'
 network connectivity works because they do not directly have access to it. This
 problem is not dissimilar to probing connectivity for other services (such as VPN
 services) that they do not have direct access to, so the NOC may already employ
 appropriate mechanisms to deal with this issue (probing proxies).
  See <xref target="simultaneous" /> for solutions.</t>
 
-<t>Challenge: NOC applications need to support IPv6 which often is still not the case in many enterprise networks.
+<t>Challenge: NMS hosts need to support IPv6 which often is still not possible in many enterprise networks.
 See <xref target="ipv4-only" /> for (highly undesirable) workarounds.</t>
 
 <t>Limitation: Performance of the ACP will be limited versus normal 'data-plane' connectivity. The
@@ -264,17 +264,17 @@ needs to be done via simple IPv6 static routes in the NOC host.</t>
 <t>Providing two virtual (eg: dot1q subnet) connections into NOC hosts may be
 seen as undesired complexity. In that case the routing policy to provide access
 to both ACP and data-plane via IPv6 needs to happen in the NOC network itself:
-The NOC application device gets a single attachment interface but still with the
+The NMS host gets a single attachment interface but still with the
 same two IPv6 addresses as in before - one for use towards the ACP, one towards
-the data-plane. The first-hop router connecting to the NOC application device would
+the data-plane. The first-hop router connecting to the NMS host would
 then have separate interfaces: one towards the data-plane, one towards the ACP. 
-Routing of traffic from NOC application hosts would then have to be based on the
+Routing of traffic from NMS hosts would then have to be based on the
 source IPv6 address of the host: Traffic from the address designated for ACP use
 would get routed towards the ACP, traffic from the designated data-plane address
 towards the data-plane.</t>
 
-<t>In the most simple case, we get the following topology: Existing NOC application
-devices connect via an existing NOClan and existing first hop Rtr1 to the data-plane.
+<t>In the most simple case, we get the following topology: Existing NMS hosts 
+connect via an existing NOClan and existing first hop Rtr1 to the data-plane.
 Rtr1 is not made autonomic, but instead the edge router of the Autonomic network
 ANrtr is attached via a separate interface to Rtr1 and ANrtr provides access
 to the ACP via ACPaccessLan. Rtr1 is configured with the above described IPv6
@@ -314,7 +314,7 @@ cable into two ports of ANrtr1 to connect the data-plane and ACP VRF as shown in
       <section anchor="ipv4-only" title="IPv4 only NMS hosts">
 
 <t>The ACP does not support IPv4 to ensure long term simplicity: Single stack IPv6
-management of the network via ACP and (as needed) Data Plane. Independent of whether the
+management of the network via ACP and (as needed) data plane. Independent of whether the
 data plane is dual-stack, has IPv4 as a service or is single stack IPv6. Dual plane
 management, IPv6 for the ACP, IPv4 for the data plane is likewise an architecturally
 simple option.</t>
@@ -336,9 +336,9 @@ here because it is a short term deployment challence specific to the operations 
 
 <t>To bridge an IPv4 only management plane with the ACP, IPv4 to IPv6 NAT can be used.
 This NAT setup could for example be done in Rt1r1 in above picture to also support IPv4 only
- NOC application devices connected to NOClan.</t>
+ NMS hots connected to NOClan.</t>
 
-<t>To support connections initiated from IPv4 only NOC applications towards the ACP
+<t>To support connections initiated from IPv4 only NMS hosts towards the ACP
 of network devices, it is necessary to create a static mapping of ACP IPv6 addresses
 into an unused IPv4 address space and dynamic or static mapping of the IPv4 NOC
 application device address (prefix) into IPv6 routed in the ACP. The main issue
@@ -348,20 +348,20 @@ ACP IPv6 addresses is too long to be mapped directly into IPv4 on a prefix basis
 
 <t>One could implement in router software dynamic mappings by leveraging DNS, but it
 seems highly undesirable to implement such complex technologies for something that
-ultimately is a temporary problem (IPv4 only NOC application devices). With
+ultimately is a temporary problem (IPv4 only NMS hosts). With
 today's operational directions it is likely more preferable to automate the setup
 of 1:1 NAT mappings in that NAT router as part of the automation process of
 network device enrollment into the ACP.</t>
 
 <t>The ACP can also be used for connections initiated by the network device into the
-NOC application devices. For example syslog from autonomic devices. In this case,
-static mappings of the NOC application devices IPv4 addresses are required. This
+NMS hosts. For example syslog from autonomic devices. In this case,
+static mappings of the NMS hosts IPv4 addresses are required. This
 can easily be done with a static prefix mapping into IPv6.</t>
 
 <t>Overall, the use of NAT is especially subject to the RoI (Return of Investment) considerations, but the
 methods described here may not be too different from the same problems encountered
 totally independent of AN/ACP when some parts of the network are to introduce IPv6 but 
-NOC application devices are not (yet) upgradeable.</t>
+NMS hosts are not (yet) upgradeable.</t>
 
       <!-- ipv4-only -->
       </section>
@@ -377,7 +377,7 @@ full encryption across the ACP to achieve the desired security. </t>
 ACP and network device designs that better tender to the needs of a separate OAM
 plane, but it is wise to plan for even long-term designs of the solution that does
 NOT depend on high-performance of the ACP. This is opposite to the expectation that
-future NOC application devices will have IPv6, so that any considerations for IPv4/NAT
+future NMS hosts will have IPv6, so that any considerations for IPv4/NAT
 in this solution are temporary.</t>
 
 <t>To solve the expected performance limitations of the ACP, we do expect to have
@@ -389,13 +389,13 @@ early stages of device bootstrap, failures, provisioning mistakes or during netw
 configuration changes.</t>
 
 <t>The desired policy is therefore as follows: In the absence of further security
-considerations (see below), traffic between NOC application and AN devices should
+considerations (see below), traffic between NMS hosts and AN devices should
 prefer data-plane connectivity and resort only to using the ACP when necessary,
 unless it is an operation known to be so much tied to the cases where the ACP
 is necessary that it makes no sense to try using the data plane. An example
 here is of course the SSH connection from the NOC into a network device to troubleshoot
-network connectivity. This could easily always rely on the ACP. Likewise, if a
-NOC application is known to transmit large amounts of data, and it uses the ACP,
+network connectivity. This could easily always rely on the ACP. Likewise, if an
+NMS host is known to transmit large amounts of data, and it uses the ACP,
 then its performance need to be controlled so that it will not overload the
 ACP performance. Typical examples of this are software downloads.</t>
 
@@ -405,10 +405,10 @@ ACP performance. Typical examples of this are software downloads.</t>
 (ACP and the various data plane addresses). Every action of the NOC system would
 indicate via a "path-policy" what type of connection it needs (eg: only data-plane,
 ACP-only, default to data-plane, fallback to ACP,...). A connection policy manager
-would then build connection to the address using the right address(es). Alas, such
-NOC would still have to be built. Shorter term, a common practice is to identify
-different paths to a device via different names (eg: loopback vs. interface addresses).
-This approach can be expanded to ACP uses, with NOC system local names or DNS:</t>
+would then build connection to the target using the right address(es). Shorter term,
+a common practice is to identify different paths to a device via different names
+(eg: loopback vs. interface addresses).  This approach can be expanded to ACP uses,
+whether it uses NOC system local names or DNS. We describe example schemes using DNS:</t>
 
 <t>DNS can be used to set up names for the same network devices but with different
 addresses assigned: One name (name.noc.example.com) with only the data-plane address(es)
@@ -446,7 +446,7 @@ itself is non-autonomic is as mentioned in the beginning a security issue. It al
 results as shown in the previous paragraphs in a range of connectivity considerations,
 some of which may be quite undesirable or complex to operationalize.</t>
 
-<t>Making NOC application devices autonomic and having them participate in the ACP
+<t>Making NMS hosts autonomic and having them participate in the ACP
 is therefore not only a highly desirable solution to the security issues, but can
 also provide a likely easier operationalization of the ACP because it minimizes
 NOC-special edge considerations - the ACP is simply built all the way automatically,
@@ -459,9 +459,9 @@ for the ACP and at least the host side of IPv6 routing setup for the ACP. Minima
 this could all be implemented as an application and be made available to the host
 OS via eg: a tap driver to make the ACP show up as another IPv6 enabled interface.</t>
 
-<t>Having said this: If the structure of NOC applications is transformed through
+<t>Having said this: If the structure of NMS hosts is transformed through
 virtualization anyhow, then it may be considered equally secure and appropriate to construct
-a (physical) NOC application system by combining a virtual AN/ACP enabled router with
+(physical) NMS host system by combining a virtual AN/ACP enabled router with
 non-AN/ACP enabled NOC-application VMs via a hypervisor, leveraging the configuration
 options described in the previous sections but just virtualizing them.</t>
 
@@ -475,15 +475,15 @@ encryption protected, especially when considering the above described use of
 AN application devices. If instead the data-plane is used, then this is not the
 case anymore unless it is done by the application.</t>
 
-<t>The simplest solution for this problem exists when using AN NOC application devices,
-because in that case the communicating AN NOC application and the AN network device
+<t>The simplest solution for this problem exists when using AN capable NMS hosts,
+because in that case the communicating AN capable NMS host and the AN network device
 have certificates through the AN enrollment process that they can mutually trust
 (same AN domain). In result, data-plane connectivity that does support this can simply
 leverage TLS/dTLS with mutual AN-domain certificate authentication - and does not incur
 new key management.</t>
 
 <t>If this automatic security benefit is seen as most important, but a "full" ACP
-stack into the NOC application device is unfeasible, then it would still be possible
+stack into the NMS host is unfeasible, then it would still be possible
 to design a stripped down version of AN functionality for such NOC hosts that
 only provides enrollment of the NOC host into the AN domain to the extend that
 the host receives an AN domain certificate, but without directly participating in the
@@ -491,7 +491,7 @@ ACP afterwards. Instead, the host would just leverage  TLS/dTLS using its AN cer
 via the data-plane with AN network devices as well as indirectly via the ACP with the
  above mentioned in-NOC network edge connectivity into the ACP.</t>
 
-<t>When using the ACP itself, TLS/dTLS for the transport layer between NOC application
+<t>When using the ACP itself, TLS/dTLS for the transport layer between NMS hosts
 and network device is somewhat of a double price to pay (ACP also encrypts) and could
 potentially be optimized away, but given the assumed lower performance of the ACP,
 it seems that this is an unnecessary optimization.</t>
@@ -506,19 +506,19 @@ direction:</t>
 
 <t>
 <list style="numbers">
-<t>NOC applications should at least support IPv6. IPv4/IPv6 NAT in the network to
+<t>NMS hosts should at least support IPv6. IPv4/IPv6 NAT in the network to
 enable use of ACP is long term undesirable. Having IPv4 only applications automatically
 leverage IPv6 connectivity via host-stack options is likely non-feasible (NOTE:
 this has still to be vetted more).</t>
 
-<t>Build the ACP as a lightweight application for NOC application devices so ACP
-extends all the way into the actual NOC application devices.</t>
+<t>Build the ACP as a lightweight application for NMS hosts so ACP
+extends all the way into the actual NMS hosts.</t>
 
 <t>Leverage and as necessary enhance MP-TCP with automatic dual-connectivity: If
 the MP-TCP unaware application is using ACP connectivity, the policies used should
 add sub-flow(s) via the data-plane and prefer them.</t>
 
-<t>Consider how to best map NOC application desires to underlying transport mechanisms:
+<t>Consider how to best map NMS host desires to underlying transport mechanisms:
 With the above mentioned 3 points, not all options are covered. Depending on the
 OAM operation, one may still want only ACP, only data-plane, or automatically
 prefer one over the other and/or use the ACP with low performance or high-performance
@@ -619,7 +619,7 @@ to ensure correct and consistent DNS entries.</t>
 own operations but that they should not be made available publically
 for "security" by concealment reasons, then the case of ACP DNS entries is probably
 one of the least problematic use cases for split-DNS: The ACP DNS
-names are only needed for the NOC applications intending to use the ACP -
+names are only needed for the NMS hosts intending to use the ACP -
 but not network wide across the enterprise.</t>
 
   </section>

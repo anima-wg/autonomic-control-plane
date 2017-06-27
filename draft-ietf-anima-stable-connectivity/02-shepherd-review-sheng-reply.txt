@@ -16,6 +16,8 @@ based on your feedback below
 https://github.com/anima-wg/autonomic-control-plane/tree/master/draft-ietf-anima-autonomic-control-plane
 https://github.com/anima-wg/autonomic-control-plane/tree/master/draft-ietf-anima-stable-connectivity
 
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-02.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity.txt
+
 On Tue, Jun 20, 2017 at 08:00:33AM +0000, Sheng Jiang wrote:
 > Hi, authors of draft-ietf-anima-stable-connectivity,
 > 
@@ -25,8 +27,8 @@ On Tue, Jun 20, 2017 at 08:00:33AM +0000, Sheng Jiang wrote:
 
 Yes, it is a mess. But it is documenting an actual deployment experience with an enterprise
 customer. TAnd my understanding is tht it would be a quite common scenario for enterprises. There
-was just last week a very nice RTG area WG chair tutorial (see https://trac.ietf.org/trac/rtg/wiki/WGChairTraining)
-that to me reconfirmed the ongoing challenges with IPv6 only management planes.
+was just recently a very nice RTG area WG chair tutorial that to me reconfirmed the ongoing
+challenges with IPv6 only management planes.
 
 I have added paragraphs to justify the need for this section and that its all undesirable workarounds
 Please check. To me, this messy section is the price we have to pay so that the ACP
@@ -43,6 +45,8 @@ Yes, IPv6 is a precondition. If a deployment can not meet this precondition, tha
 > I don't understand point 4. What does "exposing the ACP natively" mean?
 
 That is the term that was defined in ACP CP draft, section 6.1. Reading through that section, i improved it in the ACP section, and i updated the text about it in stable connectivity.
+
+Oh, and this change had me change the term "NOC application device" to "NMS host" throughout the document because that is the term used in the ACP draft.
 
 > Thirdly, I have issues to use names to distinguish the path selection policies.
 > This is a chicken&egg issue in the autonomic scenario.
