@@ -7,16 +7,31 @@ Subject: Re: [Anima] Review of draft-ietf-anima-stable-connectivity-02
 Reply-To: 
 In-Reply-To: <5D36713D8A4E7348A7E10DF7437A4B927CDE5CCF@NKGEML515-MBX.china.huawei.com>
 
-Thanks a lot!
+Thanks a lot! 
 
-I have pushed the stable connectivity draft into git as well as the ACP draft because
-i was not only fixing up the stable connectivity draft, but also made improvements to ACP
-based on your feedback below
+Integrated fixes for all comments (see inline discuss below). Pushed stable connectivity draft
+into www.github.com/anima-wg/autonomic-control-plane together with ACP draft because i ended up
+having to do a fix for the ACP draft as a result of your comments.
 
-https://github.com/anima-wg/autonomic-control-plane/tree/master/draft-ietf-anima-autonomic-control-plane
-https://github.com/anima-wg/autonomic-control-plane/tree/master/draft-ietf-anima-stable-connectivity
+Diff between -02 and fixed up stable connectivity draft here: 
 
 http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-02.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity.txt
+
+If you are fine with the fixes let me know, and i'll push it to datatracker as -03.
+
+If not ok. feel free to use email or now also add issue to the git.
+
+Raw txt/git files of fixed stable connectivity text:
+
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity.txt
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity.xml
+
+Diff for change done in ACP (explaining ACP connect better):
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-06.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Cheers
+    Toerless
 
 On Tue, Jun 20, 2017 at 08:00:33AM +0000, Sheng Jiang wrote:
 > Hi, authors of draft-ietf-anima-stable-connectivity,
