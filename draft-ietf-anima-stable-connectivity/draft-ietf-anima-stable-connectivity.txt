@@ -873,7 +873,7 @@ Internet-Draft         AN Stable Connectivity OAM          February 2017
    Balaji, Steinthor Bjarnason, Yves Herthoghs, Sebastian Meissner, Ravi
    Kumar Vadapalli.  The author would also like to thank Michael
    Richardson, James Woodyatt and Brian Carpenter for their review and
-   comments.
+   comments. Special thanks for Sheng Jiangs thorough review and suggestions.
 
 7.  Change log [RFC Editor: Please remove]
 
