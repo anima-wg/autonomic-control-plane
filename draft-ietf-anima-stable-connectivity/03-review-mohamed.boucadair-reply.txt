@@ -1,0 +1,44 @@
+
+Thank you so much, Mohamed for your thorough review. Especially all that
+tightening of text around my redundant verbose side sentence redundancy verbosity.
+It is always hard to see those myself, but these reviews should help next docs
+to become tigher from the beginning.
+
+Wrt to some of your notes:
+
+- Better explained in the beginning of 1.1 what the doc is about. Pls. check.
+
+- OAM {functions, procedures, operations} -> OAM. As i think that is what you suggested.
+  Still use terms like OAM protocols, OAM devices and the like.
+
+- Changed wording in section 2.1 re NAT (-> workaround, not recommended but potentially necessary).
+
+- Re your question about:
+  "Note that even though the ACP only uses IPv6, it can and should be
+  used to provide stable connectivity for management of any network:
+  IPv4 only, dual-stack or IPv6 only."
+
+  This sentence was added as response to shepherd review from Sheng who thought it would
+  not be clear that the use of ACP would equally apply if the actual network services
+  desired would only be IPv4. I tried to rewrite the sentence without changing the intent
+  of it, but hopefully make that point clearer.
+
+- What are "logical names" in section 2.1.1. I did add two sentences to explain this better,
+  the example was actually bad. This was actually part of discussions with enterprise customers
+  that know their IPv4 address space inside out, just in case you think this sounds crazy ;-)
+
+- "IPv4 to IPv6 NAT can be used." - Do you mean RFC7915
+  I intentionally did not want to elaborate on the details of which of the 15? different
+  NAT options can be used best. When i worked on this, i got a working setup with NAT-PT and i think
+  also NAT64 statefull (RFC6146). This was mostly driven by whatever old router OS versions
+  where available.Also your note re. rfc7757. The main issue is that the stateless translations would
+  require matching address structures in he ACP, and i certainly would not want to fudge the ACP design
+  to support NAT better. Rather use some horrific NAT option. That should even accelerate pushing IPv6
+  into NOC/OAM equipment. 
+
+  So, i didn't add any pointers to those RFCs you mentioned. I think its good if this is
+  left as an exercise to the reader ;-)
+
+- "I’m afraid NoO "  - i did not get that.
+
+
