@@ -9,7 +9,7 @@
 <?rfc iprnotified="no" ?>
 <!-- Change to "yes" if someone has disclosed IPR for the draft -->
 <?rfc compact="yes"?>
-<rfc ipr="trust200902" docName="draft-ietf-anima-autonomic-control-plane-08" category="std">
+<rfc ipr="trust200902" docName="draft-ietf-anima-autonomic-control-plane-09" category="std">
 	<front>
 		<title abbrev="An Autonomic Control Plane (ACP)">An Autonomic Control Plane (ACP)</title>
 		<author role="editor" fullname="Michael H. Behringer" initials="M." surname="Behringer">
@@ -43,7 +43,7 @@
 			</address>
 		</author>
 
-		<date day="20" month="Jul" year="2017"/>
+		<date day="27" month="Jul" year="2017"/>
 
 		<area>Operations and Management</area>
 		<workgroup>ANIMA WG</workgroup>
@@ -1072,9 +1072,11 @@ with STP changes.</t>
 
 				<t>ACP connect has security consequences: All systems and processes connected via ACP connect have access to all autonomic nodes on the entire ACP, without further authentication. Thus, the ACP connect interface and (NOC) systems connected to it must be physically controlled/secured. </t>
 
-				<t>The ACP connect interface must be configured with some IPv6 address prefix. This prefix could use the ACP address prefix or could be different. It must be distributed into the ACP routing protocol unless the ACP device is the root of the ACP routing protocol (eg: when all other autonomic devices have a default route in the ACP towards it). The NOC hosts must route the ACP address prefix to the ACP edge devices address on the ACP connect interface.</t>
+				<t>The ACP connect interface must be configured with some IPv6 address prefix. This prefix could use the ACP address prefix or could be different. It MUST be distributed into the ACP routing protocol unless the ACP device is the root of the ACP routing protocol (eg: when all other autonomic devices have a default route in the ACP towards it). The NMS hosts must route the ACP address prefix to the ACP edge devices address on the ACP connect interface.</t>
 
-<t>An ACP connect interface provides exclusively access to only the ACP. This is likely insufficient for many NOC hosts. Instead, they would likely require a second interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or even for direct access to the data plane. The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment. </t>
+<t>To allow for auto-configuration of NMS hosts, the ACP edge device and NMS hosts using ACP connect SHOULD support <xref target="RFC4191"/>. The ACP edge device should announce the whole ACP ULA prefix via that standards Router Advertisement signaling option. It should also announce the default route (::/) with a lifetime of 0. In result, NMS hosts supporting RFC4191 will route the ACP prefix via the ACP edge device, but will not route the default route via it.</t>
+
+<t>An ACP connect interface provides exclusively access to only the ACP. This is likely insufficient for many NMS hosts. Instead, they would likely require a second interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or even for direct access to the data plane. The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment. </t>
 
 				<t>Note: If an NMS host is autonomic itself, it negotiates access to the ACP with its neighbor, like any other autonomic node and then runs a normal (encrypted) ACP connection to the neighbor. </t>
 			</section>
@@ -1568,6 +1570,9 @@ such an approach. A full specification is subject to a separate document:</t>
 		                 <t>Added V8 addressing sub-scheme according to suggestion from mcr in his mail from 30 Nov 2016 (https://mailarchive.ietf.org/arch/msg/anima/nZpEphrTqDCBdzsKMpaIn2gsIzI). Also modified the explanation of the single V bit in the first sub-scheme now renamed to Zone sub-scheme to distinguish it. </t>
 
 			</section>
+			<section title="draft-ietf-anima-autonomic-control-plane-09">
+                                 <t>Added reference to RFC4191 and explained how it should be used on ACP edge routers to allow autoconfiguration of routing by NMS hosts. This came after review of stable connectivity draft where ACP connect is being referred to.</t>
+			</section>
 		</section>
 		<!-- changes -->
 
@@ -1575,6 +1580,7 @@ such an approach. A full specification is subject to a separate document:</t>
 	<back>
 		<references title="Normative References">
 			<?rfc include="reference.I-D.ietf-anima-grasp.xml"?>
+			<?rfc include='reference.RFC.4191'?>
 			<?rfc include='reference.RFC.4193'?>
 			<?rfc include='reference.RFC.5246'?>
 			<?rfc include='reference.RFC.5280'?>
