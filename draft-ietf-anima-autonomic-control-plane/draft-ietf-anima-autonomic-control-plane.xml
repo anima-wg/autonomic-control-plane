@@ -605,6 +605,8 @@ will be distributed with the flooded objective. An example of the message is inf
 
                                 <t>Autonomic devices need to specify in documentation the set of secure ACP mechanisms they suppport.</t>
 
+                                <t>ACP secure channel MUST imediately be terminated when the lifetime of any certificate in the chain used to authenticate the neighbor expires or becomes revoked. Note that is is not standard behavior in secure channel protocols such as IPsec because the certificate authentication only influences the setup of the secure channel in these protocols.</t>
+
                         </section>
                         <!-- Profiles -->
 
@@ -1916,6 +1918,7 @@ destination address (not in ACP connect section, but because of it).</t>
                                  <t>More details about RPL behavior in ACP.</t>
                                  <t>blackhole route to avoid loops in RPL.</t>
                              </list></t>
+                             <t>Added requirement to terminate ACP channels upon cert expiry/revocation.</t>
                         </section>
 
                 </section>
