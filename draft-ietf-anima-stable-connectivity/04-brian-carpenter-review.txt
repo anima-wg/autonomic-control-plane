@@ -1,0 +1,397 @@
+From anima-bounces@ietf.org  Mon Jul 24 05:00:36 2017
+Return-Path: <anima-bounces@ietf.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.9 required=5.0 tests=DKIM_ADSP_CUSTOM_MED=0.001,
+	DKIM_SIGNED=0.1,DKIM_VALID=-0.1,FREEMAIL_FORGED_FROMDOMAIN=0.199,
+	FREEMAIL_FROM=0.001,HEADER_FROM_DIFFERENT_DOMAINS=0.001,
+	RCVD_IN_DNSWL_MED=-2.3,RCVD_IN_MSPIKE_H2=-2.8,RP_MATCHES_RCVD=-0.001
+	autolearn=disabled version=3.4.0
+X-Original-To: eckert+ietf.anima@i4.informatik.uni-erlangen.de
+Delivered-To: eckert+ietf.anima@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [131.188.34.45])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id B87E058C4BB;
+	Mon, 24 Jul 2017 05:00:36 +0200 (CEST)
+Received: from mail.ietf.org (mail.ietf.org [4.31.198.44])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id E9C3474CA36;
+	Mon, 24 Jul 2017 05:00:33 +0200 (CEST)
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id F0568131A54;
+	Sun, 23 Jul 2017 20:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1500865230; bh=x+oOuvBhUi7a1abOrP+zgXe3GMne3OrqfdTWl0hbyPw=;
+	h=References:From:To:Date:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
+	b=EBo6TAJ2jG15Kma4/ZU1RuolEaXmRwFDRsJjiEeFJbYBd3rgiZViH4hbR1VTwuOMj
+	 aJeYrkPOQjR+Ow6gCZ5lWC8crL/CkRxMp5IXJRYlnkD+quhKXlrGhSS7uCYOd6yO2x
+	 bI41qRbxV5XEmZO/xGJNA3n7n6CZwyk3MhkObFhw=
+X-Original-To: anima@ietfa.amsl.com
+Delivered-To: anima@ietfa.amsl.com
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id E76F61318A2
+ for <anima@ietfa.amsl.com>; Sun, 23 Jul 2017 20:00:27 -0700 (PDT)
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
+ header.d=gmail.com
+Received: from mail.ietf.org ([4.31.198.44])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rOlRG7qehM1d for <anima@ietfa.amsl.com>;
+ Sun, 23 Jul 2017 20:00:25 -0700 (PDT)
+Received: from mail-pf0-x22d.google.com (mail-pf0-x22d.google.com
+ [IPv6:2607:f8b0:400e:c00::22d])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id ADF01126B71
+ for <anima@ietf.org>; Sun, 23 Jul 2017 20:00:25 -0700 (PDT)
+Received: by mail-pf0-x22d.google.com with SMTP id z129so1831736pfb.3
+ for <anima@ietf.org>; Sun, 23 Jul 2017 20:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025; 
+ h=subject:references:from:organization:to:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=EOHDSY4Y/WsH4iS546ECUqcN6xjxUscRyXDouvqW/So=;
+ b=azA2s9zMuYqQ+jzAWEm/vKLYQubZ751VarLNqh0g+DJicBsPmo4PRkw035GHI62x8N
+ B8318QWIdNTwuBSopBOobjR9LBoYbggshtjPVG4KylOUeuT0no8Oq5UvSwVt5Wxbt0Cx
+ onxwB0HD8NbqdaJyRf9TbV4Sc7MARqHDEOY4PpqtLXRU5x864FNrDYv1tgYCnw/6YkZY
+ 4PfmXoARTF5IRVOteDIsrUYMyp1E6584qj9AJjzffnfHqpO5oTpZDHTMdZx1gAhcNc1q
+ E8InYY3cQ7NDDUN65gl9eh77h0ixP4B+9eGUBHBZmBzSD+ZK7OE9woUQqJjPWRYuZyQL
+ 7DZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:references:from:organization:to
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=EOHDSY4Y/WsH4iS546ECUqcN6xjxUscRyXDouvqW/So=;
+ b=qh+4fUfEXOxCpK/JHmobedHFlyT78UuBa5I0e7juDQnYSzZDWArvpZ9s/BG7TA6vXM
+ lQ2YZAJM6S4mBofhQ1jzqgy/CNsM2evtRzZKjit2liTcROVZNO5iip7Nwj5rHHojG+kA
+ dcv5JxhCUaa12tmvTUonZUyUFJwGptGsMFloeTOl4oqsmU7sfVsXsbmQ8Fm96KRTR+Qn
+ 1WaecjtmEGT0+i413x9IwFYKedLrXsqMDm5wK4Xlx2E4RbrwYa8jvI0JXwmrz/g6CyOV
+ 9WhDR0RzncztRnI5A4GC1OFTFo8TyZCQFcv2Bui0qck5TykVNAMJS971N/Y6LGob7wlV
+ F9RA==
+X-Gm-Message-State: AIVw110rjxVYehIiFFf003gfuqfhJpP6GwefPoXKELJXzPNde/0aHoIX
+ NlFgyUJ3C9N6bj3J
+X-Received: by 10.84.167.2 with SMTP id c2mr16721038plb.365.1500865224858;
+ Sun, 23 Jul 2017 20:00:24 -0700 (PDT)
+Received: from ?IPv6:2406:e007:4a2d:1:28cc:dc4c:9703:6781?
+ ([2406:e007:4a2d:1:28cc:dc4c:9703:6781])
+ by smtp.gmail.com with ESMTPSA id n13sm17197576pgs.0.2017.07.23.20.00.22
+ for <anima@ietf.org>
+ (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+ Sun, 23 Jul 2017 20:00:24 -0700 (PDT)
+References: <5D36713D8A4E7348A7E10DF7437A4B927CDFE66F@NKGEML515-MBX.china.huawei.com>
+From: Brian E Carpenter <brian.e.carpenter@gmail.com>
+Organization: University of Auckland
+To: Anima WG <anima@ietf.org>
+Message-ID: <136a3ebd-dedb-9e2b-86be-a7d5fd12ad9b@gmail.com>
+Date: Mon, 24 Jul 2017 15:00:20 +1200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
+MIME-Version: 1.0
+In-Reply-To: <5D36713D8A4E7348A7E10DF7437A4B927CDFE66F@NKGEML515-MBX.china.huawei.com>
+Content-Language: en-US
+Archived-At: <https://mailarchive.ietf.org/arch/msg/anima/QCgeaEDFQlEgX_JsWzzjdWRNoHo>
+Subject: Re: [Anima] WGLC on draft-ietf-anima-stable-connectivity-03 -
+ Respond by July 28, 2017
+X-BeenThere: anima@ietf.org
+X-Mailman-Version: 2.1.22
+Precedence: list
+List-Id: Autonomic Networking Integrated Model and Approach <anima.ietf.org>
+List-Unsubscribe: <https://www.ietf.org/mailman/options/anima>,
+ <mailto:anima-request@ietf.org?subject=unsubscribe>
+List-Archive: <https://mailarchive.ietf.org/arch/browse/anima/>
+List-Post: <mailto:anima@ietf.org>
+List-Help: <mailto:anima-request@ietf.org?subject=help>
+List-Subscribe: <https://www.ietf.org/mailman/listinfo/anima>,
+ <mailto:anima-request@ietf.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: anima-bounces@ietf.org
+Sender: "Anima" <anima-bounces@ietf.org>
+X-Virus-Scanned: clamav-milter 0.99.2 at faui45
+X-Virus-Status: Clean
+Status: RO
+Content-Length: 11711
+Lines: 278
+
+Hi,
+
+Here are my comments on this draft. In general it seems to be ready,
+but there are some issues that IMHO need fixing. Here they are,
+followed by a few nits that I noticed.
+
+Technical issues:
+-----------------
+
+> 2.1.3.  Simultaneous ACP and data plane connectivity
+...>    If the data-plane of the network is also supporting IPv6, then the
+>    NOC devices that need access to the ACP should have a dual-homing
+>    IPv6 setup.  One option is to make the NOC devices multi-homed with
+>    one logical or physical IPv6 interface connecting to the data-plane,
+>    and another into the ACP.
+
+I don't understand the need to call this "dual-homing". That generally
+implies a physical topology with multiple links and/or routers. I think
+all you mean is that the nodes happen to have at least two addresses
+in different IPv6 prefixes (one for the data plane and one for the
+ACP). Having multiple addresses is a standard feature of IPv6. It might
+be done with multiple (virtual or real) interfaces, but it doesn't need
+to be. So I suggest:
+
+  If the data-plane of the network also supports IPv6, then the
+  NOC devices that need access to the ACP should have both data-plane
+  and ACP IPv6 addresses. One option is to set up the NOC devices with
+  one logical or physical IPv6 interface connecting to the data-plane,
+  and another into the ACP.
+
+>    The LAN that provides access to the ACP
+>    should then be given an IPv6 prefix that shares a common prefix with
+>    the IPv6 ULA...
+
+1) It is surely a virtual interface, not a LAN.
+2) I think it is better to say
+ "should then be given an IPv6 prefix that lies within the ULA prefix..."
+
+(In fact, it doesn't matter that it's a ULA - what matters is that
+it's the prefix that covers the whole ACP. That really goes for the whole
+document; a ULA prefix is just another prefix, after all. It might be
+clearer to just say "ACP prefix" everywhere.)
+
+>    ... so that the standard IPv6
+>    interface selection rules on the NOC host
+
+Cite [RFC6724] for complete clarity.
+
+>    If this can not be achieved
+>    automatically, then it needs to be done via simple IPv6 static routes
+>    in the NOC host.
+
+But it can. That's why RFC6724 exists. Do we really need to say this?
+
+...
+>    Providing two virtual (eg: dot1q subnet) connections into NOC hosts
+>    may be seen as undesired complexity. 
+
+Either you have to explain 'dot1q' and give a reference, or delete it.
+I'd delete it.
+
+...
+>    In that case the routing policy
+>    to provide access to both ACP and data-plane via IPv6 needs to happen
+>    in the NOC network itself: The NMS host gets a single attachment
+>    interface but still with the same two IPv6 addresses as in before -
+>    one for use towards the ACP, one towards the data-plane.  The first-
+>    hop router connecting to the NMS host would then have separate
+>    interfaces: one towards the data-plane, one towards the ACP.  Routing
+>    of traffic from NMS hosts would then have to be based on the source
+>    IPv6 address of the host: Traffic from the address designated for ACP
+>    use would get routed towards the ACP, traffic from the designated
+>    data-plane address towards the data-plane.
+
+That seems like an explanation of very basic routing - does it need to
+be said?
+
+> In the most simple case, we get the following topology:...
+
+This part isn't very clear to follow. The ASCII art of Fig. 1
+and Fig. 2 is a bit scrappy, and the explanation is a bit short.
+It would be better to start with an explanation of the terms
+like 'NOClan' and 'Rtr1'. And you suddenly start discssing VRFs
+without any definition.
+
+> 2.1.4.  IPv4 only NMS hosts
+...
+>    The downside of this architectural decision is the potential need for
+>    short-term workarounds when the operational practices in a network
+>    that can not meet these target expectations.  This section motivates
+>    when and why these workarounds may be necessary and describes them.
+>    All the workarounds described in this section are HIGHLY UNDESIRABLE.
+>    The only long term solution is to enable IPv6 on NMS hosts.
+
+I full agree with the message but I think the wording has the wrong tone.
+The goal should be to welcome NOCs to the new world of IPv6, not to
+tell them they are dinosaurs. Something like:
+
+   The implication of this architectural decision is the potential need for
+   short-term workarounds when the operational practices in a network
+   do not yet meet these target expectations.  This section explains
+   when and why these workarounds may be operationally necessary and
+   describes them. However, the long term goal is to upgrade all
+   NMS hosts to native IPv6, so the workarounds described in this
+   section should not be considered permanent.
+
+...
+>    To bridge an IPv4 only management plane with the ACP, IPv4 to IPv6
+>    NAT can be used.  This NAT setup could for example be done in Rt1r1
+>    in above picture to also support IPv4 only NMS hots connected to
+>    NOClan.
+
+I think this (and the following paragraph) is underspecified. It isn't
+clear to me whether this would be described as a NAT64 or a NAT46 scenario
+(which side is the client and which side is the server, in other words).
+There's a lot more to specify to make this work - maybe the details are
+out of scope, which should be stated if so. Also, it would be better
+to say 'IP/ICMP translation' not 'NAT' and cite RFC7915. Make that
+clearly separate from the issue of how addresses are mapped.
+
+(Incidentally, recall that (a) IPv4 addresses are only 32 bits and
+(b) we own the ACP address plan. So algorithmic mapping of IPv4
+addresses into a special /96 in the ACP address plan is possible.
+Of course that would be an insecure zone in ACP terms.)
+
+> 2.1.5.  Path selection policies
+
+A lot of this section comes across almost as hand-waving. I did
+wonder whether it would have been enough just to state the
+problem.
+
+...
+>    MP-TCP (Multipath TCP -see [RFC6824]) is a very attractive candidate
+>    to automate the use of both data-plane and ACP...
+
+I'm not sure... you seem to be asking for new intelligence in
+MPTCP's choice of candidate addresses, not just a policy but
+a whole mechanism in support of that policy. And will you really
+benefit from MPTCP's main point, which is automatic load management
+between alternative paths. Wouldn't SCTP be a better match?
+
+> 2.1.8.  Long term direction of the solution
+...>    1.  NMS hosts should at least support IPv6.  IPv4/IPv6 NAT in the
+>        network to enable use of ACP is long term undesirable.  Having
+>        IPv4 only applications automatically leverage IPv6 connectivity
+>        via host-stack options is likely non-feasible (NOTE: this has
+>        still to be vetted more).
+
+That NOTE needs to be cleared up. Something like 464XLAT (RFC6877)
+might be a good compromise.
+
+> 3.  Security Considerations
+...
+>    ULA addressing as proposed in this document is preferred over...
+
+Was this pasted from the ACP draft? Surely that is where ULA is proposed.
+
+>    Randomn ULA addressing provides more than sufficient protection
+>    against address collision even though there is no central assignment
+>    authority.
+
+I don't like that phrase: it isn't the *address* that's random,
+it's the /48 prefix. Also, somebody is always ready to complain
+about the collision risk. Suggest:
+
+   The random nature of a ULA prefix provides strong protection
+   against address collision even though there is no central assignment
+   authority.
+
+>    If packets with unexpected ULA addresses are seen and one expects
+>    them to be from another networks ACP from which they leaked, then
+>    some form of ULA prefix registrastion (not allocation) can be
+>    beneficial.  Some voluntary registries exist, for example
+>    https://www.sixxs.net/tools/grh/ula/, although none of them is
+>    preferrable because of being operated by some recognized authority.
+>    If an operator would want to make its ULA prefix known, it might need
+>    to register it with multiple existing registries.
+> 
+>    ULA Centrally assigned ULA addresses (ULA-C) was an attempt to
+>    introduce centralized registration of randomly assigned addresses and
+>    potentially even carve out a different ULA prefix for such addresses.
+>    This proposal is currently not proceeding, and it is questionable
+>    whether the stable connectivity use case provides sufficient
+>    motivation to revive this effort.
+
+I think all that is a red herring. I suggest replacing it by a simple
+statement:
+
+   If packets with unexpected ULA addresses are seen they should
+   be discarded.
+
+(Even that is not really needed, since all border routers should
+discard such packets anyway.)
+
+>    Using current registration options implies that there will not be
+>    reverse DNS mapping for ACP addresses.
+
+Really? I assume we're talking about two-faced DNS, and afaik nothing
+stops an operator providing reverse mapping in the private DNS.
+That seems to be implied by the following paragraphs, so the text
+seems inconsistent anyway.
+
+> 4.  No IPv4 for ACP
+
+This section seems out of place stuck between Security Considerations
+and IANA Considerations. Maybe it should be an Appendix, referenced
+in section 2.1.4. "IPv4 only NMS hosts".
+
+Nits/English:
+-------------
+
+(There are probably other nits as well as these, which the RFC Editor
+will fix...)
+
+> Abstract
+...
+>    ...  Provisioning during device/network bring
+>    up tends to be far less easy to automate than service provisioning
+>    later on, changes in core network functions impacting reachability
+>    can not be automated either because of ongoing connectivity
+>    requirements for the OAM equipment itself, and widely used OAM
+>    protocols are not secure enough to be carried across the network
+>    without security concerns.
+
+Suggested:
+
+  Provisioning while bringing up devices and networks
+  tends to be more difficult to automate than service provisioning
+  later on, changes in core network functions impacting reachability
+  cannot be automated because of ongoing connectivity
+  requirements for the OAM equipment itself, and widely used OAM
+  protocols are not secure enough to be carried across the network
+  without security concerns.
+
+>    This document describes how to integrate OAM processes with the
+>    autonomic control plane (ACP) in Autonomic Networks (AN). to provide
+>    stable and secure connectivity for those OAM processes.
+
+Suggested:
+
+  This document describes how to integrate OAM processes with the
+  autonomic control plane (ACP) in Autonomic Networks (AN) in order to provide
+  stable and secure connectivity for those OAM processes.
+
+> 1.2.  Data Communication Networks (DCNs)
+> 
+>    In the late 1990'th and early 2000, IP networks became the method of
+>    choice to build separate OAM networks for the communications
+>    infrastructure in service providers.  This concept was standardized
+>    in G.7712/Y.1703 
+
+This needs a complete informational reference. Also, according to
+https://www.itu.int/rec/T-REC-G.7712-200303-S/en it is a superseded
+reference, so maybe there is a better one?
+
+> 2.1.1.  Simple connectivity for non-autonomic NMS hosts
+...
+>  For example, if DNS in the network was set up with
+>    names for network devices as devicename.noc.example.com, then the ACP
+>    address of that device could be mapped to devicename-
+>    acp.noc.exmaple.com.
+
+... acp.noc.example.com
+
+> 2.1.2.  Challenges and limitation of simple connectivity
+...>    Note that these challenges and limitations exist because the ACP is
+>    primarily designed to support distributed ASA ...
+
+Define "ASA" when first used.
+
+Regards,
+    Brian
+
+
+_______________________________________________
+Anima mailing list
+Anima@ietf.org
+https://www.ietf.org/mailman/listinfo/anima
+

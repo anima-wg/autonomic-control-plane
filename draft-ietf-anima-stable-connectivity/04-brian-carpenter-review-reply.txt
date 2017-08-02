@@ -1,0 +1,461 @@
+
+> Hi,
+> 
+> Here are my comments on this draft. In general it seems to be ready,
+> but there are some issues that IMHO need fixing. Here they are,
+> followed by a few nits that I noticed.
+> 
+> Technical issues:
+> -----------------
+> 
+> > 2.1.3.  Simultaneous ACP and data plane connectivity
+> ...>    If the data-plane of the network is also supporting IPv6, then the
+> >    NOC devices that need access to the ACP should have a dual-homing
+> >    IPv6 setup.  One option is to make the NOC devices multi-homed with
+> >    one logical or physical IPv6 interface connecting to the data-plane,
+> >    and another into the ACP.
+> 
+> I don't understand the need to call this "dual-homing". That generally
+> implies a physical topology with multiple links and/or routers. I think
+> all you mean is that the nodes happen to have at least two addresses
+> in different IPv6 prefixes (one for the data plane and one for the
+> ACP). Having multiple addresses is a standard feature of IPv6. It might
+> be done with multiple (virtual or real) interfaces, but it doesn't need
+> to be. So I suggest:
+> 
+>   If the data-plane of the network also supports IPv6, then the
+>   NOC devices that need access to the ACP should have both data-plane
+>   and ACP IPv6 addresses. One option is to set up the NOC devices with
+>   one logical or physical IPv6 interface connecting to the data-plane,
+>   and another into the ACP.
+
+The ACP is meant to be an isolated network, so the fundamental idea is that
+whenever possible, all adddresses routed across the ACP are non-overlapping
+with Data Plane addresses so that its clear what traffic is for ACP and what
+not.
+
+The first thing which for security reasons should be out of scope is a
+non-ACP router that connects Data-Plane and ACP  and could therefore
+arbitrarily leak ACP traffic:
+
+                     ACP Connect
+                     Interface
+            ACP      ---------  Wrong
+            Edge                Router ---- NMS host
+            Router   ---------
+                     Data plane
+                     interface
+
+There is of course only limited abilities to prohibit this, but it is explicitly
+not desired.
+
+When i started to answer to your questions below, there was really no way to
+fix up the stable connectivity draft because it could only hint or suggest things
+that where not written correctly in the ACP draft. And thats wrong. So i went back
+and effectively had to fix up a lot of things in the ACP draft. So see ACP-09
+changelong in ACP-09 first, then go back to the following inline answers:
+
+> >    The LAN that provides access to the ACP
+> >    should then be given an IPv6 prefix that shares a common prefix with
+> >    the IPv6 ULA...
+> 
+> 1) It is surely a virtual interface, not a LAN.
+
+Well, it can be physical or virtual. Replaced LAN with subnet. Thats the correct term.
+The ACP-09 text is now also more specific to physical vs. virtual so those
+are two clear separate options re. their securitty impact.
+
+> 2) I think it is better to say
+>  "should then be given an IPv6 prefix that lies within the ULA prefix..."
+
+Done. I now also use the therm "covered by" in the acp doc. I hope
+that term is also correct.
+
+> (In fact, it doesn't matter that it's a ULA - what matters is that
+> it's the prefix that covers the whole ACP. That really goes for the whole
+> document; a ULA prefix is just another prefix, after all. It might be
+> clearer to just say "ACP prefix" everywhere.)
+
+Right. In the main text. the whole security section is specific to ULA address benefits (isolation),
+so i didn't change it on behalf of this point.
+
+> >    ... so that the standard IPv6
+> >    interface selection rules on the NOC host
+> 
+> Cite [RFC6724] for complete clarity.
+
+Ack.
+
+> >    If this can not be achieved
+> >    automatically, then it needs to be done via simple IPv6 static routes
+> >    in the NOC host.
+> 
+> But it can. That's why RFC6724 exists. Do we really need to say this?
+
+As outlined above, the explanation for this all is now in the ACP connect section
+of ACP-09. Primarily because it didn't make sense to describe a lot of wonderful
+functional aspects of the ACP edge device in an informational document when they
+are missing in the normative standards track document.
+
+But there is a single sentence summarizing the issue in the stable connectivity doc now
+as well:
+
+| This setup may not work
+| with autoconfiguration and all NOC host network stacks due to limitations in
+| those network stacks. They need to be able to perform RFC6724 source address selection
+| rule 5.5 including caching of next-hop information. See the ACP document text for more details.
+
+> >    Providing two virtual (eg: dot1q subnet) connections into NOC hosts
+> >    may be seen as undesired complexity. 
+> 
+> Either you have to explain 'dot1q' and give a reference, or delete it.
+> I'd delete it.
+
+I always annoyed by unspecific terms like virtual, but it clicks for
+me when i read practical descriptions like 802.1q. So there is a reference to
+it now.
+
+> >    In that case the routing policy
+> >    to provide access to both ACP and data-plane via IPv6 needs to happen
+> >    in the NOC network itself: The NMS host gets a single attachment
+> >    interface but still with the same two IPv6 addresses as in before -
+> >    one for use towards the ACP, one towards the data-plane.  The first-
+> >    hop router connecting to the NMS host would then have separate
+> >    interfaces: one towards the data-plane, one towards the ACP.  Routing
+> >    of traffic from NMS hosts would then have to be based on the source
+> >    IPv6 address of the host: Traffic from the address designated for ACP
+> >    use would get routed towards the ACP, traffic from the designated
+> >    data-plane address towards the data-plane.
+> 
+> That seems like an explanation of very basic routing - does it need to
+> be said?
+
+This is all gone from stable connectivity now and hopefully better structured text
+in the ACP connect section in acp-09.
+
+> > In the most simple case, we get the following topology:...
+> 
+> This part isn't very clear to follow. The ASCII art of Fig. 1
+> and Fig. 2 is a bit scrappy, and the explanation is a bit short.
+> It would be better to start with an explanation of the terms
+> like 'NOClan' and 'Rtr1'. And you suddenly start discssing VRFs
+> without any definition.
+
+Likewise gone, replaced by better picture in acp-09.
+
+> > 2.1.4.  IPv4 only NMS hosts
+> ...
+> >    The downside of this architectural decision is the potential need for
+> >    short-term workarounds when the operational practices in a network
+> >    that can not meet these target expectations.  This section motivates
+> >    when and why these workarounds may be necessary and describes them.
+> >    All the workarounds described in this section are HIGHLY UNDESIRABLE.
+> >    The only long term solution is to enable IPv6 on NMS hosts.
+> 
+> I full agree with the message but I think the wording has the wrong tone.
+> The goal should be to welcome NOCs to the new world of IPv6, not to
+> tell them they are dinosaurs. Something like:
+> 
+>    The implication of this architectural decision is the potential need for
+>    short-term workarounds when the operational practices in a network
+>    do not yet meet these target expectations.  This section explains
+>    when and why these workarounds may be operationally necessary and
+>    describes them. However, the long term goal is to upgrade all
+>    NMS hosts to native IPv6, so the workarounds described in this
+>    section should not be considered permanent.
+
+Love text suggestions. Copied.
+
+> >    To bridge an IPv4 only management plane with the ACP, IPv4 to IPv6
+> >    NAT can be used.  This NAT setup could for example be done in Rt1r1
+> >    in above picture to also support IPv4 only NMS hots connected to
+> >    NOClan.
+> 
+> I think this (and the following paragraph) is underspecified. It isn't
+> clear to me whether this would be described as a NAT64 or a NAT46 scenario
+> (which side is the client and which side is the server, in other words).
+> There's a lot more to specify to make this work - maybe the details are
+> out of scope, which should be stated if so. Also, it would be better
+> to say 'IP/ICMP translation' not 'NAT' and cite RFC7915. Make that
+> clearly separate from the issue of how addresses are mapped.
+> 
+> (Incidentally, recall that (a) IPv4 addresses are only 32 bits and
+> (b) we own the ACP address plan. So algorithmic mapping of IPv4
+> addresses into a special /96 in the ACP address plan is possible.
+> Of course that would be an insecure zone in ACP terms.)
+
+*sigh*. Yes. As i tried to explain to Mohamed, i was specifically not trying to
+get sucked into individual NAT method description. But i gave up now with your
+feedback as well and improved the NAT text to refer to SIIT and explain
+the requirements better, eg: v6 initiator -> v4 responder requirement and
+v4 initiator -> v4 responder requirement. And then suggesting to use EAM as
+the most flexible mapping option.
+
+Hope this improves the IPv4 section a lot.
+
+> > 2.1.5.  Path selection policies
+> 
+> A lot of this section comes across almost as hand-waving. I did
+> wonder whether it would have been enough just to state the
+> problem.
+
+Well, the primary problem is that first round implementations of ACP may not
+be high performance, so the use of ACP should be prioritized for critical actions
+and otherwise Data Plane be used. I though the text says that.
+
+Then the text goes into mechanisms how NOC equipment would select how to decide
+whether to use ACP and/or data plane for some action and it suggests that without
+changning NOC equipment software, it might be possible to achieve this by using
+different names for the devices, eg: names that map to ACP or to data plane or first
+to data-plane then to ACP addresses. And then use the right name in a particular
+piece of NOC equipment or action on a NOC equipment to get the desired use
+of ACP and/or data plane.
+
+If the above explanation makes sense to you but you do not see this best reflected,
+maybe you can suggest better text to explain this.
+
+> ...
+> >    MP-TCP (Multipath TCP -see [RFC6824]) is a very attractive candidate
+> >    to automate the use of both data-plane and ACP...
+> 
+> I'm not sure... you seem to be asking for new intelligence in
+> MPTCP's choice of candidate addresses, not just a policy but
+> a whole mechanism in support of that policy. And will you really
+> benefit from MPTCP's main point, which is automatic load management
+> between alternative paths. Wouldn't SCTP be a better match?
+
+This was just one example for an alternative mechanism to the use of different names,
+eg: embody the path selection policy into the transport protocol. Of course
+the way how exactly to do this is hand waiving, and MP-TCP was just the one most
+well known protocol that also most likely can be stuffed under existing
+TCP applications without them knowing.
+
+I would of course like that this is not seen as handwaiving but as
+interesting areas of further work/research.
+
+> > 2.1.8.  Long term direction of the solution
+> ...>    1.  NMS hosts should at least support IPv6.  IPv4/IPv6 NAT in the
+> >        network to enable use of ACP is long term undesirable.  Having
+> >        IPv4 only applications automatically leverage IPv6 connectivity
+> >        via host-stack options is likely non-feasible (NOTE: this has
+> >        still to be vetted more).
+> 
+> That NOTE needs to be cleared up. Something like 464XLAT (RFC6877)
+> might be a good compromise.
+
+See the rewritten SIIT section. IMHO, there can be no simpler "network" based
+address translation. Where network based means that the translation happens
+in some device he network operator needs to provision. Like the ACP edge device.
+Or even an additional address translation device.
+
+So, the only IMHO easier option is when the OS of the NMS host would internally
+have IPv4/IPv6 translation so the device/VM looks to the outside like full IPv6.
+Alas, i didn't have the time to investigate these options. And most likely if at
+all you could only make those work for linux.
+
+So, for now i just remove the note and clarified the last sentence a bit.
+
+If there is anything specific to be said bout why 464XLAT might be better
+longer term, let me know and i can add it. For now it looks like yet another
+network device configured option to me, but i have not tried to understand it
+all the way.
+
+> > 3.  Security Considerations
+> ...
+> >    ULA addressing as proposed in this document is preferred over...
+> 
+> Was this pasted from the ACP draft? Surely that is where ULA is proposed.
+
+Probably long time ago. This paragraph was already improved in -04 by Mohameds
+feeedback.
+
+> >    Randomn ULA addressing provides more than sufficient protection
+> >    against address collision even though there is no central assignment
+> >    authority.
+> 
+> I don't like that phrase: it isn't the *address* that's random,
+> it's the /48 prefix. Also, somebody is always ready to complain
+> about the collision risk. Suggest:
+> 
+>    The random nature of a ULA prefix provides strong protection
+>    against address collision even though there is no central assignment
+>    authority.
+
+Thanks, fixed.
+
+> >    If packets with unexpected ULA addresses are seen and one expects
+> >    them to be from another networks ACP from which they leaked, then
+> >    some form of ULA prefix registrastion (not allocation) can be
+> >    beneficial.  Some voluntary registries exist, for example
+> >    https://www.sixxs.net/tools/grh/ula/, although none of them is
+> >    preferrable because of being operated by some recognized authority.
+> >    If an operator would want to make its ULA prefix known, it might need
+> >    to register it with multiple existing registries.
+> > 
+> >    ULA Centrally assigned ULA addresses (ULA-C) was an attempt to
+> >    introduce centralized registration of randomly assigned addresses and
+> >    potentially even carve out a different ULA prefix for such addresses.
+> >    This proposal is currently not proceeding, and it is questionable
+> >    whether the stable connectivity use case provides sufficient
+> >    motivation to revive this effort.
+> 
+> I think all that is a red herring. I suggest replacing it by a simple
+> statement:
+> 
+>    If packets with unexpected ULA addresses are seen they should
+>    be discarded.
+> 
+> (Even that is not really needed, since all border routers should
+> discard such packets anyway.)
+
+I remember we had long discussions about this so i kinda want to refrain from
+removing the text. Instead:
+
+The filtering you mentioned should vbe in ACP spec but where not. So i added
+into acp-09:
+
+  - mandate that ACP edge devices must filter based on source IPv6 address.
+  - Mandating/explain that RPL roots can diagnose unknown destination IPv6
+    addresses in the ACP.
+    (Aka: if your filtering did mean the destinationa address, then this is NOT
+     possible on the border router due to RPL. Can't have minimum routing table
+     and full route prefix visibility at the same time ;-(
+
+So, with that text there, i changed the stable connectivity paragraphs above to
+read:
+
+<t>The ACP specification demands that only packets from configured ACP prefixes
+are permitted from ACP connect interfaces. It also requires that RPL root
+ACP devices need to be able to diagnose unknown ACP destination addresses.<t>
+
+<t>To help diagnose packets that unexpectedly leaked for example from another
+ACP (that was meant to be deployed separately), it can be useful to voluntarily
+list your own the ULA ACP prefixes in one of the sites on the Internet,
+for example https://www.sixxs.net/tools/grh/ula/. Note that this does not
+constitute registration and if you want to ensure that your leaked ACP packets
+can be recognized to come from you, you may need to list your prefixes in
+multiple of those sites.</t>
+
+<t>Note that there is a provision in <xref target="RFC4193"/> for non-locally 
+assigned address space (L bit = 0), but there is no existing
+standardization for this, so these ULA prefixes must not be used.</t>
+
+> >    Using current registration options implies that there will not be
+> >    reverse DNS mapping for ACP addresses.
+> 
+> Really? I assume we're talking about two-faced DNS, and afaik nothing
+> stops an operator providing reverse mapping in the private DNS.
+> That seems to be implied by the following paragraphs, so the text
+> seems inconsistent anyway.
+
+I know it under the name "split-horizon DNS". Is there any reference ?
+
+I changed the two paragraphs to read as follows, i hope this eliminates any
+real or perceived conflicts:
+
+<t>According to RFC4193 section 4.4, PTR records for ULA addresses should not
+be installed into the global DNS (no guaranteed ownership). Hence also the 
+need to rely on voluntary lists (and in prior paragraph) to make the use of
+an ULA prefix globally known.</t>
+
+<t>Nevertheless, some legacy OAM applications running across the ACP may rely
+on reverse DNS lookup for authentication of requests (eg: TFTP for download
+of network firmware/config/software). Operators may therefore use split horizon
+DNS to provide global PTR records for their own ULA prefixes only into their
+own domain to continue relying on this method. Given the security of the ACP,
+this may even increase the security of such legacy methods.</t>
+
+> > 4.  No IPv4 for ACP
+> 
+> This section seems out of place stuck between Security Considerations
+> and IANA Considerations. Maybe it should be an Appendix, referenced
+> in section 2.1.4. "IPv4 only NMS hosts".
+
+Michael Richardson made the argument that nobody reads beyond the list of
+authors, and i kinda agree, so i am trying to avoid appendices. Like in the
+ACP document i have now moved this section before the standard Security/IANA
+considerations and put it under the label "Architectural considerations". Which
+kinda should show its closeness to all the other following "Considerations".
+
+Hope this is fine. If not, yell.
+
+> Nits/English:
+> -------------
+> 
+> (There are probably other nits as well as these, which the RFC Editor
+> will fix...)
+
+Right. Lets agree on "code complete", i will do more spell checker later as well.
+
+> > Abstract
+> ...
+> >    ...  Provisioning during device/network bring
+> >    up tends to be far less easy to automate than service provisioning
+> >    later on, changes in core network functions impacting reachability
+> >    can not be automated either because of ongoing connectivity
+> >    requirements for the OAM equipment itself, and widely used OAM
+> >    protocols are not secure enough to be carried across the network
+> >    without security concerns.
+> 
+> Suggested:
+> 
+>   Provisioning while bringing up devices and networks
+>   tends to be more difficult to automate than service provisioning
+>   later on, changes in core network functions impacting reachability
+>   cannot be automated because of ongoing connectivity
+>   requirements for the OAM equipment itself, and widely used OAM
+>   protocols are not secure enough to be carried across the network
+>   without security concerns.
+
+Thanks. Copied.
+
+> >    This document describes how to integrate OAM processes with the
+> >    autonomic control plane (ACP) in Autonomic Networks (AN). to provide
+> >    stable and secure connectivity for those OAM processes.
+> 
+> Suggested:
+> 
+>   This document describes how to integrate OAM processes with the
+>   autonomic control plane (ACP) in Autonomic Networks (AN) in order to provide
+>   stable and secure connectivity for those OAM processes.
+
+Thanks. Copied.
+
+> > 1.2.  Data Communication Networks (DCNs)
+> > 
+> >    In the late 1990'th and early 2000, IP networks became the method of
+> >    choice to build separate OAM networks for the communications
+> >    infrastructure in service providers.  This concept was standardized
+> >    in G.7712/Y.1703 
+> 
+> This needs a complete informational reference. Also, according to
+> https://www.itu.int/rec/T-REC-G.7712-200303-S/en it is a superseded
+> reference, so maybe there is a better one?
+
+Reference now points to the oldest version of the series because that is the
+purpose of the text (since when is this done). Annotation in reference points to
+the home page of the series - https://www.itu.int/rec/T-REC-G.7712/en
+
+> > 2.1.1.  Simple connectivity for non-autonomic NMS hosts
+> ...
+> >  For example, if DNS in the network was set up with
+> >    names for network devices as devicename.noc.example.com, then the ACP
+> >    address of that device could be mapped to devicename-
+> >    acp.noc.exmaple.com.
+> 
+> ... acp.noc.example.com
+
+Ack.
+
+> > 2.1.2.  Challenges and limitation of simple connectivity
+> ...>    Note that these challenges and limitations exist because the ACP is
+> >    primarily designed to support distributed ASA ...
+> 
+> Define "ASA" when first used.
+
+Ack.
+
+> Regards,
+>     Brian
+> 
+> 

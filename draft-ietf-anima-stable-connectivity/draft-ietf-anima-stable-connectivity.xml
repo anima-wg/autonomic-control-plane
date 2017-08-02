@@ -9,7 +9,7 @@
 <?rfc iprnotified="no" ?>
 <!-- Change to "yes" if someone has disclosed IPR for the draft -->
 <?rfc compact="yes"?>
-<rfc ipr="trust200902" docName="draft-ietf-anima-stable-connectivity-04" category="info">
+<rfc ipr="trust200902" docName="draft-ietf-anima-stable-connectivity-05" category="info">
 	<front>
          <title abbrev="AN Stable Connectivity OAM">Using Autonomic Control Plane for Stable Connectivity of Network OAM</title>
 		<author role="editor" fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
@@ -30,25 +30,27 @@
                                 <email>michael.h.behringer@gmail.com</email>
                         </address>
                 </author>
-		<date day="27" month="Jul" year="2017"/>
+		<date day="2" month="Aug" year="2017"/>
 		<area>Operations and Management</area>
 		<workgroup>ANIMA</workgroup>
 		<abstract>
 
 <t>OAM (Operations, Administration and Maintenance - as per BCP161, <xref target="RFC6291"/>)
 processes for data networks are often subject to the problem of circular dependencies
-when relying on connectivity provided by the network to be managed for the OAM purposes. 
-Provisioning during device/network bring up tends to be far less easy to automate than
-service provisioning later on, changes in core network functions impacting reachability
-may not be easy to be automated either because of ongoing connectivity requirements for
-the OAM, and widely used OAM protocols are not secure enough to be carried across the network
+when relying on connectivity provided by the network to be managed for the OAM purposes.</t>
+
+<t>Provisioning while bringing up devices and networks
+tends to be more difficult to automate than service provisioning
+later on, changes in core network functions impacting reachability
+cannot be automated because of ongoing connectivity
+requirements for the OAM equipment itself, and widely used OAM
+protocols are not secure enough to be carried across the network
 without security concerns.</t>
 
-<t>This document describes how to integrate OAM with the 
-autonomic control plane (ACP) in Autonomic Networks (AN) to provide stable and secure
-connectivity for conducting OAM. This connectivity is not subject to aforementioned
-circular dependencies.
-</t>
+<t>This document describes how to integrate OAM processes with the
+autonomic control plane (ACP) in Autonomic Networks (AN) in order to provide
+stable and secure connectivity for those OAM processes.
+This connectivity is not subject to aforementioned circular dependencies. </t>
 		</abstract>
 	</front>
 
@@ -217,7 +219,8 @@ names for network equipment where topological information is included, even with
 <t>This simple connectivity of non-autonomic NMS hosts suffers from a range of challenges (that is, operators may not be able to do it this way) or limitations (that is, operator cannot achieve desired goals with this setup). The following list summarizes these challenges and limitations. The following sections describe additional mechanisms to overcome them.</t>
 
 <t>Note that these challenges and limitations exist because ACP is primarily designed to
-support distributed ASA in the most lightweight fashion, but not mandatorily require support
+support distributed ASA (Autonomic Service Agent, a piece of autonomic software) in the most
+lightweight fashion, but not mandatorily require support
 for additional mechanisms to best support centralized NOC operations. It is this document that
 describes additional (short term) workarounds and (long term) extensions.</t>
 
@@ -241,7 +244,7 @@ is not necessary will reduce its performance/effectiveness for those operations 
 it is necessary or highly desirable. See <xref target="selection-policies" /> for candidate solutions.</t> 
 
 <t>(Limitation) Security of the ACP is reduced by exposing the ACP natively (and unencrypted)
-into a LAN in the NOC where the NOC devices are attached to it.
+into a subnet in the NOC where the NOC devices are attached to it.
 See <xref target="encryption" /> for candidate solutions.</t> 
 
         </list>
@@ -261,70 +264,37 @@ of the NOC device/application will suffice: IPv6 connectivity from the NOC
 provides access via the ACP, IPv4 will provide access via the data-plane. If as
 explained above in the simple case, an autonomic device supports native attachment
 to the ACP, and the existing NOC setup is IPv4 only, then it could be sufficient to
-attach the ACP device(s) as the IPv6 default router to the NOC LANs and keep the
+attach the ACP device(s) as the IPv6 default router to the NOC subnet and keep the
 existing IPv4 default router setup unchanged.</t>
 
-<t>If the data-plane of the network is also supporting IPv6, then the NOC devices that
-need access to the ACP should have a dual-homing IPv6 setup. One option is to make
-the NOC devices multi-homed with one logical or physical IPv6 interface connecting
-to the data-plane, and another into the ACP. The LAN that provides access to the
-ACP should then be given an IPv6 prefix that shares a common prefix with the IPv6
-ULA (see <xref target="RFC4193" />) of the ACP so that the standard IPv6 interface selection rules on the NOC host
-would result in the desired automatic selection of the right interface: towards
-the ACP facing interface for connections to ACP addresses, and towards the data-plane
-interface for anything else. If this cannot be achieved automatically, then it
-needs to be done via IPv6 static routes in the NOC host.</t>
+<t>If the data-plane of the network is also supporting IPv6, then the most compatible
+setup for NOC devices is to have two IPv6 interfaces. One virtual ((e.g. via <xref target="IEEE802.1Q">IEEE 802.1Q</xref>)  or physical interface connecting to a data-plane subnet, and another into an ACP connect subnet as
+specified in the ACP connection section of <xref target="I-D.ietf-anima-autonomic-control-plane"/>.
+That document also specifies how the NOC devices can receive autoconfigured addressing
+and routes towards the ACP connect subnet if it supports <xref target="RFC6724"/> and
+<xref target="RFC4191"/>.</t>
 
-<t>Providing two virtual (e.g. dot1q subnet) connections into NOC hosts may be
-seen as an undesired complexity. In that case the routing policy to provide access
-to both ACP and data-plane via IPv6 needs to happen in the NOC network itself:
-The NMS host gets a single attachment interface but still with the
-same two IPv6 addresses as in before - one for use towards the ACP, one towards
-the data-plane. The first-hop router connecting to the NMS host would
-then have separate interfaces: one towards the data-plane, one towards the ACP. 
-Routing of traffic from NMS hosts would then have to be based on the
-source IPv6 address of the host: Traffic from the address designated for ACP use
-would get routed towards the ACP, traffic from the designated data-plane address
-towards the data-plane.</t>
+<t>Configuring a second interface on a NOC host may be impossible or be seen as undesired
+complexity. In that case the ACP edge device needs to provide support for 
+a "Combined ACP and Data Plane interface" as also described in the ACP connect section
+of <xref target="I-D.ietf-anima-autonomic-control-plane"/>. This setup may not work
+with autoconfiguration and all NOC host network stacks due to limitations in
+those network stacks. They need to be able to perform RFC6724 source address selection
+rule 5.5 including caching of next-hop information. See the ACP document text for more details.</t>
 
-<t>In the simple case, we get the following topology: Existing NMS hosts 
-connect via an existing NOClan and existing first hop Rtr1 to the data-plane.
-Rtr1 is not made autonomic, but instead the edge router of the Autonomic network
-ANrtr is attached via a separate interface to Rtr1 and ANrtr provides access
-to the ACP via ACPaccessLan. Rtr1 is configured with the above described IPv6
-source routing policies and the NOC-app-devices are given the secondary IPv6
-address for connectivity into the ACP.</t>
-
-<figure anchor="figure1">
-<artwork>
-                                    --... (data-plane)
-NOC-app-device(s) -- NOClan -- Rtr1
-                                    --- ACPaccessLan -- ANrtr ... (ACP)
-
-</artwork>
-</figure>
-<t>If Rtr1 was to be upgraded to also implement Autonomic Networking and the ACP,
-the picture would change as follows:</t>
-<figure anchor="figure2">
-<artwork>
-
-                                             ---- ... (data-plane)
-    NOC-app-device(s) ---- NOClan --- ANrtr1
-                                      .  .   ---- ... (ACP)
-                                      \-/
-                                      (ACP to data-plane loopback)
-
-</artwork>
-</figure>
-
-<t>In this case, ANrtr1 would have to implement some more advanced routing such as
-cross-VRF routing because the data-plane and ACP are most likely run via
-separate VRFs. A workaround without additional software functionality could be a physical external loopback
-cable into two ports of ANrtr1 to connect the data-plane and ACP VRF as shown in the picture. A (virtual)
- software loopback between the ACP and data plane VRF would of course be the better solution.</t>
+<t>For security reasons, it is not considered appropriate in the ACP document
+to connect a non-ACP router to an ACP connect interface. The reason is that the
+ACP is a secured network domain and all NOC devices connecting via ACP
+connect interfaces are also part of that secure domain - the main difference is
+that the physical link between the ACP edge device and the NOC devices is
+not authenticated/encrypted and therefore needs to be physically secured.
+If the secure ACP was extendable via untrusted routers then it would be a
+lot more verify the secure domain assertion. Therefore the ACP edge devices
+are not supposed to redistribute routes from non-ACP routers into the ACP.</t>
 
       <!-- simultaneous -->
       </section>
+
       <section anchor="ipv4-only" title="IPv4-only NMS Hosts">
 
 <t>ACP does not support IPv4: Single stack IPv6
@@ -333,11 +303,13 @@ data plane is dual-stack, has IPv4 as a service or is single stack IPv6. Dual pl
 management, IPv6 for ACP, IPv4 for the data plane is likewise an architecturally
 simple option.</t>
 
-<t>The downside of this architectural decision is the potential need for short-term workarounds
-when the operational practices in a network that cannot meet these target expectations.
-This section motivates when and why these workarounds may be necessary and
-describes them. All the workarounds described in this section are HIGHLY UNDESIRABLE.
-The only recommended solution is to enable IPv6 on NMS hosts.</t>
+<t>The implication of this architectural decision is the potential need for
+short-term workarounds when the operational practices in a network
+do not yet meet these target expectations.  This section explains
+when and why these workarounds may be operationally necessary and
+describes them. However, the long term goal is to upgrade all
+NMS hosts to native IPv6, so the workarounds described in this
+section should not be considered permanent.</t>
 
 <t>Most network equipment today supports IPv6 but it is by far not ubiquitously supported
 in NOC backend solutions (HW/SW), especially not in the product space for enterprises. Even when
@@ -345,40 +317,95 @@ it is supported, there are often additional limitations or issues using it in a 
 or the operator mandates for simplicity single stack for all operations. For these reasons an
 IPv4 only management plane is still required and common practice in many enterprises. Without the
 desire to leverage the ACP, this required and common practice is not a problem for those
-enterprises even when they run dual stack in the network. We document these workarounds
+enterprises even when they run dual stack in the network. We discuss these workarounds
 here because it is a short term deployment challenge specific to the operations of the ACP.</t>
 
-<t>To bridge an IPv4 only management plane with the ACP, IPv4 to IPv6 NAT can be used.
-This NAT setup could for example be done in Rt1r1 in above picture to also support IPv4 only
- NMS hots connected to NOClan.</t>
+<t>To connect IPv4 only management plane devices/applications with the ACP, some
+form of IP/ICMP translation of packets IPv4&lt;->IPv6 is necessary. The basic mechanisms
+for this are defined in SIIT (<xref target="RFC7915"/>). There are multiple solutions using
+this mechanisms. To understand the possible solutions, we consider the requirements:</t>
 
-<t>To support connections initiated from IPv4 only NMS hosts towards the ACP
-of network devices, it is necessary to create a static mapping of ACP IPv6 addresses
-into an unused IPv4 address space and dynamic or static mapping of the IPv4 NOC
-application device address (prefix) into IPv6 routed in the ACP. The main issue
-in this setup is the mapping of all ACP IPv6 addresses to IPv4. Without further
-network intelligence, this needs to be a 1:1 address mapping because the prefix used for
-ACP IPv6 addresses is too long to be mapped directly into IPv4 on a prefix basis.</t>
+<t><list style="numbers">
+<t>NMS hosts need to be able to initiate connections to any ACP device for management
+purposes. Examples include provisioning via Netconf/(SSH), SNMP poll operations
+or just diagnostics via SSH connections from operators. Every ACP device/function
+that needs to be reachable from NMS hosts needs to have a separate IPv4 address.</t>
 
-<t>One could implement in router software dynamic mappings by leveraging DNS, but it
-seems highly undesirable to implement such complex technologies for something that
-ultimately is a temporary problem (IPv4 only NMS hosts). With
-today's operational directions it is likely more preferable to automate the setup
-of 1:1 NAT mappings in that NAT router as part of the automation process of
-network device enrollment into the ACP.</t>
+<t>ACP devices need to be able to initiate connections to NMS hosts for example to
+initiate NTP or radius/diameter connections, send syslog or SNMP trap or initiate
+Netconf Call Home connections after bootstrap. Every NMS host needs to have a separate
+IPv6 address reachable from the ACP. When connections from ACP devices are made to
+NMS hosts, the IPv4 source address of these connections as seen by the NMS Host
+must also be unique per ACP device and the same address as in (1) to maintain the
+same addressing simplicity as in a native IPv4 deployment. For example in syslog,
+the source-IP address of a logging device is used to identify it, and if the device
+shows problems, an operator might want to SSH into the device to diagnose it.</t>
+</list></t>
 
-<t>The ACP can also be used for connections initiated by the network device into the
-NMS hosts. For example, syslog from autonomic devices. In this case,
-static mappings of the NMS hosts IPv4 addresses are required. This
-can easily be done with a static prefix mapping into IPv6.</t>
+<t>Because of these requirements, the necessary and sufficient set of solutions are
+those that provide 1:1 mapping of IPv6 ACP addresses into IPv4 space and 1:1 mapping
+of IPv4 NMS host space into IPv6 (for use in the ACP). This means that stateless SIIT
+based solutions are sufficient and preferred.</t>
+
+<t>Note that ACP devices may use multiple IPv6 addresses in the ACP based on which
+Sub-Scheme they use. For example in the Zone Sub-Scheme, an ACP device could use
+two addresses, one with the last address bit (V-bit) 0 and one with 1. Both addresses
+may need to be reachable thought the IPv6/IPv4 address translation.</t>
+
+<t>The need to allocate for every ACP device one or multiple IPv4 addresses
+should not be a problem if - as we assume - the NMS hosts can use private IPv4 
+address space (<xref target="RFC1918"/>). Nevertheless even with RFC1918 address
+space it is important that the ACP IPv6 addresses can efficiently be mapped into
+IPv4 address space without too much waste.</t>
+
+<t>The currently most flexible mapping scheme to achieve this is <xref target="RFC7757"/>
+because it allows configured IPv4 &lt;-> IPv6 prefix mapping. Assume the ACP uses
+the Zone Addressing Sub-Scheme and there are 3 registrars. In the Zone Addressing
+Sub-Scheme, there is for each registrar a constant /112 prefix for which in RFC7757
+an EAM (Explicit Address Mapping) into a /16 (eg: RFC1918) prefix into IPv4 can
+be configured. Within the registrars /112 prefix, Device-Numbers for devices are
+sequentially assigned: with V-bit effectively two numbers are assigned per ACP device.
+This also means that if IPv4 address space is even more constrained, and it is
+known that a registrar will never need the full /15 extent of Device-Numbers, then
+a longer than /112 prefix can be configured into the EAM to use less IPv4 space.</t>
+
+<t>When using the Vlong Addressing Sub-Scheme, it is unlikely that one wants or
+need to translate the full /8 or /16 bits of addressing space per ACP device
+into IPv4. In this case, the EAM rules of dropping trailing bits can be used
+to map only N bits of the V-bits into IPv4. This does imply though that only
+V-addresses that differ in those high-order N V-bits can be distinguished on
+the IPv4 side.</t>
+
+<t>Likewise, the IPv4 address space used for NMS hosts can easily be mapped into
+an ACP prefix assigned to an ACP connect interface.</t>
+
+<t>A full specification of a solution to perform SIIT in conjunction with ACP
+connect following the considerations below is outside the scope of this document.</t>
+
+<t>To be in compliance with security expectations, SIIT has to to happen on
+the ACP edge device itself so that ACP security considerations can be taken into account. 
+Eg: that IPv4 only NMS hosts can be dealt with exactly like IPv6 hosts connected to an
+ACP connect interface.</t>
+
+<t>Note that prior solutions such as NAT64 (<xref target="RFC6146"/>) may
+equally be useable to translate  between ACP IPv6 address space and NMS Hosts IPv4 address
+space, and that as workarounds this can also be done on non ACP Edge Devices
+connected to an ACP connect interface. The details vary depending on implementation
+because the options to configure address mappings vary widely. Outside of
+EAM, there are no standardized solutions that allow for mapping of prefixes,
+so it will most likely be necessary to explicitly map every individual (/128) ACP device
+address to an IPv4 address. Such an approach should use automation/scripting where these
+address translation entries are created dynamically whenever an ACP device is
+enrolled or first connected to the ACP network.</t>
 
 <t>Overall, the use of NAT is especially subject to the ROI (Return On Investment) considerations, but the
 methods described here may not be too different from the same problems encountered
 totally independent of AN/ACP when some parts of the network are to introduce IPv6 but 
 NMS hosts are not (yet) upgradeable.</t>
 
-      <!-- ipv4-only -->
       </section>
+      <!-- ipv4-only -->
+
       <section anchor="selection-policies" title="Path Selection Policies">
 
 <t>As mentioned above, the ACP is not expected to have high performance because its
@@ -522,8 +549,8 @@ direction:</t>
 <list style="numbers">
 <t>NMS hosts should at least support IPv6. IPv4/IPv6 NAT in the network to
 enable use of ACP is long term undesirable. Having IPv4 only applications automatically
-leverage IPv6 connectivity via host-stack translation may be an option but the operational
-viability of this approach is not well enough understood.</t>
+leverage IPv6 connectivity via host-stack translation may be an option but this
+has not been investigated yet.</t>
 
 <t>Build the ACP as a lightweight application for NMS hosts so ACP
 extends all the way into the actual NMS hosts.</t>
@@ -570,75 +597,7 @@ such as those performing distributed OAM. The ACP can help in these cases.</t>
   <!-- solutions -->
   </section>
 
-  <section anchor="security" title="Security Considerations">
-
-<t>In this section, we discuss only security considerations not covered in the appropriate sub-sections of the solutions described.</t>
-
-<t>Even though ACPs are meant to be isolated, explicit operator
-misconfiguration to connect to insecure OAM equipment and/or bugs in ACP
-devices may cause leakage into places where it is not expected. 
-Mergers/Acquisitions and other complex network reconfigurations affecting
-the NOC are typical examples.</t>
-
-<t>ULA addressing as proposed in this document is preferred over globally
-reachable addresses because it is not routed in the global Internet and
-will therefore be subject to more filtering even in places where specific ULA addresses
-are being used.</t>
-
-<t>Random ULA addressing provides more than sufficient protection against address
-collision even though there is no central assignment authority. This is helped
-by the expectation, that ACPs are never expected to connect all together, but
-only few ACPs may ever need to connect together, e.g. when mergers and aquisitions
-occur.</t>
-
-<t>If packets with unexpected ULA addresses are seen and one expects them to be
-from another networks ACP from which they leaked, then some form of ULA
-prefix registration (not allocation) can be beneficial. Some voluntary
-registries exist, for example https://www.sixxs.net/tools/grh/ula/, although
-none of them is preferable because of being operated by some recognized
-authority. If an operator would want to make its ULA prefix known, it might
-need to register it with multiple existing registries.</t>
-
-<t>ULA Centrally assigned ULA addresses (ULA-C) was an attempt to introduce
-centralized registration of randomly assigned addresses and potentially
-even carve out a different ULA prefix for such addresses. This proposal is currently
-not proceeding, and it is questionable whether the stable connectivity use
-case provides sufficient motivation to revive this effort.</t>
-
-<t>Using current registration options implies that there will not be
-reverse DNS mapping for ACP addresses. For that one will have to rely
-on looking up the unknown/unexpected network prefix in the registry
-to determine the owner of these addresses.</t>
-
-<t>Reverse DNS resolution may be beneficial for specific already deployed
-insecure legacy protocols on NOC OAM systems that intend to communicate
-via the ACP (e.g. TFTP) and leverages reverse-DNS for authentication. Given
-how the ACP provides path security except potentially for the last-hop in the NOC,
-the ACP does make it easier to extend the lifespan of such protocols in
-a secure fashion as far to just the transport is concerned. The ACP does
-not make reverse DNS lookup a secure authentication method though.
-
-Any current and future protocols must rely on secure end-to-end communications
-(TLS/DTLS) and identification and authentication via the certificates assigned
-to both ends. This is enabled by the certificate mechanisms of the ACP.</t>
-
-<t>If DNS and especially reverse DNS are set up, then it should be set up
-in an automated fashion, linked to the autonomic registrar backend so
-that the DNS and reverse DNS records are actually derived from the
-subject name elements of the ACP device certificates in the same way as the autonomic
-devices themselves will derive their ULA addresses from their certificates
-to ensure correct and consistent DNS entries.</t>
-
-<t>If an operator feels that reverse DNS records are beneficial to its
-own operations but that they should not be made available publically
-for "security" by concealment reasons, then the case of ACP DNS entries is probably
-one of the least problematic use cases for split-DNS: The ACP DNS
-names are only needed for the NMS hosts intending to use the ACP -
-but not network wide across the enterprise.</t>
-
-  </section>
-  <!-- security -->
-
+<section anchor="arch" title="Architectural Considerations">
     <section anchor="ipv4" title="No IPv4 for ACP">
 
 <t>The ACP is targeted to be IPv6 only, and the prior explanations in this document show
@@ -666,6 +625,81 @@ IPv4. Especially because auto-addressing for the ACP with IPv4 would be more
 complex than in IPv6 due to the IPv4 addressing space.</t>
 
     </section>
+</section>
+
+
+  <section anchor="security" title="Security Considerations">
+
+<t>In this section, we discuss only security considerations not covered in the appropriate sub-sections of the solutions described.</t>
+
+<t>Even though ACPs are meant to be isolated, explicit operator
+misconfiguration to connect to insecure OAM equipment and/or bugs in ACP
+devices may cause leakage into places where it is not expected. 
+Mergers/Acquisitions and other complex network reconfigurations affecting
+the NOC are typical examples.</t>
+
+<t>ACP prefix addresses are ULA addresses. Using these addresses also for NOC
+devices as proposed in this document is not only necessary for above explained
+simple routing functionality but it is also more secure than global IPv6
+addresses. ULA addresses are not routed in the global Internet and
+will therefore be subject to more filtering even in places where specific ULA addresses
+are being used. Packets are therefore less likely to leak to be successfully
+injected into the isolated ACP environment.</t>
+
+<t>The random nature of a ULA prefix provides strong protection
+against address collision even though there is no central assignment authority. This is helped
+by the expectation, that ACPs are never expected to connect all together, but
+only few ACPs may ever need to connect together, e.g. when mergers and aquisitions
+occur.</t>
+
+<t>The ACP specification demands that only packets from configured ACP prefixes
+are permitted from ACP connect interfaces. It also requires that RPL root
+ACP devices need to be able to diagnose unknown ACP destination addresses.</t>
+
+<t>To help diagnose packets that unexpectedly leaked for example from another
+ACP (that was meant to be deployed separately), it can be useful to voluntarily
+list your own the ULA ACP prefixes in one of the sites on the Internet, 
+for example https://www.sixxs.net/tools/grh/ula/. Note that this does not
+constitute registration and if you want to ensure that your leaked ACP packets
+can be recognized to come from you, you may need to list your prefixes in
+multiple of those sites.</t>
+
+<t>Note that there is a provision in <xref target="RFC4193"/> for non-locally
+assigned address space (L bit = 0), but there is no existing
+standardization for this, so these ULA prefixes must not be used.</t>
+
+<t>According to RFC4193 section 4.4, PTR records for ULA addresses should not
+be installed into the global DNS (no guaranteed ownership). Hence also the
+need to rely on voluntary lists (and in prior paragraph) to make the use of
+an ULA prefix globally known.</t>
+
+<t>Nevertheless, some legacy OAM applications running across the ACP may rely
+on reverse DNS lookup for authentication of requests (eg: TFTP for download
+of network firmware/config/software). Operators may therefore use split horizon
+DNS to provide global PTR records for their own ULA prefixes only into their
+own domain to continue relying on this method. Given the security of the ACP,
+this may even increase the security of such legacy methods.</t>
+
+<t>Any current and future protocols must rely on secure end-to-end communications
+(TLS/DTLS) and identification and authentication via the certificates assigned
+to both ends. This is enabled by the certificate mechanisms of the ACP.</t>
+
+<t>If DNS and especially reverse DNS are set up, then it should be set up
+in an automated fashion, linked to the autonomic registrar backend so
+that the DNS and reverse DNS records are actually derived from the
+subject name elements of the ACP device certificates in the same way as the autonomic
+devices themselves will derive their ULA addresses from their certificates
+to ensure correct and consistent DNS entries.</t>
+
+<t>If an operator feels that reverse DNS records are beneficial to its
+own operations but that they should not be made available publically
+for "security" by concealment reasons, then the case of ACP DNS entries is probably
+one of the least problematic use cases for split-DNS: The ACP DNS
+names are only needed for the NMS hosts intending to use the ACP -
+but not network wide across the enterprise.</t>
+
+  </section>
+  <!-- security -->
 
   <section anchor="iana" title="IANA Considerations">
 
@@ -683,8 +717,18 @@ complex than in IPv6 due to the IPv4 addressing space.</t>
   <section anchor="changes" title="Change log [RFC Editor: Please remove]">
   <t>
     <list>
-      <t>04: Integrated fixes from Mohamed Boucadairs review. </t>
-      <t>03: Integrated fixes from Shepherd review (Sheng Jiang). </t>
+      <t>05: Integrated fixes from Brian Carpenters review. Details on semantic/structural changes:</t>
+      <t> <list style="symbols">
+          <t>Folded most comments back into draft-ietf-anima-autonomic-control-plane-09 because this stable connectivity draft was suggesting things that are better written out and standardized in the ACP document.</t>
+          <t>Section on simultaneous ACP and data plane connectivity section reduced/rewritten because of this.</t>
+          <t>Re-emphasized security model of ACP - ACP-connect can not arbitrarily extend ACP routing domain.</t>
+          <t>Re-wrote much of NMS section to be less suggestive and more descriptive, avoiding the term NAT and referring to relevant RFCs (SIIT etc.).</t>
+          <t>Main additional text in IPv4 section is about explaining how we suggest to use EAM (Explicit Address Mapping) which actuall would well work with the Zone and Vlong Addressing Sub-Schemes of ACP.</t>
+          <t>Moved, but not changed section of "why no IPv4 in ACP" before IANA considerations to make structure of document more logical.</t>
+          <t>Refined security considerations: explained how optional ULA prefix listing on Internet is only for diagnostic purposes. Explained how this is useful because DNS must not be used. Explained how split horizon DNS can be used nevertheless.</t>
+      </list></t>
+      <t>04: Integrated fixes from Mohamed Boucadairs review (thorough textual review). </t>
+      <t>03: Integrated fixes from thorough Shepherd review (Sheng Jiang). </t>
       <t>01: Refresh timeout. Stable document, change in author association.</t>
       <t>01: Refresh timeout. Stable document, no changes.</t>
       <t>00: Changed title/dates.</t>
@@ -708,25 +752,42 @@ complex than in IPv6 due to the IPv4 addressing space.</t>
     <?rfc include="reference.I-D.ietf-anima-grasp.xml"?>
     <?rfc include="reference.I-D.ietf-anima-autonomic-control-plane.xml"?>
     <?rfc include='reference.RFC.1034'?>
+    <?rfc include='reference.RFC.1918'?>
+    <?rfc include='reference.RFC.4191'?>
     <?rfc include='reference.RFC.4193'?>
     <?rfc include='reference.RFC.5246'?>
     <?rfc include='reference.RFC.6291'?>
+    <?rfc include='reference.RFC.6146'?>
     <?rfc include='reference.RFC.6347'?>
     <?rfc include='reference.RFC.6418'?>
     <?rfc include='reference.RFC.6434'?>
     <?rfc include='reference.RFC.6518'?>
+    <?rfc include='reference.RFC.6724'?>
     <?rfc include='reference.RFC.6824'?>
+    <?rfc include='reference.RFC.7757'?>
+    <?rfc include='reference.RFC.7915'?>
 
-	<reference anchor="ITUT">
-		<front>
-			<title>Architecture and specification of data communication network</title>
-			<author>
-				<organization>International Telecommunication Union</organization>
-			</author>
-			<date month="June" year="2008"/>
-		</front>
-		<seriesInfo name="ITU-T" value="Recommendation G.7712/Y.1703"/>
-	</reference>
-    </references>
+    <reference anchor="ITUT">
+        <front>
+            <title>Architecture and specification of data communication network</title>
+	    <author> <organization>International Telecommunication Union</organization> </author>
+	    <date month="Noevember" year="2001"/>
+         </front>
+         <seriesInfo name="ITU-T" value="Recommendation G.7712/Y.1703"/>
+         <annotation>This is the earliest but superceeded version of the series. See 
+             <eref target="https://www.itu.int/rec/T-REC-G.7712/en">REC-G.7712 Home Page</eref>
+             for current versions.
+         </annotation>
+     </reference>
+
+     <reference anchor="IEEE802.1Q">
+         <front>
+             <title> 802.1Q-2014 - IEEE Standard for Local and metropolitan area networks - Bridges and Bridged Networks </title>
+	     <author> <organization>International Telecommunication Union</organization> </author>
+             <date year="2014"/>
+         </front>
+     </reference>
+
+  </references>
 </back>
 </rfc>
