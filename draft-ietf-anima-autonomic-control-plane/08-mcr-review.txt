@@ -1,0 +1,243 @@
+From anima-bounces@ietf.org  Tue Aug  1 02:13:02 2017
+Return-Path: <anima-bounces@ietf.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED=0.1,
+	DKIM_VALID=-0.1,HEADER_FROM_DIFFERENT_DOMAINS=0.001,RCVD_IN_DNSWL_MED=-2.3,
+	SPF_FAIL=0.919 autolearn=disabled version=3.4.0
+X-Original-To: eckert+ietf.anima@i4.informatik.uni-erlangen.de
+Delivered-To: eckert+ietf.anima@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [IPv6:2001:638:a000:4134::ffff:45])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id 72D4058C4BA;
+	Tue,  1 Aug 2017 02:13:02 +0200 (CEST)
+Received: from mail.ietf.org (mail.ietf.org [4.31.198.44])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id 5614C74D0CE;
+	Tue,  1 Aug 2017 02:12:58 +0200 (CEST)
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id A95FE131C95;
+	Mon, 31 Jul 2017 17:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1501546376; bh=RXF9M/EmlFOSIoQcX70dOjSyDX5Zjbij3qGMqmCkEUg=;
+	h=From:to:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc;
+	b=mmPCLDj+jv5JPzhi6Q/PMjKdv6uKoqoobgsyYnzg7AKT+sIm0VpfHRCmA+3DybPrk
+	 X0uLmPSRFUSiOXp5GMxSIT80rwyrzOf8sgr0KQeS1YmJ0hUYLLSrnX8+XEGjORS3+K
+	 z/u/qpR97HIIPOdkq+a0mhE9tUIvTai64C3fwABY=
+X-Original-To: anima@ietfa.amsl.com
+Delivered-To: anima@ietfa.amsl.com
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 7F2D5131C81
+ for <anima@ietfa.amsl.com>; Mon, 31 Jul 2017 17:12:54 -0700 (PDT)
+Received: from mail.ietf.org ([4.31.198.44])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zIQpRuW-dyVK for <anima@ietfa.amsl.com>;
+ Mon, 31 Jul 2017 17:12:52 -0700 (PDT)
+Received: from tuna.sandelman.ca (tuna.sandelman.ca [209.87.249.19])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 33543131C3A
+ for <anima@ietf.org>; Mon, 31 Jul 2017 17:12:52 -0700 (PDT)
+Received: from sandelman.ca (obiwan.sandelman.ca [IPv6:2607:f0b0:f:2::247])
+ by tuna.sandelman.ca (Postfix) with ESMTP id 6FB792009E;
+ Mon, 31 Jul 2017 20:14:37 -0400 (EDT)
+Received: from obiwan.sandelman.ca (localhost [IPv6:::1])
+ by sandelman.ca (Postfix) with ESMTP id 3DA6E80243;
+ Mon, 31 Jul 2017 20:12:51 -0400 (EDT)
+From: Michael Richardson <mcr+ietf@sandelman.ca>
+to: anima@ietf.org
+In-Reply-To: <32649.1500771022@dooku.sandelman.ca>
+References: <32649.1500771022@dooku.sandelman.ca>
+X-Mailer: MH-E 8.6; nmh 1.6+dev; GNU Emacs 24.5.1
+X-Face: $\n1pF)h^`}$H>Hk{L"x@)JS7<%Az}5RyS@k9X%29-lHB$Ti.V>2bi.~ehC0;
+ <'$9xN5Ub#
+ z!G,p`nR&p7Fz@^UXIn156S8.~^@MJ*mMsD7=QFeq%AL4m<nPbLgmtKK-5dC@#:k
+MIME-Version: 1.0
+Date: Mon, 31 Jul 2017 20:12:51 -0400
+Message-ID: <25703.1501546371@obiwan.sandelman.ca>
+Archived-At: <https://mailarchive.ietf.org/arch/msg/anima/T9csvXS7lTK3NDknXmWDsKvLoDk>
+Subject: Re: [Anima] ACP document --- 07 to 08 changes
+X-BeenThere: anima@ietf.org
+X-Mailman-Version: 2.1.22
+Precedence: list
+List-Id: Autonomic Networking Integrated Model and Approach <anima.ietf.org>
+List-Unsubscribe: <https://www.ietf.org/mailman/options/anima>,
+ <mailto:anima-request@ietf.org?subject=unsubscribe>
+List-Archive: <https://mailarchive.ietf.org/arch/browse/anima/>
+List-Post: <mailto:anima@ietf.org>
+List-Help: <mailto:anima-request@ietf.org?subject=help>
+List-Subscribe: <https://www.ietf.org/mailman/listinfo/anima>,
+ <mailto:anima-request@ietf.org?subject=subscribe>
+Cc: Pascal Thubert <pthubert@cisco.com>
+Content-Type: multipart/mixed; boundary="===============9093653593811320872=="
+Errors-To: anima-bounces@ietf.org
+Sender: "Anima" <anima-bounces@ietf.org>
+X-Virus-Scanned: clamav-milter 0.99.2 at faui45
+X-Virus-Status: Clean
+Status: RO
+Content-Length: 5737
+Lines: 157
+
+--===============9093653593811320872==
+Content-Type: multipart/signed; boundary="=-=-=";
+ micalg=pgp-sha256; protocol="application/pgp-signature"
+
+--=-=-=
+Content-Type: text/plain
+
+
+All of my minor edits and a few smallish friendly amendments are at:
+    https://github.com/anima-wg/autonomic-control-plane/pull/3
+
+
+Michael Richardson <mcr+ietf@sandelman.ca> wrote:
+    > I'm reading the -07 version of ACP (because it's been open in a tab
+
+Now to the changes in -08:
+
+    AN "Autonomic Network".  A network according to
+         [I-D.ietf-anima-reference-model].  Its main components are Intent,
+         Autonomic Functions and ANI.
+
+So, I had an initial problem with this, that it referes to something we have
+no idea about, "Intent". Then I wondered if this was well defined in the
+reference, and I find that actually the reference model has no terminology
+section.... maybe one could consider the entire document a terminology
+section.  But, it seems strange to be definining this way in *this* document.
+I think that it should end at the first period.  If the second sentence is
+needed, it should go into the reference.
+
+On this topic (which is not "ACP document"), I'm concerned about the amount
+of (*) text in the reference model document!
+
+    AN Domain Name  A string name (typically in a format of a DNS domain
+              name) identifying an Autonomic Network.  It is stored in the
+              ACP information field of an ANI devices LDevID.
+
+re (typically..) either it's an FQDN (with all the QNAME restrictions and a
+reference), or it's just a string.  Let's decide one way or the other, rather
+than "typically".
+
+I think that there are a number of other terms which should not be introduced
+definitatively in this document....
+
+5.  Inside the ACP VRF, each node sets up a virtual (loopback)
+    interface with its ULA IPv6 address.
+
+I think we should say that it's a /128.
+
+section 6.1.2 says "Maintenance" but, it's about AN_join_registrar.
+
+I don't think that the AN_join_registrar definition belongs in this document.
+I agree that some minor bit of text should exist, but I don't think this
+belongs here.  This belongs in BRSKI.
+Perhaps it got clipped out in editing, but that's a bug.
+
+
+section 6.6:
+        If our devices certificate indicates a CDP or OCSP then the peers
+        certificate must be valid occrding to those (eg: OCSP check across
+        the ACP or not listed in the CRL).
+        {see git for a grammar fix to above}
+
+Somewhere, I think that we should be saying that Certificate
+Distribution Points (CDPs) or OCSP servers (whichever is used) SHOULD be
+available via the connections inside the ACP.    BUT, as those things are
+usually referenced with names there are some MIF-like isues that I think the
+ACP document should address:
+1) DNS.
+2) address preferences.
+(Homenet's naming architecture is dealing with the same questions, but I
+think the answers may be different)
+
+6.8.1.  GRASP as a core service of the ACP
+
+I think that this section is really important.
+Too important to belong buried in a document about to build secure tunnels
+for IP traffic.   At the least, this belongs prominently in the reference
+model document.  At the largest, it needs a new document with a title like:
+    "The ACP profile of GRASP as a core service"
+
+along with 6.8.2.
+
+re 6.10.2:
+   -> 8+40+2 = 50 bits.
+   so why in 6.10.3 says, "51 bits" for subscheme.
+
+I don't find the rational for the V bit very convincing. I don't think you
+need any real justification for it.
+
+6.10.4.  ACP V8 Addressing Sub-Scheme
+     The sub-scheme defined here is defined by the Type value 1 (one) in
+     the base scheme.
+
+I think you mean, "Type value 01 (one)", since there are two type bits.
+I find the use of 1 confusing, given that we also have the Z bit.
+You've made me happy with the address definition.
+
+I sent some text via pull request to clarify some of the no-artifact choice
+in RPL.  most of the rest of the text looks great to me...
+(I just learnt that "artefact" was british spelling for artifact.. I guess we
+just need to pick one or the other.)
+
+I'll have to ask Pascal why he suggested:
+      Trickle: Not used.
+
+7.1 --- a pretty important section.
+One consideration that might be worth doing in a future document is
+registering a TLV for LLDP (CDP) that could carry GRASP M_FLOOD ACP
+messages. That would please switch fabric vendors because then making the
+topologies follow physical would be very easy. LLDP does not get forwarded.
+
+I wonder who knows the right IEEE incantations to do this.
+
+section 10.1: it seems like it's all been said already.
+section 10.2 ---> move to an appendix.
+section 10.3 ---> appendix or cut.
+I see that it all *WAS* in an appendix. I don't know why you moved it.
+
+
+
+
+--
+Michael Richardson <mcr+IETF@sandelman.ca>, Sandelman Software Works
+ -= IPv6 IoT consulting =-
+
+
+
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEbsyLEzg/qUTA43uogItw+93Q3WUFAll/x4IACgkQgItw+93Q
+3WUHHAf8DaK0NyEuwABezjeCImCTkIrGAxl8qUwXK4cE9wCj3SKrXtE8etvUmIQX
+QKNFhRFA/+WWaDED6XAUZr/x0vFGCwZLUXlmoap8xgrOTYMOtpCeVUe0k0V2JIuS
+ZNccO+Vhnoy3gF9J3+UkDNfWoWP68AQ52TKc+IjeXKZWHhT5en/RMfmqPb/PpsPH
+ckUaem80Ae1jpXIsnTfKMwYvyDEiI+ZzweExrNEC/oV+WI8z9OeFHIZMsUpCHHX7
+xY0sUcwRWY6SunOj5lS4TC7YHpFQN6VeuKYYra25v07uTYQasTAD7yqbyVprY5KQ
+07JoDwwil+T+j2yslwYTk8T5NQ1qHQ==
+=K/rm
+-----END PGP SIGNATURE-----
+--=-=-=--
+
+
+--===============9093653593811320872==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+Anima mailing list
+Anima@ietf.org
+https://www.ietf.org/mailman/listinfo/anima
+
+--===============9093653593811320872==--
+

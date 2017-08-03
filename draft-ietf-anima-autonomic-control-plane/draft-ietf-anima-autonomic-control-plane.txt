@@ -315,9 +315,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
       [I-D.ietf-anima-reference-model].  Its main components are Intent,
       Autonomic Functions and ANI.
 
-   AN Domain Name  A string name (typically in a format of a DNS domain
-      name) identifying an Autonomic Network.  It is stored in the ACP
-      information field of an ANI devices LDevID.
+   AN Domain Name  An FQDN (Fully Qualified Domain Name) identifying an
+      Autonomic Network.  It is stored in the ACP information field of
+      an ANI devices LDevID.  See Section 6.1.1.
 
    ANI (device/network)  "Autonomic Network Infrastructure".  A device
       with ANI supports ACP, BRSKI and GRASP.  The ANI is the
@@ -677,9 +677,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    the address can matches the simple dot-atom format of [RFC5322] (":"
    are not allowed in that format).
 
-   <domain> is used to indicate the autonomic "domain" across which all
+   <domain> is used to indicate the Autonomic Domain across which all
    ACP nodes trust each other and are willing to build ACP channel with
-   each other.  See Section 6.6.
+   each other.  See Section 6.6.  It SHOULD be the FQDN of a domain
+   owned by the operator assigning the certificate.  This is a simple
+   method to ensure that the domain name is globally unique and
+   collision of ACP addresses would therefore only happen due to ULA
+   hash collisions.  If the operator does not own any FQDN, it should
+   choose am FQDN format string that intends to be equally unique.
 
    {<rsub>.}<domain> is the autonomic "routing subdomain" that is used
    used in addressing to calculate the hash used in the creation of the
@@ -718,11 +723,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
       the LDevID.  If the elements used for the ACP are interpreted by
       other protocols/services, then the impact should be benign.
 
-   o  Using an IP address format encoding could result in non-benign
-      misinterpretation of the ACP information, for example other
-      protocol/services unaware of the ACP could try to do something
-      with the ACP address that would fail to work correctly.  For
-
 
 
 Behringer, et al.       Expires February 3, 2018               [Page 13]
@@ -730,6 +730,10 @@ Behringer, et al.       Expires February 3, 2018               [Page 13]
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 
+   o  Using an IP address format encoding could result in non-benign
+      misinterpretation of the ACP information, for example other
+      protocol/services unaware of the ACP could try to do something
+      with the ACP address that would fail to work correctly.  For
       example, the address could be interpreted to be an address of the
       device in a VRF other than the ACP VRF.
 
@@ -770,13 +774,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    EST servers MUST announce their service via GRASP in the ACP through
    M_FLOOD messages:
 
-        Example:
 
-        [M_FLOOD, 12340815, h'fda379a6f6ee0000200000064000001', 180000,
-            ["AN_join_registrar", SYNCH-FLAG, 255, "EST-TLS"],
-            [O_IPv6_LOCATOR,
-                 h'fda379a6f6ee0000200000064000001', TCP, 80]
-        ]
+
+
 
 
 
@@ -785,6 +785,14 @@ Behringer, et al.       Expires February 3, 2018               [Page 14]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+        Example:
+
+        [M_FLOOD, 12340815, h'fda379a6f6ee0000200000064000001', 180000,
+            ["AN_join_registrar", SYNCH-FLAG, 255, "EST-TLS"],
+            [O_IPv6_LOCATOR,
+                 h'fda379a6f6ee0000200000064000001', TCP, 80]
+        ]
 
    The formal CDDL definition is:
 
@@ -825,14 +833,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    (as learned during the TLS handshake) is added to the top of the list
    or provisioned/configured EST-server(s).
 
-   This logic of selecting an EST server for renewal is choosen to allow
-   for distributed EST servers to be used effectively but to also allow
-   fallback to the most reliably learned EST server - those that
-   performed already successful enrollment in before.  A compromised
-   (non EST-server) ACP device for example can filter or fake GRASP
-   announcements, but it can not successfully renew a certificate and
-   can only prohibit traffic to a valid EST server when it is on the
-   path between the ACP device and the EST server.
 
 
 
@@ -841,6 +841,15 @@ Behringer, et al.       Expires February 3, 2018               [Page 15]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   This logic of selecting an EST server for renewal is choosen to allow
+   for distributed EST servers to be used effectively but to also allow
+   fallback to the most reliably learned EST server - those that
+   performed already successful enrollment in before.  A compromised
+   (non EST-server) ACP device for example can filter or fake GRASP
+   announcements, but it can not successfully renew a certificate and
+   can only prohibit traffic to a valid EST server when it is on the
+   path between the ACP device and the EST server.
 
    The ACP device MUST support Certificate Revocation Lists via HTTPs
    from one or more Certificate Distribution Points.  These CDPs MUST be
@@ -881,6 +890,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    configuration.  For example, the node-ID and IP address could be
    configured.
 
+
+
+
+Behringer, et al.       Expires February 3, 2018               [Page 16]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
+
+
    The adjacency table MAY contain information about the validity and
    trust of the adjacent autonomic node's certificate.  However,
    subsequent steps MUST always start with authenticating the peer.
@@ -889,14 +906,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    nodes in general, independently of their domain and trust status.
    The next step determines to which of those autonomic nodes an ACP
    connection should be established.
-
-
-
-
-Behringer, et al.       Expires February 3, 2018               [Page 16]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
-
 
 6.3.  Neighbor Discovery with DULL GRASP
 
@@ -937,15 +946,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    the "AN_ACP" objective.  This is a synchronization objective intended
    to be flooded on a single link using the GRASP Flood Synchronization
    (M_FLOOD) message.  In accordance with the design of the Flood
-   message, a locator consisting of a specific link-local IP address, IP
-   protocol number and port number will be distributed with the flooded
-   objective.  An example of the message is informally:
-
-
-
-
-
-
 
 
 
@@ -953,6 +953,10 @@ Behringer, et al.       Expires February 3, 2018               [Page 17]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   message, a locator consisting of a specific link-local IP address, IP
+   protocol number and port number will be distributed with the flooded
+   objective.  An example of the message is informally:
 
           Example:
 
@@ -999,16 +1003,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    is offering ACP secure channel negotiation via IKEv2 on port 15000
    (for the sake of creating a non-standard example).
 
-   If a locator is included, it MUST be an O_IPv6_LOCATOR, and the IPv6
-   address MUST be the same as the initiator address (these are DULL
-   requirements to minimize third party DoS attacks).
-
 
 
 Behringer, et al.       Expires February 3, 2018               [Page 18]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   If a locator is included, it MUST be an O_IPv6_LOCATOR, and the IPv6
+   address MUST be the same as the initiator address (these are DULL
+   requirements to minimize third party DoS attacks).
 
    The secure channel methods defined in this document use the objective
    values of "IKEv2" and "dTLS".  There is no distinction between IKEv2
@@ -1054,10 +1058,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
       "example.com", "access.example.com", "core.example.com" and
       "city.core.example.com" could all establish one single ACP.
 
-   o  ACP connections across domains with different CA (certificate
-      authorities) could establish a common ACP by installing the
-      alternate domains' CA into the trusted anchor store.  This is an
-
 
 
 
@@ -1066,6 +1066,9 @@ Behringer, et al.       Expires February 3, 2018               [Page 19]
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 
+   o  ACP connections across domains with different CA (certificate
+      authorities) could establish a common ACP by installing the
+      alternate domains' CA into the trusted anchor store.  This is an
       executive management action that could easily be accomplished
       through the control channel created by the ACP.
 
@@ -1112,9 +1115,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    succeeds in a predictable fashion without blocking, the following
    rules apply:
 
-   An autonomic device may choose to attempt initiate the different
-   feasible ACP secure channel protocol it supports according to its
-
 
 
 Behringer, et al.       Expires February 3, 2018               [Page 20]
@@ -1122,6 +1122,8 @@ Behringer, et al.       Expires February 3, 2018               [Page 20]
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 
+   An autonomic device may choose to attempt initiate the different
+   feasible ACP secure channel protocol it supports according to its
    local policies sequentially or in parallel, but it MUST support
    acting as a responder to all of them in parallel.
 
@@ -1168,8 +1170,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
    o  The certificate is valid as proven by the security associations
       protocol exchanges.
-
-
 
 
 
@@ -1503,8 +1503,8 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 6.10.3.  ACP Zone Addressing Sub-Scheme
 
-   The sub-scheme defined here is defined by the Type value 0 (zero) in
-   the base scheme.
+   The sub-scheme defined here is defined by the Type value 00b (zero)
+   in the base scheme.
 
 
 
@@ -1519,7 +1519,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    |  (base scheme)  | Zone-ID | Z ||         Device-ID               |
    |                 |         |   || Registrar-ID | Device-Number| V |
    +-----------------+---------+---++--------------+--------------+---+
-            51              13   1         48           15          1
+            50              13   1         48           15          1
 
 
                  Figure 3: ACP Zone Addressing Sub-Scheme
@@ -1600,7 +1600,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    the addresses primarily act as identifiers for the nodes, and
    aggregation is not possible.
 
-   If aggregation is required, the 13 bit value allows for up to 8191
+   If aggregation is required, the 13 bit value allows for up to 8192
    zones.  The allocation of zone numbers may either happen
    automatically through a to-be-defined algorithm; or it could be
    configured and maintained manually.
@@ -1633,8 +1633,8 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 6.10.4.  ACP Manual Addressing Sub-Scheme
 
-   The sub-scheme defined here is defined by the Type value 0 (zero) in
-   the base scheme.
+   The sub-scheme defined here is defined by the Type value 00b (zero)
+   in the base scheme.
 
 
 
@@ -1642,7 +1642,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    +---------------------+---------+---++-----------------------------+
    |    (base scheme)    |Subnet-ID| Z ||     Interface Identifier    |
    +---------------------+---------+---++-----------------------------+
-            51             13        1
+            50             13        1
 
 
                 Figure 4: ACP Manual Addressing Sub-Scheme
@@ -1684,20 +1684,21 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
 6.10.5.  ACP Vlong Addressing Sub-Scheme
 
-   The sub-scheme defined here is defined by the Type value 1 (one) in
+   The sub-scheme defined here is defined by the Type value 01b (one) in
    the base scheme.
 
-             51                              77
+
+             50                              78
    +---------------------++-----------------------------+----------+
    |    (base scheme)    ||                Device-ID               |
    |                     || Registrar-ID | Device-Number|        V |
    +---------------------++--------------+--------------+----------+
-                               46             32/16          8/16
+                               46             33/17          8/16
 
                  Figure 5: ACP Vlong Addressing Sub-Scheme
 
    This addressing scheme foregoes the Zone field to allow for larger,
-   flatter routed networks (eg: as in IoT) with more than 2^31 Device-
+   flatter routed networks (eg: as in IoT) with more than 2^32 Device-
    Numbers.  It also allows for up to 2^16 - 65536 different virtualized
    adddresses, which could be used to address individual software
    components in an ACP device.
@@ -1706,7 +1707,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    refinements:
 
    o  V: Virtualization bit: Values 0 and 1 as in Zone sub-scheme,
-      values 2-255 for use via definition in followup work.
+      further values use via definition in followup work.
 
    o  Registrar-ID: To maximize Device-Number and V, the Registrar-ID is
       reduced to 46 bits.  This still allows to use the MAC address of a
@@ -1715,17 +1716,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
       to distinguish MAC addresses).
 
    o  If the first bit of the "Device-Number" is "1", then the Device
-      number and V field are each 16 bit long.  Otherwise the Device-
-      Number is 32 bit long and the V field is 8 bit long. "0" bit
-      Device-Numbers are intended to be used for "general purpose" ACP
-      devices that would potentially have a limited number (< 256) of
-      internal users of the ACP that require separate V(irtual)
-      addresses. "1" bit Device-Numbers are intended for ACP devices
-      that are ACP edge devices (see Section 8.1.1) or that have a large
-      number of internal ACP users requiring separate V(irtual)
+      number is 17 bit long and the V field is 16 bit long.  Otherwise
+      the Device-Number is 33 bit long and the V field is 8 bit long.
+      "0" bit Device-Numbers are intended to be used for "general
+      purpose" ACP devices that would potentially have a limited number
+      (< 256) of internal users of the ACP that require separate
+      V(irtual) addresses. "1" bit Device-Numbers are intended for ACP
+      devices that are ACP edge devices (see Section 8.1.1) or that have
+      a large number of internal ACP users requiring separate V(irtual)
       addresses.  For example large SDN controllers with container
       modular software architecture (see Section 8.1.2).
-
 
 
 
@@ -1830,11 +1830,11 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    a different parent.
 
    Future Extensions to this RPL profile can provide optimality for
-   multiple NOCs.  This requires utilizing data plane artefacts
-   including IPinIP encap/decap on ACP routers and processing of IPv6
-   RPI headers.  Alternatively (Src,Dst) routing table entries could be
-   used.  A decision for the preferred technology would have to be done
-   when such extension is defined.
+   multiple NOCs.  This requires utilizing data plane artifact including
+   IPinIP encap/decap on ACP routers and processing of IPv6 RPI headers.
+   Alternatively (Src,Dst) routing table entries could be used.  A
+   decision for the preferred technology would have to be done when such
+   extension is defined.
 
 6.11.1.2.  RPL Instances
 
@@ -4024,7 +4024,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
    Added requirement to terminate ACP channels upon cert expiry/
    revocation.
 
-
+   Added fixes from 08-mcr-review-reply.txt (on github):
 
 
 
@@ -4033,6 +4033,12 @@ Behringer, et al.       Expires February 3, 2018               [Page 72]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   o  AN Domain Names are FQDNs.
+
+   o  Fixed bit length of schemes, numerical writing of bits (00b/01b).
+
+   o  Lets use US american english.
 
 16.  References
 
@@ -4075,12 +4081,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
               DOI 10.17487/RFC5322, October 2008,
               <http://www.rfc-editor.org/info/rfc5322>.
 
-   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
-              January 2012, <http://www.rfc-editor.org/info/rfc6347>.
-
-
-
 
 
 
@@ -4089,6 +4089,10 @@ Behringer, et al.       Expires February 3, 2018               [Page 73]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
+              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
+              January 2012, <http://www.rfc-editor.org/info/rfc6347>.
 
    [RFC6550]  Winter, T., Ed., Thubert, P., Ed., Brandt, A., Hui, J.,
               Kelsey, R., Levis, P., Pister, K., Struik, R., Vasseur,
@@ -4132,11 +4136,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
               anima-stable-connectivity-04 (work in progress), July
               2017.
 
-   [I-D.ietf-netconf-zerotouch]
-              Watsen, K., Abrahamsson, M., and I. Farrer, "Zero Touch
-              Provisioning for NETCONF or RESTCONF based Management",
-              draft-ietf-netconf-zerotouch-14 (work in progress), June
-              2017.
+
 
 
 
@@ -4145,6 +4145,12 @@ Behringer, et al.       Expires February 3, 2018               [Page 74]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   [I-D.ietf-netconf-zerotouch]
+              Watsen, K., Abrahamsson, M., and I. Farrer, "Zero Touch
+              Provisioning for NETCONF or RESTCONF based Management",
+              draft-ietf-netconf-zerotouch-14 (work in progress), June
+              2017.
 
    [I-D.ietf-roll-useofrplinfo]
               Robles, I., Richardson, M., and P. Thubert, "When to use
@@ -4189,18 +4195,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
               DOI 10.17487/RFC7404, November 2014,
               <http://www.rfc-editor.org/info/rfc7404>.
 
-   [RFC7575]  Behringer, M., Pritikin, M., Bjarnason, S., Clemm, A.,
-              Carpenter, B., Jiang, S., and L. Ciavaglia, "Autonomic
-              Networking: Definitions and Design Goals", RFC 7575,
-              DOI 10.17487/RFC7575, June 2015,
-              <http://www.rfc-editor.org/info/rfc7575>.
-
 
 
 Behringer, et al.       Expires February 3, 2018               [Page 75]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2017
 
+
+   [RFC7575]  Behringer, M., Pritikin, M., Bjarnason, S., Clemm, A.,
+              Carpenter, B., Jiang, S., and L. Ciavaglia, "Autonomic
+              Networking: Definitions and Design Goals", RFC 7575,
+              DOI 10.17487/RFC7575, June 2015,
+              <http://www.rfc-editor.org/info/rfc7575>.
 
    [RFC7576]  Jiang, S., Carpenter, B., and M. Behringer, "General Gap
               Analysis for Autonomic Networking", RFC 7576,
@@ -4230,12 +4236,6 @@ Authors' Addresses
    United States
 
    Email: sbjarnason@arbor.net
-
-
-
-
-
-
 
 
 

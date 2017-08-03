@@ -1,0 +1,268 @@
+> All of my minor edits and a few smallish friendly amendments are at:
+>     https://github.com/anima-wg/autonomic-control-plane/pull/3
+
+Yeah... because i was already finished doing all my changes from acp-08 -> acp 09
+due to Brian Carpenters review, and still a total greenhorn on git, i could
+not figure out how to resolve the conflict. There was also no way to individually
+try to merge the commits, and of course it was the first commit with all the whitespace
+stuff that failed.
+
+So i ended up doing all the commits manually via one single commit:
+
+https://github.com/anima-wg/autonomic-control-plane/tree/063938e3b697185da2ceec4caad69a3de5de4572
+
+Hopefully i did copy all your changes correctly.
+
+I did change the sentence about the RPL "needs to go through RPL root" to something
+like "needs to go along DODAG (tree) rooted in NOC"... Aka: it really depends on topology
+so i don't think your "unless its a descendant" was correct.
+
+> Now to the changes in -08:
+> 
+>     AN "Autonomic Network".  A network according to
+>          [I-D.ietf-anima-reference-model].  Its main components are Intent,
+>          Autonomic Functions and ANI.
+> 
+> So, I had an initial problem with this, that it referes to something we have
+> no idea about, "Intent". Then I wondered if this was well defined in the
+> reference, and I find that actually the reference model has no terminology
+> section.... maybe one could consider the entire document a terminology
+> section.  But, it seems strange to be definining this way in *this* document.
+> I think that it should end at the first period.  If the second sentence is
+> needed, it should go into the reference.
+
+1. opened a git issue for the reference model about this.
+
+2.  I'd like to pledge with you not having to change this: There are a couple historic
+places in the ACP spec that i would paraphrase as "magic future intent can improve this".
+I did not want to change/eliminate them. But i wanted to make sure that we make it as
+clear as possible that nothing in the ACP depends on intent. WHich i think i did in
+a bunch of the other explanations in the terminology section. And just because i restate
+something from the reference model does not mean i define it here. Its explicitly
+referring to the reference model and just restating.
+
+Aka: I would like the ACP doc to be read standalone, and the reader should get
+away with the following overview from the terminology section:
+
+  AN = Intent, Autonomic Functions, ANI
+
+  Autonomic Functions = made up of software called ASA
+
+    -> You do not need to care about Intent, Autonomic Functions to use ANI
+
+  ANI = ACP, BRSKI, GRASP
+  
+  ACP = needs GRASP but does not mandate use of BRSKI
+
+> On this topic (which is not "ACP document"), I'm concerned about the amount
+> of (*) text in the reference model document!
+
+opened issue in github, with suggested resolution:
+
+Toerless: Should try to find a place in the doc to justify the existiance of all those (*):
+We wanted to spell out the parts of autonomic networks that we had conceptually in mind not to further refine them, but to be able to vet what impacts they could have on the definition of the ANI charter items.
+
+For example, the structuring of the ACP via subdomains goes back to the reference model.
+
+>     AN Domain Name  A string name (typically in a format of a DNS domain
+>               name) identifying an Autonomic Network.  It is stored in the
+>               ACP information field of an ANI devices LDevID.
+> 
+> re (typically..) either it's an FQDN (with all the QNAME restrictions and a
+> reference), or it's just a string.  Let's decide one way or the other, rather
+> than "typically".
+
+Ack. FQDN. Normative section about certificate now says so and says that if you don't own any FQDN, make one up that is unique (exercise left up to the reader ;-).
+
+> I think that there are a number of other terms which should not be introduced
+> definitatively in this document....
+
+If you give me some hints on merging git commits feel free to add them. Else let me know and i can do it.
+
+> 5.  Inside the ACP VRF, each node sets up a virtual (loopback)
+>     interface with its ULA IPv6 address.
+> 
+> I think we should say that it's a /128.
+> 
+> section 6.1.2 says "Maintenance" but, it's about AN_join_registrar.
+> 
+> I don't think that the AN_join_registrar definition belongs in this document.
+> I agree that some minor bit of text should exist, but I don't think this
+> belongs here.  This belongs in BRSKI.
+> Perhaps it got clipped out in editing, but that's a bug.
+
+So... This has nothing to do with BRSKI and is not implying the need for BRSKI in any way!
+
+ This is purely about the need to have an
+EST server for certificate renewal and be able to find it dynamically via GRASP.
+
+The way i am proposing the encoding of the objective is that the cert renewal function is looking
+for objective=AN_join_registrar and option="EST-TLS"
+
+BRSKI would look for for objective=AN_join_registrar and option="BRSKI-TLS"
+
+And of course this would be a single GRASP announcement with just a list of options.
+So in the end, the BRSKI draft would need to be changed to say option=["BRSKI-TLS","EST-TLS"]
+
+So, this i felt was best inline with the fact that BRSKI is a superset of EST. Aka: with
+the terminology we use in BRSKI...
+
+Of course, we could equally define a separate objective, eg: EST_Server.
+
+IMHO, the best "logical" term would the AN_Registrar because an AN_Registrar that
+can only do EST (renewal), but not BRSKI is not a _join_ registrar. But i did not do this
+because the discussion about the ter AN_join_registrar was already so long. 
+
+So, let me know whatever term you think is best, objective name and/or option name...
+
+> section 6.6:
+>         If our devices certificate indicates a CDP or OCSP then the peers
+>         certificate must be valid occrding to those (eg: OCSP check across
+>         the ACP or not listed in the CRL).
+>         {see git for a grammar fix to above}
+> 
+> Somewhere, I think that we should be saying that Certificate
+> Distribution Points (CDPs) or OCSP servers (whichever is used) SHOULD be
+> available via the connections inside the ACP.    BUT, as those things are
+> usually referenced with names there are some MIF-like isues that I think the
+> ACP document should address:
+> 1) DNS.
+> 2) address preferences.
+> (Homenet's naming architecture is dealing with the same questions, but I
+> think the answers may be different)
+
+Well, -08 already does says one minimal option:
+
+<t>The ACP device MUST support Certificate Revocation Lists via HTTPs from one
+or more Certificate Distribution Points. These CDPs MUST be indicated
+in the Domain Certificate when used. If the CDP URL uses an IPv6 ULA,
+the ACP device will try to reach it via the ACP. In that case the
+ACP address in the domain certificate of the CDP as learned by the
+ACP device during the HTTPs TLS handshake MUST match that ULA address
+in the HTTPs URL.</t>
+
+Aka: Automatically discover that the address is reachable via ACP because its an
+IPv6 ULA. Thats kinda lame but easy and does not bring us into more troublesome
+options.
+
+The next best option IMHO would be to have CDP proxy service announced via GRASP,
+eg: AN_Registrars are manually configured for the service, so in that config you
+do some box-local decision whether to reach the CDP via data plane or ACP, and then
+the registrar announces itself as the TCP endpoint for the CDP and proxies it to
+the actual CDP. Aka: make things auto-discovered across the ACP and then use the
+registrars as the proxies into the legacy landscape. Same solution as for enrolment...
+
+Let me know what you like/want. Text proposals welcome.
+
+> 6.8.1.  GRASP as a core service of the ACP
+> 
+> I think that this section is really important.
+> Too important to belong buried in a document about to build secure tunnels
+> for IP traffic.   At the least, this belongs prominently in the reference
+> model document.  At the largest, it needs a new document with a title like:
+>     "The ACP profile of GRASP as a core service"
+> 
+> along with 6.8.2.
+
+I did open an issue for the reference model.
+
+I am not sure i understand the proposal for a separate document. 
+
+I had some thoughts on how to proceed with promoting the idea of ACP+GRASP as
+a core way to do distributed service discovery as opposed to the current 
+unicast DNS-SD that requires "well managed DNS server"... Is that the direction you
+where thinking of as well ?
+
+> re 6.10.2:
+>    -> 8+40+2 = 50 bits.
+>    so why in 6.10.3 says, "51 bits" for subscheme.
+> 
+> I don't find the rational for the V bit very convincing. I don't think you
+> need any real justification for it.
+
+This came from actual prototypng work where we wanted to add ACP as a virtual router
+to an existing system and then we first figured we needed to use the XXX (forgot name,
+the thing they use with docker and other container stuff...) p2p virtual interface pair in linux
+ - one interface for the application side, one interface for the ACP virtual router.
+Now i didn't specifically mention this .. maybe i should The decoupling of the port space looked like the easir justification example.
+
+> 6.10.4.  ACP V8 Addressing Sub-Scheme
+>      The sub-scheme defined here is defined by the Type value 1 (one) in
+>      the base scheme.
+> 
+> I think you mean, "Type value 01 (one)", since there are two type bits.
+> I find the use of 1 confusing, given that we also have the Z bit.
+> You've made me happy with the address definition.
+
+I changed this to 00b and 01b in the text.
+
+See also in -09 i have modified the V8 to Vlong because it now has the option of
+either /8 or /16 V space. (given our IPinIP example or me wanting automatic
+ACP connect subinterfaces and 8 bit might not be enough - eg: i remember controllers
+that had also more than 256 virtual functions each with its own address).
+
+> I sent some text via pull request to clarify some of the no-artifact choice
+> in RPL.  most of the rest of the text looks great to me...
+> (I just learnt that "artefact" was british spelling for artifact.. I guess we
+> just need to pick one or the other.)
+
+Ok, changed to artifact. Don't want any british english, it always empties up my
+supply of vovels.
+
+> I'll have to ask Pascal why he suggested:
+>       Trickle: Not used.
+
+If i understand it correctly its because the profile does like "regular" IGPs try to
+track up/down state changes and triggers route recalc... But if not, then i am
+also interested in the explanation.
+
+> 7.1 --- a pretty important section.
+> One consideration that might be worth doing in a future document is
+> registering a TLV for LLDP (CDP) that could carry GRASP M_FLOOD ACP
+> messages. That would please switch fabric vendors because then making the
+> topologies follow physical would be very easy. LLDP does not get forwarded.
+>
+> I wonder who knows the right IEEE incantations to do this.
+
+We can ask Norm Finn when we run into him, he would know if IEEE would like
+such piggybacking.
+
+> 
+> section 10.1: it seems like it's all been said already.
+
+No, absolutely not!
+
+There is some duplication from the normative text, but hopefully a lot easier to read.
+
+But there is also the key paragraphs about why BRSKI is really the best companion of
+ACP. I couldn't say this in the normative part of the doc because we want BRSKI to
+be optional from the normative perspective.
+
+The best buddy text is about the fact that you do not need cert revocation because
+with BRSKI and short lived certs you can achieve the same thing much easier. And
+it depends on ACP+BRSKI collaborating to make re-enrollment totally painless.
+
+> section 10.2 ---> move to an appendix.
+> section 10.3 ---> appendix or cut.
+> I see that it all *WAS* in an appendix. I don't know why you moved it.
+
+;-)) Hey, it was YOU who persuaded me that "nobody reads beyond the authors list",
+thats why i moved the appendices into the main text. But i specifically marked all
+sections as "Normative" vs. "Informative".
+
+So now there is now two "Informational" sections. One is the "Benefit", the other is
+ "Further Considerations". If you want me to move the whole "Further Considerations"
+out as appendices i can do that, but if you want to break it up because you
+like some sections in there more than others... i think that would make the doc
+look more complex than it looks now".
+
+I wonder if i can mark the "IANA/Security Considerations" as "Legislative"
+or if IESG would take offense at that. But it would nicely mark all sections
+with the right TIVE ;-)
+
+> --
+> Michael Richardson <mcr+IETF@sandelman.ca>, Sandelman Software Works
+>  -= IPv6 IoT consulting =-
+
+Cheers
+    toerless

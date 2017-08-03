@@ -115,9 +115,9 @@
             <t hangText="AN">"Autonomic Network". A network according to <xref target="I-D.ietf-anima-reference-model"/>.
             Its main components are Intent, Autonomic Functions and ANI.
             </t>
-            <t hangText="AN Domain Name">A string name (typically in a format of a DNS domain name)
-            identifying an Autonomic Network. It is stored in the ACP information field of an
-            ANI devices LDevID.
+            <t hangText="AN Domain Name">An FQDN (Fully Qualified Domain Name) identifying an
+            Autonomic Network. It is stored in the ACP information field of an ANI devices LDevID.
+            See <xref target="domcert-acpinfo"/>.
             </t>
             <t hangText="ANI (device/network)">"Autonomic Network Infrastructure". A device with
             ANI supports ACP, BRSKI and GRASP. The ANI is the infrastructure to enable autonomic
@@ -294,7 +294,8 @@ tunnel :  +-----------+  :   tunnel      :  +-----------+  :  tunnel
                                 <t>&nbsp;&nbsp;anima.acp+fda379A6f6ee00000200000064000001+area51.research@acp.example.com</t>
 
                                 <t>The acp-address MUST be specified as a string of 32 hex characters with only lower letters a-f and numbers 0-9 so that the local part of the address can matches the simple dot-atom format of <xref target="RFC5322"/> (":" are not allowed in that format).</t>
-                                <t>&lt;domain> is used to indicate the autonomic "domain" across which all ACP nodes trust each other and are willing to build ACP channel with each other. See <xref target="certcheck"/>.</t>
+                                <t>&lt;domain> is used to indicate the Autonomic Domain across which all ACP nodes trust each other and are willing to build ACP channel with each other. See <xref target="certcheck"/>.
+It SHOULD be the FQDN of a domain owned by the operator assigning the certificate. This is a simple method to ensure that the domain name is globally unique and collision of ACP addresses would therefore only happen due to ULA hash collisions. If the operator does not own any FQDN, it should choose am FQDN format string that intends to be equally unique.</t>
                                 <t>{&lt;rsub>.}&lt;domain> is the autonomic "routing subdomain" that is used used in addressing to calculate the hash used in the creation of the ACP address of the device. As the name implies, every routing subdomain is also a separate routing subdomain. &lt;rsub> is optional and should only used when its impacts are understood. The domain without any leading rsub field is also just another routing subdomain.</t>
                                 <t>The optional &lt;extensions> field is used for future extensions to this specification. It MUST be ignored if present and not understood.</t>
 <t>The subjectAlName / rfc822Name encoding of the ACP domain name and ACP address is used for the following reasons: </t>
@@ -726,7 +727,7 @@ will be distributed with the flooded objective. An example of the message is inf
         <!-- base-scheme -->
 
         <section anchor="zone-scheme" title="ACP Zone Addressing Sub-Scheme">
-                <t>The sub-scheme defined here is defined by the Type value 0 (zero) in the base scheme.</t>
+                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme.</t>
                 <t><figure title="ACP Zone Addressing Sub-Scheme" anchor='addr-scheme'>
                 <artwork>
 
@@ -735,7 +736,7 @@ will be distributed with the flooded objective. An example of the message is inf
 |  (base scheme)  | Zone-ID | Z ||         Device-ID               |
 |                 |         |   || Registrar-ID | Device-Number| V |
 +-----------------+---------+---++--------------+--------------+---+
-         51              13   1         48           15          1
+         50              13   1         48           15          1
 
                 </artwork>
                 </figure></t>
@@ -762,7 +763,7 @@ will be distributed with the flooded objective. An example of the message is inf
             <section anchor="zone" title="Usage of the Zone Field">
             <t>The "Zone-ID" allows for the introduction of structure in the addressing scheme.</t>
             <t>Zone = zero is the default addressing scheme in an autonomic domain. Every autonomic node MUST respond to its ACP address with zone=0. Used on its own this leads to a non-hierarchical address scheme, which is suitable for networks up to a certain size. In this case, the addresses primarily act as identifiers for the nodes, and aggregation is not possible.</t>
-            <t>If aggregation is required, the 13 bit value allows for up to 8191 zones. The allocation of zone numbers may either happen automatically through a to-be-defined algorithm; or it could be configured and maintained manually.</t>
+            <t>If aggregation is required, the 13 bit value allows for up to 8192 zones. The allocation of zone numbers may either happen automatically through a to-be-defined algorithm; or it could be configured and maintained manually.</t>
             <t>If a device learns through an autonomic method or through configuration that it is part of a zone, it MUST also respond to its ACP address with that zone number. In this case the ACP loopback is configured with two ACP addresses: One for zone 0 and one for the assigned zone. This method allows for a smooth transition between a flat addressing scheme and an hierarchical one.</t>
             <t>(Theoretically, the 13 bits for the Zone-ID would allow also for two levels of zones, introducing a sub-hierarchy. We do not think this is required at this point, but a new type could be used in the future to support such a scheme.)</t>
             <t>Note: The Zone-ID is one method to introduce structure or hierarchy into the ACP. Another way is the use of the routing subdomain field in the ACP that leads to different /40 ULA prefixes within an autonomic domain. This gives followup work two options to consider.</t>
@@ -774,7 +775,7 @@ will be distributed with the flooded objective. An example of the message is inf
         <!-- zone-scheme -->
 
         <section anchor="manual-scheme" title="ACP Manual Addressing Sub-Scheme">
-                <t>The sub-scheme defined here is defined by the Type value 0 (zero) in the base scheme.</t>
+                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme.</t>
                 <t><figure title="ACP Manual Addressing Sub-Scheme" anchor='manual-scheme-pic'>
                 <artwork>
 
@@ -783,7 +784,7 @@ will be distributed with the flooded objective. An example of the message is inf
 +---------------------+---------+---++-----------------------------+
 |    (base scheme)    |Subnet-ID| Z ||     Interface Identifier    |
 +---------------------+---------+---++-----------------------------+
-         51             13        1
+         50             13        1
 
                 </artwork>
                 </figure></t>
@@ -801,26 +802,27 @@ will be distributed with the flooded objective. An example of the message is inf
         <!-- manual -->
 
         <section anchor="Vlong" title="ACP Vlong Addressing Sub-Scheme">
-                <t>The sub-scheme defined here is defined by the Type value 1 (one) in the base scheme.</t>
+                <t>The sub-scheme defined here is defined by the Type value 01b (one) in the base scheme.</t>
                 <t><figure title="ACP Vlong Addressing Sub-Scheme" anchor='v8-scheme'>
                 <artwork>
-          51                              77
+
+          50                              78
 +---------------------++-----------------------------+----------+
 |    (base scheme)    ||                Device-ID               |
 |                     || Registrar-ID | Device-Number|        V |
 +---------------------++--------------+--------------+----------+
-                            46             32/16          8/16
+                            46             33/17          8/16
                 </artwork>
                 </figure></t>
                 <t>This addressing scheme foregoes the Zone field to allow for larger, flatter routed networks (eg: as in IoT)
-                with more than 2^31 Device-Numbers. It also allows for up to 2^16 - 65536 different virtualized adddresses,
+                with more than 2^32 Device-Numbers. It also allows for up to 2^16 - 65536 different virtualized adddresses,
                 which could be used to address individual software components in an ACP device.</t>
                 <t>The fields are the same as in the Zone sub-scheme with the following refinements:
                 <list style="symbols">
-                        <t>V: Virtualization bit: Values 0 and 1 as in Zone sub-scheme, values 2-255 for use via definition in followup work.</t>
+                        <t>V: Virtualization bit: Values 0 and 1 as in Zone sub-scheme, further values use via definition in followup work.</t>
                         <t>Registrar-ID: To maximize Device-Number and V, the Registrar-ID is reduced to 46 bits. This still allows to use the MAC address of a registrar by removing the V and U bits from the 48 bits of a MAC address (those two bits are never unique, so they can not be used to distinguish MAC addresses).</t>
 
-                        <t>If the first bit of the "Device-Number" is "1", then the Device number and V field are each 16 bit long. Otherwise the Device-Number is 32 bit long and the V field is 8 bit long. "0" bit Device-Numbers are intended to be used for "general purpose" ACP devices that would potentially have a limited number (&lt; 256) of internal users of the ACP that require separate V(irtual) addresses. "1" bit Device-Numbers are intended for ACP devices that are ACP edge devices (see <xref target="NMS"/>) or that have a large number of internal ACP users requiring separate V(irtual) addresses. For example large SDN controllers with container modular software architecture (see <xref target="software"/>).</t>
+                        <t>If the first bit of the "Device-Number" is "1", then the Device number is 17 bit long and the V field is 16 bit long. Otherwise the Device-Number is 33 bit long and the V field is 8 bit long. "0" bit Device-Numbers are intended to be used for "general purpose" ACP devices that would potentially have a limited number (&lt; 256) of internal users of the ACP that require separate V(irtual) addresses. "1" bit Device-Numbers are intended for ACP devices that are ACP edge devices (see <xref target="NMS"/>) or that have a large number of internal ACP users requiring separate V(irtual) addresses. For example large SDN controllers with container modular software architecture (see <xref target="software"/>).</t>
                 </list>
                 </t>
 
@@ -890,7 +892,7 @@ will be distributed with the flooded objective. An example of the message is inf
   failure of an ACP tunnel should signal the RPL control plane to pick a
   different parent.
 </t>
-<t>Future Extensions to this RPL profile can provide optimality for multiple NOCs. This requires utilizing data plane artefacts including IPinIP encap/decap on ACP routers and processing of IPv6 RPI headers. Alternatively (Src,Dst) routing table entries could be used. A decision for the preferred technology would have to be done when such extension is defined.</t>
+<t>Future Extensions to this RPL profile can provide optimality for multiple NOCs. This requires utilizing data plane artifact including IPinIP encap/decap on ACP routers and processing of IPv6 RPI headers. Alternatively (Src,Dst) routing table entries could be used. A decision for the preferred technology would have to be done when such extension is defined.</t>
     </section>
 
     <section anchor="rpl-instances" title= "RPL Instances">
@@ -1919,6 +1921,13 @@ destination address (not in ACP connect section, but because of it).</t>
                                  <t>blackhole route to avoid loops in RPL.</t>
                              </list></t>
                              <t>Added requirement to terminate ACP channels upon cert expiry/revocation.</t>
+                             <t>Added fixes from 08-mcr-review-reply.txt (on github):</t>
+                             <t><list style="symbols">
+                                 <t>AN Domain Names are FQDNs.</t>
+                                 <t>Fixed bit length of schemes, numerical writing of bits (00b/01b).</t>
+                                 <t>Lets use US american english.</t>
+                             </list></t>
+ 
                         </section>
 
                 </section>
