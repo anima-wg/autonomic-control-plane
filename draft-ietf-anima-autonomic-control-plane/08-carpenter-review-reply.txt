@@ -1,0 +1,1168 @@
+> Hi,
+> 
+> Here are my comments on ACP version -08. First the ones I rank
+> as substantive isssues, then a few nits.
+
+Thanks so much Brian, lots of help to improve quality.
+
+Alas, i got derailed from finishing the fixes for your review because the
+reviews/last-call for stable connectivity had me figure out a bunch of
+changes to ACP document, and i first put all of those in acp-09.  The changes
+from your review below then got into acp -10.
+
+- Toerless
+
+> Issues:
+> -------
+> 
+> > 2.  Terminology
+> ...
+> > ULA  "Unique Local Address".  The IPv6 equivalent to RFC1918 IPv4
+> > addresses.  ACP addresses are ULA.
+> 
+> No, they are *not* equivalent to RFC1918, because those are ambiguous
+> and ULAs are not. Please avoid controversy, just cite RFC4193.
+
+
+IMHO, a terminology section has to try to explain terms without making the reader refer to ever mor ereferences.  Had a lot of customers who didn't know what ULA are, but who klicked when
+i mentioned 1918. And differences/benefits over 1918 become obvious later in doc anyhow (ambiguity).
+
+acp-10 text:
+
+   A "Unique Local Address" (ULA) is an IPv6 address in the block fc00::/7, defined in 
+   <xref target="RFC4193"/>. It is the approximate IPv6 counterpart of the IPv4 private address 
+   (<xref target="RFC1918"/>).
+
+If you do not like that, please fix in Wikipedia wherer i stole this from:
+    https://en.wikipedia.org/wiki/Unique_local_address
+;-)
+
+> > 3.2.  Secure Bootstrap over an Unconfigured Network
+> ...
+> > ...This does not require any configuration
+> > on intermediate nodes, because they can communicate through the ACP.
+> 
+> s/they can communicate/they can communicate securely/
+
+ACK
+
+> > 4.  Requirements
+> ...
+> > ACP4:  The ACP MUST be generic.  Usable by all the functions and
+> >        protocols of the AN infrastructure.  It MUST NOT be tied to a
+> >        particular protocol.
+> 
+> I'm not sure what the last sentence is saying. Do you mean
+> "MUST NOT be tied to a particular transport protocol" or
+> "MUST NOT be tied to a particular security protocol"?
+> Or do you mean "MUST NOT restrict the choice of upper layer
+> protocol"? Or do you simply mean "MUST provide a generic
+> IPv6 service"?
+
+This goes back to very early discussions in ANIMA when we argued that
+a greenfield autonomic networking design would not need any protocol other
+than GRASP for any ASA to ASA communications. In which case there would
+not have been a good argument for ACPs concept of a virtual IPv6 network
+to transport any management traffic. 
+
+acp-10: "NOT be tied to a particular application or transport protocol.".
+
+Please suggest better text if thats not sufficient.
+
+> Also, there's no requirement about performance or the
+> expected traffic density. Should we say something either
+> in the Requirements section or in the Notes in the
+> Overview section? I assume that performance is not critical
+> and ACP traffic density is expected to be low.
+
+My practical experience was that proliferation of implementation was
+easier when you did not have performance requirements but when you could
+implement also in just software forwarding path. This did then lead
+to text in stable connectivity arguing about using the ACP primarily
+for critical operations. 
+
+acp-10 has a new performance section restate that position:
+
+                            <section anchor="performance" title="Performance">
+<t>There are no performance requirements against ACP implementations defined in this document because the performance requirements depend on the intended use case. It is expected that full autonomic devices with a wide range of ASA can require high forwarding plane performance in the ACP, for example for telemetry, but that determination is for future work. Implementations of ACP to solely support traditional/SDN style use cases can benefit from ACP at lower performance, especially if the ACP is used only for critical operations, eg: when the data plane is not available. See <xref target="I-D.ietf-anima-stable-connectivity"> for more details.</t>
+                            </section>
+
+Pls. suggest better text if you feel this is insufficient/inadequate.
+
+> > 5.  Overview
+> ...
+> >   Default policy is: To all adjacent nodes in the
+> >   same domain.
+> 
+> I know this is explained later, but I think both
+> "adjacent" and "domain" need some qualification.
+> For example:
+> 
+>   Default policy is: To all adjacent link-layer autonomic
+>   nodes in the same autonomic domain.
+
+I am daring to claim this is better english:
+
+acp-10: To all link-layer adjacent autonomic nodes in the same autonomic domain.
+
+> >    5.  Inside the ACP VRF, each node sets up a virtual (loopback)
+> >        interface with its ULA IPv6 address.
+> 
+> I think we have cases where a node has multiple ULAs.
+
+Right now, an ACP would have exacty one Certificate derived ULA
+and 0 or more configured ones for autonomic-connect interfaces in case
+the operator wants to use the manual addressing sub-scheme on the autonomic
+connect interface.
+
+What other cases are you thinking of ?
+
+> > 6.1.  Domain Certificate
+> > 
+> >    To establish an ACP securely, an ACP device MUST have a globally
+> >    unique domain certificate (LDevID),...
+> 
+> You need a normative reference for the LDevID format.
+
+acp-10: Added 802.1AR reference and pointed to it in terminology section for IDevID and LDevID.
+
+> > 6.1.1.  ACP information
+> > 
+> >    The domain certificate (LDevID) of an autonomic node MUST contain ACP
+> >    specific information, specifically the domain name, the address of
+> >    the device in the ACP with the Zone-ID set to zero ("ACP address").
+> 
+> You need a cross-reference for Zone-ID, which is undefined at this point.
+
+acp-10: Removed the zone-ID details here and explained it only in the description of the sub-schemes
+More logical now that there are multiple address sub-schemes (only one of them with a zone field).
+
+> ...
+> >    anima.acp+<acp-address>{+<rsub>{+<extensions>}}@<domain>
+> 
+> What notation is that? Is {} supposed to be an optional item?
+> If so, why not use [] as in ABNF, and cite ABNF.
+
+acp-10: Done. Please check again. Got a lot more complex by using ABNF, but maybe more precise.
+
+> >  <domain> is used to indicate...
+> 
+> Is that required to respect DNS syntax? If so, please say so.
+
+Yes. That was already in -09.
+
+> > {<rsub>.}<domain>
+> 
+> That's wrong. <domain> is preceded by "@" in your syntax, and 
+> in your example, the dot is in the <extensions> element
+> "area51.research".
+>
+No, it was correct, but hopefully now with ABNF and the explicit example expanded it's
+less easy to misread, although i am not 100% sure that ABNF really allows me to
+specify what i want 100%:
+  
+ anima.acp+fda379A6f6ee00000200000064000000+area51.research@acp.example.com
+
+ routing-subdomain = area51.research.acp.example.com
+                                    ^
+                                    |
+This dot needs to come from the syntax because it is not in the actual ACP information
+string, it is the connector between the rsub part and the acp-domain.
+
+In ABNF the problem is that i need the option to specify the rsub part as optional,
+but then i want to say that this connecting dot is also only used when the rsub part is
+empty. And i think there is no ABNF element to do this. Check the ABNF i have written,
+i am rying to wing that problem. ...
+
+> Is there a length limit on the rfc822Name ?
+
+Seemingly yes, but difficult to hunt down.
+
+I have written now:
+
+Note that the maximum size of "acp-information" is 254 characters and the maximum size of acp-device-info is 64 characters according to <xref target="RFC5280"> that is referring to <xref target="RFC2821"> (superceeded by <xref target="RFC5321").
+
+So yes... not much extension space if any (depending on how long you want/need to do rsub and how long your domain is). But we could use multiple rfc822 addresses in the same certificate to encode other things when we need to.
+
+> > 6.1.2.  Maintenance
+> 
+> a) As Michael R said,
+> b) all the stuff about the registrar should be in BRSKI, not duplicated here.
+> c) In fact, it's > very confusing to have it here.
+> d) If we want a cert renewal mechanism, surely that's part of BRSKI?
+
+b), c) BRSKI only specifies zero touch bootstrap, but not certificate maintenance/renewal.
+
+ACP should be modular, eg: we should be able to combine it with any initial bootstrap
+(BRSKI of course preferred and only BRSKI+ANIMA+GRASP = ANI, but netconf-zero-touch or
+other would be possible option if so desired). So we need zero-touch certificate
+(renewal, revocation) specification in ACP doc.
+
+Cert renewal in ACP spec is using EST (RFC7030). Use of GRASP is specified in ACP draft
+is solely to support this EST renewal. Without GRASP to find EST-Server, we can not
+support EST-Server redundancy: YOu can specify a URL for reneal in the certificate,
+but if that URL goes down, you're lost. Without ACP/GRASP you would have had to setup some
+form of anycast domain-name or ip-address in the URL - or worse yet list multiple registrar.
+
+The GRASP objective in BRSKI is BRSKI-TLS and is discovered by bootstrap proxies, the
+GRASP objective in ACP is EST-TLS and is discovered by encrolled ACP members for their
+own Cert renewal. Big difference.
+
+c) Initially i thought too that RSKI would be a superset of everything that we'd need
+for certificate maintenance, but thats not the goal of BRSKI. It is only meant o specify
+initial bootstrap, but not cert renewal or the like.
+
+a) I think to remember that MichaelR was pretty positive on the mike in Prague about
+the inclusion of EST in ACP spec for renewal. But i am sure he will chime in. 
+
+The confusing bits may be how to use GRASP. Here is what current ACP and BRSKI text
+would lead to:
+
+- ACP registrar without BRSKI: registrar == EST-server
+  registrar announces AN_join_registrar with only EST-TLS objective value
+
+- ACP registrar with BRSKI: registrar == EST-server + BRSKI spec
+  registrar announces AN_join_registrar with both EST-TLS and EST-BRSKI objective values
+
+> >    The loop-count MUST be sete to 255.  When an ACP node
+> >    receives the M_FLOOD, it will have been reduced by the number of hops
+> >    from the EST server.
+> 
+> I don't like that. The role of the loop count is loop prevention,
+> so it should be set to a reasonable upper bound on the "radius"
+> of the network. GRASP has two measures for loop detection, this
+> one and detection of duplicate session IDs, but that was
+> intentional redundancy.]
+
+Sure, and if we set loop-count to a well-known value such as 255 then
+we do use it in the same way as IP uses TTL: Just as a way of last defense.
+Primary method is loop-free routing protocols (IP) or duplicate session ID (GRASP).
+
+[50% rant:]
+Every new technology seems to think that TTL is a great tool, only then to
+figure out later that its only a good protection of last resort. IP unicast
+did this, and today, nobody really uses any TTL other than 255 or 1.
+IP multicast regurgitated TTL values for "TTL scoping" and it took almost
+10 years to get rid of it, we depreciated that, and since ~2000 IP multicast
+also only uses 255 or 1 since then. IMHO: Same learning curve is necessary for GRASP.
+Maybe we will come up with good use cases for 1 < TTL < 255 still, but i doubt
+it. Unless you have very specific variations of eg: ACP for networks with
+well-knon smaller max-TTL, i do not see it.
+[/rant]
+
+But you do not need to buy into this logic of mine. I just want to put you in the
+bind for an ability in GRASP to discover the closest instance of an objective.
+Thats i think something you agreed GRASP will support a long time ago.
+
+If you do not like to use the fixed TTL value of 255 as a mechanism to help
+support the "closest objective announcer" mechanism, then i need to specify
+a more complex way to discover the closest objective announcer:
+
+- objective-values for AN_join_registrar would need to be extended to be a structure like:
+
+  objective-value = [ sender-ttl, method-list [, future-extensions]* ]
+  method-list = [ method ]*1
+  methd = BRSKI-TLS | EST-TLS | ...
+  sender-ttl = NUM
+
+  (pretty sure i didn't get the CBOR template not right, but i am sure you get the idea)
+
+That way, the recipient can compare sender-ttl with the TTL of the received objective
+and threeby figue out which one is closest.
+
+I fine either way. I just tried to go for the most simple, logical option.
+
+> > 6.2.  AN Adjacency Table
+> > 
+> >    To know to which nodes to establish an ACP channel, every autonomic
+> >    node maintains an adjacency table.  The adjacency table contains
+> >    information about adjacent autonomic nodes, at a minimum: node-ID, IP
+> >    address, domain, certificate.
+> 
+> Please specify which IP address(es) you mean. Link-Local, ACP
+> Address(es), or both?
+
+acp-10: Added.  Its the link local.
+
+It was described further below in the doc already:
+
+<t>The result of the discovery is the IPv6 link-local address of the neighbor as well as its supported secure channel protocols (and non-standard port they are running on).  It is stored in the AN Adjacency Table, see <xref target="adj-table" /> which then drives the further building of the ACP to that neighbor.</t>
+
+> Can you also indicate that an API to this table is needed (at 
+> least by the GRASP core, and possibly by any ASA that wants to
+> make direct use of the ACP)?
+
+acp-10:
+
+<t>Interaction between ACP and other autonomic elements like GRASP (see below) or ASAs
+should be via an API that allows (appropriately access controlled) read/write access to the AN Adjacency Table. Specification of such an API is subject to future work.</t>
+
+
+> > 6.3.  Neighbor Discovery with DULL GRASP
+> ...
+> >           [M_FLOOD, 12340815, h'fe80000000000000c0011001FEEF0000, 1,
+> >               ["AN_ACP", SYNCH-FLAG, 1, "IKEv2"],
+> >               [O_IPv6_LOCATOR,
+> >                    h'fe80000000000000c0011001FEEF0000, UDP, 15000]
+> >           ]
+> 
+> Once we are fully settled on this I can generate an example and
+> its binary value for complete clarity. I have one comment which is
+> that when I last updated draft-carpenter-anima-ani-objectives,
+> I replaced "SYNCH-FLAG" with "5" (the actual value of the flag
+> byte) - otherwise you have to define SYNCH-FLAG. Actually
+> the value 5 indicates discovery+synchronization; everything
+> should work just the same if it was 4 (synchronization alone),
+> since it's flooded. I don't know if we care about that difference.
+
+acp-10: defined sync-only and used that for both grasp ojectives.
+
+> >    The ttl and loop-count are fixed at 1 since this is a link-local
+> >    operation.
+> 
+> No, the ttl is milliseconds - the valid lifetime of the flood.
+> You have that correct in your version of AN_join_registrar.
+
+acp-10: Fixed.
+
+> > 6.8.2.  ACP as the Security and Transport substrate for GRASP
+> ...
+> >    GRASP inside the ACP uses link-local UDP IPv6 multicast across the
+> >    ACP virtual interfaces for GRASP neighbor discovery...
+> 
+> and flooding
+
+acp-10: Ack.
+
+> Also, you might want to add a reminder that GRASP does its own
+> relaying of multicast packets between interfaces; the ACP is
+> not required to provide multicast routing.
+
+Saying that was actually the intent of the prior section "GRASP as a core service of the ACP"
+But maye sentence was not good.
+
+acp-10:  Please check 6.8.1 again. There is now a rather comprehensive description of
+GRASP, IP multicast, flooding and so on. Too long to paste here unfortunately. Maybe
+some of the later paragraphs can go into an appendix. But given how this IMHO abuse
+of IP multicast to do service discovery is still going on since 30 years no, i do
+appreciate any opportunity to write down a sane option ;-)
+
+> >                                                  ...and IPv6 over TLS
+> >    across the ACP virtual interfaces for any of its unicast messages.
+> 
+> Wait, what are you saying here? Do you really mean IPv6
+> over TLS, or TLS over TCP over IPv6?
+
+Oops, that was just a bad ordering of words. The intention even in -08 was to have
+GRASP always be carried "natively" (without any UDP/IP packet headers) inside 
+TLS/TCP (for "unicast" connections) or just via TCP (for connections to ACP neighbors on
+their link-local addresses - TLS not required here because it doesn't add anything
+on top of the ACP secure channel mechanism in this case).
+
+Pls. re-check 6.8.2 i overhauled it.
+
+> As Eric Rescorla asked us at one point, please draw a ladder
+> diagram of the protocol stack.
+
+This is now part of 6.8.2:
+
+
+         ACP:
+    ...............................................................
+    .                                                             .
+    .         /-GRASP-flooding-\         ACP GRASP instance       .
+    .        /                  \                                 .
+    .    GRASP      GRASP      GRASP                              .
+    .  link-local   unicast  link-local                           .
+    .   multicast  messages   multicast                           .
+    .   messages      |       messages                            .
+    .      |          |          |                                .
+    ...............................................................
+    .      v          v          v    ACP security and transport  .
+    .      |          |          |    substrate for GRASP         .
+    .      |          |          |                                .
+    .      |       ACP GRASP     |       - ACP GRASP loopback     .
+    .      |       loopback      |         loopback interface     .
+    .      |         TLS         |       - AN-cert auth           .
+    .      |          |          |                                .
+    .   ACP GRASP     |       ACP GRASP  - ACP GRASP virtual      .
+    .   subnet1       |       subnet2      virtual inerfaces      .
+    .     TCP         |         TCP                               .
+    .      |          |          |                                .
+    ...............................................................
+    .      |          |          |   ^^^ Users of ACP (GRASP/ASA) .
+    .      |          |          |   ACP interfaces/addressing    .
+    .      |          |          |                                .
+    .      |          |          |                                .
+    .      |      ACP-loopack    |       - ACP loopback interface .
+    .      |      ACP-address    |       - address (global ULA)   .
+    .    subnet1      |        subnet2   - ACP virtual interfaces .
+    .  link-local     |      link-local  - addresses              .
+    ...............................................................
+    .      |          |          |   ACP routing and forwarding   .
+    .      |     RPL-routing     |                                .
+    .      |   /IP-Forwarding\   |                                .
+    .      |  /               \  |                                .
+    .  ACP IPv6 packets   ACP IPv6 packets                        .
+    .      |/                   \|                                .
+    .    IPsec/dTLS        IPsec/dTLS  - AN-cert auth             .
+    ...............................................................
+             |                   |   Data Plane
+             |                   |     
+             |                   |     - ACP secure channe
+         link-local        link-local  - encap addresses
+           subnet1            subnet2  - data plane interfaces
+             |                   |
+          ACP-Nbr1            ACP-Nbr2
+
+> ...
+> >    TLS is mandated for GRASP because the ACP secure channel mandatory
+> >    authentication and encryption protects only against attacks from the
+> >    outside but not against attacks from the inside - compromised ACP
+> >    members
+> 
+> I think the threat model really needs a clearer explanation. I assume
+> that Bob and Alice are good guys, and Eve is a malicious ACP member.
+> So a packet from Alice to Bob is encrypted from Alice to Eve, decrypted
+> by Eve, then encrypted from Eve to Bob. So Eve can do what she wants
+> with the decrypted packet.
+
+I've only been using https://en.wikipedia.org/wiki/Alice_and_Bob
+where it was easy enough, but not when discussing attacks against GRASP/ACP
+I think its easier to memorize the cast of character from Hamlet first than
+that rocky horror picture show ensemble.
+
+Eve seems to be only allowed to do passive attacks (Eve(dropper).
+If Eve was an ACP member onpath between Alice and Bob, it could observe
+the GRASP TCP connection. Assuming Alice and Bob are not only ACP
+members but also members of the privacy-advocacy team, they would
+always demand end-to-end encryption against Eve. Thats why ACP now
+provides TLS connections to GRASP for that purpose.
+
+What i did explain in 6.8.2 is that Mallory, who is permitted to be
+an active attacker could be an ACP member and now when Alice tries
+to find an objective from Bob, Mallory intercepts the objecive
+discovery (whether it's M_FLOOD or M_DISCOVERY), and makes itself
+look like Bobs objecctive to Alice, and then once it has captured
+the GRASP unicast connection from Alice, it will open another
+unicast connection to Bob and now it proxies the unicast GRASP
+negotiation between Alice and Bob - so TLs does not help at all.
+
+Check out if you think 6.8.2 is sufficient now, if not maybe propose
+more specific text.  9.2.2 is also summarizing the attack vector.
+
+> Now, who does the TLS wrapping? Will that be done by the ACP,
+> or by the GRASP core? If the latter, you still need to explain
+> how the ACP conveys the cert information to GRASP.
+
+Should be obvious from 6.8.2 now i hope: the ACP GRASP loopback/
+virtual interfaces are interfaces that take GRASP messages, so
+ACP does the TCP/TLS encap/decap.
+
+> > 6.10.1.  Fundamental Concepts of Autonomic Addressing
+> ...
+> >    o  Addresses in the ACP are permanent, and do not support temporary
+> >       addresses as defined in [RFC4941].
+> 
+> Add something like:
+> 
+>   o  Addresses in the ACP are not considered sensitive on
+>      privacy grounds, so do not need to be pseudo-random
+>      as discussed in [RFC7721].
+> 
+> (You probably also need to discuss why the ACP is not subject
+> to scanning attacks: because ULAs are not propagated across
+> domain boundaries.)
+
+acp-10:
+<t>Addresses in the ACP are not considered sensitive on privacy grounds, so do not need to be pseudo-random as discussed in <xref target="RFC7721"/> Because they are not propagated to untrusted (non ACP) devices and stay within a domain, we also consider them not to be subject to scanning attacks.</t>.
+
+> 
+> > 6.10.2.  The ACP Addressing Base Scheme
+> > 
+> >    The Base ULA addressing scheme for autonomic nodes has the following
+> >    format:
+> > 
+> >   8      40             2                     78
+> > +--+-----------------+------+------------------------------------------+
+> > |FD| hash(subdomain) | Type |             (sub-scheme)                 |
+> > +--+-----------------+------+------------------------------------------+
+> > 
+> >                    Figure 2: ACP Addressing Base Scheme
+> > 
+> >    The first 48 bits follow the ULA scheme, as defined in [RFC4193], to
+> >    which a type field is added:
+> > 
+> >    o  "FD" identifies a locally defined ULA address.
+> 
+> For the Nth time, please s/FD/fd/ as required by RFC5952
+
+Fixed. Day 1 bug.
+
+Although we can not really use 5952 in the acp-information field, but i like consistency too.
+
+> >    o  Type: This field allows different address sub-schemes in the
+> >       future.  The goal is to start with a single sub-schemes, but to
+> >       allow for extensions later if and when required.  This addresses
+> >       the "upgradability" requirement.  Assignment of types for this
+> >       field should be maintained by IANA.
+> 
+> You need to write precise directions to IANA.
+
+acp-10: Done.  It's just the addressing Type field for now, but could become more.
+
+> > 6.10.3.  ACP Zone Addressing Sub-Scheme
+> > 
+> >    The sub-scheme defined here is defined by the Type value 0 (zero) in
+> >    the base scheme.
+> > 
+> >            51            1     13                    63             1
+> >  +---------------------+---+---------+-----------------------------+---+
+> >  |    (base scheme)    | Z | Zone-ID |         Device-ID           | V |
+> >  |                     |   |         | Registrar-ID | Device-Number|   |
+> >  +---------------------+---+---------+--------------+--------------+---+
+> >                                              48           15
+> 
+> s/51/50/
+
+Thanks.
+
+> Although I think it would be simpler to do this:
+> 
+>            48        2   1     13                    63             1
+>  +----------------+----+---+---------+-----------------------------+---+
+>  | ULA prefix     |Type| Z | Zone-ID |         Device-ID           | V |
+>  |                | 00 |   |         | Registrar-ID | Device-Number|   |
+>  +----------------+----+---+---------+--------------+--------------+---+
+>                                              48           15
+
+Not changed:
+
+MichaelM came up with the picture, so i didn't want to change it too much.
+
+Besides, i did run into a benefit of this approach: i changed the
+hash(subdomain) to hash(routing-subdomain) because thats the correct term
+now, and e voila: i did not have to do this change in the now 3 sub schema pictures.
+
+(its 3 sub schemes now because in -09 i did introduce the manual addressing 
+ sub-scheme as well after the "stable-connectivity" review and its resulting
+  options for addressing - aka: the safe bet when the 6man police does not like to use
+ the Vlong addressing scheme on autonomic connect interfaces).
+
+> > 
+> > 6.10.4.  ACP V8 Addressing Sub-Scheme
+> > 
+> >    The sub-scheme defined here is defined by the Type value 1 (one) in
+> >    the base scheme.
+> > 
+> >              51                           63                 8
+> >    +---------------------+-----------------------------+----------+
+> >    |    (base scheme)    |         Device-ID           |        V |
+> >    |                     | Registrar-ID | Device-Number|          |
+> >    +---------------------+--------------+--------------+----------+
+> >                                46             32
+> 
+> Same comments.
+
+see above
+
+> > 6.10.5.  Other ACP Addressing Sub-Schemes
+> > 
+> >    Other ACP addressing sub-schemes can be defined if and when required.
+> >    IANA would need to assign a new "type" for each new addressing sub-
+> >    scheme.  With the current allocations, 5 more schemes are possible
+> 
+> That's confusing. In your terminology, only two more types are
+> possible (10 and 11).
+
+Right. Fixed.
+
+> It would be simpler to simply define 3 type bits.
+
+The main constraint is that the original (zone scheme) tried to comply to the
+IPv6 address architecture by using a 64 bit interface identifier part. The
+same is now true of the manual addressing scheme that i added and i would like
+to keep it that way (to be on the safe side with IETF architectures).
+
+MichaelB came up with the zone address scheme and i already stole one bit from
+the zone-field to enable the manual addressing sub-scheme because i wanted
+to make sure that deployments can get started with using manual configured
+ACP connect interfaces without conflicting with later automatic assigned zones.
+
+I am quite unsure how important zones are. I do very much like the Vlong (was
+called V8 in -08) scheme because it allows a lot of internal address assignment
+within a node, which i think is more important for future work than Zones. But Vlong
+does not comply to the 64-bit interface identifier rule.
+
+If you want 3 type bits, we need to go to 12 subnet bits in the zone scheme
+and maybe 32/16 Device-ID in the Vlong scheme. I also would feel safer if we
+had more Type field options to explore/experiment, but i would like for
+more ANIMA participants to chime in.
+
+> A general remark: when a wider audience looks at this, there will
+> be complaints that we are re-creating classful addressing. I suggest
+> adding some text about this. (Along the lines of: it's true, and
+> here is why it doesn't matter.)
+
+I will certainl not mention that word in the document. Its like the courtroom:
+I do not want to open the door to that type of accusation by bringing up the word
+ myself first ;-)
+
+Here is the paragraph i added at the beginning of 6.10.6 (other ACP addressing
+sub schemes):
+
+<t>Before further addressing sub-schemes are defined, experience with the schemes defined here should be collected. The schemes defined in this document have been devised to allow hopefully sufficiently flexible setup of ACPs for a variety of situation. These reasons also lead to the fairly liberal use of address space: The Zone addressing sub-schemes is intended to enable optimized routing in large networks by reserving bits for zones. The Vlong addressing sub-scheme enables the allocation of 8/16 bit of addresses inside individual ACP nodes. Both address spaces allow distributed, uncoordinated allocation of node addresses by reserving bits for the Registrar-ID field in the address.</t>
+
+> >    Every ACP device (RPL node) announces an IPv7 prefix
+> 
+> Forward into the future!
+
+;-)
+
+> > 6.12.4.  ACP interfaces
+> ...
+> >    These packets are of course redundant (unnecessary) and would be
+> >    discarded by GRASP on receipt as duplicates.
+> 
+> ...by use of the GRASP Session ID.
+
+ack.
+
+
+> > 7.2.  How (per L2 port DULL GRASP)
+> ...
+> > L3/L2 devices SHOULD support per-L2 port ACP.
+> 
+> Clarify that ACP (and GRASP) capable devices do
+> not need to depend on MLD snooping, since they
+> catch LL multicasts directly per port. But non-ACP
+> switches MUST either support MLDv2 snooping or
+> operate as pure L2 bridges for all multicast
+> packets.
+
+acp-10, added to 6.3:
+
+    <t>Note that the use of the IPv6 link-local multicast address (ALL_GRASP_NEIGHBORS) implies
+    the need to use MLD (<xref target="RFC3810"\>) to announce the desire to receive packets for
+    that address. Otherwise DULL GRASP could fail to operate correctly in the presence of
+    MLD snooping, non-ACP enabled L2 switches - because those would stop forwarding DULL GRASP
+    packets. Switches not supporting MLD snooping simply need to operate as pure L2 bridges for
+    IPv6 multicast packets for DULL GRASP to work.</t>
+    
+Its a common oversight of pretty much every protocol RFC i know thats using link-local scope multicast to NOT mention the need to use IGMP/MLD. In IPv4 it was unclear whether it was necessary to do this for link-local scope addresses and in result, no sane IGMP snooping switch would ever try to constrain link-local messages. I am 100% sure we did make it mandatory in IPv6 to announce membership for link-local addresses, even though i can not find a line in RFC3810 to that end right now. Anyhow, better be safe than sorry (should have gone into GRASP RFC though, oh well.. too late).
+
+For 7.2 i added:
+
+    <t>If the device with L2 ports is supporting per L2 port ACP DULL GRASP as well as MLD snooping
+    (<xref target="RFC4541"/>), then MLD snooping must be changed to never forward packets for
+    ALL_GRASP_NEIGHBORS because that would cause the problem that per L2 port ACP DULL GRASP
+    is meant to overcome (forwarding DULL GRASP packets across L2 ports).</t>
+
+> Also, is there anything to say here about VLANs?
+
+Nothing special comes to mind...
+Not that i'd be trying hard ;-)
+
+> > 11.  Security Considerations
+> 
+> I think you need to insert cross-references to
+> various security discussions elswhere in the draft.
+
+Ok. Probably not complete, but i added 6 hopefully good paragraphs with pointers to make security reviewers happy. 
+>  
+> > 12.  IANA Considerations
+> 
+> TBD!
+
+Yes, from above.
+
+> Nits:
+> -----
+> 
+> > 2.  Terminology
+> ...
+> >    ACP VRF  The ACP is modelled in this document as a "Virtual Routing
+> >       and Forwarding" (VRF) component in a network device.
+> 
+> I suggest listing this alphabetically as VRF, not under A.
+
+ack
+
+> >    AN "Autonomic Network".  A network according to
+> >       [I-D.ietf-anima-reference-model].  Its main components are Intent,
+> >       Autonomic Functions and ANI.
+> 
+> I find the second sentence doesn't help, especially by referring to Intent.
+
+Any better idea ?
+
+Right now i just added a definition for Intent:
+
+           <t hangText="Intent">Northbound operator and automation facing interface of an Autonomic Network according to <xref target="I-D.ietf-anima-reference-model"/>.
+
+For me it's important that readers of the ACP document know the simple distinction
+between ANI and AN:
+
+ AN = ANI + autonomic-functions + intent.
+
+That makes it difficult not to mention intent.
+
+Of course, anything related to intent is fuzzy, but thats an IETF ANIMA charter issue ;-)
+
+>   ** The document seems to lack a both a reference to RFC 2119 and the
+>      recommended RFC 2119 boilerplate, even if it appears to use RFC 2119
+>      keywords. 
+> 
+>   == Using lowercase 'not' together with uppercase 'MUST', 'SHALL', 'SHOULD',
+>      or 'RECOMMENDED' is not an accepted usage according to RFC 2119.  Please
+>      use uppercase 'NOT' together with RFC 2119 keywords (if that is what you
+>      mean).
+
+Ok, i just stole the boilerplate from GRASP.
+
+> 
+> Regards
+>    Brian
+> 
+============ original mail from Brian appended ===============================
+
+From brian.e.carpenter@gmail.com  Wed Aug  2 04:39:14 2017
+Return-Path: <brian.e.carpenter@gmail.com>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED=0.1,
+	DKIM_VALID=-0.1,DKIM_VALID_AU=-0.1,RCVD_IN_DNSWL_MED=-2.3 autolearn=disabled
+	version=3.4.0
+X-Original-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Delivered-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [131.188.34.45])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id D124F58C4E1
+	for <eckert+ietf@i4.informatik.uni-erlangen.de>; Wed,  2 Aug 2017 04:39:14 +0200 (CEST)
+Received: from mail.ietf.org (mail.ietf.org [4.31.198.44])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id 0F2DF74D0F2
+	for <tte+ietf@cs.fau.de>; Wed,  2 Aug 2017 04:39:12 +0200 (CEST)
+Received: by ietfa.amsl.com (Postfix, from userid 65534)
+	id 77B18120724; Tue,  1 Aug 2017 19:39:10 -0700 (PDT)
+X-Original-To: xfilter-draft-ietf-anima-autonomic-control-plane@ietfa.amsl.com
+Delivered-To: xfilter-draft-ietf-anima-autonomic-control-plane@ietfa.amsl.com
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 42928127B60;
+ Tue,  1 Aug 2017 19:39:10 -0700 (PDT)
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
+ header.d=gmail.com
+Received: from mail.ietf.org ([4.31.198.44])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yquVlTbL3oSY; Tue,  1 Aug 2017 19:39:08 -0700 (PDT)
+Received: from mail-pg0-x229.google.com (mail-pg0-x229.google.com
+ [IPv6:2607:f8b0:400e:c05::229])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id F15BC120724;
+ Tue,  1 Aug 2017 19:39:04 -0700 (PDT)
+Received: by mail-pg0-x229.google.com with SMTP id l64so15274325pge.5;
+ Tue, 01 Aug 2017 19:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=subject:to:references:from:organization:cc:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=OpTTtKELwWT6v6Ga6LK8VwNhfPuXRL+U5tBH/U/5t0s=;
+ b=ZA9L2k91LQsUZEJPf9U3r31Vsaqbs11DN5C6TJFc2ja/Ke/AF0eF3x8Xjm8MB+uc2j
+ HbVEFCyVc/d3GS8Hzdcr8/qbFKO7ccCOI8xBQqQ4ZiZUXt6/A/TF9LmHYnLx+i77jNxQ
+ +E9XIOS2fviooEIu+9lgHe9Ff2DrkR1dqQm7lcNPJiLa3vo518Fs1dEKF+g59frb82oV
+ pogn+PGZWpVWVDGSNPB6ttSjJ0bQQ5qMFZT0UJh8q172UTHQ85tSRvlTnfzJhFYTqkhq
+ cPuD3wgluYxPhrWKhPCP7Gy8VqIQDT6HYFCX71zLUxeE/2GEZwvzkfOxbJcj9l2Ozpw3
+ /Q/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:references:from:organization:cc
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=OpTTtKELwWT6v6Ga6LK8VwNhfPuXRL+U5tBH/U/5t0s=;
+ b=rJJFHIqQDiUlG9VObY1FWTxsxex3gzkM2uM/31TAoVVWBzX2hnpBk5wgsxanGoMSl/
+ S5JYvWUTDnBY9n/WK7swXgsixIQfM+r2OuKMNen/6sQnJKhLKjYAaPJpzDqa2nQRpdkp
+ v6ojSFlvNKKRLYVSfGoDZqgqYMDf8m3Ds7g0WhRKUNqm3lECuufBNGXie2gB1y+h6U1r
+ sQNU2fyIQM6J9djqAdMYEGdM7/XX34LR4wdEW4gI5jtKlkmeiAIx/QbCSm/nBpFBHsCH
+ XhJsiHt0PiEIJXg0eQFkhn9t6pQDsE9YfcUkFBf6R696NzuPm/Pc89aEmBGTV1LiI2+B
+ NA/w==
+X-Gm-Message-State: AIVw110KyAWhsLqjmKfHmNcxin3y23sYyEAeGHbDEuEir6RRFgAxVCm2
+ X8pf/ISgJ4N0xLnM
+X-Received: by 10.84.210.203 with SMTP id a69mr23091589pli.397.1501641543965; 
+ Tue, 01 Aug 2017 19:39:03 -0700 (PDT)
+Received: from [130.216.38.9] (sc-cs-567-laptop.uoa.auckland.ac.nz.
+ [130.216.38.9])
+ by smtp.gmail.com with ESMTPSA id n19sm23178838pfi.35.2017.08.01.19.39.01
+ (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+ Tue, 01 Aug 2017 19:39:03 -0700 (PDT)
+Subject: Re: I-D Action: draft-ietf-anima-autonomic-control-plane-08.txt
+To: draft-ietf-anima-autonomic-control-plane@ietf.org
+References: <150044138257.25233.12391471568614147773@ietfa.amsl.com>
+From: Brian E Carpenter <brian.e.carpenter@gmail.com>
+Organization: University of Auckland
+Cc: anima@ietf.org
+Message-ID: <f5e84812-c2fa-cc16-4105-20f7791110f4@gmail.com>
+Date: Wed, 2 Aug 2017 14:39:03 +1200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
+MIME-Version: 1.0
+In-Reply-To: <150044138257.25233.12391471568614147773@ietfa.amsl.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+Resent-From: <alias-bounces@ietf.org>
+Resent-To: Michael.H.Behringer@gmail.com, tte+ietf@cs.fau.de, sbjarnason@arbor.net
+Resent-Message-Id: <20170802023910.77B18120724@ietfa.amsl.com>
+Resent-Date: Tue,  1 Aug 2017 19:39:10 -0700 (PDT)
+X-Virus-Scanned: clamav-milter 0.99.2 at faui45
+X-Virus-Status: Clean
+Status: RO
+Content-Length: 12076
+Lines: 342
+
+Hi,
+
+Here are my comments on ACP version -08. First the ones I rank
+as substantive isssues, then a few nits.
+
+Issues:
+-------
+
+> 2.  Terminology
+...
+> ULA  "Unique Local Address".  The IPv6 equivalent to RFC1918 IPv4
+> addresses.  ACP addresses are ULA.
+
+No, they are *not* equivalent to RFC1918, because those are ambiguous
+and ULAs are not. Please avoid controversy, just cite RFC4193.
+
+> 3.2.  Secure Bootstrap over an Unconfigured Network
+...
+> ...This does not require any configuration
+> on intermediate nodes, because they can communicate through the ACP.
+
+s/they can communicate/they can communicate securely/
+
+> 4.  Requirements
+...
+> ACP4:  The ACP MUST be generic.  Usable by all the functions and
+>        protocols of the AN infrastructure.  It MUST NOT be tied to a
+>        particular protocol.
+
+I'm not sure what the last sentence is saying. Do you mean
+"MUST NOT be tied to a particular transport protocol" or
+"MUST NOT be tied to a particular security protocol"?
+Or do you mean "MUST NOT restrict the choice of upper layer
+protocol"? Or do you simply mean "MUST provide a generic
+IPv6 service"?
+
+Also, there's no requirement about performance or the
+expected traffic density. Should we say something either
+in the Requirements section or in the Notes in the
+Overview section? I assume that performance is not critical
+and ACP traffic density is expected to be low.
+
+> 5.  Overview
+...
+>   Default policy is: To all adjacent nodes in the
+>   same domain.
+
+I know this is explained later, but I think both
+"adjacent" and "domain" need some qualification.
+For example:
+
+  Default policy is: To all adjacent link-layer autonomic
+  nodes in the same autonomic domain.
+
+...
+>    5.  Inside the ACP VRF, each node sets up a virtual (loopback)
+>        interface with its ULA IPv6 address.
+
+I think we have cases where a node has multiple ULAs.
+
+> 6.1.  Domain Certificate
+> 
+>    To establish an ACP securely, an ACP device MUST have a globally
+>    unique domain certificate (LDevID),...
+
+You need a normative reference for the LDevID format.
+
+> 6.1.1.  ACP information
+> 
+>    The domain certificate (LDevID) of an autonomic node MUST contain ACP
+>    specific information, specifically the domain name, the address of
+>    the device in the ACP with the Zone-ID set to zero ("ACP address").
+
+You need a cross-reference for Zone-ID, which is undefined at this point.
+
+...
+>    anima.acp+<acp-address>{+<rsub>{+<extensions>}}@<domain>
+
+What notation is that? Is {} supposed to be an optional item?
+If so, why not use [] as in ABNF, and cite ABNF.
+
+>  <domain> is used to indicate...
+
+Is that required to respect DNS syntax? If so, please say so.
+
+> {<rsub>.}<domain>
+
+That's wrong. <domain> is preceded by "@" in your syntax, and 
+in your example, the dot is in the <extensions> element
+"area51.research".
+
+Is there a length limit on the rfc822Name ?
+
+> 6.1.2.  Maintenance
+
+As Michael R said, all the stuff about the registrar
+should be in BRSKI, not duplicated here. In fact, it's
+very confusing to have it here. If we want a cert
+renewal mechanism, surely that's part of BRSKI?
+
+[One detail however:
+
+>    The loop-count MUST be sete to 255.  When an ACP node
+>    receives the M_FLOOD, it will have been reduced by the number of hops
+>    from the EST server.
+
+I don't like that. The role of the loop count is loop prevention,
+so it should be set to a reasonable upper bound on the "radius"
+of the network. GRASP has two measures for loop detection, this
+one and detection of duplicate session IDs, but that was
+intentional redundancy.]
+
+> 6.2.  AN Adjacency Table
+> 
+>    To know to which nodes to establish an ACP channel, every autonomic
+>    node maintains an adjacency table.  The adjacency table contains
+>    information about adjacent autonomic nodes, at a minimum: node-ID, IP
+>    address, domain, certificate.
+
+Please specify which IP address(es) you mean. Link-Local, ACP
+Address(es), or both?
+
+Can you also indicate that an API to this table is needed (at 
+least by the GRASP core, and possibly by any ASA that wants to
+make direct use of the ACP)?
+
+> 6.3.  Neighbor Discovery with DULL GRASP
+...
+>           [M_FLOOD, 12340815, h'fe80000000000000c0011001FEEF0000, 1,
+>               ["AN_ACP", SYNCH-FLAG, 1, "IKEv2"],
+>               [O_IPv6_LOCATOR,
+>                    h'fe80000000000000c0011001FEEF0000, UDP, 15000]
+>           ]
+
+Once we are fully settled on this I can generate an example and
+its binary value for complete clarity. I have one comment which is
+that when I last updated draft-carpenter-anima-ani-objectives,
+I replaced "SYNCH-FLAG" with "5" (the actual value of the flag
+byte) - otherwise you have to define SYNCH-FLAG. Actually
+the value 5 indicates discovery+synchronization; everything
+should work just the same if it was 4 (synchronization alone),
+since it's flooded. I don't know if we care about that difference.
+
+...
+>    The ttl and loop-count are fixed at 1 since this is a link-local
+>    operation.
+
+No, the ttl is milliseconds - the valid lifetime of the flood.
+You have that correct in your version of AN_join_registrar.
+
+> 6.8.2.  ACP as the Security and Transport substrate for GRASP
+...
+>    GRASP inside the ACP uses link-local UDP IPv6 multicast across the
+>    ACP virtual interfaces for GRASP neighbor discovery...
+
+and flooding
+
+Also, you might want to add a reminder that GRASP does its own
+relaying of multicast packets between interfaces; the ACP is
+not required to provide multicast routing.
+
+>                                                  ...and IPv6 over TLS
+>    across the ACP virtual interfaces for any of its unicast messages.
+
+Wait, what are you saying here? Do you really mean IPv6
+over TLS, or TLS over TCP over IPv6?
+
+As Eric Rescorla asked us at one point, please draw a ladder
+diagram of the protocol stack.
+
+...
+>    TLS is mandated for GRASP because the ACP secure channel mandatory
+>    authentication and encryption protects only against attacks from the
+>    outside but not against attacks from the inside - compromised ACP
+>    members
+
+I think the threat model really needs a clearer explanation. I assume
+that Bob and Alice are good guys, and Eve is a malicious ACP member.
+So a packet from Alice to Bob is encrypted from Alice to Eve, decrypted
+by Eve, then encrypted from Eve to Bob. So Eve can do what she wants
+with the decrypted packet.
+
+Now, who does the TLS wrapping? Will that be done by the ACP,
+or by the GRASP core? If the latter, you still need to explain
+how the ACP conveys the cert information to GRASP.
+
+> 6.10.1.  Fundamental Concepts of Autonomic Addressing
+...
+>    o  Addresses in the ACP are permanent, and do not support temporary
+>       addresses as defined in [RFC4941].
+
+Add something like:
+
+  o  Addresses in the ACP are not considered sensitive on
+     privacy grounds, so do not need to be pseudo-random
+     as discussed in [RFC7721].
+
+(You probably also need to discuss why the ACP is not subject
+to scanning attacks: because ULAs are not propagated across
+domain boundaries.)
+
+> 6.10.2.  The ACP Addressing Base Scheme
+> 
+>    The Base ULA addressing scheme for autonomic nodes has the following
+>    format:
+> 
+>   8      40             2                     78
+> +--+-----------------+------+------------------------------------------+
+> |FD| hash(subdomain) | Type |             (sub-scheme)                 |
+> +--+-----------------+------+------------------------------------------+
+> 
+>                    Figure 2: ACP Addressing Base Scheme
+> 
+>    The first 48 bits follow the ULA scheme, as defined in [RFC4193], to
+>    which a type field is added:
+> 
+>    o  "FD" identifies a locally defined ULA address.
+
+For the Nth time, please s/FD/fd/ as required by RFC5952
+
+> 
+>    o  Type: This field allows different address sub-schemes in the
+>       future.  The goal is to start with a single sub-schemes, but to
+>       allow for extensions later if and when required.  This addresses
+>       the "upgradability" requirement.  Assignment of types for this
+>       field should be maintained by IANA.
+
+You need to write precise directions to IANA.
+
+> 6.10.3.  ACP Zone Addressing Sub-Scheme
+> 
+>    The sub-scheme defined here is defined by the Type value 0 (zero) in
+>    the base scheme.
+> 
+>            51            1     13                    63             1
+>  +---------------------+---+---------+-----------------------------+---+
+>  |    (base scheme)    | Z | Zone-ID |         Device-ID           | V |
+>  |                     |   |         | Registrar-ID | Device-Number|   |
+>  +---------------------+---+---------+--------------+--------------+---+
+>                                              48           15
+
+s/51/50/
+
+Although I think it would be simpler to do this:
+
+           48        2   1     13                    63             1
+ +----------------+----+---+---------+-----------------------------+---+
+ | ULA prefix     |Type| Z | Zone-ID |         Device-ID           | V |
+ |                | 00 |   |         | Registrar-ID | Device-Number|   |
+ +----------------+----+---+---------+--------------+--------------+---+
+                                             48           15
+
+> 
+> 6.10.4.  ACP V8 Addressing Sub-Scheme
+> 
+>    The sub-scheme defined here is defined by the Type value 1 (one) in
+>    the base scheme.
+> 
+>              51                           63                 8
+>    +---------------------+-----------------------------+----------+
+>    |    (base scheme)    |         Device-ID           |        V |
+>    |                     | Registrar-ID | Device-Number|          |
+>    +---------------------+--------------+--------------+----------+
+>                                46             32
+
+Same comments.
+
+> 6.10.5.  Other ACP Addressing Sub-Schemes
+> 
+>    Other ACP addressing sub-schemes can be defined if and when required.
+>    IANA would need to assign a new "type" for each new addressing sub-
+>    scheme.  With the current allocations, 5 more schemes are possible
+
+That's confusing. In your terminology, only two more types are
+possible (10 and 11). It would be simpler to simply define 3 type
+bits.
+
+A general remark: when a wider audience looks at this, there will
+be complaints that we are re-creating classful addressing. I suggest
+adding some text about this. (Along the lines of: it's true, and
+here is why it doesn't matter.)
+
+>    Every ACP device (RPL node) announces an IPv7 prefix
+
+Forward into the future!
+
+> 6.12.4.  ACP interfaces
+...
+>    These packets are of course redundant (unnecessary) and would be
+>    discarded by GRASP on receipt as duplicates.
+
+...by use of the GRASP Session ID.
+
+> 7.2.  How (per L2 port DULL GRASP)
+...
+> L3/L2 devices SHOULD support per-L2 port ACP.
+
+Clarify that ACP (and GRASP) capable devices do
+not need to depend on MLD snooping, since they
+catch LL multicasts directly per port. But non-ACP
+switches MUST either support MLDv2 snooping or
+operate as pure L2 bridges for all multicast
+packets.
+
+Also, is there anything to say here about VLANs?
+ 
+> 11.  Security Considerations
+
+I think you need to insert cross-references to
+various security discussions elswhere in the draft.
+ 
+> 12.  IANA Considerations
+
+TBD!
+
+Nits:
+-----
+
+> 2.  Terminology
+...
+>    ACP VRF  The ACP is modelled in this document as a "Virtual Routing
+>       and Forwarding" (VRF) component in a network device.
+
+I suggest listing this alphabetically as VRF, not under A.
+
+>    AN "Autonomic Network".  A network according to
+>       [I-D.ietf-anima-reference-model].  Its main components are Intent,
+>       Autonomic Functions and ANI.
+
+I find the second sentence doesn't help, especially by referring to Intent.
+
+  ** The document seems to lack a both a reference to RFC 2119 and the
+     recommended RFC 2119 boilerplate, even if it appears to use RFC 2119
+     keywords. 
+
+  == Using lowercase 'not' together with uppercase 'MUST', 'SHALL', 'SHOULD',
+     or 'RECOMMENDED' is not an accepted usage according to RFC 2119.  Please
+     use uppercase 'NOT' together with RFC 2119 keywords (if that is what you
+     mean).
+
+Regards
+   Brian
+
