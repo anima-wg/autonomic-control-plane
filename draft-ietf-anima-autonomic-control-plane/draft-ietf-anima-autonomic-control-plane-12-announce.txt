@@ -1,0 +1,41 @@
+To: anima@ietf.org
+Subject: ANIMA: draft-ietf-anima-autonomic-data-plane-12
+
+Dear ANIMA WG.
+
+I just uploaded subject draft. I think the draft is now code complete and
+i would like to ask my co-chair for WG last call.
+
+It is also terminology/spell checked. Most of the changes where derived
+from Shengs thorough review, pls. see those details from the separate mail
+i sent in reply of that review.
+
+Details about changes in changelog, quick summary:
+
+- removed claim from -10/11 to update RFC4291,RFC4193 based on MichaelR
+  suggestion, lets see if IESH/IETF review will bring up the request to do so.
+- range of terminology improvements. Replaced "AN foobar" with "ACP foobar"
+  because "AN foobar" was implying that the nodes would have to be (fully)
+  autonomic), which is not true (wanted to specifically allow implementors
+  to be able to implement ONLY ACP if they want to).
+- Device -> node, physical -> native (interface), because "physical interface"
+  is not very intuitive for virtual ACP nodes so text now should
+  be a lot better agnostic of physical vs. virtual ACP routers.
+- Fixes to section mentioning EST/RFC7030 to renew certificate after discussion
+  with Max et.al. GRASP objective is now called "SRV.est" for this. See also
+  complete IANA section for description why.
+- fixed explanation of loopback interfaces.
+- A few small fixups ended up being larger informational new text:
+  - 10.2 diagnostics. From my operational experience i can guarantee
+    that no ANI implementation will fly without a lot of this diagnostics.
+  - 10.3 How to enable/disable ACP/ANI global/per-interface and why
+    (including the suggestion how to avoid interfaces being shut down by
+     operators to impact ACP). Likewise i have a hard time imagining good
+     ACP implementations that do not take a lot of care of these aspects correctly.
+  - 10.8 how ACP could be modified through future work. No too long, but
+    docussed on what i have seen interest in.
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-11.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-12.txt
+
+Cheers
+    Toerless
