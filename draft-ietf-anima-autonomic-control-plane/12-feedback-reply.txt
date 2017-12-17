@@ -1,0 +1,834 @@
+To: anima@ietf.org
+Subject: Review reply: Re: [Anima] WGLC on draft-ietf-anima-autonomic-control-plane-12
+
+This email is coalescing the replies to the comments received from ANIMA WG
+last call against version -12. Comments where received from:
+
+  Bill Atwood, Brian Carpenter, Michael Richardson, Yongkang Zhang
+
+Thank you very much!
+
+-13 was just posted and hopefully answers all the concerns raised. Changes
+include mostly non-semantic changes such as additional terminology,
+additional/refined explanations, bugfixes (ULA calculation, addressing bitlengths),
+formatting and clarification of "must/not" to "MUST/NOT" (security profiles for secure
+channels).
+
+Main semantic refinements where done for
+-  6.3, AN_ACP GRASP objectives (simplified, only one secure channel
+   method/objective permitted)
+-  8.2.1, manual config of remote ACP neighbors - removed "patterns"
+   and simplified/fixed CDDL model and rewrote the explanations.
+-  Use of Zone-ID != 0 in grasp locators to achieve desired goal of
+   smaller routing tables (when those zones are used in future).
+
+For diff, see:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-12.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-13.txt
+
+List of change usual in changelog.
+
+Replies to each pointed raised below, coalesced by reviewer.
+
+Thanks!
+    Toerless
+
+------------------------------------------------------------------------------
+From: Brian Carpenter:
+------------------------------------------------------------------------------
+
+> Here's my first comment on this draft. However, it is very long and I hope you can allow some     
+> +extra delay.                                                                                     
+>                                                                                                   
+> As far as the two GRASP objectives are concerned, both "AN_ACP" and "SRV.est"                     
+> look mainly OK and I have made a demonstration implementation of both of them.                    
+> [...]
+> I do have a question about the value field of each of these objectives.                           
+> They are both defined as "name of the (list of) of supported protocols"                           
+> but the examples show a simple string. That needs to be more precise.                             
+> Is it a string, a list of strings ["abc", "def"] or something else?                               
+
+Good question. Had to revisit format and text before being able
+to satisfactory answer. Luckily it simplified things:
+
+SRV.est - Only empty objective-value required/beneficial now:
+
+Modified text:
+  <t>The objective value "SRV.est" indicates that the objective is an
+  <xref target="RFC7030"/> compliant EST server because "est" is an
+  <ref target="RFC6335"/> registered service name for <xref target="RFC7030"/>.
+  Future backward compatible extensions/alternatives to <xref target="RFC7030"/>
+  my be indicated through objective-value information. Future non-backward compatible 
+  certificate renewal options must use a different objective-name.</t>
+
+Explanation: 
+  Because the objective-name indicates RFC7030, we do not need "EST-TLS",
+  and can not really have incompatible options indicate in it:
+  If we would use DNS-SD/mDNS instead of GRASP, the same would be true
+  (IANA registration for "est" shows no TXT assignments!).
+
+  For example, some CoAP based cert renewal would require a new service name
+  for DNS-SD because it wouldn't be compatible with rfc7030 (at transport
+  level). A BRSKI server instead is compatible, so it could be announced
+  via SRV.est for cert renewal.
+  
+  If there would be future extensions to 7030 that are backward compatible,
+  we would indicate that in DNS-SD TXT and in GRASP objective-value.
+  At that time i would prefer the encoding i am suggesting in the
+  GRASP DNS-SD draft.
+
+AN_ACP - No arrays of strings required now, just a single method string per objective!
+
+Explanations:
+  
+  Different methods may require their own locators. In that case they
+  most easily go into their own objective. So it is sufficient that
+  objective-value = string = single method.
+
+  I don't really see a need to add more on-off alternatives like multiple
+  strings in an array right now. ANd if one of those new methods would
+  require some more parameter, it would get even more complex. So
+  i removed that option. And i hope we're having those discussions when
+  looking at the extensible format proposed in GRASP-DNSSD (which is
+  applicable even without being DNS-SD compatible.
+
+Changed:
+  I changed the example to show two objectives, one for "IKEv2", one for
+  "dTLS" together in the same message. That is along the lines of above
+  explanations. (Keep It Simple Stupid). Also removed paragraph indicating
+  that we could have multiple methods per objective.
+  
+> And do the names need to be registered?                                                           
+
+I guess we could, but i would rather go the lazy route and do it
+when we really see that we need to add more options. Registries that
+never get used are a waste of effort for IANA. I think to remember that
+we did the same on some IP multicast protocol parameters as well
+(late registration when we saw extensions popping up).
+
+> Here are my comments from a superficial re-read of the whole document. I only
+> spent about an hour on this, so document shepherd and AD please note:
+> this document really needs multiple reviewers.
+> 
+> Nits and substantive points are mixed together.
+> 
+> Introduction, page 5:
+> 
+> >    The following sections are non-normative: Section 7 reviews benefits
+> >    of the ACP 
+> 
+> Actually that should be Section 9. I really hope you are using <xref>
+> for all internal references. Otherwise there will be a disaster when
+> this goes to the RFC Editor.
+
+Fixed. Yes, all xref'ed, but somehow overlooked fixing this one in some edit.
+Not sure how this happened.
+
+> Introduction, page 6:
+> 
+> >    The ACP as defined in this document can be implemented and operated
+> >    without dependency against other components of autonomous networks
+> 
+> Please don't use "autonomous". It doesn't mean exactly the same as
+> "autonomic". This occurs in 4 places in the draft. (Autonomous cars drive
+> themselves. An autonomic car would also decide for itself where to go.)
+
+Done.
+
+> Acronyms and Terminology, page 7:
+> 
+> >    domain information (field):  An rfc822Name information element (e.g.:
+> >       field) in the domain certificate in which the ACP relevant
+> >       information is encoded: the domain name and the ACP address.
+> 
+> You need to define "domain certificate" too, even just a forward
+> reference since it is well explained later in the draft.
+
+Hmm... The first instance of referring to domain certificate is
+actually in the "ACP address" definition. I have now tried to put a
+forward reference to the definition of domain certificate in section 2
+into it, but its kinda quirky:
+
+           <t hangText="ACP address:">An IPv6 address assigned to the ACP node.  It is stored            in the domain information field of the <xref target="domcert-def">ACP domain certificate</xref>.
+            </t>
+
+            <t hangText="ACP (ANI/AN) Domain Certificate:" anchor="domcert-def">A provisioned certificate (LDevID)
+            carrying the domain information field which is used by the ACP to learn its address
+            in the ACP and to derive and cryptographically assert its membership in the ACP domain.
+            </t>
+
+xml2rfc turns this reference into:
+
+   ACP address:  An IPv6 address assigned to the ACP node.  It is stored
+      in the domain information field of the ACP domain certificate
+      (Paragraph 21).
+      ^^^^^^^^^^^^^^^
+
+I would imagine that the xref works better for any format that can insert
+xrefs as metadata (HTML/PDF), but for text its really ugly.
+
+My idea was to NOT have references in the terminology section because of this
+
+-> xrefs to other terms (see above) are ugly in text.
+-> refs to other sections defy the purpose of quickly just getting definitions.
+   (i think i added a few just to reply to feedback from reviewers, even though i didn't like it).
+
+Maybe we let this one instance ("Paragraph 21") in and get back to this
+later when the doc is in the RFC editor queue. Those folks may have better ideas for this formatting problem.
+
+> Also, somewhere in the terminology section, can you give a relevant
+> definition of "loopback interface", since we have established via
+> the 6man list and even the internet-history list that it is a
+> slippery concept. Something like:
+> 
+> loopback interface: The conventional name for a neutral virtual
+> IP interface to which addresses may be assigned, but which
+> transmits no external traffic.
+
+<t hangText="loopback interface:">The conventional name for an internal IP interface to which addresses may be assigned, but which transmits no external traffic.
+
+> In Overview, page 13:
+> 
+> >    Note:
+> > 
+> >    o  Non-autonomic NMS ("Network Management Systems") or SDN
+> >       controllers have to be manually connected into the ACP.
+> 
+> The phrase "manually connnected" bugs me a little. I agree there
+> needs to be a human decision but that will be a configuration
+> decision; the actual connection process will be automated.
+> How about "manually configured for connection into the ACP"?
+
+changed to:
+
+"explicitly configured for connection into the ACP"
+
+> >    o  Connecting over non-ACP Layer-3 clouds initially requires a tunnel
+> >       between ACP nodes.
+> > 
+> >    o  None of the above operations (except manual ones) is reflected in
+                                        ^^^^^^^^^^^^^^^^^^
+> >       the configuration of the node.
+> 
+> That sentence illustrates exactly why "manually connected" is wrong.
+
+changed to:
+
+"except explicit configured ones"
+
+Also removed a few more instances of "manual" and replaced with "explicit".
+Really just left it in for the 'Manual Addressing Sub-Scheme" because i am not
+sure another name would better ("Traditional EUID64 addressing sub-scheme" ??).
+
+> In ACP Adjacency Table, page 20:
+> 
+> >    To know to which nodes to establish an ACP channel, every ACP node
+> >    maintains an adjacency table.  The adjacency table contains
+> >    information about adjacent ACP nodes, at a minimum: node-ID, Link-
+> >    local IPv6 address (discovered by GRASP as explained below), domain,
+> >    certificate. 
+> 
+> You must also include the interface index (the number, not the name)
+> with the LL address. Without that, the address is useless. (Discussed
+> with Michael B a long time ago, but somehow it didn't make it into
+> the reference model text.)
+
+See after your next comments...
+
+> (I write as one who has coded the process of discovering a node's
+> link local addresses and interface indexes, because GRASP can't run
+> without them.)
+>
+> [insert Brians comment from another thread]
+>
+> I commented elsewhere that the ACP adjacency table needs to include
+> the interface index for link-local addresses**, and that is in fact
+> exactly what RFC 4007 calls the "zone index". So unless we make
+> this excessively clear, we can be certain that some readers will
+> get the two things mixed up.
+> 
+> ** How you determine the interface index is o/s dependent, so
+> it's important to put this in the adjacency table, for maximum
+> portability of code.
+
+Fixed adjacency table text to indicate that "interface" where neighbor
+was learned from must be included.
+
+This is likely the interface index, but i wanted to be as generic
+as possible. Some implementations may use e.g.: some interface name/number, which
+would be sufficient as well.
+
+I added some text about zone_id intot he terminology section.
+
+The relationship between zone_id and interface index is kinda quaint:
+
+In the figure 1 example in rfc4007, there is a link-local zone with
+two interfaces. Theoretically we really would need to track those
+link-scope zone_id's instead of interfaes (whether its interface-id or
+name/number). But practially speaking, i have never seen a product
+that supports this example model directly. Instead, i have only seen
+the approach where you would have to create a virtual interface,
+such as an "etherchannel interface" and bind tht to interface2/interface3
+in figure 1, and "e voila", that new virtual interfaces interface-id
+is equivalent to a quirky link scope zone_id. 
+
+I also asked this on ipv6@ietf.org. Lets see if anybody comes up
+with evidence that there is really in  reality a different
+namespace for link scope zone_ids vs. interface IDs. I'd be surprised.
+
+> Also - this text duplicates the reference model. We'd perhaps better
+> agree where it belongs and delete it from one draft or the other.
+> Duplicated text always causes problems later.
+
+The standards track documents (GRASP, ACP, BRSKI) are meant to not depend on the reference
+model for their normative definitions, and this is a normative text of ACP,
+so we can not get it from reference model. If you think the text in reference model is
+redundant, that must therefore be a discus against reference model.
+
+I wouldn't change reference model here either:
+
+I think this is benign duplication because you also want to be able
+to read through the reference model without unnecessarily having
+to dig into BRSKI, ACP or the like.
+
+> In GRASP as a core service of the ACP, page 28:
+> 
+> >    The ACP does not use IP multicast routing nor does it provide generic
+> >    IP multicast services. 
+> 
+> However, GRASP sends multicasts to the GRASP multicast address on each
+> ACP interface, sent as unicast inside the ACP tunnels. This is fully explained
+> later, but the reader might be confused. I suggest adding:
+
+I guess i am too much of a multicast geek that i am not confused:
+"no IP multicast routing" means "does not use any multicast other than maybe
+link-local ip multicast".
+
+>   The handling of GRASP multicast messages is explained in the following section.
+
+Added: (the handling of GRASP link-local multicast messages is explained in the following section).
+
+> In Addressing inside the ACP, page 33:
+> 
+> >    Links inside the ACP only use link-local IPv6 addressing, such that
+> >    each node only requires one routable virtual address.
+> 
+> Does the really mean each *node*? Can we have more than one ACP instance in
+> a node? And didn't we discuss some use cases for multiple addresses recently?
+
+Fixed to "each nodes ACP only requires..."
+               ^^^^^^^^^
+
+We did not really conclude on defining how to use multiple ACPs within a node.
+Too late for this RFC IMHO. COuld be interesting followup work, we discussed
+it in 2015/2015 for VMs.
+
+> A related but more general question:
+> 
+> If there are multiple GRASP instances in a node (ignoring the DULL case),
+> does each instance require its own ACP unicast address and its own ACP
+> security associations? (I hope the answer is "No".)
+
+If you had multiple ACPs, i am sure each ACP would have its separate loopback
+address. These are different addressing domains anyhow, so really no way
+to avoid this. Even if it would be the same addresses (like having multiple
+times the same rfc1918 address in different VRFs - counts as different addresses).
+
+> In Combined ACP/Data-Plane Interface (VRF Select), page 57:
+> 
+> >    In result, RFC6724 source address selection Rule 5.5 may result in
+> >    the same correct source address selection behavior of NMS hosts
+> >    without further configuration on it as the separate ACP connect and
+> >    data-plane interfaces.  As described in the text for Rule 5.5, this
+> >    is only a may, because IPv6 hosts are not required to track next-hop
+> >    information.
+> 
+> Well, you can change this by requiring RFC8028.
+
+Added to end of paragraph:
+
+Hosts implementing <xref target="RFC8028"/> should (insead of may) implement <xref target="RFC6724"/> Rule 5.5, so it is preferred for hosts to support <xref target="RFC8028"/>
+
+Too bad 8028 did make this only a SHOULD but not MUST. I can not see a reason why not supporting it would ever be beneficial.
+
+> In Configured Remote ACP neighbor, page 58:
+> 
+> >        remote-peer = [ local-address, method, remote-address ]
+> >        local-address  = ip-address
+> >        remote-address = transport-address
+> >        transport-address =
+> >           [ (ip-address | pattern) ?( , protocol ?(, port)) (, pmtu) ]
+> >        ip-address = (ipv4-address | ipv6-address )
+> >        method = "IKEv2" / "dTLS" / ..
+> >        pattern = some IP address set
+> 
+> Hmm. This seems a bit loose for normative text. What's ".."
+> and what's the format of "pattern"?
+
+Hmm... I am not going to come up with some pattern definition because
+its not really important and too much work and CLI's are different.
+So, i rewrote this text to just indicate "any" as an option.
+
+I ended up rewriting this section because there was more loose
+text and confusing CDDL definition (needed to get "any" in, "protocol"
+ not needed, pmtu in a strange place, port not necessary for every
+ method,....).
+
+
+>Subject: Re: [Anima] Fwd: Section 6.10.2 of draft-ietf-anima-autonomic-control-plane
+>
+> from Brian Carpenter:
+>
+> This is particularly important since "zone" and "zone index" and                                  
+> "zone_id" are used in a completely different sense in RFC 4007 and                                
+> other RFCs that depend on RFC 4007. In fact, it might be worth                                    
+> a note that this is different from that.  
+
+Added to the zone addressing section:
+
+            <t>Note: Zones and Zone-ID as defined here are not related to <xref target="RFC4007"> zones or zone_id. ACP zone addresses are not scoped (reachable only from within an RFC4007 zone) but reachable across the whole ACP. An RFC4007 zone_id is a zone index that has only local significance on a node, whereas an ACP Zone-ID is an identifier for an ACP zone that is unique across that ACP.</t>
+
+Also added to section 2 (terminology):
+
+           <t hangText="(ACP) Zone:">An ACP zone is a connected region of the ACP where nodes derive from their non-aggregatable ACP address (identifier address) an aggregateable ACP zone address (locator address). See the definition of the ACP Zone Addressing Sub-Scheme (<xref target="zone-scheme"/>). The complete definition of zones is subject to future work because this document does not describe the routing protocols details for aggregation of ACP zone addresses, but only their addressing scheme.</t>
+
+
+------------------------------------------------------------------------------
+From: William Atwood
+------------------------------------------------------------------------------
+
+Subject: Re: Technical comments on draft-ietf-anima-autonomic-control-plane-12 (part 1)
+
+> Bill Atwood, part 1:
+> > Hi Bill,
+> > 
+> > Thanks for the review. Let me comment quickly. Will do the fixups
+> > after Sheng has made determinations.
+> > 
+> > 
+> > Inline...
+> > 
+> > On Tue, Oct 24, 2017 at 10:35:56PM -0400, William Atwood wrote:
+> >> Hello,
+> >>
+> >> These are my technical comments on this draft, for the first 32 pages.
+> >> Given the length of the document, I do not expect to be able to finish
+> >> it by October 28, so I second Brian's request for additional time.
+> >>
+> >>    Bill
+> >>
+> >> 1) The definition of "ANI" in Section 2 says that it includes ACP, BRSKI
+> >> and GRASP.  The statement of Requirements in Section 4 says:
+> >>
+> >> "ACP4:  The ACP MUST be generic. ... It MUST NOT be tied to a particular
+> >> application or transport protocol."
+> >>
+> >> These two statements are in conflict, because the ANI as defined in this
+> >> document clearly depends on GRASP.
+> > 
+> > Actually, the ACP does depend on GRASP too (eg: to find neighbors,
+> > and also because it defines ACP-GRasp to be core part of ACP services). So
+> > no need to bring in ANI ;-)
+> > 
+> > I did respond to this point somewhere deep inside of one of the long reviews
+> > from Brian or Sheng i think, so let me repeat:
+> > 
+> > AFAIK, the origin of ACP4 was in the early history of ANIMA: We first
+> > brainstormed how we could build out ASA solely using one standardized
+> > transport/session layer protocol and in result, we could make the
+> > underlying infrastructure (ANI) very simple. In technical terms, think
+> > how we could have NOT built the ACP as a virtualized IP inband network
+> > but if we would have simply built out GRASP and then ANI was just GRASP,
+> > In the extreme, there would be no IP hop-by-hop forwarding in ACP,
+> > but every unicast communication between two ASA would be hop-by-hop
+> > forwarded by GRASP. No need to build a whole VRF around ACP etc. pp.
+> > 
+> > In the end we concluded that this was too bold to gain short term
+> > attaction, and i also was worried about performance even for GRASP
+> > unicast if we didn't rely on existing forwarding plane mechanisms such
+> > as end-to-end IP/TCP/TLS. Now if we do get a lot of adoption of ASA
+> > with only GRASP then we can of course bring "ANI-lite" that would potentially
+> > do this.. But first we got to kill a huge lot of legacy.
+> > 
+> > So thats how ACP4 requirement came along.
+> > 
+> > I changed in to "application or transport" through the last review,
+> > but i agree that this still does not well explain.
+> > 
+> > How about "Clients of the ACP MUST NOT be tied..."
+> >             ^^^^^^^^^^^^^^^
+> > (instead of "It")
+> 
+> Works for me.
+
+Done.
+
+> >> 2) As a specification, Step 4 in Section 5 is terrible.  Step 3
+> >> explicitly includes the "for-loop".  Step 4 then shifts to the
+> >> perspective of an individual peer relationship, and uses the singular in
+> >> the first sentence.  It then shifts again to the plural for the second
+> >> sentence.  Suggested text:
+> >>
+> >> "4. For each node in the candidate peer list, it then establishes a
+> >> secure tunnel of the negotiated type.  The resulting tunnels are then
+> >> placed into the previously set up VRF.  This creates an overlay network
+> >> with hop-by-hop tunnels."
+> > 
+> > Thanks. Unless there are counterproposals, i will put that into 13.
+
+Done.
+
+> >> 3) In Section 6.1.1, in the comment on "routing-subdomain", it says,
+> >> <<"rsub" is optional and should only be used when its impacts are
+> >> understood.>>  Who must do the understanding?  What is the test for
+> >> "understanding"?  Is this a statement that "rsub" should not be used
+> >> until the WG has done more work, or until the reader has read this
+> >> document 42 times, or ??  For a normative section of this document, this
+> >> is remarkably ambiguous.
+> > 
+> > In my university in 1988?, every student had to sign the following
+> > statement before he/she got an account: "i hereby declare that i
+> > will not execute commands whose impact i do not understand". The more
+> > i learned of unix then, the more hilarious that statement beame
+> > over time. Every decade i now flip between "that was terrible" and
+> > "we really need to reintroduce this".
+> > 
+> > Practically speaking:
+> > 
+> > Before introducing rsub, older versions of ACP had a lot of hand waiving about
+> > subdomains, and open questions how they would tie in with mutual authentication,
+> > addressing and so on. All sounding harmless by using the word
+> > "intent" in many places. So i sat down and tried to figure out how i would
+> > make it work. I think its now implementable. But the primary benefit
+> > i see is only in being able to reduce routing tables, because rsub gives
+> > you multiple ULA prefixes, and you could auto-aggregate those. Only tht
+> > we have not sat down trying to specify a standard auto-aggregation. And
+> > i don't know how difficult that would be. So with that uncertainty in
+> > mind, using rsub now is a bit like starting to use IPv6 when you
+> > have all the IPv4 address space in the world. You are investing
+> > in an uncertain future (don't think 20/20 hindsight ;-)
+> > 
+> > So... given those more detailled insights, how do you think
+> > we could better warn the user of this option ?
+> > 
+> > "Benefits of using rsub may depend on future work in enhancing routing
+> > for the ACP" ?
+> 
+> How about this little expansion:
+> 
+> "rsub" is optional; its syntax is defined in this document, but its 
+> semantics are for further study.  Understanding the benefits of using 
+> rsub may depend on the results of future work on enhancing routing for 
+> the ACP.
+
+Done.
+
+> > But maybe i am overlooking other possible benefits.
+> > 
+> >> 4) In Section 6.2.3, para 1, line 3, "must" -> "MUST"  (I believe that
+> >> this requirement should be normative.)
+> > 
+> > There is no 6.2.3 in acp-12 ;-(
+> 
+> sorry, this should be 6.1.3.
+
+Done.
+
+> >> 5) In Section 6.7.2, para 2, line 4, "and not permit" -> "and MUST NOT
+> >> permit"  (The implied dependence on the previous "MUST" should be made
+> >> explicit.)
+> > 
+> > Ok.
+
+Done.
+
+Also added an equivalent "MUST NOT permit weaker crypto options" to IKEv2 section.
+
+I bet Eric (sec AD) will have further refinement wishes.. ;-)
+
+> >> 6) In Section 6.8.2, para 2, I was puzzled by the statement that the ACP
+> >> could exist in the absence of any active ACP neighbors, since the ACP is
+> >> only created with the help of a neighbor that is already a member of the
+> >> domain.  I then realized that domain membership (and its accompanying
+> >> domain certificate) could be established while a neighbor was active,
+> >> and then the neighbor could vanish.  I suggest adding some text to make
+> >> this sequence of events clear.  Suggestion: "It is created when the node
+> >> has a domain certificate, and continues to exist even if all of its
+> >> neighbors cease operation."
+> > 
+> > Ok.
+
+Done.
+
+From: william.atwood@concordia.ca
+Cc: anima@ietf.org
+Subject: Technical comments on draft-ietf-anima-autonomic-control-plane-12 (part 2)
+
+> Subject to correction of the points below, and some non-technical 
+> suggestions sent to the document authors, I believe that this document 
+> is ready to publish.
+> 
+>    Bill
+> 
+> Technical issues
+> 
+> 1) Somewhere, the document needs to have a definitive reference to the 
+> definition of a VRF.  If no such reference exists, then a definition of 
+> Virtual Referencing and Forwarding must be given inside this document. 
+> This could be included in the explanation of VRF in Section 2, or 
+> inserted at an appropriate place in the subsequent text.
+
+Updated the section 2 definition as follows:
+
+            <t hangText="(ACP) VRF:">The ACP is modelled in this document as a "Virtual Routing and Forwarding" instance (VRF). This means that it is based on a "virtual router" consisting of a separate IPv6 forwarding table to which the ACP virtual interfaces are attached and an associated separate IPv6 routing table. Unlike the VRFs on MPLS/VPN-PE (<xref target="RFC4364"/>) or LISP XTR (<xref target="RFC6830"/>), the ACP VRF does not have any special "core facing" functionality or routing/mapping protocols shared across multiple VRFs. In vendor products a VRF such as the ACP-VRF may also be referred to as a so called VRF-lite.
+
+So yes: There really is IMHO no good definition in RFCs for the type of
+VRF we want even though it is quite common in deployments: VRF to build
+VRF lite like solution , aka: not requring any specific "core-facing"
+encapsulation technology support like MPLS-VPN, LISP or the like.
+
+The only reference to VRF-lite i could find was RFC8151,
+and no - i am not going to use that reference because that vendors web server
+URLs have a pretty low t1/2. 
+
+> 2) The ACP is defined in various ways in the ANIMA documents.  I don't 
+> like any of the ones that I have seen in published documents; I find the 
+> one in Section 3.1 of draft-ietf-anima-reference-model-05 to be 
+> particularly opaque.  It is very important that all definitions of the 
+> ACP (in the reference model, in the ACP document, etc.) say the same 
+> thing.  The one that I like best was suggested by Brian Carpenter in a 
+> discussion with me and some others:
+> 
+>    "The ACP is the secure transport substrate that is *used by* the ANI 
+> for its interactions with other *autonomic* nodes and services."
+> 
+> I hope that a good definition can be agreed to by all document writers; 
+> the important thing is that we not be seen as saying different things in 
+> different documents.
+
+-> The ACP as we define it here is primarily a secure and resilient network (layer)
+   substrate, not a transport substrate. Only for ACP GRASP did we make
+   it also go up all the way to transport layer. The decision to do so
+   came late in the process as part of GRASP IESG security review.
+   We wanted to give solutions that use GRASP the freedom to define
+   and IESG-defend the security and congestion-control/reliability used for
+   GRASP.
+
+-> The terminology we use in various documents necessarily is evolving the
+   more we learn. For example, RFC7575 does not mention the term ANI, but it
+   does mention ACP. The reason is that ANI was the IETF political term we 
+   did only introduce after 7575 when forming ANIMA WG to describe the
+   subset of an AN network that ANIMA wold be chartered to work on. 
+
+-> In the ANIMA charter, ACP is part of ANI and not as Brians definition
+   from above may make it look like only "used by ANI". 
+
+-> In draft-ietf-anima-reference-model, a lot of terms are using the ANI prefix,
+   and i did change those in the ACP draft to an ACP prefix because ANI
+   also mandates use of BRSKI and one goal of the standards track RFCs of
+   ANIMA (GRASP, BRSKI, ACP) was that they should all be reuseable by
+   themselves, so any use of ANI-* in ACP RFC would impley a need to
+   support BRSKI (which we'd love, but which would make reuseability without BRSKI
+   difficult).
+
+So, in light of these terminology explanations, i would like to claim that
+the definition of ACP in section 2 of the ACP draft is actually not too shabby:
+
+           <t hangText="ACP:">"Autonomic Control Plane".  The Autonomic Function as defined in this document.
+            It provides secure zero-touch transitive (network wide) IPv6 connectivity for all nodes in the same ACP domain as well as a GRASP instance running across this ACP IPv6 connectivity.
+            The ACP is primarily meant to be used as a component of the ANI to enable Autonomic Networks
+            but it can equally be used in simple ANI networks (with no other Autonomic Functions) or
+            completely by itself.
+            </t>
+
+I did add the detail about the ACP GRASP instance in response to this discus,
+so i hope that makes the definition maybe not as elegant as Brians, but more complete,
+explanatory and correct.
+
+> 3) Section 6, para 2, line 3.  "following ACP specific information field 
+> in its domain certificate" -> "ACP specific information in the xxx field 
+> of its domain certificate, as specified in Section 6.1.1,"  (The word 
+> "following" refers to something that is 5 paragraphs away, and so is 
+> ambiguous.  It is important to be specific here.
+
+Fixed to:
+
+<t>The ACP does not mandate specific mechanisms by which this keying material is provisioned into the ACP node, it only requires the Domain information field as specified in <xref target="domcert-acpinfo"/> in its domain certificate as well as those of candidate ACP peers....
+
+>  Note: I cannot tell 
+> from the text what field of the domain certificate must contain this 
+> information, so I have written "xxx".  Please make the appropriate 
+> substitution.)
+
+The whole Domain information field is about the ACP. All pieces of it
+are required for ACP operation.
+
+> 4) In Section 6.8.2, para 6, line 3.  "equally built"  (What does 
+> "equally" mean here?  I cannot puzzle out what is intended.)
+
+I removed "equally built". I thought it would make it easier to
+understand how the ACP GRASP virtual interface duplicates what the
+ACP virtual interface does - but seemingly it doesn't for you, and i
+now also think the sentence is fine without these redundant words:
+
+On a physcial link you discover 3 ACP neigbhors. You build an IPsec
+secure channel to each of them. You form an ACP virtual interface
+from these three secure channels.
+
+Now you build 3 TCP connections for ACP GRASP to those three neighbors
+across that ACP virtual interface because for GRASP we also want
+to have TCP reliability and message fragmentation. Thats what i
+ thought could be described by "equally build". 
+
+> 5) In Section 6.10.1, bullet 4, this bullet appears to be talking about 
+> three types of addresses, "ULA", "ULA-Random", and "assigned ULA", when 
+> in fact there are only two.  I suggest the following text for the first 
+> sentence:
+>      "Use-ULA: For loopback interfaces of ACP nodes, we use
+>       Unique Local Addresses (ULA), specifically ULA-Random, as
+>       specified in [RFC4193]."
+
+Done. Hope the following changelog comment i added captures this:
+
+<t>Removed comment about assigned ULA addressing. Decision not to use it now ancient history of WG decision making process, not worth nothing anymore in the RFC.</t>
+
+> 
+> 6) In Section 6.10.3 and Section 6.10.3.1, the phrases "zone", "Zone 
+> ID", "zone-ID", and "Zone-ID" are used interchangeably.  This is 
+> ambiguous.  Since almost all of the discussion is about the "Zone-ID" 
+> field, the two sections should be reviewed carefully, with the goal of 
+> using a single phrase throughout these two sections.  If "zone", Zone 
+> ID, "zone-ID", or "Zone-ID" is used elsewhere in the document, it should 
+> be examined.  When discussing the concept of a zone, "zone" should be 
+> used; when discussing the Zone-ID field, "Zone-ID" should be used.
+
+Ok, i tried to clean up the use of the various terms:
+
+"ACP Zone Addressing Sub-Scheme" - name, always capitalized
+"Zone-ID" - name, always capitalized
+"zone" - term, not capitalized
+"ACP zone address" - term, not capitalized.
+
+> -- 
+> Dr. J.W. Atwood, Eng.             tel:   +1 (514) 848-2424 x3046
+> Distinguished Professor Emeritus  fax:   +1 (514) 848-2830
+> Department of Computer Science
+>     and Software Engineering
+> Concordia University EV 3.185     email:william.atwood@concordia.ca
+> 1455 de Maisonneuve Blvd. West    http://users.encs.concordia.ca/~bill
+> Montreal, Quebec Canada H3G 1M8
+
+------------------------------------------------------------------------------
+From: Michael Richardson
+------------------------------------------------------------------------------
+
+On Mon, Nov 06, 2017 at 10:57:32AM -0500, Michael Richardson wrote:
+>
+> William Atwood <william.atwood@concordia.ca> wrote:
+>     > For two different on-line generators, I get the following results:
+>
+>
+>
+>     > http://www.xorbin.com/tools/sha256-hash-calculator
+>     > area51.research.acp.example.com
+>     > 89b714f3db8e41558cfb49d4d763ee7cc5ae53a3ffe8a17039679d06dc9bb0e3
+>
+> Sometimes the difference is whether or not a CR and/or LF is included in the
+> hash.  I see that your result is without the line feed.
+>
+> dooku-[~](2.3.0) mcr 14553 %echo area51.research.acp.example.com | sha256sum
+> 60b1547f399cb8354010e0bd5853f0bcd393590e44efa2cb47c233615e9ce766  -
+> dooku-[~](2.3.0) mcr 14554 %echo -n area51.research.acp.example.com | sha256sum
+> 89b714f3db8e41558cfb49d4d763ee7cc5ae53a3ffe8a17039679d06dc9bb0e3  -
+  ^^^^^^^^^^
+
+Thanks. Fixed in all occurances of the draft. Somehow we missed to update the
+example when we moved from MD5 in -05 to SHA256. 
+
+Wrt. why SHA256 and is it an update to the spec:
+
+There was also the question whether using SHA256 would indicate we're doing
+something different from RFC4193, but that text in 4193 was just an example,
+even hashing different data.
+
+> But, the only device that needs to create the ULA prefix is the registrar
+> during it's bootstrap, and once created it is to be stored.  I would expect
+> that if there was an administrator interface that it would ask for some
+> domain details, and then pre-populate a "ACP prefix" field with the result,
+> but let the admin type in their own.
+
+"let administrator type their own" == allow ULA prefix to be inconsistant
+with the domain name ?! Sure, but that would be non-compliant with the ACP
+definition, but should perfectly well work. Aka: If someone would like to
+run an ACP without ULA address, even that should work as long as you hack
+up the registrar to allow non-ULA prefixes. The ACP text was explicitly
+written to make such slightly modified versions of ACP easy to implement
+(just config interface on registrar needs to support it as you said).
+
+------------------------------------------------------------------------------
+From: Yonghang Zhang
+------------------------------------------------------------------------------
+
+From: Toerless Eckert <tte@cs.fau.de>
+To: <zhangyongkang@huawei.com>
+Cc: "anima@ietf.org" <anima@ietf.org>, Zengweizhi <zengweizhi@huawei.com>, Yangang <yangang@huawei.com>
+Bcc: 
+Subject: Re: [Anima] ????: A question about draft-ietf-anima-autonomic-control-plane-12
+Reply-To: 
+In-Reply-To: <CC8B22EE24080B4CB9D4F5453538E0D6B85225D9@dggemm509-mbx.china.huawei.com>
+
+Thank you so much, Yongkang
+
+I have fixed the length of the node-number in ACP draft -13.
+
+Toerless
+
+On Mon, Nov 20, 2017 at 07:11:43AM +0000, zhangyongkang 00210452 wrote:
+> Sorry, there is a mistake:
+> (2) When the first bit of Node-Number is 0, 33(Node-Number) + 8(V) + 46(Registrar-ID) = 41 + 46 = 87
+> 
+> 
+> ??????: Anima [mailto:anima-bounces@ietf.org] ???? zhangyongkang 00210452
+> ????????: 2017??11??20?? 15:09
+> ??????: michael.h.behringer@gmail.com; anima@ietf.org
+> ????: Zengweizhi; Yangang
+> ????: [Anima] A question about draft-ietf-anima-autonomic-control-plane-12
+> 
+> Hi Behringer,
+> When I read the section 6.10.5 ACP Vlong Addressing Sub-Scheme??I was confused about the following content:
+>              50                              78
+>    +---------------------++-----------------------------+----------+
+>    |    (base scheme)      ||           Node-ID                             |
+>    |                          || Registrar-ID |   Node-Number|          V |
+>    +---------------------++--------------+--------------+----------+
+>                                       46             33/17          8/16
+> 
+>                  Figure 6: ACP Vlong Addressing Sub-Scheme
+> ??
+> o  Registrar-ID: To maximize Node-Number and V, the Registrar-ID is
+>       reduced to 46 bits.  This still allows to use the MAC address of a
+>       registrar by removing the V and U bits from the 48 bits of a MAC
+>       address (those two bits are never unique, so they cannot be used
+>       to distinguish MAC addresses).
+> o  If the first bit of the "Node-Number" is "1", then the Node-Number
+>       is 17 bit long and the V field is 16 bit long.  Otherwise the
+>       Node-Number is 33 bit long and the V field is 8 bit long.  "0" bit
+>       Node-Numbers are intended to be used for "general purpose" ACP
+>       nodes that would potentially have a limited number (< 256) of
+>       clients (ASA/Autonomic Functions or legacy services) nof the ACP
+>       that require separate V(irtual) addresses.  "1" bit Node-Numbers
+>       are intended for ACP nodes that are ACP edge nodes (see
+> 
+> 
+>       Section 8.1.1) or that have a large number of clients requiring
+>       separate V(irtual) addresses.  For example large SDN controllers
+>       with container modular software architecture (see Section 8.1.2).
+> 
+> According the above content, Node-ID(78bits) is composed of Registrar-ID, Node-Number and V fields. But:
+> (1) When the first bit of Node-Number is 1, 17(Node-Number) + 16(V) + 46(Registrar-ID) = 33 + 46 = 79
+> (2) When the first bit of Node-Number is 0, 33(Node-Number) + 8(V) + 46(Registrar-ID) = 41 + 46 = 97
+> 
+> So the result confused me!
+> Please check the above section again when you pleasure.
+> 
+
