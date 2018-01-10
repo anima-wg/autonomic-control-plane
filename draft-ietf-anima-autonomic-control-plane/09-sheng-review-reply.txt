@@ -1,0 +1,833 @@
+Hi Sheng
+
+Thank you very much for the review.
+
+Sorry for the delay in replying to your great review. Alas,
+it had me think of some questions brought up to introduce some more
+(informational only!) text, eg. section 10.8 and then i also folded
+in feedback from others into the now posted -12 version of the ACP.
+
+I think the ACP document is now complete and have no desire for changes
+other than those raised by review with as little as possible changes.
+
+Note that when you sent your review against -09, i was still working
+on feedback for Brians review, so your changes where made against -10.
+See below for answers to your suggestions. I think i adopted them verbatim 
+all except in 2? cases where i hope my response is acceptable to you.
+If not, please let me know.
+
+Alas, the -10 .txt that i uploaded after Brians review was wrong, only
+the -10 xml was right. So i also created version -11 to be able to point to
+the following diff as the relevant diff for the changes made for your review
++ other. I will send out another email do highlight the other changes
+separately.
+
+Diff:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-11.xml&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-12.xml
+
+Cheers
+    Toerless
+
+> From: Anima [mailto:anima-bounces@ietf.org] On Behalf Of Sheng Jiang
+> Sent: Thursday, August 31, 2017 7:01 PM
+> To: anima@ietf.org
+> Cc: draft-ietf-anima-auotnomic-data-plane.authors@ietf.org
+> Subject: [Anima] Review on draft-ietf-anima-auotnomic-data-plane-09
+> 
+> 
+> Hi, authors of draft-ietf-anima-auotnomic-data-plane,
+> 
+> 
+> I am doing a thorough review as the document shepherd with my ANIMA chair h=
+> at on. Please address the below comments so that we could process this docu=
+> ment further. This is a petty long document. Therefore, my review may be a =
+> little bit disordered. Overall, I think this document has been in a good sh=
+> arp although I cannot claim all my comments are minor. I believe they are n=
+> ot difficult to address.
+
+thanks!
+
+> In introduction section, it is better to reference the "Autonomic Control P=
+> lane" definition & description in Section 5 of RFC7575, rather than "[RFC75=
+> 75] calls it the 'Autonomic Control Plane'" .
+
+Ack.
+
+> The ACP could actually be communication channel for both management and con=
+> trol plane. So, the name seems be mis-leading. My understanding is that we =
+> could not change the name in such late stage. But it worth to see more on t=
+> his in the introduction, even in the abstract.
+
+Ack. Check text change in abstract and the into paragraph you mention.
+
+> "This document describes options for a ... ACP". I am confused by the word =
+> "option". What option does it actually mean? At least, it is not clear from=
+>  the context.
+
+Probably historic from early versions of the draft when we had a lot of
+options listed we either converged on or eliminated.
+
+I agree that the word "options" does not help the reader today anymore in that sentence.
+
+s/options/modular design/
+
+> "It therefore remains operational even in...". My understanding for "it" is=
+>  the network, but from the context, my first expression for "it" is ACP.
+
+s/It/The ACP/
+
+> Used short for the first appearance, ANI, VRF, IKE, TLS/dTLS, SDN, NOC, OAM=
+> , NMS, CA and although GRASP, BRSKI, EST, ULA, are defined in Section 2, bu=
+> t their first appearance is before their terminologies.
+
+Ack.
+
+> Section 2,
+> 
+> "ACP provides secure zero-touch network wide IPv6 connectivity between devi=
+> ces supporting it." This is not accurate. These two devices must be in the =
+> same autonomic network.
+
+Right. I tried to clean up terminology to have more precise definitions.
+
+The sentence changed into:
+
+"It provides secure zero-touch transitive (network wide) IPv6 connectivity for all nodes in the same ACP domain."
+
+and added:
+
+The ACP domain is the set of nodes with domain certificates that allow them to authenticate each other as members of the ACP domain. See <xref target="certcheck"/>
+
+Also:
+
+The ACP network constitutes all the nodes that have access to the ACP.
+It is the set of active and transitively connected nodes of an ACP domain plus all
+nodes that get access to the ACP of that domain via ACP edge nodes.
+
+Aka: i now try to consistently use "domain" in he context of cryptigraphic group
+membreship and "network" in the context of actual IPv6 reachability - and define
+the terms appropriately.
+
+> Actually, we did not define an important concept ye=
+> t - the domain of autonomic network. We were always assume there is only on=
+> e domain within the connectivity range or the autonomic network would natur=
+> ally be separated by non-AN devices. But it would not always be the case if=
+>  AN technologies become widely deployed
+
+Right. If you have any specific text or considerations you would like to see
+added, please make request/suggestions. Otherwise i think that the above
+definitions are sufficient for the current document, but also flexible enough
+to extend into future more complex cases: Aka: an autonomic/ACP network can
+extend across multiple ACP domains because its about transitive connectivity,
+and we can define additional cross-domain interconnects. 
+
+> In Section 3,
+> 
+> 
+> 
+> "certain AAA misconfigurations can lock an administrator out of a device", =
+> I am not sure how ACP helps in this use case. It seems for me the only way =
+> is to log in with another admin account, then change the misconfig. It is n=
+> o different through normal data plane. This can still be recovered remotely=
+>  without ACP.
+
+changed to:
+
+"for example misconfigurations that make AAA servers unreachable can lock an administrator out of a device;"
+
+As mentioned in other emails, followup work would be to define a GRASP
+announcement for AAA server across ACP, and e voila, problem solved ;-)
+
+
+> "The ACP provides reachability that is largely independent of the data plan=
+> e." Why "largely"? It implies that is still partially (maybe small proporti=
+> on) dependent on the data plane.
+
+changed to:
+
+The ACP provides reachability that is independent of the data plane (except for the dependency discussed in <xref section="general_addressing"/>  which can be removed through future work))
+
+See section 6.12.2 - encap of secure channels specified is in data plane.
+
+> "ACP MUST NOT be tied to a particular protocol." ACP does need support from=
+>  some specific protocol, GRASP, IPv6. I am sure you did not mean them. But =
+> the description should be improved to be more precise.
+
+Was changed in acp-10 due to same comment by Brian to:
+
+ACP4:  The ACP MUST be generic.  Usable by all the functions and
+          protocols of the AN infrastructure.  It MUST NOT be tied to a
+          particular application or transport protocol.
+
+> "The ACP MUST provide security". I am not sure the "MUST". In many scenario=
+> s, for example, some layer has very strong layer 2 security mechanism, or n=
+> etwork with physics isolation/protection. The connectivity is the vital fun=
+> ctionality that ACP could provide, while security provided by ACP is redund=
+> ant or not necessary.
+
+a) It is really hard for customers to figure out what a product really does when
+the RFC it claims to support has many options. Especially for fundamental
+requirements like security. There are no PICS (Protocol Implementation Compliance
+Specification) or the like as in ISO documents. There is no good tradition for
+vendors to specify what options of an RFC they choose or RFCs to well express
+what options vendors MUST document.
+
+b) In BRSKI we had an evolution of making the use of strong security first optional
+and now mandatory (strong security = use of voucher). Making ACP RFC go along with
+strong security gives us the best possible security as a starting point.
+
+c) Through GRASP SEC AD review, we ended up inheriting the security requirments
+for GRASP into ACP (security substrate). That too would look weaker if we would
+change security back to SHOULD.
+
+If i take a),b) and c) together, IMHO for both BRSKI and ACP it would be best
+to stick with the strong security requirements, and then define in followup
+work variations of those solutions with lower security. These would be very simple/short
+documents (few pages at most), so easy to write and those would then solve
+especially problem a). Aka: security reduced products/solutions would only be
+able to claim support for the derived, security reduced RFCs, not main/secure BRSKI/ACP.
+
+I also added at the end of the ACP draft an informative section called
+"Adopting ACP concepts for other environments" where the last paragraph discusses
+possible security reduced options. To set the stage for thus future work.
+
+More opinions welcome of course.
+
+> "The default mode of operation of the ACP is hop-by-hop." I guess you mean =
+> "basic" or "fundamental" rather than "default". The multiple connectivity i=
+> s made up by hop-by-hop connections.
+
+Right. Text from behringer draft -00 when we where trying to figure out where to
+go to ;-). Simplified to:
+
+The ACP operates hop-by-hop, because
+
+> " ULA "Unique Local Address".  The IPv6 equivalent to RFC1918 IPv4 addresse=
+> s.  ACP addresses are ULA."Please don't consider ULA as an equivalent to RF=
+> C1918. We used to have relevant discussion in v6ops WG, and people had stro=
+> ng consensus on ULAs !=3D RFC1918. (see https://tools.ietf.org/html/draft-i=
+> etf-v6ops-ula-usage-considerations-02#section-3.1)
+
+Same comment from Brian against -08. Changed already in -10 to:
+
+  ULA  A "Unique Local Address" (ULA) is an IPv6 address in the block
+  fc00::/7, defined in [RFC4193].  It is the approximate IPv6
+  counterpart of the IPv4 private address ([RFC1918]).
+
+Text from:
+
+https://en.wikipedia.org/wiki/Unique_local_address
+
+See also long explanation to brian why its IMHO proven very helpfull with customers
+to relate to rfc1918 (explains it a lot better than not doing it to most non-IPv6 experts).
+
+> The content of section 3.3 reads like the essential benefit rather than a s=
+> pecific use case, especially comparing to Section 3.1 and 3.2. More proper =
+> place for this may be Section 9 (Benefits).
+
+I beg to differ. Section 3.3 outlines what use-cases the ACP attempts to solve -
+without going much into technical detail how.  Is IMHO necessary to have it at
+the beginning of the document as motivation for reading the rest of the document.
+
+Section 9 is not structured not around specific use-cases but around specific
+architectural 'self-X' properties. It is revisiting those after the reader 
+is familiar with how the ACP works.
+
+If at all, section 9 is duplication of prior text, but i think it is quite useful
+to have this. Like in any good presentation or book you want to revisit your
+core message, and that where 3.3 gives the introduction from the user perspective,
+and section 9 the wrap-up from the technical perspective.
+
+> "ACP loopback interface" and "ACP virtual interface" refer to different thi=
+> ngs as defined in the Terminology section. However, in the main text, somet=
+> imes they are mixed together ((E.g. in section 5, Item 5 and 6). Either the=
+> y should be used in a canonical way in this document, or other more disting=
+> uished terminologies should be used to refer the two things.
+
+Right. I did fix up a lot of terminology arond interfaces in -10 already,
+and for -11 i did walk again through all 180 instances of "interface" and hopefully
+gave them all the correct words in before (ACP virtual/loopback, etc..). The
+terminology has definitions for ACP loopback interface and ACP virtual interface,
+so they are now well defined terms. 
+
+> The terminology "ACP connect" same not proper. It would be more proper to c=
+> all the connect/channel for non-ACP device joining the ACP through an ACP d=
+> evice "ACP bridge"?
+
+ACP connect is a term some vendor already used in an ACP implementation for
+this functionality, so i wanted to reduce confusion in readers familiar with
+that term (including myself). Bridge is also a loaded word. If i would start
+terminology from scratch i would probably call it "ACP native unsecured interface",
+or the like, eg: descriptive.
+
+Aka: no change right now unless i hear stronger demand for term change.
+
+> In section 6,
+> 
+> Initially, it must have a ... as well as an adjacency table."The word here =
+> is misleading. The authors should mean the functionality of an adjacency ta=
+> ble. But it reads like an adjacency table with already learned neighbor inf=
+> ormation.
+> 
+Right. Similar comment from Brian. Changed in -10 to:
+
+To know to which nodes to establish an ACP channel, every ACP node maintains an adjacency table
+...
+
+
+> Inadvert -> inadvertent
+
+ack.
+
+> The term "Autonomic Domain" first appears at section 6.1, it should be defi=
+> ned in section 3.
+
+Ok... the whole use of terminology was not very consistent, accurate or helpfull IMHO.
+
+I did a range of updates to use the terms "ACP domain/certificate/network"
+instead of the autonomic domain/certificate/network terms. Reason: RFC7475 and
+define the terms to apply to autonomic devices/nodes and we need to stay consistent
+to that terminology. But the ACP should be understood to be implementable/deployable
+without further autonomic options so ACP nodes do not need to be (fully) autonomic
+nodes.
+
+Rewritten section 6.1 now introduces these ACP * terms and relates them to the Autonomic *
+terms to explain this (ACP FOO == Autonomic FOO unless ACP node < autonomic node).
+
+Section 3 would have been too early and not fit the "use-case" focus of that chapter.
+
+> acp-address within ACP information should be optional.
+
+Done.
+
+>  It may be the address is generated by AN after getting the domain certificate.
+
+Right. 
+
+The draft is hinting at other means of address assignment in the new informative
+ section 10.6 (Adopting ACP concepts for other environments). Of course
+without specifying any full solution.
+
+[ Note: I can easily see IoT networks not using pre-assined ACP addresses. But i would
+  still like to explore more (not in this ACP doc of course) what security benefits
+  we would get from nodes being able to cryptographically assert ownership of
+  their IPv6 acp address. ]
+
+> It is worthy to clarify that although the LDevID contains ACP-information, =
+> it is not specific for ACP only; it is generic for other functions that req=
+> uest node-level authentication.
+
+Right. Section 6.1 now says:
+
+<t>The ACP domain certificate can and should be used for any authentication between ACP nodes where the required security is domain membership. <xref target="certcheck"/> defines this "ACP domain membership check". The uses of this check that are standardized in this document are for the establishment of ACP secure channels (<xref target="neighbor_verification"/>) and for ACP GRASP (<xref target="GRASP-substrate"/>  Other uses are subject to future work, but it is recommended that it is the default security check for any end-to-end connections between ASA. It is equally useable by other functions such as legacy OAM functions.</t>
+
+> "To establish an ACP securely, an ACP device MUST have a globally unique do=
+> main certificate (LDevID)"I think the requirement in this sentence is too s=
+> trong in two perspective: why globally unique, secondly it is not necessary=
+>  to be a domain certificate that newly assigned in this domain. Furthermore=
+> , this seems imply ACP depend on BRSKI as pre-step, which I don't think is =
+> in authors original meaning.
+
+"globally unique" is like saying "please pay me with non-counterfit money" instead
+of saying "please pay me with money". So i guess it may sound offensive. Removed.
+
+Also removed reference to LDevID from 6.0 (too much detail there), but introduced
+it into aforementioned new section 6.1. Please check first three paragraphs of section:
+
+- explicitly says ACP does not prescribe how the node gets the certificate.
+  Informative section explains options including BRSKI / Netconf.
+
+- IDevID / LDevID are not terms invented by BRSKI but by long term established
+  security systems, eg: 802.1AR or others. Thats why we use them.
+
+- The ACP domain certificate does have to be explicitly assigned with ACP in
+  mind because the way how nodes authenticate other nodes to belong to the
+  ACP domain is because of the domain element in the Domain Information Field
+  in the certificate.
+  
+Let me know what pieces are still unclear so i can fix if necessary.
+
+> "The ACP network MUST have one or more nodes that support EST server through
+> which ACP nodes can renew their domain certificate." The work "MUST" is far too strong here.
+
+Hmm ;-) So i changed this as follows:
+
+<t>ACP nodes MUST support certificate renewal via EST ("Enrollment over Secure Transport", see <xref target="RFC7030"/>) and MAY support other mechanisms. An ACP network must have at least one ACP nodes supporting EST server functionality across the ACP. The ACP address(es) of EST servers MAY be enrolled/provisioned into the ACP domain certificate during initial installation of the domain certificate.</t>
+
+Reasoning: We need to have one mandatory mechanism for certificate renewal supported
+by all ACP nodes. If every ACP implementation would only support their own private
+idaho protocol, you would end up with undeployable ACP networks because of the
+complexity involved dealing with all those different vendor choices. 
+
+The original sentence of course was wrong because vendors are welcome to
+implement additional mechanisms on top of this "lowest common denominator", so
+in an actual deployment (especially those that are single-vendor), you may not
+actually use EST.
+
+> "it should choose am FQDN" -> it should choose "an" FQDN
+
+fixed to "any" in -10 from Brians review.
+
+> "The format of the rfc822Name is choosen" -> The format of the rfc822Name i=
+> s "chosen". There are another 4 instance of "choosen".
+
+thanks.
+
+> "The loop-count MUST be sete to 255" -> The loop-count MUST be "set" to 255
+
+Ack.
+
+> "When it is time for domain certificate reneal" -> When it is time for doma=
+> in certificate "renewal"
+
+Ack.
+
+> "the primarily imiting factor for shorter certificate lifetimes", my guess =
+> is "limiting"
+
+Ack.
+
+> "the assigning CA has enough performance" -> the assigning CA has enough "p=
+> erformance"
+
+Ack
+
+> "See Section 10.1 for further optimizationss" -> See Section 10.1 for furth=
+> er "optimizations"
+
+Ack.
+
+> The first sentence of  section 6.3, "Because of the the considerations", th=
+> e second "the"should be deleted
+
+Ack.
+
+> "ACP discovery MUST NOT be enabled by default on any non-physical interface=
+> s." This seems rule out the possibility of applying ACP with virtual device=
+> s. My suggestion would be deleted the sentence since we ready have the foll=
+> ow up sentence "ACP discovery MUST NOT run inside the ACP." Or not deleting=
+> , we should at least soften it to be "SHOULD NOT".
+
+
+Ok:
+
+Changed all instances of "device-*" to "node-*", defined "device" to be
+"physical node" and only used it in examples where physcial node make sense.
+
+Introduced and use term "native interface" to refer to interface existing
+without configuration. Thats what IMHO defines physical interfaces in
+physical device - and "physcial interface in virtual device" does not sound
+right, but there are of course exact equivalences to physcial interfaces
+in virtual devices.
+
+Added section 10.3 to explain more how to enable/disable ACP. Inspired by
+refining that notion of native vs. non native interface, it expanded
+into also answring the yet unanswered question what to do against operators
+"shutting" down interfaces and more. 
+
+> Section 6.5,
+> "the next step after discoving" -> the next step after "discovering"
+
+Ack.
+
+> "The roles of Bob abd Alice" -> The roles of Bob "and" Alice
+
+Ack.
+
+> "It is not up to Alice to devide" -> It is not up to Alice to "divide"
+
+Ack.
+
+> "interfaces are the ame devices" -> interfaces are the "same" devices
+
+Ack.
+
+> Section 6.6,
+> "certificate must be valid occording to"-> certificate must be valid "accor=
+> ding" to
+
+Ack.
+
+> Section 6.7,
+> "the ACP secure channel protocol" -> the ACP secure channel "protocol"
+
+Ack.
+
+> "ACP mechanisms they support" -> ACP mechanisms they "support"
+
+fixed to "ACP secure channel protocols they support".
+
+> "ACP secure channel MUST imediately be terminated" -> ACP secure channel MU=
+> ST "immediately" be terminated
+
+Ack.
+
+> "Note that is is not standard behavior" -> Note that is not standard behavi=
+> or
+
+Ack
+
+> Section 6.8,
+> "Authentication is via the the domain" -> Authentication is via the domain
+
+Ack. Sentences got changed for -10 already.
+
+> Section 6.10,
+> "65536 different virtualized adddresses" -> 65536 different virtualized "ad=
+> dresses"
+
+Ack.
+
+> Section 6.11,
+> on-RPL-aware leafs (or "Internet") accoding to -> on-RPL-aware leafs (or "I=
+> nternet") "according" to
+
+Ack
+
+> "the ACP will only accommodate" -> the ACP will only "accommodate"
+
+Ack.
+
+> Routeable - > routable; at least two instances
+
+Ack.
+
+> "The multi-access ACP virtual interace" -> The multi-access ACP virtual "in=
+> terface"
+
+Ack.
+
+
+> Thanks for your hand work and good contribution to the ANIMA group.
+
+Thank you!
+  Toerless
+
+> Regards,
+> 
+> 
+> 
+> Sheng
+> 
+============== Original mail appended ==========================================
+From: Anima [mailto:anima-bounces@ietf.org] On Behalf Of Sheng Jiang
+Sent: Thursday, August 31, 2017 7:01 PM
+To: anima@ietf.org
+Cc: draft-ietf-anima-auotnomic-data-plane.authors@ietf.org
+Subject: [Anima] Review on draft-ietf-anima-auotnomic-data-plane-09
+
+
+Hi, authors of draft-ietf-anima-auotnomic-data-plane,
+
+
+
+I am doing a thorough review as the document shepherd with my ANIMA chair h=
+at on. Please address the below comments so that we could process this docu=
+ment further. This is a petty long document. Therefore, my review may be a =
+little bit disordered. Overall, I think this document has been in a good sh=
+arp although I cannot claim all my comments are minor. I believe they are n=
+ot difficult to address.
+
+
+In introduction section, it is better to reference the "Autonomic Control P=
+lane" definition & description in Section 5 of RFC7575, rather than "[RFC75=
+75] calls it the 'Autonomic Control Plane'" .
+
+
+
+The ACP could actually be communication channel for both management and con=
+trol plane. So, the name seems be mis-leading. My understanding is that we =
+could not change the name in such late stage. But it worth to see more on t=
+his in the introduction, even in the abstract.
+
+
+
+"This document describes options for a ... ACP". I am confused by the word =
+"option". What option does it actually mean? At least, it is not clear from=
+ the context.
+
+
+
+"It therefore remains operational even in...". My understanding for "it" is=
+ the network, but from the context, my first expression for "it" is ACP.
+
+
+
+Used short for the first appearance, ANI, VRF, IKE, TLS/dTLS, SDN, NOC, OAM=
+, NMS, CA and although GRASP, BRSKI, EST, ULA, are defined in Section 2, bu=
+t their first appearance is before their terminologies.
+
+
+
+Section 2,
+
+
+
+"ACP provides secure zero-touch network wide IPv6 connectivity between devi=
+ces supporting it." This is not accurate. These two devices must be in the =
+same autonomic network. Actually, we did not define an important concept ye=
+t - the domain of autonomic network. We were always assume there is only on=
+e domain within the connectivity range or the autonomic network would natur=
+ally be separated by non-AN devices. But it would not always be the case if=
+ AN technologies become widely deployed
+
+
+
+In Section 3,
+
+
+
+"certain AAA misconfigurations can lock an administrator out of a device", =
+I am not sure how ACP helps in this use case. It seems for me the only way =
+is to log in with another admin account, then change the misconfig. It is n=
+o different through normal data plane. This can still be recovered remotely=
+ without ACP.
+
+
+
+"The ACP provides reachability that is largely independent of the data plan=
+e." Why "largely"? It implies that is still partially (maybe small proporti=
+on) dependent on the data plane.
+
+
+
+"ACP MUST NOT be tied to a particular protocol." ACP does need support from=
+ some specific protocol, GRASP, IPv6. I am sure you did not mean them. But =
+the description should be improved to be more precise.
+
+
+
+"The ACP MUST provide security". I am not sure the "MUST". In many scenario=
+s, for example, some layer has very strong layer 2 security mechanism, or n=
+etwork with physics isolation/protection. The connectivity is the vital fun=
+ctionality that ACP could provide, while security provided by ACP is redund=
+ant or not necessary.
+
+
+
+"The default mode of operation of the ACP is hop-by-hop." I guess you mean =
+"basic" or "fundamental" rather than "default". The multiple connectivity i=
+s made up by hop-by-hop connections.
+
+
+
+" ULA "Unique Local Address".  The IPv6 equivalent to RFC1918 IPv4 addresse=
+s.  ACP addresses are ULA."Please don't consider ULA as an equivalent to RF=
+C1918. We used to have relevant discussion in v6ops WG, and people had stro=
+ng consensus on ULAs !=3D RFC1918. (see https://tools.ietf.org/html/draft-i=
+etf-v6ops-ula-usage-considerations-02#section-3.1)
+
+
+
+The content of section 3.3 reads like the essential benefit rather than a s=
+pecific use case, especially comparing to Section 3.1 and 3.2. More proper =
+place for this may be Section 9 (Benefits).
+
+
+
+"ACP loopback interface" and "ACP virtual interface" refer to different thi=
+ngs as defined in the Terminology section. However, in the main text, somet=
+imes they are mixed together ((E.g. in section 5, Item 5 and 6). Either the=
+y should be used in a canonical way in this document, or other more disting=
+uished terminologies should be used to refer the two things.
+
+
+
+The terminology "ACP connect" same not proper. It would be more proper to c=
+all the connect/channel for non-ACP device joining the ACP through an ACP d=
+evice "ACP bridge"?
+
+
+
+In section 6,
+
+
+
+Initially, it must have a ... as well as an adjacency table."The word here =
+is misleading. The authors should mean the functionality of an adjacency ta=
+ble. But it reads like an adjacency table with already learned neighbor inf=
+ormation.
+
+
+
+Inadvert -> inadvertent
+
+
+
+The term "Autonomic Domain" first appears at section 6.1, it should be defi=
+ned in section 3.
+
+
+
+acp-address within ACP information should be optional. It may be the addres=
+s is generated by AN after getting the domain certificate.
+
+
+
+It is worthy to clarify that although the LDevID contains ACP-information, =
+it is not specific for ACP only; it is generic for other functions that req=
+uest node-level authentication.
+
+
+
+"To establish an ACP securely, an ACP device MUST have a globally unique do=
+main certificate (LDevID)"I think the requirement in this sentence is too s=
+trong in two perspective: why globally unique, secondly it is not necessary=
+ to be a domain certificate that newly assigned in this domain. Furthermore=
+, this seems imply ACP depend on BRSKI as pre-step, which I don't think is =
+in authors original meaning.
+
+
+
+"The ACP network MUST have one or more nodes that support EST server throug=
+h which ACP nodes can renew their domain certificate." The work "MUST" is f=
+ar too strong here.
+
+
+
+"it should choose am FQDN" -> it should choose "an" FQDN
+
+
+
+"The format of the rfc822Name is choosen" -> The format of the rfc822Name i=
+s "chosen". There are another 4 instance of "choosen".
+
+
+
+"The loop-count MUST be sete to 255" -> The loop-count MUST be "set" to 255
+
+
+
+"When it is time for domain certificate reneal" -> When it is time for doma=
+in certificate "renewal"
+
+
+
+"the primarily imiting factor for shorter certificate lifetimes", my guess =
+is "limiting"
+
+
+
+"the assigning CA has enough performance" -> the assigning CA has enough "p=
+erformance"
+
+
+
+"See Section 10.1 for further optimizationss" -> See Section 10.1 for furth=
+er "optimizations"
+
+
+
+The first sentence of  section 6.3, "Because of the the considerations", th=
+e second "the"should be deleted
+
+
+
+"ACP discovery MUST NOT be enabled by default on any non-physical interface=
+s." This seems rule out the possibility of applying ACP with virtual device=
+s. My suggestion would be deleted the sentence since we ready have the foll=
+ow up sentence "ACP discovery MUST NOT run inside the ACP." Or not deleting=
+, we should at least soften it to be "SHOULD NOT".
+
+
+
+Section 6.5,
+
+
+
+"the next step after discoving" -> the next step after "discovering"
+
+
+
+"The roles of Bob abd Alice" -> The roles of Bob "and" Alice
+
+
+
+"It is not up to Alice to devide" -> It is not up to Alice to "divide"
+
+
+
+"interfaces are the ame devices" -> interfaces are the "same" devices
+
+
+
+Section 6.6,
+
+
+
+"certificate must be valid occording to"-> certificate must be valid "accor=
+ding" to
+
+
+
+Section 6.7,
+
+
+
+"the ACP secure channel protocol" -> the ACP secure channel "protocol"
+
+
+
+"ACP mechanisms they support" -> ACP mechanisms they "support"
+
+
+
+"ACP secure channel MUST imediately be terminated" -> ACP secure channel MU=
+ST "immediately" be terminated
+
+
+
+"Note that is is not standard behavior" -> Note that is not standard behavi=
+or
+
+
+
+Section 6.8,
+
+
+
+"Authentication is via the the domain" -> Authentication is via the domain
+
+
+
+Section 6.10,
+
+
+
+"65536 different virtualized adddresses" -> 65536 different virtualized "ad=
+dresses"
+
+
+
+Section 6.11,
+
+
+
+on-RPL-aware leafs (or "Internet") accoding to -> on-RPL-aware leafs (or "I=
+nternet") "according" to
+
+
+
+"the ACP will only accommodate" -> the ACP will only "accommodate"
+
+
+
+Routeable - > routable; at least two instances
+
+
+
+"The multi-access ACP virtual interace" -> The multi-access ACP virtual "in=
+terface"
+
+
+
+Thanks for your hand work and good contribution to the ANIMA group.
+
+
+
+Regards,
+
+
+
+Sheng
