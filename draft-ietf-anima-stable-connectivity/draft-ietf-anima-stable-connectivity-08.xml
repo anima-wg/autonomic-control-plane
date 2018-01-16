@@ -90,17 +90,17 @@ this complexity extends into that automation software.</t>
     <!-- connectivity -->
     <section anchor="DCNs" title="Data Communication Networks (DCNs)">
 
-<t>In the late 1990'th and early 2000, IP networks became the method of choice to build separate
+<t>In the late 1990s and early 2000, IP networks became the method of choice to build separate
 OAM networks for the communications infrastructure within Network Providers. This concept
 was standardized in <xref target="ITUT">ITU-T G.7712/Y.1703</xref> 
 and called "Data Communications Networks" (DCN). These
-where (and still are) physically separate IP(/MPLS) networks that provide access to OAM
+were (and still are) physically separate IP(/MPLS) networks that provide access to OAM
 interfaces of all equipment that had to be managed, from PSTN (Public Switched Telephone Network)
 switches over optical equipment
  to nowadays Ethernet and IP/MPLS production network equipment.</t>
 
 <t>Such DCN provide stable connectivity not subject to aforementioned problems because
-they are separate network entirely, so change configuration of the production IP network
+they are a separate network entirely, so change configuration of the production IP network
 is done via the DCN but never affects the DCN configuration. Of course, this approach
  comes at a cost of buying and operating a separate network and this cost is not
 feasible for many providers, most notably smaller providers, most enterprises and
@@ -203,14 +203,14 @@ NOC/OAM equipment is necessary. These options are discussed in sections
 
 <t>In the most simple candidate deployment case, the GACP extends all the way into the NOC via 
 one or more "GACP-edge-devices". See also section 6.1 of <xref target="I-D.ietf-anima-autonomic-control-plane"/>. These devices "leak" the (otherwise encrypted) GACP natively to NMS hosts.
-They acts as the default router to those NMS hosts and provide them with 
+They act as the default routers to those NMS hosts and provide them with 
 IPv6 connectivity into the GACP. NMS hosts with this setup need to support IPv6 (see e.g.
 <xref target="RFC6434"/>) but require no other modifications to leverage the GACP.</t>
 
 <t>Note that even though the GACP only uses IPv6, it can of course support OAM for any
-type of network deployment as long as the network devices support the GACP: The Data Plane
+type of network deployment as long as the network devices support the GACP: The data-plane
 can be IPv4 only, dual-stack or IPv6 only. It is always spearate from the GACP, therefore
-there is no dependency between the GACP and the IP version(s) used in the Data Plane.</t>
+there is no dependency between the GACP and the IP version(s) used in the data-plane.</t>
 
 <t>This setup is sufficient for troubleshooting such as SSH into network
 devices, NMS that performs SNMP read operations for status checking, software
@@ -226,7 +226,7 @@ highly desirable to set up DNS (Domain Name System - see <xref target="RFC1034" 
 so that the GACP IPv6 addresses of autonomic devices are known via domain names that
 include the desired structure. For example, if DNS in the network was set up with names
 for network devices as devicename.noc.example.com, and the well known structure of the
-Data Plane IPv4 addresses space was used by operators to infer the region where a device
+data-plane IPv4 addresses space was used by operators to infer the region where a device
 is located in, then the GACP address of that device could be set up as
 devicename_&lt;region>.acp.noc.example.com, and devicename.acp.noc.example.com could be a
 CNAME to devicename_&lt;region>.acp.noc.example.com. Note that many networks already use
@@ -277,7 +277,7 @@ towards a candiate long term solution.</t>
 
       <!-- limitations -->
       </section>
-      <section anchor="simultaneous" title="Simultaneous GACP and Data Plane Connectivity">
+      <section anchor="simultaneous" title="Simultaneous GACP and data-plane Connectivity">
 
 <t>Simultaneous connectivity to both GACP and data-plane can be achieved in a variety
 of ways. If the data-plane is IPv4-only, then any method for dual-stack attachment
@@ -296,7 +296,7 @@ and routes towards the ACP connect subnet if it supports <xref target="RFC6724"/
 
 <t>Configuring a second interface on a NOC host may be impossible or be seen as undesired
 complexity. In that case the GACP edge device needs to provide support for 
-a "Combined ACP and Data Plane interface" as also described in section 8.1 
+a "Combined ACP and data-plane interface" as also described in section 8.1 
 of <xref target="I-D.ietf-anima-autonomic-control-plane"/>. This setup may not work
 with autoconfiguration and all NOC host network stacks due to limitations in
 those network stacks. They need to be able to perform RFC6724 source address selection
@@ -371,7 +371,7 @@ based solutions are sufficient and preferred.</t>
 <t>Note that GACP devices may use multiple IPv6 addresses in the GACP.  For example,
 <xref target="I-D.ietf-anima-autonomic-control-plane"/> section 6.10 defines multiple
 useful addressing sub-schemes supporting this option. All those addresses
-may then need to be reachable thought the IPv6/IPv4 address translation.</t>
+may then need to be reachable through the IPv6/IPv4 address translation.</t>
 
 <t>The need to allocate for every GACP device one or multiple IPv4 addresses
 should not be a problem if - as we assume - the NMS hosts can use private IPv4 
@@ -454,7 +454,7 @@ configuration changes.</t>
 considerations (see below), traffic between NMS hosts and GACP devices should
 prefer data-plane connectivity and resort only to using the GACP when necessary,
 unless it is an operation known to be so much tied to the cases where the GACP
-is necessary that it makes no sense to try using the data plane. An example
+is necessary that it makes no sense to try using the data-plane. An example
 are SSH connections from the NOC into a network device to troubleshoot
 network connectivity. This could easily always rely on the GACP. Likewise, if an
 NMS host is known to transmit large amounts of data, and it uses the GACP,
@@ -464,7 +464,7 @@ GACP performance. Typical examples of this are software downloads.</t>
 <t>There is a wide range of methods to build up these policies. We describe a few:</t>
 
 <t>Ideally, a NOC system would learn and keep track of all addresses of a device
-(GACP and the various data plane addresses). Every action of the NOC system would
+(GACP and the various data-plane addresses). Every action of the NOC system would
 indicate via a "path-policy" what type of connection it needs (e.g. only data-plane,
 GACP-only, default to data-plane, fallback to GACP,...). A connection policy manager
 would then build connection to the target using the right address(es). Shorter term,
@@ -478,9 +478,9 @@ addresses assigned: One name (name.noc.example.com) with only the data-plane add
 downloads that may stall/fail when there are connectivity issues. One name 
 (name-acp.noc.example.com) with only the GACP reachable address of the device for 
 troubleshooting and probing/discovery that is desired to always only use the GACP.
-One name with data plane and GACP addresses (name-both.noc.example.com).</t>
+One name with data-plane and GACP addresses (name-both.noc.example.com).</t>
 
-<t>Traffic policing and/or shaping of at the GACP edge in the NOC can be used to throttle
+<t>Traffic policing and/or shaping at the GACP edge in the NOC can be used to throttle
 applications such as software download into the GACP.</t>
 
 <t>MPTCP (Multipath TCP -see <xref target="RFC6824" />) is a very attractive candidate to automate the use of both data-plane and GACP
@@ -602,9 +602,9 @@ a specific case of the more generic scope of TAPS.</t>
 <t>Today, many distributed protocols implement their own unique security mechanisms.</t>
 
 <t>KARP (Keying and Authentication for Routing Protocols, see <xref target="RFC6518" />)
-has tried to start provide common directions and therefore reduce the re-invention
+has tried to start to provide common directions and therefore reduce the re-invention
 of at least some of the security aspects, but it only covers routing-protocols and it is
-unclear how well it applicable to a potentially wider range of network distributed agents
+unclear how well it is applicable to a potentially wider range of network distributed agents
 such as those performing distributed OAM. The common security of a GACP can help in these cases.</t>
 
 <t>Furthermore, GRASP (<xref target="I-D.ietf-anima-grasp" />) can run on top of a GACP
@@ -630,16 +630,16 @@ whether the GACP should optionally also support IPv4. </t>
 use cases in this document is because of the following reasons:</t>
 
 <t>In SP networks that have started to support IPv6, often the next planned
-step is to consider moving out IPv4 from a native transport  as just a service
+step is to consider moving out IPv4 from a native transport to just a service
 on the edge. There is no benefit/need for multiple parallel transport families
 within the network, and standardizing on one reduces OPEX and improves reliability.
-This evolution in the data plane makes it highly unlikely that investing
+This evolution in the data-plane makes it highly unlikely that investing
 development cycles into IPv4 support for GACP will have a longer term benefit
 or enough critical short-term use-cases. Support for IPv4-only for GACP is
 purely a strategic choice to focus on the known important long term goals. </t>
 
-<t>In other type of networks as well, we think that efforts to support autonomic
-networking is better spent in ensuring that one address family will be support
+<t>In other types of networks as well, we think that efforts to support autonomic
+networking is better spent in ensuring that one address family will be supported
 so all use cases will long-term work with it, instead of duplicating effort into
 IPv4. Especially because auto-addressing for the GACP with IPv4 would be more
 complex than in IPv6 due to the IPv4 addressing space.</t>
@@ -741,6 +741,10 @@ but not network wide across the enterprise.</t>
   <t>
     <list>
       <t>08: IESG review fixes.<list style="symbols">
+         <t></t>
+         <t>Matthew Miller/Alissa Cooper: syntactic nits.</t>
+         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9bff109281e8b3c22522c3144cbf0f13e5000498/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
+         <t>Suresh Krishnan (comment): rewrote first paragraph of 2.1.4 (incomprehensible).</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Alvaro Retana: Made references normative where the authors think is is important to understand all or parts for the mechanisms described in this document.</t>
          <t>Alvaro Retana: Clarified that the discussions in this document are not specific to the ANI ACP, but instead rely primarily on a set of design constraints for any type of autonomic inband management network. Called this the GACP (generalized ACP). Mayor add: explanation of those design constraints in section 1.3. Textual fixes ACP -> GACP throughout the document, but without semantic changes.</t>
@@ -752,7 +756,7 @@ but not network wide across the enterprise.</t>
       <t>05: Integrated fixes from Brian Carpenters review. See github draft-ietf-anima-stable-connectivity/04-brian-carpenter-review-reply.txt. Details on semantic/structural changes:</t>
       <t> <list style="symbols">
           <t>Folded most comments back into draft-ietf-anima-autonomic-control-plane-09 because this stable connectivity draft was suggesting things that are better written out and standardized in the ACP document.</t>
-          <t>Section on simultaneous ACP and data plane connectivity section reduced/rewritten because of this.</t>
+          <t>Section on simultaneous ACP and data-plane connectivity section reduced/rewritten because of this.</t>
           <t>Re-emphasized security model of ACP - ACP-connect can not arbitrarily extend ACP routing domain.</t>
           <t>Re-wrote much of NMS section to be less suggestive and more descriptive, avoiding the term NAT and referring to relevant RFCs (SIIT etc.).</t>
           <t>Main additional text in IPv4 section is about explaining how we suggest to use EAM (Explicit Address Mapping) which actuall would well work with the Zone and Vlong Addressing Sub-Schemes of ACP.</t>

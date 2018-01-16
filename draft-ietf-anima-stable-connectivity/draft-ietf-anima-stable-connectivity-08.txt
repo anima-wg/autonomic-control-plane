@@ -83,7 +83,7 @@ Table of Contents
      2.1.  Stable Connectivity for Centralized OAM . . . . . . . . .   5
        2.1.1.  Simple Connectivity for Non-GACP capable NMS Hosts  .   6
        2.1.2.  Challenges and Limitation of Simple Connectivity  . .   7
-       2.1.3.  Simultaneous GACP and Data Plane Connectivity . . . .   8
+       2.1.3.  Simultaneous GACP and data-plane Connectivity . . . .   8
        2.1.4.  IPv4-only NMS Hosts . . . . . . . . . . . . . . . . .   9
        2.1.5.  Path Selection Policies . . . . . . . . . . . . . . .  12
        2.1.6.  Autonomic NOC Device/Applications . . . . . . . . . .  14
@@ -154,11 +154,11 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 1.2.  Data Communication Networks (DCNs)
 
-   In the late 1990'th and early 2000, IP networks became the method of
+   In the late 1990s and early 2000, IP networks became the method of
    choice to build separate OAM networks for the communications
    infrastructure within Network Providers.  This concept was
    standardized in ITU-T G.7712/Y.1703 [ITUT] and called "Data
-   Communications Networks" (DCN).  These where (and still are)
+   Communications Networks" (DCN).  These were (and still are)
    physically separate IP(/MPLS) networks that provide access to OAM
    interfaces of all equipment that had to be managed, from PSTN (Public
 
@@ -174,7 +174,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    nowadays Ethernet and IP/MPLS production network equipment.
 
    Such DCN provide stable connectivity not subject to aforementioned
-   problems because they are separate network entirely, so change
+   problems because they are a separate network entirely, so change
    configuration of the production IP network is done via the DCN but
    never affects the DCN configuration.  Of course, this approach comes
    at a cost of buying and operating a separate network and this cost is
@@ -319,17 +319,17 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    the way into the NOC via one or more "GACP-edge-devices".  See also
    section 6.1 of [I-D.ietf-anima-autonomic-control-plane].  These
    devices "leak" the (otherwise encrypted) GACP natively to NMS hosts.
-   They acts as the default router to those NMS hosts and provide them
+   They act as the default routers to those NMS hosts and provide them
    with IPv6 connectivity into the GACP.  NMS hosts with this setup need
    to support IPv6 (see e.g.  [RFC6434]) but require no other
    modifications to leverage the GACP.
 
    Note that even though the GACP only uses IPv6, it can of course
    support OAM for any type of network deployment as long as the network
-   devices support the GACP: The Data Plane can be IPv4 only, dual-stack
+   devices support the GACP: The data-plane can be IPv4 only, dual-stack
    or IPv6 only.  It is always spearate from the GACP, therefore there
    is no dependency between the GACP and the IP version(s) used in the
-   Data Plane.
+   data-plane.
 
 
 
@@ -354,8 +354,8 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    the GACP IPv6 addresses of autonomic devices are known via domain
    names that include the desired structure.  For example, if DNS in the
    network was set up with names for network devices as
-   devicename.noc.example.com, and the well known structure of the Data
-   Plane IPv4 addresses space was used by operators to infer the region
+   devicename.noc.example.com, and the well known structure of the data-
+   plane IPv4 addresses space was used by operators to infer the region
    where a device is located in, then the GACP address of that device
    could be set up as devicename_<region>.acp.noc.example.com, and
    devicename.acp.noc.example.com could be a CNAME to
@@ -418,7 +418,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    solution improvements.  Combining some of these solutions
    improvements together can lead towards a candiate long term solution.
 
-2.1.3.  Simultaneous GACP and Data Plane Connectivity
+2.1.3.  Simultaneous GACP and data-plane Connectivity
 
    Simultaneous connectivity to both GACP and data-plane can be achieved
    in a variety of ways.  If the data-plane is IPv4-only, then any
@@ -452,7 +452,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    Configuring a second interface on a NOC host may be impossible or be
    seen as undesired complexity.  In that case the GACP edge device
-   needs to provide support for a "Combined ACP and Data Plane
+   needs to provide support for a "Combined ACP and data-plane
    interface" as also described in section 8.1 of
    [I-D.ietf-anima-autonomic-control-plane].  This setup may not work
    with autoconfiguration and all NOC host network stacks due to
@@ -545,7 +545,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    Note that GACP devices may use multiple IPv6 addresses in the GACP.
    For example, [I-D.ietf-anima-autonomic-control-plane] section 6.10
    defines multiple useful addressing sub-schemes supporting this
-   option.  All those addresses may then need to be reachable thought
+   option.  All those addresses may then need to be reachable through
    the IPv6/IPv4 address translation.
 
    The need to allocate for every GACP device one or multiple IPv4
@@ -654,7 +654,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    GACP devices should prefer data-plane connectivity and resort only to
    using the GACP when necessary, unless it is an operation known to be
    so much tied to the cases where the GACP is necessary that it makes
-   no sense to try using the data plane.  An example are SSH connections
+   no sense to try using the data-plane.  An example are SSH connections
    from the NOC into a network device to troubleshoot network
    connectivity.  This could easily always rely on the GACP.  Likewise,
    if an NMS host is known to transmit large amounts of data, and it
@@ -675,7 +675,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    Ideally, a NOC system would learn and keep track of all addresses of
-   a device (GACP and the various data plane addresses).  Every action
+   a device (GACP and the various data-plane addresses).  Every action
    of the NOC system would indicate via a "path-policy" what type of
    connection it needs (e.g. only data-plane, GACP-only, default to
    data-plane, fallback to GACP,...).  A connection policy manager would
@@ -692,10 +692,10 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    may stall/fail when there are connectivity issues.  One name (name-
    acp.noc.example.com) with only the GACP reachable address of the
    device for troubleshooting and probing/discovery that is desired to
-   always only use the GACP.  One name with data plane and GACP
+   always only use the GACP.  One name with data-plane and GACP
    addresses (name-both.noc.example.com).
 
-   Traffic policing and/or shaping of at the GACP edge in the NOC can be
+   Traffic policing and/or shaping at the GACP edge in the NOC can be
    used to throttle applications such as software download into the
    GACP.
 
@@ -851,12 +851,12 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    mechanisms.
 
    KARP (Keying and Authentication for Routing Protocols, see [RFC6518])
-   has tried to start provide common directions and therefore reduce the
-   re-invention of at least some of the security aspects, but it only
-   covers routing-protocols and it is unclear how well it applicable to
-   a potentially wider range of network distributed agents such as those
-   performing distributed OAM.  The common security of a GACP can help
-   in these cases.
+   has tried to start to provide common directions and therefore reduce
+   the re-invention of at least some of the security aspects, but it
+   only covers routing-protocols and it is unclear how well it is
+   applicable to a potentially wider range of network distributed agents
+   such as those performing distributed OAM.  The common security of a
+   GACP can help in these cases.
 
    Furthermore, GRASP ([I-D.ietf-anima-grasp]) can run on top of a GACP
    as a security and transport substrate and provide common local &
@@ -880,10 +880,10 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    In SP networks that have started to support IPv6, often the next
    planned step is to consider moving out IPv4 from a native transport
-   as just a service on the edge.  There is no benefit/need for multiple
+   to just a service on the edge.  There is no benefit/need for multiple
    parallel transport families within the network, and standardizing on
    one reduces OPEX and improves reliability.  This evolution in the
-   data plane makes it highly unlikely that investing development cycles
+   data-plane makes it highly unlikely that investing development cycles
    into IPv4 support for GACP will have a longer term benefit or enough
    critical short-term use-cases.  Support for IPv4-only for GACP is
    purely a strategic choice to focus on the known important long term
@@ -898,12 +898,12 @@ Eckert & Behringer        Expires July 19, 2018                [Page 16]
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
-   In other type of networks as well, we think that efforts to support
+   In other types of networks as well, we think that efforts to support
    autonomic networking is better spent in ensuring that one address
-   family will be support so all use cases will long-term work with it,
-   instead of duplicating effort into IPv4.  Especially because auto-
-   addressing for the GACP with IPv4 would be more complex than in IPv6
-   due to the IPv4 addressing space.
+   family will be supported so all use cases will long-term work with
+   it, instead of duplicating effort into IPv4.  Especially because
+   auto-addressing for the GACP with IPv4 would be more complex than in
+   IPv6 due to the IPv4 addressing space.
 
 4.  Security Considerations
 
@@ -1021,6 +1021,18 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       08: IESG review fixes.
 
+      *
+
+      *  Matthew Miller/Alissa Cooper: syntactic nits.
+
+      *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
+         plane/9bff109281e8b3c22522c3144cbf0f13e5000498/draft-ietf-
+         anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
+         08.txt
+
+      *  Suresh Krishnan (comment): rewrote first paragraph of 2.1.4
+         (incomprehensible).
+
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
          plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-
          anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
@@ -1047,6 +1059,13 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       07: Fixed ID nits.
 
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 19]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
       06: changed "split-horizon" term to "private-DNS" and reworded the
       paragraph about it.
 
@@ -1058,18 +1077,10 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       *  Folded most comments back into draft-ietf-anima-autonomic-
          control-plane-09 because this stable connectivity draft was
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 19]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
          suggesting things that are better written out and standardized
          in the ACP document.
 
-      *  Section on simultaneous ACP and data plane connectivity section
+      *  Section on simultaneous ACP and data-plane connectivity section
          reduced/rewritten because of this.
 
       *  Re-emphasized security model of ACP - ACP-connect can not
@@ -1104,6 +1115,13 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       00: Changed title/dates.
 
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 20]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
       individual-02: Updated references.
 
       individual-03: Modified ULA text to not suggest ULA-C as much
@@ -1114,13 +1132,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       individual-01: Added security section discussing the role of
       address prefix selection and DNS for ACP.  Title change to
       emphasize focus on OAM.  Expanded abstract.
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 20]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
       individual-00: Initial version.
 
@@ -1157,17 +1168,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               DOI 10.17487/RFC7575, June 2015,
               <https://www.rfc-editor.org/info/rfc7575>.
 
-   [RFC7757]  Anderson, T. and A. Leiva Popper, "Explicit Address
-              Mappings for Stateless IP/ICMP Translation", RFC 7757,
-              DOI 10.17487/RFC7757, February 2016,
-              <https://www.rfc-editor.org/info/rfc7757>.
-
-   [RFC7915]  Bao, C., Li, X., Baker, F., Anderson, T., and F. Gont,
-              "IP/ICMP Translation Algorithm", RFC 7915,
-              DOI 10.17487/RFC7915, June 2016,
-              <https://www.rfc-editor.org/info/rfc7915>.
-
-
 
 
 
@@ -1177,6 +1177,16 @@ Eckert & Behringer        Expires July 19, 2018                [Page 21]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
+
+   [RFC7757]  Anderson, T. and A. Leiva Popper, "Explicit Address
+              Mappings for Stateless IP/ICMP Translation", RFC 7757,
+              DOI 10.17487/RFC7757, February 2016,
+              <https://www.rfc-editor.org/info/rfc7757>.
+
+   [RFC7915]  Bao, C., Li, X., Baker, F., Anderson, T., and F. Gont,
+              "IP/ICMP Translation Algorithm", RFC 7915,
+              DOI 10.17487/RFC7915, June 2016,
+              <https://www.rfc-editor.org/info/rfc7915>.
 
 8.2.  Informative References
 
@@ -1215,16 +1225,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               series.  See "https://www.itu.int/rec/T-REC-G.7712/en" for
               current versions.
 
-   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
-              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
-              <https://www.rfc-editor.org/info/rfc1034>.
-
-   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
-              (TLS) Protocol Version 1.2", RFC 5246,
-              DOI 10.17487/RFC5246, August 2008,
-              <https://www.rfc-editor.org/info/rfc5246>.
-
-
 
 
 
@@ -1233,6 +1233,15 @@ Eckert & Behringer        Expires July 19, 2018                [Page 22]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
+
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
+
+   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
+              (TLS) Protocol Version 1.2", RFC 5246,
+              DOI 10.17487/RFC5246, August 2008,
+              <https://www.rfc-editor.org/info/rfc5246>.
 
    [RFC6146]  Bagnulo, M., Matthews, P., and I. van Beijnum, "Stateful
               NAT64: Network Address and Protocol Translation from IPv6
@@ -1274,6 +1283,13 @@ Authors' Addresses
    Email: tte+ietf@cs.fau.de
 
 
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 23]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    Michael H. Behringer
 
    Email: michael.h.behringer@gmail.com
@@ -1285,4 +1301,44 @@ Authors' Addresses
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 24]
