@@ -87,19 +87,19 @@ Table of Contents
        2.1.4.  IPv4-only NMS Hosts . . . . . . . . . . . . . . . . .   9
        2.1.5.  Path Selection Policies . . . . . . . . . . . . . . .  12
        2.1.6.  Autonomic NOC Device/Applications . . . . . . . . . .  14
-       2.1.7.  Encryption of data-plane connections  . . . . . . . .  14
+       2.1.7.  Encryption of data-plane connections  . . . . . . . .  15
        2.1.8.  Long Term Direction of the Solution . . . . . . . . .  15
      2.2.  Stable Connectivity for Distributed Network/OAM . . . . .  16
    3.  Architectural Considerations  . . . . . . . . . . . . . . . .  16
      3.1.  No IPv4 for GACP  . . . . . . . . . . . . . . . . . . . .  16
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
-   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  18
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  19
+   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  19
    7.  Change log [RFC Editor: Please remove]  . . . . . . . . . . .  19
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  21
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  22
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
 
 1.  Introduction
 
@@ -699,29 +699,29 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    used to throttle applications such as software download into the
    GACP.
 
-   MPTCP (Multipath TCP -see [RFC6824]) is a very attractive candidate
-   to automate the use of both data-plane and GACP and minimize or fully
-   avoid the need for the above mentioned logical names to pre-set the
-   desired connectivity (data-plane-only, GACP only, both).  For
-   example, a set-up for non MPTCP aware applications would be as
-   follows:
+   MPTCP (Multipath TCP -see [RFC6824]) with additional future work
+   could be a very attractive candidate to automate the use of both
+   data-plane and GACP and minimize or fully avoid the need for the
+   above mentioned logical names to pre-set the desired connectivity
+   (data-plane-only, GACP only, both).
 
-   DNS naming is set up to provide the GACP IPv6 address of network
-   devices.  Unbeknownst to the application, MPTCP is used.  MPTCP
-   mutually discovers between the NOC and network device the data-plane
-   address and caries all traffic across it when that MPTCP subflow
-   across the data-plane can be built.
+   MPTCP supports signaling between the peers with which additional
+   available addresses can be exchanged and then additional subflows
+   between those addresses can be built.  MPTCP also allows to declare
+   subflows to be backup so they do not carry traffic unless non-backup
+   subflows fail.  Taken together, this could be used to automatically
+   leverage the stable connectivity of the GACP and the potentially
+   higher throughput of the data plane and simplify the DNS setup:
 
-   In the Autonomic network devices where data-plane and GACP are in
-   separate VRFs, it is clear that this type of MPTCP subflow creation
-   across different VRFs is new/added functionality.  Likewise, the
-   policies of preferring a particular address (NOC-device) or VRF (AN
-   device) for the traffic is potentially also a policy not provided as
-   a standard.
+   (Only) the GACP address of GACP devices could to be put into DNS.
+   When MPTCP builds the first subflow across the GACP, it exchanges the
+   data-plane address.  A data-plane subflow is built.  Once this is
+   successful, the peers declare the GACP subflow to be a backup flow
+   and only the data-plane subflow is used to carry traffic.
 
-
-
-
+   Making this idea work requires additional specification work outside
+   the scope of this document.  This includes but is not necessarily
+   limited to defining the following aspects:
 
 
 
@@ -729,6 +729,27 @@ Eckert & Behringer        Expires July 19, 2018                [Page 13]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
+
+   The above described behavior/policy for MPTCP must be controllable by
+   applications or libraries acting on behalf of applications.  APIs
+   and/or data models for this control need to be defined.  As outlined
+   above, applications for example may choose to only perform transfers
+   if the data-plane is actually available because of performance
+   limitations of the GACP, so the application needs to be made aware if
+   the setup of the data-plane subflow fails.  Or transfers may want to
+   only use the GACP because the connection performs configuration
+   changes that are likely known to bring down the data-plane.  It
+   should be sufficient to make these policies work on a per connection
+   basis, and not change during the lifetime of a connection for
+   different data items.
+
+   GACP and data-plane addresses exist in different VRFs.  The MPTCP
+   stack needs to be able to access multiple VRFs and know which local
+   address is existing in which VRF.  There also needs to be a logic to
+   determine which peer address is expected to be reachable via which
+   local VRF/address.  Because the GACP is an isolated network, data-
+   plane addresses are not reachable via the GACP therefore devices can
+   determine if a peer adddress is a data-plane address.
 
 2.1.6.  Autonomic NOC Device/Applications
 
@@ -757,6 +778,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    Having said this: If the structure of NMS hosts is transformed
    through virtualization anyhow, then it may be considered equally
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 14]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    secure and appropriate to construct (physical) NMS host system by
    combining a virtual GACP enabled router with non-GACP enabled NOC-
    application VMs via a hypervisor, leveraging the configuration
@@ -777,15 +806,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    host and the GACP network device have credentials they can mutually
    trust (same GACP domain).  In result, data-plane connectivity that
    does support this can simply leverage TLS/DTLS
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 14]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
    ([RFC5246])/([RFC6347]) with those GACP credentials for mutual
    authentication - and does not incur new key management.
 
@@ -814,6 +834,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    1.  NMS hosts should at least support IPv6.  IPv4/IPv6 NAT in the
        network to enable use of a GACP is long term undesirable.  Having
        IPv4 only applications automatically leverage IPv6 connectivity
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 15]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
        via host-stack translation may be an option but this has not been
        investigated yet.
 
@@ -834,14 +862,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
        clear what the simplest set of tools is to enable explicitly the
        choice of desired behavior of each OAM.  The use of the above
        mentioned DNS and MPTCP mechanisms is a start, but this will
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 15]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
        require additional thoughts.  This is likely a specific case of
        the more generic scope of TAPS.
 
@@ -870,6 +890,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    The GACP is intended to be IPv6 only, and the prior explanations in
    this document show that this can lead to some complexity when having
    to connect IPv4 only NOC solutions, and that it will be impossible to
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 16]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    leverage the GACP when the OAM agents on a GACP network device do not
    support IPv6.  Therefore, the question was raised whether the GACP
    should optionally also support IPv4.
@@ -888,15 +916,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    critical short-term use-cases.  Support for IPv4-only for GACP is
    purely a strategic choice to focus on the known important long term
    goals.
-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 16]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
    In other types of networks as well, we think that efforts to support
    autonomic networking is better spent in ensuring that one address
@@ -927,6 +946,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    The random nature of a ULA prefix provides strong protection against
    address collision even though there is no central assignment
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 17]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    authority.  This is helped by the expectation, that GACPs are never
    expected to connect all together, but only few GACPs may ever need to
    connect together, e.g. when mergers and aquisitions occur.
@@ -945,14 +972,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    constitute registration and if you want to ensure that your leaked
    GACP packets can be recognized to come from you, you may need to list
    your prefixes in multiple of those sites.
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 17]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
    Note that there is a provision in [RFC4193] for non-locally assigned
    address space (L bit = 0), but there is no existing standardization
@@ -983,6 +1002,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    be linked to the autonomic registrar backend so that the DNS and
    reverse DNS records are actually derived from the subject name
    elements of the ACP device certificates in the same way as the
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 18]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    autonomic devices themselves will derive their ULA addresses from
    their certificates to ensure correct and consistent DNS entries.
 
@@ -1002,14 +1029,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    This work originated from an Autonomic Networking project at cisco
    Systems, which started in early 2010 including customers involved in
    the design and early testing.  Many people contributed to the aspects
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 18]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
    described in this document, including in alphabetical order: BL
    Balaji, Steinthor Bjarnason, Yves Herthoghs, Sebastian Meissner, Ravi
    Kumar Vadapalli.  The author would also like to thank Michael
@@ -1021,7 +1040,10 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       08: IESG review fixes.
 
-      *
+      *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
+         plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-
+         anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
+         08.txt
 
       *  Matthew Miller/Alissa Cooper: syntactic nits.
 
@@ -1035,6 +1057,15 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
          plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 19]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
          anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
          08.txt
 
@@ -1059,13 +1090,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       07: Fixed ID nits.
 
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 19]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
       06: changed "split-horizon" term to "private-DNS" and reworded the
       paragraph about it.
 
@@ -1089,6 +1113,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       *  Re-wrote much of NMS section to be less suggestive and more
          descriptive, avoiding the term NAT and referring to relevant
          RFCs (SIIT etc.).
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 20]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
 
       *  Main additional text in IPv4 section is about explaining how we
          suggest to use EAM (Explicit Address Mapping) which actuall
@@ -1115,13 +1147,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       00: Changed title/dates.
 
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 20]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
       individual-02: Updated references.
 
       individual-03: Modified ULA text to not suggest ULA-C as much
@@ -1143,6 +1168,15 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               and E. Lear, "Address Allocation for Private Internets",
               BCP 5, RFC 1918, DOI 10.17487/RFC1918, February 1996,
               <https://www.rfc-editor.org/info/rfc1918>.
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 21]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
 
    [RFC4191]  Draves, R. and D. Thaler, "Default Router Preferences and
               More-Specific Routes", RFC 4191, DOI 10.17487/RFC4191,
@@ -1168,16 +1202,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               DOI 10.17487/RFC7575, June 2015,
               <https://www.rfc-editor.org/info/rfc7575>.
 
-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 21]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
    [RFC7757]  Anderson, T. and A. Leiva Popper, "Explicit Address
               Mappings for Stateless IP/ICMP Translation", RFC 7757,
               DOI 10.17487/RFC7757, February 2016,
@@ -1200,6 +1224,15 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               S., and K. Watsen, "Bootstrapping Remote Secure Key
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
               keyinfra-09 (work in progress), October 2017.
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 22]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
 
    [I-D.ietf-anima-grasp]
               Bormann, C., Carpenter, B., and B. Liu, "A Generic
@@ -1225,15 +1258,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               series.  See "https://www.itu.int/rec/T-REC-G.7712/en" for
               current versions.
 
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 22]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
    [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
               <https://www.rfc-editor.org/info/rfc1034>.
@@ -1257,6 +1281,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
               January 2012, <https://www.rfc-editor.org/info/rfc6347>.
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 23]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
 
    [RFC6434]  Jankiewicz, E., Loughney, J., and T. Narten, "IPv6 Node
               Requirements", RFC 6434, DOI 10.17487/RFC6434, December
@@ -1283,41 +1315,9 @@ Authors' Addresses
    Email: tte+ietf@cs.fau.de
 
 
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 23]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
    Michael H. Behringer
 
    Email: michael.h.behringer@gmail.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

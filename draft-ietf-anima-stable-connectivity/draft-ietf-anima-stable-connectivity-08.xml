@@ -483,21 +483,46 @@ One name with data-plane and GACP addresses (name-both.noc.example.com).</t>
 <t>Traffic policing and/or shaping at the GACP edge in the NOC can be used to throttle
 applications such as software download into the GACP.</t>
 
-<t>MPTCP (Multipath TCP -see <xref target="RFC6824" />) is a very attractive candidate to automate the use of both data-plane and GACP
+<t>MPTCP (Multipath TCP -see <xref target="RFC6824" />) with additional future work could be a very attractive candidate to automate the use of both data-plane and GACP
 and minimize or fully avoid the need for the above mentioned logical names to
-pre-set the desired connectivity (data-plane-only, GACP only, both). For example, a
-set-up for non MPTCP aware applications would be as follows:</t>
+pre-set the desired connectivity (data-plane-only, GACP only, both).</t>
 
-<t>DNS naming is set up to provide the GACP IPv6 address of network devices. Unbeknownst to
-the application, MPTCP is used. MPTCP mutually discovers between the NOC and network
-device the data-plane address and caries all traffic across it when that MPTCP
-subflow across the data-plane can be built.</t>
+<t>MPTCP supports signaling between the peers with which additional available
+addresses can be exchanged and then additional subflows between those addresses
+can be built. MPTCP also allows to declare subflows to be backup
+so they do not carry traffic unless non-backup subflows fail. Taken together,
+this could be used to automatically leverage the stable connectivity of the GACP
+and the potentially higher throughput of the data plane and simplify the DNS
+setup:</t>
 
-<t>In the Autonomic network devices where data-plane and GACP are in separate VRFs,
-it is clear that this type of MPTCP subflow creation across different VRFs is
-new/added functionality. Likewise, the policies of preferring a particular address
-(NOC-device) or VRF (AN device) for the traffic is potentially also a policy not
-provided as a standard.</t>
+<t>(Only) the GACP address of GACP devices could to be put into DNS. When MPTCP
+builds the first subflow across the GACP, it exchanges the data-plane address.
+A data-plane subflow is built. Once this is successful, the peers declare the
+GACP subflow to be a backup flow and only the data-plane subflow is used to
+carry traffic.</t>
+
+<t>Making this idea work requires additional specification work outside the
+scope of this document. This includes but is not necessarily limited to
+defining the following aspects:</t>
+
+<t>The above described behavior/policy for MPTCP must be controllable by applications or
+libraries acting on behalf of applications. APIs and/or data models for this
+control need to be defined. As outlined above, applications for example may
+choose to only perform transfers if the data-plane is actually available because
+of performance limitations of the GACP, so the application needs to be made aware
+if the setup of the data-plane subflow fails. Or transfers may want
+to only use the GACP because the connection performs configuration changes that are
+likely known to bring down the data-plane. It should be sufficient to make these policies
+work on a per connection basis, and not change during the lifetime of a connection
+for different data items.</t>
+
+<t>GACP and data-plane addresses exist in different VRFs. The MPTCP stack
+needs to be able to access multiple VRFs and know which local address is existing in which
+VRF.  There also needs to be a logic
+to determine which peer address is expected to be reachable via which local VRF/address.
+Because the GACP is an isolated network, data-plane addresses are not reachable
+via the GACP therefore devices can determine if a peer adddress is a data-plane
+address.</t>
 
       <!-- selection-policies -->
       </section>
@@ -741,7 +766,7 @@ but not network wide across the enterprise.</t>
   <t>
     <list>
       <t>08: IESG review fixes.<list style="symbols">
-         <t></t>
+         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Matthew Miller/Alissa Cooper: syntactic nits.</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9bff109281e8b3c22522c3144cbf0f13e5000498/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Suresh Krishnan (comment): rewrote first paragraph of 2.1.4 (incomprehensible).</t>
