@@ -230,21 +230,21 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       has access to the GACP directly or has an IP subnet connection to
       a GACP-edge device.
 
-   Closed Group Security  GACP devices have cryptographic credentials to
-      mutually authenticate each other as members of a GACP.  Traffic
+   Closed Group Security:  GACP devices have cryptographic credentials
+      to mutually authenticate each other as members of a GACP.  Traffic
       across the GACP is authenticated with these credentials and then
-      encrypted.  The only traffic permitted in & out of the GACP not
-      authenticated by these credentials is through explicit
-      configuration the traffic from/to the aforementiontioned non-GACP
-      NOC equipment with subnet connections to a GACP-edge device (as a
+      encrypted.  The only traffic permitted in & out of the GACP that
+      is not authenticated by these credentials is through explicit
+      configuration the traffic from/to the aforementioned non-GACP NOC
+      equipment with subnet connections to a GACP-edge device (as a
       transition method).
 
-   The GACP must be built automactically/autonomously and its function
-   must not be disruptable by operator or automated (NMS/SDN)
-   configuration/provisioning actions.  These are allowed to only impact
-   the "data-plane".  This aspect is not currently covered in this
-   document.  Instead, it focusses on the imapct of the above
-   constraints: IPv6 only, dual connectivity and security.
+   The GACP must be built autonomic and its function must not be
+   disruptable by operator or automated (NMS/SDN) configuration/
+   provisioning actions.  These are allowed to only impact the "data-
+   plane".  This aspect is not currently covered in this document.
+   Instead, it focusses on the impact of the above constraints: IPv6
+   only, dual connectivity and security.
 
 2.  Solutions
 
@@ -631,7 +631,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    will have IPv6, so that any considerations for IPv4/NAT in this
    solution are temporary.
 
-   To solve the expected performance limitations of the FACP, we do
+   To solve the expected performance limitations of the GACP, we do
    expect to have the above describe dual-connectivity via both GACP and
    data-plane between NOC application devices and devices with GACP.
    The GACP connectivity is expected to always be there (as soon as a
@@ -771,7 +771,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    "full" GACP stack into the NMS host is unfeasible, then it would
    still be possible to design a stripped down version of GACP
    functionality for such NOC hosts that only provides enrollment of the
-   NOC host with the GACP cryptigraphic credentials but without directly
+   NOC host with the GACP cryptographic credentials but without directly
    participating in the GACP encryption method.  Instead, the host would
    just leverage TLS/DTLS using its GACP credentials via the data-plane
    with GACP network devices as well as indirectly via the GACP with the
@@ -919,7 +919,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    Note that the GACP contraints demands that only packets from
    connected subnet prefixes are permitted from GACP connect interfaces,
-   limiting the scope of non-cryptographically secured transpoort to a
+   limiting the scope of non-cryptographically secured transport to a
    subnet within a NOC that instead has to rely on physical security
    (only connect trusted NOC devices to it).
 
@@ -1000,7 +1000,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       08: IESG review fixes.
 
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
-         plane/9143445006e13b311635898b18e249597c74f6e7/draft-ietf-
+         plane/aad25351f1e9a5c2c93c8dde8c78f48cf2d4349d/draft-ietf-
 
 
 
