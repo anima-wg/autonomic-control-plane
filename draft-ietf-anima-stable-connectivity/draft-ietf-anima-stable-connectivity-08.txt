@@ -5,7 +5,7 @@
 ANIMA                                                     T. Eckert, Ed.
 Internet-Draft                                                    Huawei
 Intended status: Informational                              M. Behringer
-Expires: April 21, 2018                                 October 18, 2017
+Expires: July 19, 2018                                  January 15, 2018
 
 
   Using Autonomic Control Plane for Stable Connectivity of Network OAM
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 21, 2018.
+   This Internet-Draft will expire on July 19, 2018.
 
 
 
@@ -53,14 +53,14 @@ Status of This Memo
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 1]
+Eckert & Behringer        Expires July 19, 2018                 [Page 1]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 Copyright Notice
 
-   Copyright (c) 2017 IETF Trust and the persons identified as the
+   Copyright (c) 2018 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 2]
+Eckert & Behringer        Expires July 19, 2018                 [Page 2]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    provided by the network to be managed.  OAM can easily but
@@ -165,9 +165,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 3]
+Eckert & Behringer        Expires July 19, 2018                 [Page 3]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    never affects the DCN configuration.  Of course, this approach comes
@@ -221,9 +221,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 4]
+Eckert & Behringer        Expires July 19, 2018                 [Page 4]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    NOC connectivity:  NOC equipment (controlling OAM operations) either
@@ -277,9 +277,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 5]
+Eckert & Behringer        Expires July 19, 2018                 [Page 5]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    communicate with network devices.  We describe differently advanced
@@ -333,9 +333,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 6]
+Eckert & Behringer        Expires July 19, 2018                 [Page 6]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    connectivity goals.  The limitations of this approach are discussed
@@ -389,9 +389,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 7]
+Eckert & Behringer        Expires July 19, 2018                 [Page 7]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    3.  (Limitation) Performance of the GACP may be limited versus normal
@@ -445,9 +445,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 8]
+Eckert & Behringer        Expires July 19, 2018                 [Page 8]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    RFC6724 source address selection rule 5.5 including caching of next-
@@ -501,9 +501,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                 [Page 9]
+Eckert & Behringer        Expires July 19, 2018                 [Page 9]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    1.  NMS hosts need to be able to initiate connections to any GACP
@@ -557,9 +557,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 10]
+Eckert & Behringer        Expires July 19, 2018                [Page 10]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    address space is even more constrained, and it is known that a
@@ -613,9 +613,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 11]
+Eckert & Behringer        Expires July 19, 2018                [Page 11]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    more effort to implement that additional connectivity with hardware
@@ -669,9 +669,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 12]
+Eckert & Behringer        Expires July 19, 2018                [Page 12]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    DNS can be used to set up names for the same network devices but with
@@ -725,9 +725,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 13]
+Eckert & Behringer        Expires July 19, 2018                [Page 13]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    and only authorized and authenticate NOC devices/applications will
@@ -781,9 +781,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 14]
+Eckert & Behringer        Expires July 19, 2018                [Page 14]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    When using the GACP itself, TLS/DTLS for the transport layer between
@@ -837,9 +837,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 15]
+Eckert & Behringer        Expires July 19, 2018                [Page 15]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    performing distributed OAM.  The common security of a GACP can help
@@ -893,9 +893,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 16]
+Eckert & Behringer        Expires July 19, 2018                [Page 16]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    GACP devices may cause leakage into places where it is not expected.
@@ -949,9 +949,9 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
 
 
-Eckert & Behringer       Expires April 21, 2018                [Page 17]
+Eckert & Behringer        Expires July 19, 2018                [Page 17]
 
-Internet-Draft         AN Stable Connectivity OAM           October 2017
+Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
    RFC1918 addresses in DNS.  See for example [RFC1918] section 5, last
@@ -999,17 +999,23 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
 
       08: IESG review fixes.
 
+      *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
+         plane/9143445006e13b311635898b18e249597c74f6e7/draft-ietf-
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 18]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
+         anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
+         08.txt
+
       *  Alvaro Retana: Clarified that the discussions in this document
          are not specific to the ANI ACP, but instead rely primarily on
          a set of design constraints for any type of autonomic inband
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 18]
-
-Internet-Draft         AN Stable Connectivity OAM           October 2017
-
-
          management network.  Called this the GACP (generalized ACP).
          Mayor add: explanation of those design constraints in section
          1.3.  Textual fixes ACP -> GACP throughout the document, but
@@ -1053,19 +1059,18 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
          would well work with the Zone and Vlong Addressing Sub-Schemes
          of ACP.
 
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 19]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
       *  Moved, but not changed section of "why no IPv4 in ACP" before
          IANA considerations to make structure of document more logical.
 
       *  Refined security considerations: explained how optional ULA
          prefix listing on Internet is only for diagnostic purposes.
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 19]
-
-Internet-Draft         AN Stable Connectivity OAM           October 2017
-
-
          Explained how this is useful because DNS must not be used.
          Explained how split horizon DNS can be used nevertheless.
 
@@ -1107,20 +1112,20 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
               keyinfra-09 (work in progress), October 2017.
 
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 20]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    [I-D.ietf-anima-grasp]
               Bormann, C., Carpenter, B., and B. Liu, "A Generic
               Autonomic Signaling Protocol (GRASP)", draft-ietf-anima-
               grasp-15 (work in progress), July 2017.
-
-
-
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 20]
-
-Internet-Draft         AN Stable Connectivity OAM           October 2017
-
 
    [I-D.ietf-anima-reference-model]
               Behringer, M., Carpenter, B., Eckert, T., Ciavaglia, L.,
@@ -1163,20 +1168,20 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
               DOI 10.17487/RFC5246, August 2008,
               <https://www.rfc-editor.org/info/rfc5246>.
 
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 21]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    [RFC6146]  Bagnulo, M., Matthews, P., and I. van Beijnum, "Stateful
               NAT64: Network Address and Protocol Translation from IPv6
               Clients to IPv4 Servers", RFC 6146, DOI 10.17487/RFC6146,
               April 2011, <https://www.rfc-editor.org/info/rfc6146>.
-
-
-
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 21]
-
-Internet-Draft         AN Stable Connectivity OAM           October 2017
-
 
    [RFC6291]  Andersson, L., van Helvoort, H., Bonica, R., Romascanu,
               D., and S. Mansfield, "Guidelines for the Use of the "OAM"
@@ -1218,21 +1223,21 @@ Internet-Draft         AN Stable Connectivity OAM           October 2017
               DOI 10.17487/RFC7575, June 2015,
               <https://www.rfc-editor.org/info/rfc7575>.
 
+
+
+
+
+
+
+Eckert & Behringer        Expires July 19, 2018                [Page 22]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    [RFC7757]  Anderson, T. and A. Leiva Popper, "Explicit Address
               Mappings for Stateless IP/ICMP Translation", RFC 7757,
               DOI 10.17487/RFC7757, February 2016,
               <https://www.rfc-editor.org/info/rfc7757>.
-
-
-
-
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 22]
-
-Internet-Draft         AN Stable Connectivity OAM           October 2017
-
 
    [RFC7915]  Bao, C., Li, X., Baker, F., Anderson, T., and F. Gont,
               "IP/ICMP Translation Algorithm", RFC 7915,
@@ -1280,9 +1285,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Eckert & Behringer       Expires April 21, 2018                [Page 23]
+Eckert & Behringer        Expires July 19, 2018                [Page 23]
