@@ -317,11 +317,12 @@ are not supposed to redistribute routes from non-GACP routers into the GACP.</t>
 
       <section anchor="ipv4-only" title="IPv4-only NMS Hosts">
 
-<t>GACP does not support IPv4: Single stack IPv6
-management of the network via GACP and (as needed) data plane. Independent of whether the
-data plane is dual-stack, has IPv4 as a service or is single stack IPv6. Dual plane
-management, IPv6 for GACP, IPv4 for the data plane is likewise an architecturally
-simple option.</t>
+<t>One architectural expectation for the GACP as described in <xref target="GACP"/>
+is that all devices that want to use the GACP do support IPv6. Including NMS hosts.
+Note that this expectation does not imply any requirements against
+the data-plane, especially no need to support IPv6 in it. The data-plane could be IPv4
+only, IPv6 only, dual stack or it may not need to have any IP host stack on the network
+devices.</t>
 
 <t>The implication of this architectural decision is the potential need for
 short-term workarounds when the operational practices in a network
@@ -740,7 +741,7 @@ but not network wide across the enterprise.</t>
   <t>
     <list>
       <t>08: IESG review fixes.<list style="symbols">
-         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/4bc0fa240a10be4e3dd1bed249fafc7cc452de31/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
+         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Alvaro Retana: Made references normative where the authors think is is important to understand all or parts for the mechanisms described in this document.</t>
          <t>Alvaro Retana: Clarified that the discussions in this document are not specific to the ANI ACP, but instead rely primarily on a set of design constraints for any type of autonomic inband management network. Called this the GACP (generalized ACP). Mayor add: explanation of those design constraints in section 1.3. Textual fixes ACP -> GACP throughout the document, but without semantic changes.</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/d26df831da2953779c3b3ac41ec118cbbe43373e/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>

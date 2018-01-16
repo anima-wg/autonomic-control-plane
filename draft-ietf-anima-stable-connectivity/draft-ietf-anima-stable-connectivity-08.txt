@@ -474,11 +474,13 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 2.1.4.  IPv4-only NMS Hosts
 
-   GACP does not support IPv4: Single stack IPv6 management of the
-   network via GACP and (as needed) data plane.  Independent of whether
-   the data plane is dual-stack, has IPv4 as a service or is single
-   stack IPv6.  Dual plane management, IPv6 for GACP, IPv4 for the data
-   plane is likewise an architecturally simple option.
+   One architectural expectation for the GACP as described in
+   Section 1.3 is that all devices that want to use the GACP do support
+   IPv6.  Including NMS hosts.  Note that this expectation does not
+   imply any requirements against the data-plane, especially no need to
+   support IPv6 in it.  The data-plane could be IPv4 only, IPv6 only,
+   dual stack or it may not need to have any IP host stack on the
+   network devices.
 
    The implication of this architectural decision is the potential need
    for short-term workarounds when the operational practices in a
@@ -496,8 +498,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    all operations.  For these reasons an IPv4 only management plane is
    still required and common practice in many enterprises.  Without the
    desire to leverage the GACP, this required and common practice is not
-   a problem for those enterprises even when they run dual stack in the
-
 
 
 
@@ -506,6 +506,7 @@ Eckert & Behringer        Expires July 19, 2018                 [Page 9]
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
+   a problem for those enterprises even when they run dual stack in the
    network.  We discuss these workarounds here because it is a short
    term deployment challenge specific to the operations of a GACP.
 
@@ -553,7 +554,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    with RFC1918 address space it is important that the GACP IPv6
    addresses can efficiently be mapped into IPv4 address space without
    too much waste.
-
 
 
 
@@ -1022,7 +1022,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       08: IESG review fixes.
 
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
-         plane/4bc0fa240a10be4e3dd1bed249fafc7cc452de31/draft-ietf-
+         plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-
          anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
          08.txt
 
