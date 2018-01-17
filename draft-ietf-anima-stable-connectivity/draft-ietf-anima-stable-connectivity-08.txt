@@ -5,7 +5,7 @@
 ANIMA                                                     T. Eckert, Ed.
 Internet-Draft                                                    Huawei
 Intended status: Informational                              M. Behringer
-Expires: July 19, 2018                                  January 15, 2018
+Expires: July 20, 2018                                  January 16, 2018
 
 
   Using Autonomic Control Plane for Stable Connectivity of Network OAM
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 19, 2018.
+   This Internet-Draft will expire on July 20, 2018.
 
 
 
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 1]
+Eckert & Behringer        Expires July 20, 2018                 [Page 1]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -96,9 +96,9 @@ Table of Contents
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  19
    6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  19
    7.  Change log [RFC Editor: Please remove]  . . . . . . . . . . .  19
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  21
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  22
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  22
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  23
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 2]
+Eckert & Behringer        Expires July 20, 2018                 [Page 2]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -165,7 +165,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 3]
+Eckert & Behringer        Expires July 20, 2018                 [Page 3]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 4]
+Eckert & Behringer        Expires July 20, 2018                 [Page 4]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 5]
+Eckert & Behringer        Expires July 20, 2018                 [Page 5]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -333,7 +333,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 6]
+Eckert & Behringer        Expires July 20, 2018                 [Page 6]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -389,7 +389,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 7]
+Eckert & Behringer        Expires July 20, 2018                 [Page 7]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -445,7 +445,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 8]
+Eckert & Behringer        Expires July 20, 2018                 [Page 8]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -501,7 +501,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                 [Page 9]
+Eckert & Behringer        Expires July 20, 2018                 [Page 9]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -557,7 +557,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 10]
+Eckert & Behringer        Expires July 20, 2018                [Page 10]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -613,7 +613,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 11]
+Eckert & Behringer        Expires July 20, 2018                [Page 11]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -669,7 +669,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 12]
+Eckert & Behringer        Expires July 20, 2018                [Page 12]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -725,7 +725,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 13]
+Eckert & Behringer        Expires July 20, 2018                [Page 13]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -781,7 +781,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 14]
+Eckert & Behringer        Expires July 20, 2018                [Page 14]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -837,7 +837,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 15]
+Eckert & Behringer        Expires July 20, 2018                [Page 15]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -893,7 +893,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 16]
+Eckert & Behringer        Expires July 20, 2018                [Page 16]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
@@ -913,7 +913,7 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    one reduces OPEX and improves reliability.  This evolution in the
    data-plane makes it highly unlikely that investing development cycles
    into IPv4 support for GACP will have a longer term benefit or enough
-   critical short-term use-cases.  Support for IPv4-only for GACP is
+   critical short-term use-cases.  Support for IPv6-only for GACP is
    purely a strategic choice to focus on the known important long term
    goals.
 
@@ -949,12 +949,12 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 17]
+Eckert & Behringer        Expires July 20, 2018                [Page 17]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
-   authority.  This is helped by the expectation, that GACPs are never
+   authority.  This is helped by the expectation that GACPs are never
    expected to connect all together, but only few GACPs may ever need to
    connect together, e.g. when mergers and aquisitions occur.
 
@@ -966,12 +966,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
    To help diagnose packets that unexpectedly leaked for example from
    another GACP (that was meant to be deployed separately), it can be
-   useful to voluntarily list your own the ULA GACP prefixes in one of
-   the sites on the Internet, for example
-   https://www.sixxs.net/tools/grh/ula/. Note that this does not
-   constitute registration and if you want to ensure that your leaked
-   GACP packets can be recognized to come from you, you may need to list
-   your prefixes in multiple of those sites.
+   useful to voluntarily list your own the ULA GACP prefixes on some
+   site(s) on the Internet and hope that other users of GACPs do the
+   same so that you can look up unknown ULA prefix packets seen in your
+   network.  Note that this does not constitute registration.
+   https://www.sixxs.net/tools/grh/ula/ was a site to list ULA prefixes
+   but it is not open for new listings anymore since the mid of 2017.
+   The authors are not aware of other active Internet sites to list ULA
+   use.
 
    Note that there is a provision in [RFC4193] for non-locally assigned
    address space (L bit = 0), but there is no existing standardization
@@ -1000,16 +1002,16 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    up in an automated fashion when the GACP address for devices are
    assigned.  In the case of the ACP, DNS resource record creation can
    be linked to the autonomic registrar backend so that the DNS and
-   reverse DNS records are actually derived from the subject name
-   elements of the ACP device certificates in the same way as the
 
 
 
-Eckert & Behringer        Expires July 19, 2018                [Page 18]
+Eckert & Behringer        Expires July 20, 2018                [Page 18]
 
 Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
+   reverse DNS records are actually derived from the subject name
+   elements of the ACP device certificates in the same way as the
    autonomic devices themselves will derive their ULA addresses from
    their certificates to ensure correct and consistent DNS entries.
 
@@ -1040,8 +1042,30 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       08: IESG review fixes.
 
+      *  Eric Rescorla (comments):Typos, listing ULA on internet
+         benefits.  Other comments from Eric where addressed via commits
+         for other reviewers already.
+
+      *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
+         plane/c02252710fbd7aea15aff550fb393eb36584658b/draft-ietf-
+         anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
+         08.txt
+
+      *  Mirja Kuehlewind (discuss) / Yoshifumi Nishida: Fixed and
+         Rewrote MPTCP text to be more explanatory, answering questions
+         raised in disucss.
+
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
          plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-
+
+
+
+
+Eckert & Behringer        Expires July 20, 2018                [Page 19]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
          anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
          08.txt
 
@@ -1057,15 +1081,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       *  https://raw.githubusercontent.com/anima-wg/autonomic-control-
          plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 19]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
-
          anima-stable-connectivity/draft-ietf-anima-stable-connectivity-
          08.txt
 
@@ -1099,6 +1114,14 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
 
 
+
+
+
+Eckert & Behringer        Expires July 20, 2018                [Page 20]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
       *  Folded most comments back into draft-ietf-anima-autonomic-
          control-plane-09 because this stable connectivity draft was
          suggesting things that are better written out and standardized
@@ -1113,14 +1136,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
       *  Re-wrote much of NMS section to be less suggestive and more
          descriptive, avoiding the term NAT and referring to relevant
          RFCs (SIIT etc.).
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 20]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
       *  Main additional text in IPv4 section is about explaining how we
          suggest to use EAM (Explicit Address Mapping) which actuall
@@ -1154,6 +1169,15 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
 
       individual-02: Added explanation why no IPv4 for ACP.
 
+
+
+
+
+Eckert & Behringer        Expires July 20, 2018                [Page 21]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
       individual-01: Added security section discussing the role of
       address prefix selection and DNS for ACP.  Title change to
       emphasize focus on OAM.  Expanded abstract.
@@ -1168,15 +1192,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               and E. Lear, "Address Allocation for Private Internets",
               BCP 5, RFC 1918, DOI 10.17487/RFC1918, February 1996,
               <https://www.rfc-editor.org/info/rfc1918>.
-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 21]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
    [RFC4191]  Draves, R. and D. Thaler, "Default Router Preferences and
               More-Specific Routes", RFC 4191, DOI 10.17487/RFC4191,
@@ -1212,6 +1227,13 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               DOI 10.17487/RFC7915, June 2016,
               <https://www.rfc-editor.org/info/rfc7915>.
 
+
+
+Eckert & Behringer        Expires July 20, 2018                [Page 22]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
 8.2.  Informative References
 
    [I-D.ietf-anima-autonomic-control-plane]
@@ -1224,15 +1246,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               S., and K. Watsen, "Bootstrapping Remote Secure Key
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
               keyinfra-09 (work in progress), October 2017.
-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 22]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
    [I-D.ietf-anima-grasp]
               Bormann, C., Carpenter, B., and B. Liu, "A Generic
@@ -1267,6 +1280,16 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
               DOI 10.17487/RFC5246, August 2008,
               <https://www.rfc-editor.org/info/rfc5246>.
 
+
+
+
+
+
+Eckert & Behringer        Expires July 20, 2018                [Page 23]
+
+Internet-Draft         AN Stable Connectivity OAM           January 2018
+
+
    [RFC6146]  Bagnulo, M., Matthews, P., and I. van Beijnum, "Stateful
               NAT64: Network Address and Protocol Translation from IPv6
               Clients to IPv4 Servers", RFC 6146, DOI 10.17487/RFC6146,
@@ -1281,14 +1304,6 @@ Internet-Draft         AN Stable Connectivity OAM           January 2018
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
               January 2012, <https://www.rfc-editor.org/info/rfc6347>.
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 23]
-
-Internet-Draft         AN Stable Connectivity OAM           January 2018
-
 
    [RFC6434]  Jankiewicz, E., Loughney, J., and T. Narten, "IPv6 Node
               Requirements", RFC 6434, DOI 10.17487/RFC6434, December
@@ -1326,19 +1341,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Eckert & Behringer        Expires July 19, 2018                [Page 24]
+Eckert & Behringer        Expires July 20, 2018                [Page 24]

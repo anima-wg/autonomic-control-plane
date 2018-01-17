@@ -30,7 +30,7 @@
                                 <email>michael.h.behringer@gmail.com</email>
                         </address>
                 </author>
-		<date day="15" month="Jan" year="2018"/>
+		<date day="16" month="Jan" year="2018"/>
 		<area>Operations and Management</area>
 		<workgroup>ANIMA</workgroup>
 		<abstract>
@@ -660,7 +660,7 @@ on the edge. There is no benefit/need for multiple parallel transport families
 within the network, and standardizing on one reduces OPEX and improves reliability.
 This evolution in the data-plane makes it highly unlikely that investing
 development cycles into IPv4 support for GACP will have a longer term benefit
-or enough critical short-term use-cases. Support for IPv4-only for GACP is
+or enough critical short-term use-cases. Support for IPv6-only for GACP is
 purely a strategic choice to focus on the known important long term goals. </t>
 
 <t>In other types of networks as well, we think that efforts to support autonomic
@@ -693,7 +693,7 @@ injected into the isolated GACP environment.</t>
 
 <t>The random nature of a ULA prefix provides strong protection
 against address collision even though there is no central assignment authority. This is helped
-by the expectation, that GACPs are never expected to connect all together, but
+by the expectation that GACPs are never expected to connect all together, but
 only few GACPs may ever need to connect together, e.g. when mergers and aquisitions
 occur.</t>
 
@@ -704,11 +704,12 @@ secured transport to a subnet within a NOC that instead has to rely on physical 
 
 <t>To help diagnose packets that unexpectedly leaked for example from another
 GACP (that was meant to be deployed separately), it can be useful to voluntarily
-list your own the ULA GACP prefixes in one of the sites on the Internet, 
-for example https://www.sixxs.net/tools/grh/ula/. Note that this does not
-constitute registration and if you want to ensure that your leaked GACP packets
-can be recognized to come from you, you may need to list your prefixes in
-multiple of those sites.</t>
+list your own the ULA GACP prefixes on some site(s) on the Internet and hope
+that other users of GACPs do the same so that you can look up unknown ULA
+prefix packets seen in your network. Note that this does not constitute registration.
+https://www.sixxs.net/tools/grh/ula/ was a site to list ULA prefixes but it is not open
+for new listings anymore since the mid of 2017. The authors are not aware
+of other active Internet sites to list ULA use.</t>
 
 <t>Note that there is a provision in <xref target="RFC4193"/> for non-locally
 assigned address space (L bit = 0), but there is no existing
@@ -766,6 +767,9 @@ but not network wide across the enterprise.</t>
   <t>
     <list>
       <t>08: IESG review fixes.<list style="symbols">
+         <t>Eric Rescorla (comments):Typos, listing ULA on internet benefits. Other comments from Eric where addressed via commits for other reviewers already.</t>
+         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/c02252710fbd7aea15aff550fb393eb36584658b/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
+         <t>Mirja Kuehlewind (discuss) / Yoshifumi Nishida: Fixed and Rewrote MPTCP text to be more explanatory, answering questions raised in disucss.</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Matthew Miller/Alissa Cooper: syntactic nits.</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9bff109281e8b3c22522c3144cbf0f13e5000498/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
