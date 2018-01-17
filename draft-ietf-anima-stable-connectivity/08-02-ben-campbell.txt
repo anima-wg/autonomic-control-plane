@@ -1,0 +1,67 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Ben Campbell <ben@nostrum.com>
+Cc: The IESG <iesg@ietf.org>, draft-ietf-anima-stable-connectivity@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Ben Campbell's No Objection on
+ draft-ietf-anima-stable-connectivity-07: (with COMMENT)
+Reply-To: 
+In-Reply-To: <151562899665.15876.3762205729160423887.idtracker@ietfa.amsl.com>
+
+Thanks, Ben
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+Wrt. your comment.
+
+I did create for -08 a section of normative references. IN reply
+to Alvaros DISCUSS i wrote:
+
+> I went through the references and made those normative where i thought
+> rfc7322#section-4.8.6 "are essential to ... understanding the content"
+> applies. 
+> 
+> This set is of course somewhat subjective. Eg.: there is nothing special
+> to know about RFC6434, so its kept informational. On the other hand, if
+> you're a poor enterprise requiring to use any of the nasty NAT options
+> mentioned, you really want to read up on SIIT (RFC7915), so i made that
+> normative. Most customers i talked to did not know ULA (rfc4193), so i made it
+> normative. For fairness so then did the same for rfc1918.
+
+I hope this addresses your comment.
+
+Cheers
+    toerless
+
+
+On Wed, Jan 10, 2018 at 04:03:16PM -0800, Ben Campbell wrote:
+> Ben Campbell has entered the following ballot position for
+> draft-ietf-anima-stable-connectivity-07: No Objection
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-stable-connectivity/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> I am skeptical that there are no normative references at all. Is it reasonable
+> that a reader could skip all the references and still fully understand this
+> document?
+> 
+
+-- 
+---
+tte@cs.fau.de

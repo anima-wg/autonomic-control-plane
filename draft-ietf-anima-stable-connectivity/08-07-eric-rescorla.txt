@@ -1,0 +1,209 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Eric Rescorla <ekr@rtfm.com>
+Cc: The IESG <iesg@ietf.org>, draft-ietf-anima-stable-connectivity@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Eric Rescorla's No Objection on
+ draft-ietf-anima-stable-connectivity-07: (with COMMENT)
+Reply-To: 
+In-Reply-To: <151564150183.11232.5234107897547990840.idtracker@ietfa.amsl.com>
+
+Hi Eric,
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+I hope -08 of the draft resolves your comments: 
+
+1)
+
+>  secure ACP was extendable via untrusted routers then it would be a
+>    lot more verify the secure domain assertion.  Therefore the ACP edge
+>    devices are not supposed to redistribute routes from non-ACP routers
+>
+> There's something grammatically wrong here and I can't make sense of this
+> sentence.
+
+This was fixed through review by Matthew Miller to say:
+
+|  If the secure GACP was extendable via untrusted routers then it would
+|  be a lot more difficult to verify the secure domain assertion.
+
+[ Aka: This section is dealing with the problem of how to overcome
+  the lack of cryptographic security on the legacy NOC devices (hopefully
+  temporarily) with physical secured access to the trusted ACP edge device.
+  So so we limit the options to build out that physcial security area
+  to avoid the most common operator errors - messing up L3 routing/
+  leaking routes. ]
+
+2)
+
+>    TLS/DTLS ([RFC5246])/([RFC6347]) with mutual AN-domain certificate
+>    authentication - and does not incur new key management.
+> This isn't entirely clear to me. What are the identities that these devices are
+> using to talk to each other? Are they always FQDNs?
+
+A bit of background to answer this question:
+
+As part of resolving Alvaro Retanas DISCUSS, i extended section 1.3 to
+explain that this document is not specific to the ACP (as specified
+in draft-ietf-anima-autonomic-control-plane) but rather any (similar)
+solution that meets contraints/requirements. And we call those GACP
+(generalized ACP). The ACP of course is the first instance of such a GACP
+that we want to standardize (via draft-ietf-anima-autonomic-control-plane).
+
+The security constraint is now defined to be as follows in -08:
+
+| Closed Group Security:  GACP devices have cryptographic credentials
+|       to mutually authenticate each other as members of a GACP.  Traffic
+|       across the GACP is authenticated with these credentials and then
+|       encrypted.  The only traffic permitted in & out of the GACP that
+|       is not authenticated by these credentials is through explicit
+|       configuration the traffic from/to the aforementioned non-GACP NOC
+|       equipment with subnet connections to a GACP-edge device (as a
+|       transition method).
+
+The text you where calling out is now:
+
+| In result, data-plane connectivity that
+| does support this can simply leverage TLS/DTLS
+| ([RFC5246])/([RFC6347]) with those GACP credentials for mutual
+| authentication - and does not incur new key management.
+
+Aka: for this stable-connectivity draft (informational), i changed the
+text from "certificates" to cryptographic credentials for authentication
+as a more generic term because some GACP in the IoT space may use
+non-certificate cryptographic security (but rather shared secrets).
+
+Note that in the case of the ACP, those credentials are of course certificates,
+the mutual authentication is specified in:
+https://tools.ietf.org/html/draft-ietf-anima-autonomic-control-plane-13#section-6.1.2
+Aka: the "closed group" is identified through the "domain" field
+in a new certificate element for the ACP (we can discuss more
+hopefully soon when we get to IESG review of the ACP document, and
+why we didn't rely on the existing domain field of "web" certificates).
+
+But the main point of this section in the stable-connectivity draft
+was really only the simple statement that devices already have their 
+GACP credentials, so they can equally use them for end-to-end authentication
+via the data-plane.
+
+3)
+
+>    into IPv4 support for ACP will have a longer term benefit or enough
+>    critical short-term use-cases.  Support for IPv4-only for ACP is
+>    purely a strategic choice to focus on the known important long term
+> I think this probably should say IPv6 only
+
+Good catch. Thanks!
+
+4)
+
+>    address collision even though there is no central assignment
+>    authority.  This is helped by the expectation, that ACPs are never
+>    expected to connect all together, but only few ACPs may ever need to
+> Nit: no comma between "expectation" and "that"
+
+Thanks.
+
+5)
+
+>    ACP packets can be recognized to come from you, you may need to list
+>    your prefixes in multiple of those sites.
+> As I read this, it helps others to list, not yourself, right?
+
+Yes... Paragraph changed as following to fix This. Also to include
+another update that i unfortunately noticed only just now ;-(:
+
+| To help diagnose packets that unexpectedly leaked for example from 
+| another GACP (that was meant to be deployed separately), it can be
+| useful to voluntarily list your own the ULA GACP prefixes on some
+| site(s) on the Internet and hope that other users of GACPs do the
+| same so that you can look up unknown ULAprefix packets seen in your 
+| network. Note that this does not constitute registration.
+| https://www.sixxs.net/tools/grh/ula/ was a site to list ULA 
+| prefixes but it is not open for new listings anymore since the mid
+| of 2017. The authors are not aware of other active Internet sites to
+| list ULA use.
+
+6)
+
+>    Any current and future protocols must rely on secure end-to-end
+>    communications (TLS/DTLS) and identification and authentication via
+> This looks normative. Should it be MUST?
+
+No RFC2119 disclaimer included. No capital MUST/SHOULD/MAY. 
+
+This is an informational document that was put onto ANIMA charter to
+validate the work on draft-ietf-anima-autonomic-control-plane 
+by discussing the stable-connectivity use-case. In the ACP drafts
+there is of course RFC2119 language also for these details.
+ Hope for your review there to catch any missing capitalization.
+
+Hope these answers resolve your comments.
+
+Thanks & Cheers
+    Toerless
+
+On Wed, Jan 10, 2018 at 07:31:41PM -0800, Eric Rescorla wrote:
+> Eric Rescorla has entered the following ballot position for
+> draft-ietf-anima-stable-connectivity-07: No Objection
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-stable-connectivity/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> 
+>  secure ACP was extendable via untrusted routers then it would be a
+>    lot more verify the secure domain assertion.  Therefore the ACP edge
+>    devices are not supposed to redistribute routes from non-ACP routers
+> There's something grammatically wrong here and I can't make sense of this
+> sentence.
+>
+>  secure ACP was extendable via untrusted routers then it would be a
+>    lot more verify the secure domain assertion.  Therefore the ACP edge
+>    devices are not supposed to redistribute routes from non-ACP routers
+> There's something grammatically wrong here and I can't make sense of this
+> sentence.
+> 
+>    TLS/DTLS ([RFC5246])/([RFC6347]) with mutual AN-domain certificate
+>    authentication - and does not incur new key management.
+> This isn't entirely clear to me. What are the identities that these devices are
+> using to talk to each other? Are they always FQDNs?
+> 
+>    into IPv4 support for ACP will have a longer term benefit or enough
+>    critical short-term use-cases.  Support for IPv4-only for ACP is
+>    purely a strategic choice to focus on the known important long term
+> I think this probably should say IPv6 only
+> 
+>    address collision even though there is no central assignment
+>    authority.  This is helped by the expectation, that ACPs are never
+>    expected to connect all together, but only few ACPs may ever need to
+> Nit: no comma between "expectation" and "that"
+> 
+>    ACP packets can be recognized to come from you, you may need to list
+>    your prefixes in multiple of those sites.
+> As I read this, it helps others to list, not yourself, right?
+> 
+>    Any current and future protocols must rely on secure end-to-end
+>    communications (TLS/DTLS) and identification and authentication via
+> This looks normative. Should it be MUST?
+> 
+
+-- 
+---
+tte@cs.fau.de

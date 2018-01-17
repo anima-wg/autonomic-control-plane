@@ -1,0 +1,172 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Alvaro Retana <aretana.ietf@gmail.com>
+Cc: anima-chairs@ietf.org, Sheng Jiang <jiangsheng@huawei.com>,
+	The IESG <iesg@ietf.org>,
+	draft-ietf-anima-stable-connectivity@ietf.org
+Bcc: 
+Subject: Re: Alvaro Retana's Discuss on
+ draft-ietf-anima-stable-connectivity-07: (with DISCUSS)
+Reply-To: 
+In-Reply-To: <CAMMESsxo=UckTY3Dz0_GOrbbBySUAwee1av6ttQ-Vcs7XUoHQw@mail.gmail.com>
+
+Thanks, Alvaro
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+I have modified the verbage in -08 according to your suggestions.
+
+A) GACP
+
+Section 1.3 now introduces the four core design constraints of a
+generic ACP (GACP) (VRF isolation, IPv6 only, NOC connectivity and Group Security)
+which are the basis for the (existing/unchanged) discussion in the document.
+
+The rest of the document has no semantic/content changes just textual
+changes for ACP -> GACP. There are two places where the text still
+refers to ACP specific examples and that is accordingly highlighted. 
+
+B) Normative references
+
+I went through the references and made those normative where i thought
+rfc7322#section-4.8.6 "are essential to ... understanding the content"
+applies. 
+
+This set is of course somewhat subjective. Eg.: there is nothing special
+to know about RFC6434, so its kept informational. On the other hand, if
+you're a poor enterprise requiring to use any of the nasty NAT options
+mentioned, you really want to read up on SIIT (RFC7915), so i made that
+normative. Most customers i talked to did not know ULA (rfc4193), so i made it
+normative. For fairness so then did the same for rfc1918.
+
+
+The diffs regarding your DISCUSS are here (using the github commits
+before/after):
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/d26df831da2953779c3b3ac41ec118cbbe43373e/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/f2d8a85c2cc65ca7f823abac0f57d19c744f9b65/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt
+
+
+I hope this resolves your discuss.
+
+I am answering to the discus/comments raised by others during IESG review separately.
+
+Cheers
+    Toerless
+
+
+On Thu, Jan 11, 2018 at 06:09:22AM -0800, Alvaro Retana wrote:
+> Toerless:
+> 
+> Hi!
+> 
+> Hmmm???. I see your point, but that is not what the document says.  Not only
+> does it specifically point at the ACP anima draft ("ACP as defined in
+> [I-D.ietf-anima-autonomic-control-plane]???), but it is hard to ignore the
+> work done in the WG.
+> 
+> I think that if you clearly explained the characterization of *an autonomic
+> control plane* and mention *the ACP*
+> [I-D.ietf-anima-autonomic-control-plane] as an example of that, then we
+> would be ok.  Please then also call it something else (GACP =
+> Generic/Generalized, or anything else that clearly makes people think
+> you???re not explicitly talking about *the ACP*).
+> 
+> Thanks!
+> 
+> Alvaro.
+> 
+> On January 10, 2018 at 7:29:33 PM, Toerless Eckert (tte@cs.fau.de) wrote:
+> 
+> Thanks, Alvarao
+> 
+> I wuld like to persuade you that ACP is not a normative reference for
+> stable
+> connectivity:
+> 
+> a) Stable connectivity doc does not depend on the
+> details of how the ACP is built. It only assumes the following:
+> 
+> - There is an autonomously build managemenet network (that we call ACP)
+> - The OAM functions of network nodes are able to use this ACP
+> to reach each other.
+> - Some "ACP-edge-devices" can connect NOC equipment into the ACP.
+> - ACP only supports IPv6
+> - The ACP address space is disjoint from the address space of the data
+> plane
+> 
+> I could come up with a lot of ways how to build an ACP that matches these
+> expectations. Heck: Most of the stable connectivity text would equally be
+> valid if you
+> would use an IPv6 only DCN (external physcial manaement network). Aka:
+> this doc is about the value of an ACP for the use-case (inband, autonomic)
+> and the problems of how to deal on NOC equipment with dual connectivity and
+> IPv6 only for that managemeent plane.
+> 
+> b) stable connectivity was specifically targeted in the WG charter as a
+> validation document for ACP. To me this means it is somewhat of a
+> predecessor or
+> use-case to ACP:
+> 
+> "If the WG manages to define an ACP that is built autonomically and that
+> can be characterized by the simple behavior listed in a), then this
+> stable-connectivity document explains that/how it can be leveraged wfor the
+> stable-connectibity use-case".... and therefore justifies the work on ACP
+> for the WG.
+> 
+> Let me know if these argument are appropriate to characterize the ACP
+> draft as an informative reference. Otherwise i will change it to normative.
+> 
+> Of course, i would be happy to improve the text to highlight this
+> relationship
+> better in the text because i also do not think that the intro tries to
+> really explain this well (but i did not want to try write it up before i am
+> clear that it would resolve your discus).
+> 
+> Thanks
+> Toerless
+> 
+> On Thu, Jan 04, 2018 at 09:28:10PM -0800, Alvaro Retana wrote:
+> > Alvaro Retana has entered the following ballot position for
+> > draft-ietf-anima-stable-connectivity-07: Discuss
+> >
+> > When responding, please keep the subject line intact and reply to all
+> > email addresses included in the To and CC lines. (Feel free to cut this
+> > introductory paragraph, however.)
+> >
+> >
+> > Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> > for more information about IESG DISCUSS and COMMENT positions.
+> >
+> >
+> > The document, along with other ballot positions, can be found here:
+> > https://datatracker.ietf.org/doc/draft-ietf-anima-stable-connectivity/
+> >
+> >
+> >
+> > ----------------------------------------------------------------------
+> > DISCUSS:
+> > ----------------------------------------------------------------------
+> >
+> > I like this document, and look forward to it being published. However, it
+> > caught my attention that there are no Normative References.
+> >
+> > It seems clear to me that (at least) an understanding of the ACP is
+> necessary
+> > to properly achieve the objective of the document: "how to integrate OAM
+> > processes with the autonomic control plane (ACP) in Autonomic Networks
+> (AN) in
+> > order to provide stable and secure connectivity for those OAM processes."
+> I
+> > then think that the reference to I-D.ietf-anima-autonomic-control-plane
+> should
+> > be Normative.
+> >
+> >
+> >
+> 
+> -- 
+> ---
+> tte@cs.fau.de
+
+-- 
+---
+tte@cs.fau.de

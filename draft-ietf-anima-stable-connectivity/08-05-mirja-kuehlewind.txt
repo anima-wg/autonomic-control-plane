@@ -1,0 +1,164 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Mirja K?hlewind <ietf@kuehlewind.net>
+Cc: Michael Richardson <mcr+ietf@sandelman.ca>, anima-chairs@ietf.org,
+	anima@ietf.org, The IESG <iesg@ietf.org>,
+	draft-ietf-anima-stable-connectivity@ietf.org,
+	jiangsheng@huawei.com
+Bcc: 
+Subject: Re: [Anima] Mirja K?hlewind's Discuss on
+ draft-ietf-anima-stable-connectivity-07: (with DISCUSS)
+Reply-To: 
+In-Reply-To: <2fec5e70-3677-4380-ae11-0ab499062ea7@kuehlewind.net>
+
+Mirja, Yoshifumi
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+I have reworked the MPTCP text based on your threads feedback with
+the intention to fix errors and have it answer the questions/concerns raised,
+but without otherwise changing the scope of it:
+
+- What are they key features making MPTCP interesting 
+- How could it be used to solve the stable-connectivity issue
+- Disclaimer that THIS REQUIRES ADDITIONAL SPECIFICATION WORK
+  beyond the scope of this document
+- Describe the areas of specification work required
+  - API/policy, control by apps
+  - dealing with dual VRF addresses
+
+Please check diff in this URL (not complete diff of -08, just fix for your discuss/comment):
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/c02252710fbd7aea15aff550fb393eb36584658b/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt
+
+I hope this resolves your DISCUSS/comments. 
+
+Note that the term ACP was changed in the doc to GACP based on resolving Alvaros discus. See:
+
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/08-01-alvaro-retana.txt
+
+Thank you
+    Toerless
+
+On Thu, Jan 11, 2018 at 03:42:53PM +0100, Mirja K?hlewind wrote:
+> Hi Toerless,
+> 
+> the point I'm wondering about is your point (b) below. Yes, you can
+> set the ACP subflow to backup but that would still mean that if the
+> other link fails, it would automatically switch over to the ACP
+> subflow (without exposing this to the upper layer). Is that what you
+> want? Because my understanding was rather that there are cases where
+> you'd probably would like to know over which link the OAM packets
+> where actually sent...?
+> 
+> Mirja
+> 
+> On 08.01.2018 22:06, Toerless Eckert wrote:
+> >Thanks, Mirja
+> >
+> >(a) If the systems socket API does not transparently make TCP sockets
+> >to use MPTCP, then you would want a shim library. According to
+> >draft-hesmans-mptcp-socket, this is be the case on Apple (iOS).
+> >
+> >(b) Making the ACP subflow not carry traffic after establishing the
+> >data plane subflow should easily be possible possible by setting its MP_PRIO
+> >to backup.
+> >
+> >(c) How exactly to specify or implement the desired policy of only
+> >establishing a subflow between the ACP addresses and the data plane addresses
+> >(but not full-mesh) seem to be a subject for further spec work. It could
+> >be defined as a specific in-MPTCP policy, or it could be done via a shim
+> >library (orthogonal to (a)). draft-hesmans-mptcp-socket might be sufficient.
+> >
+> >But in general: i would like for this (informational!) draft to just motivate
+> >the concept and not specify the solution: MPTCP would be a simple way to
+> >make "TCP" applications automatically "upgrade" from ACP to a data-plane path
+> >and switch back when data-plane fails... because MP-TCP can signal the
+> >additional data-plane addresses, establish transparently another subflow and switch
+> >traffic between the subflows - all by using the right shim-library+API or
+> >in-MP-TCP address/subflow policies - and the ability to establish subflows
+> >across two VRFs.
+> >
+> >Cheers
+> >     Toerless
+> >
+> >On Mon, Jan 08, 2018 at 05:18:54PM +0100, Mirja Kuehlewind (IETF) wrote:
+> >>>>>Suggested replacement text last two paragraphs of 2.1.5:
+> >>>A (shim) library for aplications maps TCP connections to MPTCP without the applications having to be aware of it.
+> >>It???s not the (shim) library/policy framework that opens/maps the TCP connection. MPTCP itself opens eventually multiple connections but exposes only one connection to the layer above. That means everything above MPTCP does not have any real control about which data is send over which connection.
+> >>
+> >>A policy shim layer could only implement rules about which new subflows should be established when and what the priority is over which subflow data should be sent but it generally does not control which data is send of which flow. You can???t say I want this data to be sent over subflow one and this data to be sent over sub flow two.
+> >>
+> >>I think what you want is actually a view on the different TCP connections and you try to use MPTCP only for announcing the other IP address but that is not what MPTCP meant to be.
+> >>
+> >>Mirja
+> >>
+> >>
+> >>>Names in DNS use only the ACP IPv6 addresses of network devices. Thererefore, the initial MPTCP subflow will use the ACP. After it is operating, the shim libraries on both ends add their data-plane address (MPTCP ADD_ADDR) and attempt to build a new subflow between those addresses. If that (data plane) subflow is successfully built, the shim libraries could shift all traffic over this subflow which should be forwarded hardware accelerated by the network - and use the ACP subflow across the ACP solely for signaling - beause it is most resilient against failure.
+> >>>
+> >>>This MPTCP approach is only an outline and would need to be fully speficied for interoperable implementations. It may also require extensions to MP-TCP. This mechanism must not be used without providing for encryption of subflows not running across the ACP.
+> >>>
+> >>>>>Brian: ... can not use capital MUST NOT in an information draft (i think)
+> >>>>>
+> >>>Cheers
+> >>>    Toerless
+> >>>
+> >>>On Mon, Jan 08, 2018 at 11:30:30AM +0100, Mirja Kuehlewind (IETF) wrote:
+> >>>>Hi Micheal,
+> >>>>
+> >>>>to clarify one part below:
+> >>>>
+> >>>>>Am 05.01.2018 um 23:30 schrieb Michael Richardson <mcr+ietf@sandelman.ca>:
+> >>>>>
+> >>>>>
+> >>>>>Mirja Kühlewind <ietf@kuehlewind.net> wrote:
+> >>>>>>"DNS naming is set up to provide the ACP IPv6 address of network
+> >>>>>>devices.  Unbeknownst to the application, MPTCP is used.  MPTCP
+> >>>>>>mutually discovers between the NOC and network device the data-plane
+> >>>>>>address and caries all traffic across it when that MPTCP subflow
+> >>>>>>across the data-plane can be built."
+> >>>>>Section 2.1.5 is discussion, it discusses ways in which the
+> >>>>>anticipated low performance (compared to what the box might do with its
+> >>>>>hardware accelerated forwarding).
+> >>>>>
+> >>>>>If we have an application that needs the bandwidth of the native hardware,
+> >>>>>the connection can be initated over the ACP (that's what would be in DNS).
+> >>>>>One presumes that an MPTCP layer could then enumerate the available IPs at
+> >>>>>each end and then start off additional flows on the other destinations.
+> >>>>MPTCP adda an additional TCP flow but for the application that still looks like one flow. As I said I???m not sure if that is what you want.
+> >>>>
+> >>>>Mirja
+> >>>>
+> >>>>
+> >>>>>The application would have to include application security, since it would
+> >>>>>not be protected by the ACP.
+> >>>>>
+> >>>>>Perhaps MPTCP doesn't work this way.
+> >>>>>
+> >>>>>>However, I'm actually uncertain how this is supposed to work and what
+> >>>>>>"Unbeknownst to the application" should mean. If another address should be
+> >>>>>>signaled to the other host, this needs to be indicated by the application or at
+> >>>>>>least some kind of policy framework above MPTCP. Also MPTCP will by default use
+> >>>>>>both paths simultaneously while still looking like one connection to the
+> >>>>>>application, meaning the application has no control which path is used for
+> >>>>>>which traffic. I guess you can open a second subflow and then configure the
+> >>>>>>first subflow as backup path but I'm not sure if that's what you want (given
+> >>>>>>the application/policy framework will still not know which path is used)..?
+> >>>>>>Please provide more information about what the expected usage scenario is here.
+> >>>>>
+> >>>>>--
+> >>>>>Michael Richardson <mcr+IETF@sandelman.ca>, Sandelman Software Works
+> >>>>>-= IPv6 IoT consulting =-
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>_______________________________________________
+> >>>>Anima mailing list
+> >>>>Anima@ietf.org
+> >>>>https://www.ietf.org/mailman/listinfo/anima
+> >>>-- 
+> >>>---
+> >>>tte@cs.fau.de
+
+-- 
+---
+tte@cs.fau.de

@@ -1,0 +1,103 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Carlos Martinez <carlosm3011@gmail.com>
+Cc: ops-dir@ietf.org, ietf@ietf.org, anima@ietf.org,
+	draft-ietf-anima-stable-connectivity.all@ietf.org
+Bcc: 
+Subject: Re: Opsdir last call review of
+ draft-ietf-anima-stable-connectivity-07
+Reply-To: 
+In-Reply-To: <151561686872.26690.9031629570082529218@ietfa.amsl.com>
+
+Carlos,
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+Inline
+
+On Wed, Jan 10, 2018 at 12:41:08PM -0800, Carlos Martinez wrote:
+> Reviewer: Carlos Martinez
+> Review result: Ready
+> 
+> Reviewer: Carlos Martinez
+> Review Result: Ready
+> 
+> I have reviewed this document as part of the Operational directorate's
+> ongoing effort to review all IETF documents being processed by the IESG.  These
+> comments were written with the intent of improving the operational aspects of
+> the IETF drafts. Comments that are not addressed in last call may be included
+> in AD reviews during the IESG review.  Document editors and WG chairs should
+> treat these comments  just like any other last call comments.
+> 
+> I found this document well-written, informative and easy to read. I believe it
+> to be READY for publication as an informational document.
+> 
+> >From an editorial pov tt does have numerous typos and sometimes uses colloquial
+> language which IMO would be best if changed into more formal prose. Other
+> reviewers have already pointed this out as well.
+
+I have done a more thorough spell check against -08 (converted to word
+to leverage MS words spell checking *sigh*). I also received
+a couple of explicit fixes from other reviewers that was included.
+
+I am not aware of specific colloquialisms in the text (standard disclaimer
+about english as a second language), but: i am happy to learn & improve
+my english, and the experience with the RFC editor fixing up lazy language
+was really excellent (just had another RFC published). So unless there
+are more specific suggestions for textual changes, i will simply wait
+until RFC editor takes over and ask him/her to beat us authors over
+the head / help formalize colloquialisms. 
+
+> >From a technical point of view, the only aspect that I feel could be worth
+> reconsidering is whether considering very complex use cases involving
+> IPv4-to-IPv6 conversions really makes sense. Such complexity could very well
+> offset the advantages obtained from applying the ACP to the particular problem
+> of network management. Again, this is not an "issue" in the document since it's
+> more related to my opinion on the matter.
+
+Stable-connectivity was put onto the ANIMA charter to discuss one core
+use-case for the ACP and thereby justify work on the ACP - and help refine
+details of the ACP (draft ietf-anima-autonomic-control-plane).
+
+In the process of progressing both documents, i ended
+up moving a lot of the details about how to do the things we want to
+see happen from the informational stable-connectivity draft into the
+normative ACP draft because that made the work more useful because it
+created normative language (see evolution of ACP draft from ca. -08 to -13,
+especially section 8.1). 
+
+In the end, stable-connectivity can appear to be left looking a bit
+like a https://en.wikipedia.org/wiki/Bad_bank - all the difficult bits not
+fit to standardize: transition work like NAT to overcome lack of IPv6 or
+cool future stuff like MPTCP. Great but more work needed to standardize.
+
+But:
+
+I have repeatedly defended during working group last call the sections
+about options of IPv4-IPv6 transition because i explicitly dealt 
+with customers who had no other choice to get started and actually had me
+document similar level of details - if you look at
+IPv6 gap analyses, you should notice that networking equipment is a lot
+further ahead than the randomn NOC solution/applications.
+
+So, yes, i do agree that there is a risk to shy off possible adopters with
+these details, but i hope its actually more helpful than scary: Depending
+on familiarity with NAT, readers hopefully either decide to configure
+their NAT if necessary or speed up their plans to get IPv6 also into their
+NOC to be able to use an ACP. And not documenting this in detail is
+like a bad sales pitch - "oh, sure, this will work fine... go figure  out
+yourself the details".
+
+Sorry for the rant ;-)
+
+> My thanks go to the authors for a very informative and nice to read document.
+> 
+> /Carlos
+
+Thank you for the review and insightful comment!
+
+Cheers
+    Toerless
+
+-- 
+---
+tte@cs.fau.de

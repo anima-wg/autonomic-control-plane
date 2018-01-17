@@ -1,0 +1,95 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Yoshifumi Nishida <nishida@sfc.wide.ad.jp>
+Cc: dreft-ietf-anima-stable-connectivity@ietf.org, tsv-art@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: [Anima] TSV-ART telechat review of draft-ietf-anima-stable-connectivity
+Reply-To: 
+In-Reply-To: <CAO249ycJSfNrAg1QwajptZhxru2-g7ToQNXFq6er6ucehqXBXw@mail.gmail.com>
+
+Mirja, Yoshifumi
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+I have reworked the MPTCP text based on your threads feedback with
+the intention to fix errors and have it answer the questions/concerns raised,
+but without otherwise changing the scope of it:
+
+- What are they key features making MPTCP interesting
+- How could it be used to solve the stable-connectivity issue
+- Disclaimer that THIS REQUIRES ADDITIONAL SPECIFICATION WORK
+  beyond the scope of this document
+- Describe the areas of specification work required
+  - API/policy, control by apps
+  - dealing with dual VRF addresses
+
+Please check diff in this URL (not complete diff of -08, just fix for your discuss/comment):
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/c02252710fbd7aea15aff550fb393eb36584658b/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt
+
+I hope this resolves your DISCUSS/comments.
+
+Note that the term ACP was changed in the doc to GACP based on resolving Alvaros discus. See:
+
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-stable-connectivity/08-01-alvaro-retana.txt
+
+Thank you
+    Toerless
+
+On Tue, Jan 09, 2018 at 05:37:16PM -0800, Yoshifumi Nishida wrote:
+> I've reviewed this document as part of TSV-ART's ongoing effort to review
+> key IETF documents. These comments were written primarily for the transport
+> area directors, but are copied to the document's authors for their
+> information and to allow them to address any issues raised.When done at the
+> time of IETF Last Call, the authors should consider this review together
+> with any other last-call comments they receive. Please always CC tsv-art
+> @ietf.org if you reply to or forward this review.
+> 
+> Summary: This document is almost ready for publication, but several points
+> need to be clarified or updated.
+> 
+> 1: In Section 2.1.5
+> "
+>   MPTCP (Multipath TCP -see [RFC6824]) is a very attractive candidate
+>   to automate the use of both data-plane and ACP and minimize or fully
+>   avoid the need for the above mentioned logical names to pre-set the
+>   desired connectivity (data-plane-only, ACP only, both).  For example,
+>   a set-up for non MPTCP aware applications would be as follows:
+> 
+>   DNS naming is set up to provide the ACP IPv6 address of network
+>   devices.  Unbeknownst to the application, MPTCP is used.  MPTCP
+>   mutually discovers between the NOC and network device the data-plane
+>   address and caries all traffic across it when that MPTCP subflow
+>   across the data-plane can be built.
+> "
+> 
+> It's not very clear to me how to archive this feature.
+> I think more explanation will be required.
+> As MPTCP resides in transport layer, I think it will be very tricky to know
+> which endpoint is used for ACP or for data-plane. Also, although MPTCP
+> can transmit application data to multiple destinations, it cannot
+> identify which part of data is for ACP or for data-plane as it doesn't
+> parse app data.
+> 
+> 2: in Section 2.1.8
+> 
+> "
+>   Leverage and as necessary enhance MPTCP with automatic dual-
+>   connectivity: If an MPTCP unaware application is using ACP
+>   connectivity, the policies used should add subflow(s) via the
+>   data-plane and prefer them.
+> "
+> 
+> I think functions like controlling policies should be designed outside of
+> MPTCP such as middleware
+> between applications and transport layer, but the text is unclear about how
+> to enhance MPTCP.
+> 
+> Thanks,
+> --
+> Yoshi
+
+> _______________________________________________
+> Anima mailing list
+> Anima@ietf.org
+> https://www.ietf.org/mailman/listinfo/anima

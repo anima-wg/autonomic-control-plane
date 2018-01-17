@@ -1,0 +1,80 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Suresh Krishnan <suresh@kaloom.com>
+Cc: The IESG <iesg@ietf.org>, draft-ietf-anima-stable-connectivity@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Suresh Krishnan's No Objection on
+ draft-ietf-anima-stable-connectivity-07: (with COMMENT)
+Reply-To: 
+In-Reply-To: <151564081176.8304.13253757891345258555.idtracker@ietfa.amsl.com>
+
+Tahnk you, Suresh
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+
+The paragraph in question was changed as follows for -08:
+
+| One architectural expectation for the GACP as described in
+| <xref target="GACP"/> is that all devices that want to use the
+| GACP do support IPv6. Including NMS hosts Note that this expectation
+| does not imply any requirements against the data-plane, especially no
+| need to support IPv6 in it. The data-plane could be IPv4 only, IPv6 only,
+| dual stack or it may not need to have any IP host stack on the network
+| devices.
+
+I hope this resolves your comment.
+
+Cheers
+    Toerless
+
+P.S.: 
+
+Note that in response to Alvaros DISCUSS, the document now uses the term "GACP"
+(generalized ACP) and defines in <xref target="GACP"/> the architectural
+expectations (constraints) for GACPs. The reason for this was to make it clear
+that this document is not specifically discussing only the ACP as it finally will
+come out of the ANIMA WG (hopefully ;-) but any type of solution that is 
+an automatically built, isolated, secured (VRF) for inband management network
+with IPv6 only - connecting to NOC/NMS.
+
+[ The reason why i think this will help the document is that it a lot more
+  clearly distinguishes between the principles under which the stable-connectivity
+  document applies and the details in the ACP spec. And it may be useful also when
+  variations of the ACP may get defined - this stable connectivity is then still
+  applicable. ]
+
+
+On Wed, Jan 10, 2018 at 07:20:11PM -0800, Suresh Krishnan wrote:
+> Suresh Krishnan has entered the following ballot position for
+> draft-ietf-anima-stable-connectivity-07: No Objection
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-stable-connectivity/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> * The first paragraph of Section 2.1.4. is extremely difficult to read and the
+> sentences seem incomplete/malformed. Please consider rewording
+> 
+> "  ACP does not support IPv4: Single stack IPv6 management of the
+>    network via ACP and (as needed) data plane.  Independent of whether
+>    the data plane is dual-stack, has IPv4 as a service or is single
+>    stack IPv6.  Dual plane management, IPv6 for ACP, IPv4 for the data
+>    plane is likewise an architecturally simple option."
+> 
+

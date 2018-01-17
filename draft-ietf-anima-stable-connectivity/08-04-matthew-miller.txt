@@ -1,0 +1,154 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Alissa Cooper <alissa@cooperw.in>
+Cc: Matthew Miller <linuxwolf+ietf@outer-planes.net>,
+	gen-art <gen-art@ietf.org>, anima@ietf.org,
+	draft-ietf-anima-stable-connectivity.all@ietf.org
+Bcc: 
+Subject: Re: [Gen-art] Genart last call review of draft-ietf-anima-stable-connectivity-07
+Reply-To: 
+In-Reply-To: <2AAF0CB9-E081-40EB-ACC5-C752708BFCD1@cooperw.in>
+
+Thanks a lot Matthew, Alissa
+
+I just posted -08: https://tools.ietf.org/id/draft-ietf-anima-stable-connectivity-08.txt
+
+All nits fixed. Diff here:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9bff109281e8b3c22522c3144cbf0f13e5000498/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/14d5f9b66b8318bc160cee74ad152c0b926b4042/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt
+
+>  """
+>  If the secure ACP was extendable via untrusted routers then it would
+>  be a lot more verify the secure domain assertion.
+>  """
+
+Was fixed to "...more difficult to verify..." via earlier fix for another reviewer,
+so it does not show up in diff above.
+
+> > * In Section 2.2. "Stable Connectivity for Distributed Network/OAM",
+> >  second paragraph; the word "applicable" should be "applied" in the
+> >  fragment "... how ell it applicable to a ...".
+
+Actually fixed to "how well it _is_ applicable"
+
+Hope this resolves your concerns.
+
+Cheers
+    Toerless
+
+
+On Thu, Jan 11, 2018 at 09:36:32AM -0500, Alissa Cooper wrote:
+> Matt, thanks for your review. I have entered a No Objection ballot and asked for your nits to be addressed.
+> 
+> Alissa
+> 
+> > On Nov 26, 2017, at 3:48 PM, Matthew Miller <linuxwolf+ietf@outer-planes.net> wrote:
+> > 
+> > Reviewer: Matthew Miller
+> > Review result: Ready with Nits
+> > 
+> > I am the assigned Gen-ART reviewer for this draft. The General Area
+> > Review Team (Gen-ART) reviews all IETF documents being processed
+> > by the IESG for the IETF Chair.  Please treat these comments just
+> > like any other last call comments.
+> > 
+> > For more information, please see the FAQ at
+> > 
+> > <https://trac.ietf.org/trac/gen/wiki/GenArtfaq>.
+> > 
+> > Document: draft-ietf-anima-stable-connectivity-07
+> > Reviewer: Matthew A. Miller
+> > Review Date: 2017-11-26
+> > IETF LC End Date: 2017-11-26
+> > IESG Telechat date: N/A
+> > 
+> > Summary:
+> > 
+> > This document is ready to be published as informational, but there are
+> > a number of nits that ought be addressed before final publication.
+> > 
+> > Overall, the document is 
+> > 
+> > Major issues:  NONE
+> > 
+> > Minor issues:  NONE
+> > 
+> > Nits/editorial comments:
+> > 
+> > * Throughout, there is a mix of the term "data plane" and "data-plane".
+> >  One form should be chosen and the rest corrected to match.
+> >
+> > * In Section 1.2. "Data Communications Networks (DCNs)", first
+> >  paragraph; "'th" should be "'s" (or just "s"): "In the late
+> >  1990'th and ..." should be "In the late 1990s and ...".
+> > 
+> > * In Section 1.2. "Data Communications Networks (DCNs)", first
+> >  paragraph; the word "where" should be "were" in the fragment
+> >  "These where (and still are) ...".
+> > 
+> > * In Section 1.2. "Data Communications Networks (DCNs)", first
+> >  paragraph; there is a missing "a" between "are" and "separate" in
+> >  the fragment "they are separate network entirely".
+> > 
+> > * In Section 2.1.1. "Simple Connectivity for Non-ACP capable NMS
+> >  Hosts", first paragraph; there is a mismatch in plurality in the
+> >  third sentence; instead of:
+> > 
+> >  """
+> >  They acts as the default router to those NMS hosts and provide them
+> >  with IPv6 connectivity into the ACP.
+> >  """
+> > 
+> >  it should be:
+> > 
+> >  """
+> >  They act as the default routers to those NMS hosts and provide them
+> >  with IPv6 connectivity into the ACP.
+> >  """
+> > 
+> > * In Section 2.1.3. "Simultaneous ACP and Data Plane Connectivity",
+> >  last paragraph; the following sentence seems to be missing a word
+> >  or two:
+> > 
+> >  """
+> >  If the secure ACP was extendable via untrusted routers then it would
+> >  be a lot more verify the secure domain assertion.
+> >  """
+> > 
+> > * In Section 2.1.4. "IPv4-only NMS Hosts", second paragraph after the
+> >  ordered list; the word "thought" should be "through" in the fragment
+> >  "... be reachable thought the IPv6/IPv4 ...".
+> > 
+> > * In Section 2.1.5. "Path Selection Policies", fourth paragraph from
+> >  the section's end; there is an extra "of" between "shaping" and "at":
+> > 
+> >  """
+> >  Traffic policing and/or shaping of at the ACP edge in the NOC can be
+> >  used to throttle applications such as software download into the ACP.
+> >  """
+> > 
+> > * In Section 2.2. "Stable Connectivity for Distributed Network/OAM",
+> >  second paragraph; there is a missing "to" between "start" and
+> >  "provide" in the fragment "... tried to start provide common ...".
+> > 
+> > * In Section 2.2. "Stable Connectivity for Distributed Network/OAM",
+> >  second paragraph; the word "applicable" should be "applied" in the
+> >  fragment "... how ell it applicable to a ...".
+> > 
+> > * In Section 3.1. "No IPv4 for ACP", third paragraph; the word "as"
+> >  should be "to" in the fragment "... from a native transport as just
+> >  a service on the edge."
+> > 
+> > * In Section 3.1. "No IPv4 for ACP", last paragraph; the word "type"
+> >  should be "types" in the fragment "In other type of networks as
+> >  well, ...".
+> > 
+> > * In Section 3.1. "No IPv4 for ACP", last paragraph; the word "support"
+> >  should be "supported" in the fragment "... family will be support so
+> >  all use...".
+> > 
+> > 
+> > _______________________________________________
+> > Gen-art mailing list
+> > Gen-art@ietf.org
+> > https://www.ietf.org/mailman/listinfo/gen-art
+
