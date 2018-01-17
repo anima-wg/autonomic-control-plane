@@ -56,7 +56,7 @@ This connectivity is not subject to aforementioned circular dependencies. </t>
 
 <middle>
   <section anchor="intro" title="Introduction">
-    <section anchor="connectivity" title="Self dependent OAM Connectivity">
+    <section anchor="connectivity" title="Self-dependent OAM Connectivity">
 
 <t> OAM (Operations, Administration and Maintenance - as per BCP161, <xref target="RFC6291"/>) for data networks is often
 subject to the problem of circular dependencies when relying on the connectivity service provided by
@@ -80,7 +80,7 @@ lead to removal of connectivity to remote devices. This includes especially chan
  provisioning of routing, forwarding, security and addressing policies in the network that often
 occur through mergers and acquisitions, the introduction of IPv6 or other mayor re-hauls
 in the infrastructure design. Examples include change of an IGP or areas, PA (Provider
-Aggregatabe) to PI (Provider Independent) addressing, or systematic topology changes (such as L2
+Aggregatable) to PI (Provider Independent) addressing, or systematic topology changes (such as L2
 to L3 changes).</t>
 
 <t>All these circular dependencies make OAM complex and potentially fragile. When
@@ -124,7 +124,7 @@ incrementally - short and long term.</t>
 <xref target="I-D.ietf-anima-autonomic-control-plane"/> ) calls this inband management plane
 the "Autonomic Control Plane" (ACP).  The discussions in this document are not depending
 on the specification of that ACP, but only on a set of high level constraints decided early
-on in the work for the the ACP. Unless being specific about details of the ACP, this document 
+on in the work for the ACP. Unless being specific about details of the ACP, this document 
 uses the term "Generalized ACP" (GACP) and is applicable to any designs that meet those high
  level constraints.  For example - but not limited to - variations of the ACP protocol choices.</t>
 
@@ -209,7 +209,7 @@ IPv6 connectivity into the GACP. NMS hosts with this setup need to support IPv6 
 
 <t>Note that even though the GACP only uses IPv6, it can of course support OAM for any
 type of network deployment as long as the network devices support the GACP: The data-plane
-can be IPv4 only, dual-stack or IPv6 only. It is always spearate from the GACP, therefore
+can be IPv4 only, dual-stack or IPv6 only. It is always separate from the GACP, therefore
 there is no dependency between the GACP and the IP version(s) used in the data-plane.</t>
 
 <t>This setup is sufficient for troubleshooting such as SSH into network
@@ -225,7 +225,7 @@ a NOC often relies on to recognize where devices are on the network, it is likel
 highly desirable to set up DNS (Domain Name System - see <xref target="RFC1034" />)
 so that the GACP IPv6 addresses of autonomic devices are known via domain names that
 include the desired structure. For example, if DNS in the network was set up with names
-for network devices as devicename.noc.example.com, and the well known structure of the
+for network devices as devicename.noc.example.com, and the well-known structure of the
 data-plane IPv4 addresses space was used by operators to infer the region where a device
 is located in, then the GACP address of that device could be set up as
 devicename_&lt;region>.acp.noc.example.com, and devicename.acp.noc.example.com could be a
@@ -273,7 +273,7 @@ See <xref target="encryption" /> for candidate solutions.</t>
 
 <t>These four problems can be tackled independently of each other by solution
 improvements. Combining some of these solutions improvements together can lead
-towards a candiate long term solution.</t> 
+towards a candidate long term solution.</t> 
 
       <!-- limitations -->
       </section>
@@ -290,7 +290,7 @@ existing IPv4 default router setup unchanged.</t>
 
 <t>If the data-plane of the network is also supporting IPv6, then the most compatible
 setup for NOC devices is to have two IPv6 interfaces. One virtual ((e.g. via <xref target="IEEE802.1Q">IEEE 802.1Q</xref>)  or physical interface connecting to a data-plane subnet, and another into an GACP connect subnet. See section 8.1 of <xref target="I-D.ietf-anima-autonomic-control-plane"/> for more details.
-That document also specifies how the NOC devices can receive autoconfigured addressing
+That document also specifies how the NOC devices can receive auto configured addressing
 and routes towards the ACP connect subnet if it supports <xref target="RFC6724"/> and
 <xref target="RFC4191"/>.</t>
 
@@ -298,7 +298,7 @@ and routes towards the ACP connect subnet if it supports <xref target="RFC6724"/
 complexity. In that case the GACP edge device needs to provide support for 
 a "Combined ACP and data-plane interface" as also described in section 8.1 
 of <xref target="I-D.ietf-anima-autonomic-control-plane"/>. This setup may not work
-with autoconfiguration and all NOC host network stacks due to limitations in
+with auto configuration and all NOC host network stacks due to limitations in
 those network stacks. They need to be able to perform RFC6724 source address selection
 rule 5.5 including caching of next-hop information.</t>
 
@@ -307,7 +307,7 @@ to connect a non-GACP router to a GACP connect interface. The reason is that the
 GACP is a secured network domain and all NOC devices connecting via GACP
 connect interfaces are also part of that secure domain - the main difference is
 that the physical link between the GACP edge device and the NOC devices is
-not authenticated/encrypted and therefore needs to be physically secured.
+not authenticated/encrypted and therefore, needs to be physically secured.
 If the secure GACP was extendable via untrusted routers then it would be a
 lot more difficult to verify the secure domain assertion. Therefore the GACP edge devices
 are not supposed to redistribute routes from non-GACP routers into the GACP.</t>
@@ -344,7 +344,7 @@ here because it is a short term deployment challenge specific to the operations 
 <t>To connect IPv4 only management plane devices/applications with a GACP, some
 form of IP/ICMP translation of packets IPv4&lt;->IPv6 is necessary. The basic mechanisms
 for this are defined in SIIT (<xref target="RFC7915"/>). There are multiple solutions using
-this mechanisms. To understand the possible solutions, we consider the requirements:</t>
+this mechanism. To understand the possible solutions, we consider the requirements:</t>
 
 <t><list style="numbers">
 <t>NMS hosts need to be able to initiate connections to any GACP device for management
@@ -383,7 +383,7 @@ IPv4 address space without too much waste.</t>
 because it allows configured IPv4 &lt;-> IPv6 prefix mapping. Assume the GACP uses
 the ACP "Zone Addressing" Sub-Scheme and there are 3 registrars. In the Zone Addressing
 Sub-Scheme, there is for each registrar a constant /112 prefix for which in RFC7757
-an EAM (Explicit Address Mapping) into a /16 (eg: RFC1918) prefix into IPv4 can
+an EAM (Explicit Address Mapping) into a /16 (e.g.: RFC1918) prefix into IPv4 can
 be configured. Within the registrars /112 prefix, Device-Numbers for devices are
 sequentially assigned: with V-bit effectively two numbers are assigned per GACP device.
 This also means that if IPv4 address space is even more constrained, and it is
@@ -403,9 +403,9 @@ an address prefix assigned to a GACP connect interface.</t>
 <t>A full specification of a solution to perform SIIT in conjunction with GACP
 connect following the considerations below is outside the scope of this document.</t>
 
-<t>To be in compliance with security expectations, SIIT has to to happen on
+<t>To be in compliance with security expectations, SIIT has to happen on
 the GACP edge device itself so that GACP security considerations can be taken into account. 
-Eg: that IPv4 only NMS hosts can be dealt with exactly like IPv6 hosts connected to a
+E.g.: that IPv4 only NMS hosts can be dealt with exactly like IPv6 hosts connected to a
 GACP connect interface.</t>
 
 <t>Note that prior solutions such as NAT64 (<xref target="RFC6146"/>) may
@@ -521,7 +521,7 @@ needs to be able to access multiple VRFs and know which local address is existin
 VRF.  There also needs to be a logic
 to determine which peer address is expected to be reachable via which local VRF/address.
 Because the GACP is an isolated network, data-plane addresses are not reachable
-via the GACP therefore devices can determine if a peer adddress is a data-plane
+via the GACP therefore devices can determine if a peer address is a data-plane
 address.</t>
 
       <!-- selection-policies -->
@@ -694,10 +694,10 @@ injected into the isolated GACP environment.</t>
 <t>The random nature of a ULA prefix provides strong protection
 against address collision even though there is no central assignment authority. This is helped
 by the expectation that GACPs are never expected to connect all together, but
-only few GACPs may ever need to connect together, e.g. when mergers and aquisitions
+only few GACPs may ever need to connect together, e.g. when mergers and acquisitions
 occur.</t>
 
-<t>Note that the GACP contraints demands that only packets from connected subnet prefixes
+<t>Note that the GACP constraints demands that only packets from connected subnet prefixes
 are permitted from GACP connect interfaces, limiting the scope of non-cryptographically
 secured transport to a subnet within a NOC that instead has to rely on physical security
 (only connect trusted NOC devices to it). </t>
@@ -721,7 +721,7 @@ need to rely on voluntary lists (and in prior paragraph) to make the use of
 an ULA prefix globally known.</t>
 
 <t>Nevertheless, some legacy OAM applications running across the GACP may rely
-on reverse DNS lookup for authentication of requests (eg: TFTP for download
+on reverse DNS lookup for authentication of requests (e.g.: TFTP for download
 of network firmware/config/software). 
 Operators may therefore need to use a private DNS setup for the GACP ULA
 addresses. This is the same setup that would be necessary for using
@@ -767,6 +767,8 @@ but not network wide across the enterprise.</t>
   <t>
     <list>
       <t>08: IESG review fixes.<list style="symbols">
+         <t>Spell check.</t>
+         <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/01908364cfc7259009603bf2b261354b0cc26913/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Eric Rescorla (comments):Typos, listing ULA on internet benefits. Other comments from Eric where addressed via commits for other reviewers already.</t>
          <t>https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/c02252710fbd7aea15aff550fb393eb36584658b/draft-ietf-anima-stable-connectivity/draft-ietf-anima-stable-connectivity-08.txt</t>
          <t>Mirja Kuehlewind (discuss) / Yoshifumi Nishida: Fixed and Rewrote MPTCP text to be more explanatory, answering questions raised in disucss.</t>
