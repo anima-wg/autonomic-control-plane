@@ -81,9 +81,9 @@
 
 <t>The following sections are non-normative: <xref target="benefit"/> reviews benefits of the ACP (after all the details have been defined), <xref target="further"/> provides additional explanations and describes additional details or future work possibilities that where considered not to be appropriate for standardization in this document but nevertheless assumed to be helpful for candidate adopters of the ACP.</t>
 
-<t>The ACP provides secure IPv6 connectivity, therefore it can not only be used as the secure connectivity for self-management as required for the ACP in <xref target="RFC7575"/>), but it can also be used as the secure connectivity for traditional (centralized) management. The ACP can be implemented and operated without any other components of autonomic networks (except for the GRASP protocol which it leverages).</t>
+<t>The ACP provides secure IPv6 connectivity, therefore it can not only be used as the secure connectivity for self-management as required for the ACP in <xref target="RFC7575"/>, but it can also be used as the secure connectivity for traditional (centralized) management. The ACP can be implemented and operated without any other components of autonomic networks, except for the GRASP protocol which it leverages.</t>
 
-<t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> describes how the ACP alone can be used to provide secure and stable connectivity for autonomic and non-autonomic OAM applications ("Operations Administration and Management"). That document also explains on how existing management solutions can leverage the ACP in parallel with traditional management models, when to use the ACP and, how to integrate IPv4 based management.</t>
+<t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> describes how the ACP alone can be used to provide secure and stable connectivity for autonomic and non-autonomic OAM applications ("Operations Administration and Management"). That document also explains on how existing management solutions can leverage the ACP in parallel with traditional management models, when to use the ACP and, how to integrate IPv4 based management.</t>
 
 <t>Combining ACP with BRSKI ("Bootstrapping Remote Secure Key Infrastructures", see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>) results in the "Autonomic Network Infrastructure" as defined in <xref target="I-D.ietf-anima-reference-model"/>. which provides autonomic connectivity (from ACP) with full secure zero touch bootstrap (from BRSKI).  The ANI itself does not constitute an Autonomic Network, but it enables building more or less autonomic networks on top of it - using either centralized, SDN ("Software Defined Networking", see <xref target="RFC7426"/>) style automation or distributed automation via ASA ("Autonomic Service Agents") / "Autonomic Functions" - or a mixture of both.  See <xref target="I-D.ietf-anima-reference-model"/> for more information.</t>
 
@@ -256,7 +256,7 @@ key words.
                                         <t>For control plane protocols, the ACP allows their operation even when the data-plane is temporarily faulty, or during transitional events, such as routing changes, which may affect the control plane at least temporarily.  This is specifically important for autonomic service agents, which could affect data-plane connectivity.</t>
                                 </list>
                                 </t>
-                                <t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains the use cases for the ACP in significantly more detail and explains how the ACP can be used in practical network operations.</t>
+                                <t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains the use cases for the ACP in significantly more detail and explains how the ACP can be used in practical network operations.</t>
                         </section>
                         <!-- reachability -->
                 </section>
@@ -1354,14 +1354,13 @@ will be distributed with the flooded objective.  An example of the message is in
         address of IPv6 link-local multicast RPL messages - and therefore
         forego the need to send Neighbor Solicitation messages.</t>
        
-        <t>ACP nodes MUST NOT derive their ACP virtual interface IPv6 link local
-        address from their IPv6 link-local address used on the underlying interface
-        (e.g.: the address that is used as the encapsulation address in the ACP secure 
-        channel protocols defined in this document).  This ensures that
-        the ACP virtual interface operations will not depend on the specifics
-        of the encapsulation used by the ACP secure channel and that attacks against
-        SLAAC on the physical interface will not introduce new attack vectors
-        against the operations of the ACP virtual interface.</t>
+        <t>The ACP virtual interface IPv6 link local address can be derived from
+        any appropriate local mechanism such as node local EUI-48 or EUI-64 
+        ("EUI" stands for "Extended Unique Identifier").
+        It MUST NOT depend on something that is attackable from the data-plane such
+        as the IPv6 link-local address of the underlying phycsial interface, which
+        can be attacked by SLAAC, or parameters of the secure channel encapsulation header
+        that may not be protected by the secure channel mechanism.</t>
 
         <t>The link-layer address of an ACP virtual interface is the
         address used for the underlying interface across which the secure
@@ -1589,7 +1588,7 @@ with STP changes.</t>
 
                                 <t>ACP connect has security consequences: All systems and processes connected via ACP connect have access to all ACP nodes on the entire ACP, without further authentication.  Thus, the ACP connect interface and (NOC) systems connected to it must be physically controlled/secured.  For this reason the mechanisms described here do explicitly not include options to allow for a non-ACP router to be connected across an ACP connect interface and addresses behind such a router routed inside the ACP.</t>
 
-<t>An ACP connect interface provides exclusively access to only the ACP.  This is likely insufficient for many NMS hosts.  Instead, they would require a second "data-plane" interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or for direct access to the data-plane.  The document <xref target="I-D.ietf-anima-stable-connectivity">"Autonomic Network Stable Connectivity"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment.</t>
+<t>An ACP connect interface provides exclusively access to only the ACP.  This is likely insufficient for many NMS hosts.  Instead, they would require a second "data-plane" interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or for direct access to the data-plane.  The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment.</t>
 
                                 <t>The ACP connect interface must be (auto-)configured with an IPv6 address prefix.  Is prefix SHOULD be covered by one of the (ULA) prefix(es) used in the ACP.  If using non-autonomic configuration, it SHOULD use the ACP Manual Addressing Sub-Scheme (<xref target="manual-scheme"/>).  It SHOULD NOT use a prefix that is also routed outside the ACP so that the addresses clearly indicate whether it is used inside the ACP or not.</t>
 
@@ -1720,8 +1719,8 @@ are also assumed to belong to the ACP address space.</t>
         <section anchor="conf-remote" title="Configured Remote ACP neighbor">
 
     <t>On the ACP node, remote ACP neighbors are configured explicitly. 
-    The parameters of such a "connection" are described in the following ABNF
-    model.  Future work could transform this into a YANG (<xref target="RFC7950"/>) data model.</t>
+    The parameters of such a "connection" are described in the following ABNF.
+    Future work could transform this into a YANG (<xref target="RFC7950"/>) data model.</t>
 
 <figure>
  <artwork><![CDATA[
@@ -1736,7 +1735,7 @@ are also assumed to belong to the ACP address space.</t>
 </figure>
 
 <t>Explicit configuration of a remote-peer according to this
-model provides all the information to build a secure channel without requiring a tunnel
+ABNF provides all the information to build a secure channel without requiring a tunnel
 to that peer and running DULL GRASP inside of it.</t>
 
 <t>The configuration includes the parameters otherwise signaled
@@ -2941,6 +2940,7 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       <t>6.7.2 Made it clearer that constrained devices MUST support dTLS if they can not support IPsec.</t>
       <t>6.8.2.1 clarified first paragraph (TCP restransmissions lightweight).</t>
       <t>6.11.1 fixed up RPL profile text - to remove "VRF". Text was also buggy. mentioned control plane, but its a forwarding/silicon issue to have these header.</t>
+      <t>6.12.5 Clarified how link-local ACP channel address can be derived, and how not.</t>
       <t>8.2.1 Fixed up text to distinguish between configuration and model describing parameters of the configuration (spec only provides parameter model).</t>
       <t>Various Nits.</t>
       </section>

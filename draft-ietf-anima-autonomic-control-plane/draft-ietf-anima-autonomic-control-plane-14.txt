@@ -76,35 +76,35 @@ Table of Contents
      3.3.  Data-Plane Independent Permanent Reachability . . . . . .  11
    4.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .  12
    5.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
-   6.  Self-Creation of an Autonomic Control Plane (ACP) (Normative)  14
+   6.  Self-Creation of an Autonomic Control Plane (ACP) (Normative)  15
      6.1.  ACP Domain, Certificate and Network . . . . . . . . . . .  15
        6.1.1.  Certificate Domain Information Field  . . . . . . . .  16
-       6.1.2.  ACP domain membership check . . . . . . . . . . . . .  18
+       6.1.2.  ACP domain membership check . . . . . . . . . . . . .  19
        6.1.3.  Certificate Maintenance . . . . . . . . . . . . . . .  19
      6.2.  ACP Adjacency Table . . . . . . . . . . . . . . . . . . .  21
-     6.3.  Neighbor Discovery with DULL GRASP  . . . . . . . . . . .  21
-     6.4.  Candidate ACP Neighbor Selection  . . . . . . . . . . . .  24
+     6.3.  Neighbor Discovery with DULL GRASP  . . . . . . . . . . .  22
+     6.4.  Candidate ACP Neighbor Selection  . . . . . . . . . . . .  25
      6.5.  Channel Selection . . . . . . . . . . . . . . . . . . . .  25
-     6.6.  Candidate ACP Neighbor verification . . . . . . . . . . .  26
+     6.6.  Candidate ACP Neighbor verification . . . . . . . . . . .  27
      6.7.  Security Association protocols  . . . . . . . . . . . . .  27
        6.7.1.  ACP via IKEv2 . . . . . . . . . . . . . . . . . . . .  27
        6.7.2.  ACP via dTLS  . . . . . . . . . . . . . . . . . . . .  28
-       6.7.3.  ACP Secure Channel Requirements . . . . . . . . . . .  28
+       6.7.3.  ACP Secure Channel Requirements . . . . . . . . . . .  29
      6.8.  GRASP in the ACP  . . . . . . . . . . . . . . . . . . . .  29
        6.8.1.  GRASP as a core service of the ACP  . . . . . . . . .  29
-       6.8.2.  ACP as the Security and Transport substrate for GRASP  30
-     6.9.  Context Separation  . . . . . . . . . . . . . . . . . . .  33
+       6.8.2.  ACP as the Security and Transport substrate for GRASP  31
+     6.9.  Context Separation  . . . . . . . . . . . . . . . . . . .  34
      6.10. Addressing inside the ACP . . . . . . . . . . . . . . . .  34
-       6.10.1.  Fundamental Concepts of Autonomic Addressing . . . .  34
-       6.10.2.  The ACP Addressing Base Scheme . . . . . . . . . . .  35
-       6.10.3.  ACP Zone Addressing Sub-Scheme . . . . . . . . . . .  36
+       6.10.1.  Fundamental Concepts of Autonomic Addressing . . . .  35
+       6.10.2.  The ACP Addressing Base Scheme . . . . . . . . . . .  36
+       6.10.3.  ACP Zone Addressing Sub-Scheme . . . . . . . . . . .  37
        6.10.4.  ACP Manual Addressing Sub-Scheme . . . . . . . . . .  39
        6.10.5.  ACP Vlong Addressing Sub-Scheme  . . . . . . . . . .  40
        6.10.6.  Other ACP Addressing Sub-Schemes . . . . . . . . . .  41
-     6.11. Routing in the ACP  . . . . . . . . . . . . . . . . . . .  41
+     6.11. Routing in the ACP  . . . . . . . . . . . . . . . . . . .  42
        6.11.1.  RPL Profile  . . . . . . . . . . . . . . . . . . . .  42
-     6.12. General ACP Considerations  . . . . . . . . . . . . . . .  45
-       6.12.1.  Performance  . . . . . . . . . . . . . . . . . . . .  45
+     6.12. General ACP Considerations  . . . . . . . . . . . . . . .  46
+       6.12.1.  Performance  . . . . . . . . . . . . . . . . . . . .  46
        6.12.2.  Addressing of Secure Channels in the data-plane  . .  46
 
 
@@ -114,7 +114,7 @@ Eckert, et al.          Expires November 7, 2018                [Page 2]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
-       6.12.3.  MTU  . . . . . . . . . . . . . . . . . . . . . . . .  46
+       6.12.3.  MTU  . . . . . . . . . . . . . . . . . . . . . . . .  47
        6.12.4.  Multiple links between nodes . . . . . . . . . . . .  47
        6.12.5.  ACP interfaces . . . . . . . . . . . . . . . . . . .  47
    7.  ACP support on L2 switches/ports (Normative)  . . . . . . . .  50
@@ -126,16 +126,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
        8.1.2.  Software Components . . . . . . . . . . . . . . . . .  55
        8.1.3.  Auto Configuration  . . . . . . . . . . . . . . . . .  56
        8.1.4.  Combined ACP/Data-Plane Interface (VRF Select)  . . .  57
-       8.1.5.  Use of GRASP  . . . . . . . . . . . . . . . . . . . .  58
+       8.1.5.  Use of GRASP  . . . . . . . . . . . . . . . . . . . .  59
      8.2.  ACP through Non-ACP L3 Clouds (Remote ACP neighbors)  . .  59
-       8.2.1.  Configured Remote ACP neighbor  . . . . . . . . . . .  59
+       8.2.1.  Configured Remote ACP neighbor  . . . . . . . . . . .  60
        8.2.2.  Tunneled Remote ACP Neighbor  . . . . . . . . . . . .  61
        8.2.3.  Summary . . . . . . . . . . . . . . . . . . . . . . .  61
    9.  Benefits (Informative)  . . . . . . . . . . . . . . . . . . .  61
      9.1.  Self-Healing Properties . . . . . . . . . . . . . . . . .  61
      9.2.  Self-Protection Properties  . . . . . . . . . . . . . . .  63
        9.2.1.  From the outside  . . . . . . . . . . . . . . . . . .  63
-       9.2.2.  From the inside . . . . . . . . . . . . . . . . . . .  63
+       9.2.2.  From the inside . . . . . . . . . . . . . . . . . . .  64
      9.3.  The Administrator View  . . . . . . . . . . . . . . . . .  64
    10. Further Considerations (Informative)  . . . . . . . . . . . .  65
      10.1.  BRSKI Bootstrap (ANI)  . . . . . . . . . . . . . . . . .  65
@@ -143,25 +143,25 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
      10.3.  Enabling and disabling ACP/ANI . . . . . . . . . . . . .  71
        10.3.1.  Filtering for non-ACP/ANI packets  . . . . . . . . .  71
        10.3.2.  Admin Down State . . . . . . . . . . . . . . . . . .  72
-       10.3.3.  Interface level ACP/ANI enable . . . . . . . . . . .  74
+       10.3.3.  Interface level ACP/ANI enable . . . . . . . . . . .  75
        10.3.4.  Which interfaces to auto-enable ?  . . . . . . . . .  75
        10.3.5.  Node Level ACP/ANI enable  . . . . . . . . . . . . .  76
        10.3.6.  Undoing ANI/ACP enable . . . . . . . . . . . . . . .  78
        10.3.7.  Summary  . . . . . . . . . . . . . . . . . . . . . .  78
-     10.4.  ACP Neighbor discovery protocol selection  . . . . . . .  78
+     10.4.  ACP Neighbor discovery protocol selection  . . . . . . .  79
        10.4.1.  LLDP . . . . . . . . . . . . . . . . . . . . . . . .  79
        10.4.2.  mDNS and L2 support  . . . . . . . . . . . . . . . .  79
-       10.4.3.  Why DULL GRASP . . . . . . . . . . . . . . . . . . .  79
+       10.4.3.  Why DULL GRASP . . . . . . . . . . . . . . . . . . .  80
      10.5.  Choice of routing protocol (RPL) . . . . . . . . . . . .  80
      10.6.  Extending ACP channel negotiation (via GRASP)  . . . . .  81
      10.7.  CAs, domains and routing subdomains  . . . . . . . . . .  83
-     10.8.  Adopting ACP concepts for other environments . . . . . .  84
+     10.8.  Adopting ACP concepts for other environments . . . . . .  85
    11. Security Considerations . . . . . . . . . . . . . . . . . . .  86
-   12. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  87
+   12. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  88
    13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  88
-   14. Change log [RFC Editor: Please remove]  . . . . . . . . . . .  88
-     14.1.  Initial version  . . . . . . . . . . . . . . . . . . . .  88
-     14.2.  draft-behringer-anima-autonomic-control-plane-00 . . . .  88
+   14. Change log [RFC Editor: Please remove]  . . . . . . . . . . .  89
+     14.1.  Initial version  . . . . . . . . . . . . . . . . . . . .  89
+     14.2.  draft-behringer-anima-autonomic-control-plane-00 . . . .  89
 
 
 
@@ -170,27 +170,28 @@ Eckert, et al.          Expires November 7, 2018                [Page 3]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
-     14.3.  draft-behringer-anima-autonomic-control-plane-01 . . . .  88
+     14.3.  draft-behringer-anima-autonomic-control-plane-01 . . . .  89
      14.4.  draft-behringer-anima-autonomic-control-plane-02 . . . .  89
-     14.5.  draft-behringer-anima-autonomic-control-plane-03 . . . .  89
-     14.6.  draft-ietf-anima-autonomic-control-plane-00  . . . . . .  89
-     14.7.  draft-ietf-anima-autonomic-control-plane-01  . . . . . .  89
-     14.8.  draft-ietf-anima-autonomic-control-plane-02  . . . . . .  90
-     14.9.  draft-ietf-anima-autonomic-control-plane-03  . . . . . .  90
+     14.5.  draft-behringer-anima-autonomic-control-plane-03 . . . .  90
+     14.6.  draft-ietf-anima-autonomic-control-plane-00  . . . . . .  90
+     14.7.  draft-ietf-anima-autonomic-control-plane-01  . . . . . .  90
+     14.8.  draft-ietf-anima-autonomic-control-plane-02  . . . . . .  91
+     14.9.  draft-ietf-anima-autonomic-control-plane-03  . . . . . .  91
      14.10. draft-ietf-anima-autonomic-control-plane-04  . . . . . .  91
-     14.11. draft-ietf-anima-autonomic-control-plane-05  . . . . . .  91
+     14.11. draft-ietf-anima-autonomic-control-plane-05  . . . . . .  92
      14.12. draft-ietf-anima-autonomic-control-plane-06  . . . . . .  92
-     14.13. draft-ietf-anima-autonomic-control-plane-07  . . . . . .  92
+     14.13. draft-ietf-anima-autonomic-control-plane-07  . . . . . .  93
      14.14. draft-ietf-anima-autonomic-control-plane-08  . . . . . .  94
-     14.15. draft-ietf-anima-autonomic-control-plane-09  . . . . . .  95
-     14.16. draft-ietf-anima-autonomic-control-plane-10  . . . . . .  97
-     14.17. draft-ietf-anima-autonomic-control-plane-11  . . . . . .  99
-     14.18. draft-ietf-anima-autonomic-control-plane-12  . . . . . .  99
+     14.15. draft-ietf-anima-autonomic-control-plane-09  . . . . . .  96
+     14.16. draft-ietf-anima-autonomic-control-plane-10  . . . . . .  98
+     14.17. draft-ietf-anima-autonomic-control-plane-11  . . . . . . 100
+     14.18. draft-ietf-anima-autonomic-control-plane-12  . . . . . . 100
      14.19. draft-ietf-anima-autonomic-control-plane-13  . . . . . . 101
-   15. References  . . . . . . . . . . . . . . . . . . . . . . . . . 103
-     15.1.  Normative References . . . . . . . . . . . . . . . . . . 103
-     15.2.  Informative References . . . . . . . . . . . . . . . . . 105
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 109
+     14.20. draft-ietf-anima-autonomic-control-plane-14  . . . . . . 103
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . . 104
+     15.1.  Normative References . . . . . . . . . . . . . . . . . . 104
+     15.2.  Informative References . . . . . . . . . . . . . . . . . 106
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 110
 
 1.  Introduction
 
@@ -217,7 +218,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    and routing.  Misconfigurations or routing problems can therefore
    disrupt management and control channels.  Traditionally, an out of
    band network has been used to recover from such problems, or
-
 
 
 
@@ -253,27 +253,27 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The Autonomic Control Plane serves several purposes at the same time:
 
-   o  Autonomic functions communicate over the ACP.  The ACP therefore
-      supports directly Autonomic Networking functions, as described in
-      [I-D.ietf-anima-reference-model].  For example, GRASP
-      [I-D.ietf-anima-grasp] runs securely inside the ACP and depends on
-      the ACP as its "security and transport substrate".
+   1.  Autonomic functions communicate over the ACP.  The ACP therefore
+       supports directly Autonomic Networking functions, as described in
+       [I-D.ietf-anima-reference-model].  For example, GRASP
+       [I-D.ietf-anima-grasp] runs securely inside the ACP and depends
+       on the ACP as its "security and transport substrate".
 
-   o  An operator can use it to log into remote devices, even if the
-      network is misconfigured or not configured.
+   2.  A controller or network management system can use it to securely
+       bootstrap network devices in remote locations, even if the
+       network in between is not yet configured; no data-plane dependent
+       bootstrap configuration is required.  An example of such a secure
+       bootstrap process is described in
+       [I-D.ietf-anima-bootstrapping-keyinfra]
 
-   o  A controller or network management system can use it to securely
-      bootstrap network devices in remote locations, even if the network
-      in between is not yet configured; no data-plane dependent
-      bootstrap configuration is required.  An example of such a secure
-      bootstrap process is described in
-      [I-D.ietf-anima-bootstrapping-keyinfra]
+   3.  An operator can use it to log into remote devices, even if the
+       network is misconfigured or not configured.
 
-   This document describes these use cases for the ACP in Section 3, it
-   defines the requirements in Section 4.  Section 5 gives an overview
-   how the ACP is constructed, and in Section 6 the process is defined
-   in detail.  Section 7 defines how to support ACP on L2 switches.
-   Section 8 explains how non-ACP nodes and networks can be integrated.
+   This document describes these purposes as use cases for the ACP in
+   Section 3, it defines the requirements in Section 4.  Section 5 gives
+   an overview how the ACP is constructed, and in Section 6 the process
+   is defined in detail.  Section 7 defines how to support ACP on L2
+
 
 
 
@@ -282,6 +282,9 @@ Eckert, et al.          Expires November 7, 2018                [Page 5]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
+   switches.  Section 8 explains how non-ACP nodes and networks can be
+   integrated.
+
    The following sections are non-normative: Section 9 reviews benefits
    of the ACP (after all the details have been defined), Section 10
    provides additional explanations and describes additional details or
@@ -289,16 +292,21 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    for standardization in this document but nevertheless assumed to be
    helpful for candidate adopters of the ACP.
 
-   The ACP as defined in this document can be implemented and operated
-   without dependency against other components of autonomic networks
-   except for the GRASP protocol on which it depends.  The document
-   "Autonomic Network Stable Connectivity"
-   [I-D.ietf-anima-stable-connectivity] describes how the ACP alone can
-   be used to provide stable connectivity for autonomic and non-
-   autonomic OAM applications ("Operations Administration and
-   Management").  It also explains on how existing management solutions
-   can leverage the ACP in parallel with traditional management models,
-   when to use the ACP and, how to integrate IPv4 based management, etc.
+   The ACP provides secure IPv6 connectivity, therefore it can not only
+   be used as the secure connectivity for self-management as required
+   for the ACP in [RFC7575], but it can also be used as the secure
+   connectivity for traditional (centralized) management.  The ACP can
+   be implemented and operated without any other components of autonomic
+   networks, except for the GRASP protocol which it leverages.
+
+   The document "Using Autonomic Control Plane for Stable Connectivity
+   of Network OAM" [I-D.ietf-anima-stable-connectivity] describes how
+   the ACP alone can be used to provide secure and stable connectivity
+   for autonomic and non-autonomic OAM applications ("Operations
+   Administration and Management").  That document also explains on how
+   existing management solutions can leverage the ACP in parallel with
+   traditional management models, when to use the ACP and, how to
+   integrate IPv4 based management.
 
    Combining ACP with BRSKI ("Bootstrapping Remote Secure Key
    Infrastructures", see [I-D.ietf-anima-bootstrapping-keyinfra])
@@ -320,6 +328,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    do not refer to them as devices unless the context specifically calls
    for a physical system.
 
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018                [Page 6]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    This document introduces or uses the following terms (sorted
    alphabetically).  Terms introduced are explained on first use, so
    this list is for reference only.
@@ -330,14 +348,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       domain as well as a GRASP instance running across this ACP IPv6
       connectivity.  The ACP is primarily meant to be used as a
       component of the ANI to enable Autonomic Networks but it can
-
-
-
-Eckert, et al.          Expires November 7, 2018                [Page 6]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       equally be used in simple ANI networks (with no other Autonomic
       Functions) or completely by itself.
 
@@ -375,6 +385,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       The ACP routing table may include multiple ULA prefixes if the
       "rsub" option is used to create addresses from more than one ULA
       prefix.  See Section 6.1.1.  The ACP may also include non-ULA
+
+
+
+
+Eckert, et al.          Expires November 7, 2018                [Page 7]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       prefixes if those are configured on ACP connect interfaces.  See
       Section 8.1.1.
 
@@ -385,14 +404,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    ACP secure channel protocol:  The protocol used to build an ACP
       secure channel, e.g.: IKEv2/IPsec or dTLS.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018                [Page 7]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    ACP virtual interface:  An interface in the ACP VRF mapped to one or
       more ACP secure channels.  See Section 6.12.5.
@@ -429,19 +440,8 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       EST to enable secure zero touch bootstrap in conjunction with ACP.
       ANI nodes use ACP, BRSKI and GRASP.
 
-   data-plane:  The counterpoint to the ACP VRF in an ACP node: all VRFs
-      other than the ACP VRF.  In a simple ACP or ANI node, the data-
-      plane is typically provisioned non-autonomic, for example manually
-      (including across the ACP) or via SDN controllers.  In a full
-      Autonomic Network node, the data-plane is managed autonomically
-      via Autonomic Functions and Intent.  Note that other (non-ANIMA)
-      RFC use the data-plane to refer to what is better called the
-      forwarding plane.  This is not the way the term is used in this
-      document!
-
-   ACP (ANI/AN) Domain Certificate:  A provisioned certificate (LDevID)
-      carrying the domain information field which is used by the ACP to
-
+   data-plane:  The counterpoint to the ACP VRF in an ACP node: all
+      routing and forwarding in the node other than the ACP VRF.  In a
 
 
 
@@ -450,6 +450,16 @@ Eckert, et al.          Expires November 7, 2018                [Page 8]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
+      simple ACP or ANI node, the data-plane is typically provisioned
+      non-autonomic, for example manually (including across the ACP) or
+      via SDN controllers.  In a full Autonomic Network node, the data-
+      plane is managed autonomically via Autonomic Functions and Intent.
+      Note that other (non-ANIMA) RFC use the data-plane to refer to
+      what is better called the forwarding plane.  This is not the way
+      the term is used in this document!
+
+   ACP (ANI/AN) Domain Certificate:  A provisioned certificate (LDevID)
+      carrying the domain information field which is used by the ACP to
       learn its address in the ACP and to derive and cryptographically
       assert its membership in the ACP domain.
 
@@ -477,8 +487,8 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       manufacturer such as device model/type and serial number.  See
       [AR8021].
 
-   Intent:  Northbound operator and automation facing interface of an
-      Autonomic Network according to [I-D.ietf-anima-reference-model].
+   Intent:  Policy language of an autonomic network according to
+      [I-D.ietf-anima-reference-model].
 
    loopback interface:  The conventional name for an internal IP
       interface to which addresses may be assigned, but which transmits
@@ -487,6 +497,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    LDevID:  A "Local Device IDentity" is an X.509 certificate installed
       during "enrollment".  The Domain Certificate used by the ACP is an
       LDevID.  See [AR8021].
+
+
+
+
+Eckert, et al.          Expires November 7, 2018                [Page 9]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    MIC:  "Manufacturer Installed Certificate".  Another word not used in
       this document to describe an IDevID.
@@ -498,13 +516,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    node:  A system, e.g.: supporting the ACP according to this document.
       Can be virtual or physical.  Physical nodes are called devices.
-
-
-
-Eckert, et al.          Expires November 7, 2018                [Page 9]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    RPL:  "IPv6 Routing Protocol for Low-Power and Lossy Networks".  The
       routing protocol used in the ACP.
@@ -542,6 +553,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       the definition of the ACP Zone Addressing Sub-Scheme
       (Section 6.10.3).  The complete definition of zones is subject to
       future work because this document does not describe the routing
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 10]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       protocols details for aggregation of ACP zone addresses, but only
       their addressing scheme.
 
@@ -552,15 +572,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    ALL CAPS (such as "should" or "Should"), they have their usual
    English meanings, and are not to be interpreted as [RFC2119] key
    words.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 10]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 3.  Use Cases for an Autonomic Control Plane
 
@@ -599,6 +610,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    protocols are running in the data-plane (global routing table) of the
    network.  This leads to undesirable dependencies between control and
    management plane on one side and the data-plane on the other: Only if
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 11]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    the data-plane is operational, will the other planes work as
    expected.
 
@@ -610,13 +629,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    management session is running can lock an admin irreversibly out of
    the device.  Traditionally only console access can help recover from
    such issues.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 11]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Data-plane dependencies also affect applications in a NOC ("Network
    Operations Center") such as SDN controller applications: Certain
@@ -642,10 +654,10 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       autonomic service agents, which could affect data-plane
       connectivity.
 
-   The document "Autonomic Network Stable Connectivity"
-   [I-D.ietf-anima-stable-connectivity] explains the use cases for the
-   ACP in significantly more detail and explains how the ACP can be used
-   in practical network operations.
+   The document "Using Autonomic Control Plane for Stable Connectivity
+   of Network OAM" [I-D.ietf-anima-stable-connectivity] explains the use
+   cases for the ACP in significantly more detail and explains how the
+   ACP can be used in practical network operations.
 
 4.  Requirements
 
@@ -653,6 +665,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    ACP1:  The ACP SHOULD provide robust connectivity: As far as
           possible, it should be independent of configured addressing,
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 12]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
           configuration and routing.  Requirements 2 and 3 build on this
           requirement, but also have value on their own.
 
@@ -665,14 +686,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
           can't mess things up so easily).  This document suggests to
           use ULA addressing for this purpose ("Unique Local Address",
           see [RFC4193]).
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 12]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    ACP4:  The ACP MUST be generic.  Usable by all the functions and
           protocols of the AN infrastructure.  Clients of the ACP MUST
@@ -708,6 +721,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    4.  For each node in the candidate peer list, it then establishes a
        secure tunnel of the negotiated type.  The resulting tunnels are
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 13]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
        then placed into the previously set up VRF.  This creates an
        overlay network with hop-by-hop tunnels.
 
@@ -719,16 +741,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
        Section 6.12.5).
 
    Note:
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 13]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Non-autonomic NMS ("Network Management Systems") or SDN
       controllers have to be explicitly configured for connection into
@@ -766,6 +778,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    node, or if the data-plane has issues such as addressing or routing
    problems.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 14]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 6.  Self-Creation of an Autonomic Control Plane (ACP) (Normative)
 
    This section describes the components and steps to set up an
@@ -778,13 +798,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    well as an (empty) ACP Adjacency Table (described in Section 6.2).
    It then can start to discover ACP neighbors and build the ACP.  This
    is described step by step in the following sections:
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 14]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 6.1.  ACP Domain, Certificate and Network
 
@@ -820,6 +833,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    autonomic networks.  Therefore the word autonomic would be irritating
    to operators interested in only the ACP:
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 15]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    [RFC7575] defines the term "Autonomic Domain" as a collection of
    autonomic nodes.  ACP nodes do not need to be fully autonomic, but
    when they are, then the ACP domain is an autonomic domain.  Likewise,
@@ -834,14 +856,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    The ACP domain certificate can and should be used for any
    authentication between ACP nodes where the required security is
    domain membership.  Section 6.1.2 defines this "ACP domain membership
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 15]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    check".  The uses of this check that are standardized in this
    document are for the establishment of ACP secure channels
    (Section 6.6) and for ACP GRASP (Section 6.8.2).  Other uses are
@@ -859,8 +873,33 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    the RFC number assigned to this document and remove this comment
    line]
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 16]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
      domain-information = local-part "@" domain
-     local-part = key "." local-info
+     local-part = key [ "." local-info ]
      key = "rfcSELF"
      local-info = [ acp-address ] [ "+" rsub extensions ]
      acp-address = 32hex-dig
@@ -890,14 +929,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    "domain" is used to indicate the ACP Domain across which all ACP
    nodes trust each other and are willing to build ACP channel to each
    other.  See Section 6.1.2.  Domain SHOULD be the FQDN of a domain
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 16]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    owned by the operator assigning the certificate.  This is a simple
    method to ensure that the domain is globally unique and collision of
    ACP addresses would therefore only happen due to ULA hash collisions.
@@ -910,7 +941,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    semantics are for further study.  Understanding the benefits of using
    rsub may depend on the results of future work on enhancing routing
    for the ACP.  When "rsub" is not used, "routing-subdomain" is the
-   same as "domain".
+   same as "domain". "rsub" needs to be in the "local-part"; it could
+   not syntactically be separated from "domain-name" if "domain" is just
+   a domain name.  It also makes it easier for domain name to be a valid
+   e-mail target.
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 17]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    The optional "extensions" field is used for future extensions to this
    specification.  It MUST be ignored if present and not understood.
@@ -945,21 +987,12 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       the LDevID.  If the elements used for the ACP are interpreted by
       other protocols/services, then the impact should be benign.
 
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 17]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    o  Using an IP address format encoding could result in non-benign
       misinterpretation of the domain information field; other protocol/
       services unaware of the ACP could try to do something with the ACP
       address that would fail to work correctly.  For example, the
-      address could be interpreted to be an address of the node in a VRF
-      other than the ACP VRF.
+      address could be interpreted to be an address of the node which
+      does not belong to the ACP VRF.
 
    o  At minimum, both the AN domain name and the non-domain name
       derived part of the ACP address need to be encoded in one or more
@@ -969,6 +1002,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  rfc822Name encoding is quite flexible.  We choose to encode the
       full ACP address AND the domain name with sub part into a single
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 18]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       rfc822Name information element it, so that it is easier to
       examine/use the "domain information field".
 
@@ -1002,14 +1043,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       check across the ACP or not listed in the CRL retrieved from the
       CDP.
 
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 18]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    o  The peers certificate has a syntactically valid domain information
       field (subjectAltName / rfc822Name) and the domain name in that
       peers domain information field is the same as in this ACP node
@@ -1025,6 +1058,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    mechanism by which the domain certificate was initially provisioned
    SHOULD provide a mechanism to store the URL of one EST server with
    its ACP address into the node for later renewal.  This server does
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 19]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    not have to be the same as the one performing the initial certificate
    enrolment.
 
@@ -1057,15 +1098,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    [RFC7030] compliant EST server because "est" is an [RFC6335]
    registered service name for [RFC7030].  Future backward compatible
    extensions/alternatives to [RFC7030] may be indicated through
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 19]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    objective-value.  Future non-backward compatible certificate renewal
    options must use a different objective-name.
 
@@ -1082,6 +1114,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    lifetime.  When performing renewal, the node SHOULD attempt to
    connect to the remembered EST server.  If that fails, it SHOULD
    attempt to connect to EST server(s) learned via GRASP.  The server
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 20]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    with which certificate renewal succeeds SHOULD be remembered for the
    next renewal.
 
@@ -1096,7 +1136,10 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    URL uses an IPv6 ULA, the ACP node will try to reach it via the ACP.
    In that case the ACP address in the domain certificate of the CDP as
    learned by the ACP node during the HTTPs TLS handshake SHOULD match
-   that ULA address in the HTTPs URL.
+   that ULA address in the HTTPs URL.  Reaching the CDP across the ACP
+   implies that the CDPs need to be reachable via the ACP, for example
+   by running CDPs on registrars or on devices connected to the ACP via
+   ACP connect (see Section 8.1).
 
    Renewal of certificates SHOULD start after less than 50% of the
    domain certificate lifetime so that network operations has ample time
@@ -1112,16 +1155,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    CA chain where the assigning CA has enough performance to manage
    short lived certificates.
 
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 20]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    See Section 10.1 for further optimizations of certificate maintenance
    when BRSKI can be used ("Bootstrapping Remote Secure Key
    Infrastructures", see [I-D.ietf-anima-bootstrapping-keyinfra]).
@@ -1136,6 +1169,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    certificate (including domain information field).  An ACP node MUST
    maintain this adjacency table up to date.  This table is used to
    determine to which neighbor an ACP connection is established.
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 21]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    Where the next ACP node is not directly adjacent, the information in
    the adjacency table can be supplemented by configuration.  For
@@ -1157,7 +1198,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 6.3.  Neighbor Discovery with DULL GRASP
 
-   The ACP uses one instance of DULL GRASP ( See section 3.5.2.2 of
+   The ACP uses one instance of DULL GRASP ( See section 2.5.2 of
    [I-D.ietf-anima-grasp] for its formal definition) for every physical
    L2 subnet of the ACP node to discover physically adjacent candidate
    ACP neighbors.  Native interfaces (e.g.: physical interfaces on
@@ -1170,13 +1211,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    only the following ACP secure channel setup packets - but not any
    other unnecessary traffic (e.g.: no other link-local IPv6 transport
    stack responders for example).
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 21]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Note that the use of the IPv6 link-local multicast address
    (ALL_GRASP_NEIGHBORS) implies the need to use MLD ([RFC3810]) to
@@ -1192,6 +1226,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    across ACP virtual interfaces.  See Section 10.3 for further, non-
    normative suggestions how to enable/disable ACP at node and interface
    level.  See Section 8.2.2 for more details about tunnels (typical
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 22]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    non-native interfaces).  See Section 7 for how ACP should be extended
    on devices operating (also) as L2 bridges.
 
@@ -1224,16 +1266,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The formal CDDL definition is:
 
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 22]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
            flood-message = [M_FLOOD, session-id, initiator, ttl,
                             +[objective, (locator-option / [])]]
 
@@ -1249,6 +1281,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    The objective-flags field is set to indicate synchronization.
 
    The loop-count is fixed at 1 since this is a link-local operation.
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 23]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    In the above (recommended) example the period of sending of the
    objective could be 60 seconds the indicated ttl of 180000 msec means
@@ -1283,13 +1323,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    address MUST be the same as the initiator address (these are DULL
    requirements to minimize third party DoS attacks).
 
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 23]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    The secure channel methods defined in this document use the objective
    values of "IKEv2" and "dTLS".  There is no distinction between IKEv2
    native and GRE-IKEv2 because this is purely negotiated via IKEv2.
@@ -1304,6 +1337,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    in the same M_FLOOD message, since GRASP allows multiple objectives
    in one message.  This may be impractical though if ACP and BRSKI
    operations are implemented via separate software modules / ASAs.
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 24]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    The result of the discovery is the IPv6 link-local address of the
    neighbor as well as its supported secure channel protocols (and non-
@@ -1336,16 +1377,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       executive management action that could easily be accomplished
       through the control channel created by the ACP.
 
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 24]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    Since Intent is transported over the ACP, the first ACP connection a
    node establishes is always following the default behavior.  See
    Section 10.7 for more details.
@@ -1363,6 +1394,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    discovering the address of a candidate neighbor can only be to try
    first to establish a security association with that neighbor using a
    well-known security association method.
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 25]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    At this time in the lifecycle of ACP nodes, it is unclear whether it
    is feasible to even decide on a single MTI (mandatory to implement)
@@ -1394,14 +1432,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    sequentially or in parallel, but it MUST support acting as a
    responder to all of them in parallel.
 
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 25]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    Once the first secure channel protocol succeeds, the two peers know
    each other's certificates because it must be used by all secure
    channel protocols for mutual authentication.  The node with the lower
@@ -1420,6 +1450,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    succeeded.  The roles of Bob and Alice are then assigned.  At this
    stage, the protocol may not even have completed negotiating a common
    security profile.  The protocol could for example could have been
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 26]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    IPsec via IKEv2 ("IP security", see [RFC4301] and "Internet Key
    Exchange protocol version 2", see [RFC7296].  It is now up to Alice
    to decide how to proceed.  Even if the IPsec connecting determined a
@@ -1446,18 +1484,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    the connection attempt is aborted and an error logged (with
    throttling).
 
-
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 26]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
 6.7.  Security Association protocols
 
    The following sections define the security association protocols that
@@ -1479,6 +1505,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    In terms of IKEv2, this means the initiator will offer to support
    IPsec tunnel mode with next protocol equal 41 (IPv6).
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 27]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    IPsec tunnel mode is required because the ACP will route/forward
    packets received from any other ACP node across the ACP secure
@@ -1506,14 +1540,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    When GRE is used, transport mode is sufficient because the routed ACP
    packets are not "tunneled" by IPsec but rather by GRE: IPsec only has
    to deal with the GRE/IP packet which always uses the local and peer
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 27]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    link-local IPv6 addresses and is therefore applicable to transport
    mode.
 
@@ -1536,6 +1562,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    To run ACP via UDP and dTLS v1.2 [RFC6347] a locally assigned UDP
    port is used that is announced as a parameter in the GRASP AN_ACP
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 28]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    objective to candidate neighbors.  All ACP nodes supporting dTLS as a
    secure channel protocol MUST support AES256 encryption and MUST NOT
    permit weaker crypto options.
@@ -1550,9 +1584,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 6.7.3.  ACP Secure Channel Requirements
 
    A baseline ACP node MUST support IPsec natively and MAY support IPsec
-   via GRE.  A constrained ACP node MUST support dTLS.  ACP nodes
-   connecting constrained areas with baseline areas MUST therefore
-   support IPsec and dTLS.
+   via GRE.  A constrained ACP node that can not support IPsec MUST
+   support dTLS.  ACP nodes connecting constrained areas with baseline
+   areas MUST therefore support IPsec and dTLS.
 
    ACP nodes need to specify in documentation the set of secure ACP
    mechanisms they support.
@@ -1561,15 +1595,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    lifetime of any certificate in the chain used to authenticate the
    neighbor expires or becomes revoked.  Note that this is not standard
    behavior in secure channel protocols such as IPsec because the
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 28]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    certificate authentication only influences the setup of the secure
    channel in these protocols.
 
@@ -1593,6 +1618,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    provides service discovery via the objective discovery/announcement
    and negotiation mechanisms of the ACP GRASP instance (services are a
    form of objectives).  These mechanisms use hop-by-hop reliable
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 29]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    flooding of GRASP messages for both service discovery (GRASP
    M_DISCOVERY messages) and service announcement (GRASP M_FLOOD
    messages).
@@ -1618,14 +1651,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    ASA can then use service discovery from ACP GRASP, and then they do
    not need ASM but only SSM (Source Specific Multicast, see [RFC4607])
    for the IP multicast replication.  SSM itself can simply be enabled
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 29]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    in the data-plane (or even in an update to the ACP) without any other
    configuration than just enabling it on all nodes and only requires a
    simpler version of MLD (see [RFC5790]).
@@ -1648,6 +1673,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    NBMA interfaces.  This is not currently specified in this document
    because it is not quite clear yet what exactly the implications are
    to make GRASP flooding depend on RPL DODAG convergence and how
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 30]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    difficult it would be to let GRASP flooding access the DODAG
    information.
 
@@ -1673,15 +1707,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    there is no ACP and that therefore the ACP instance of GRASP can not
    operate.
 
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 30]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    The way ACP acts as the security and transport substrate for GRASP is
    visualized in the following picture:
 
@@ -1705,6 +1730,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
        .      |          |          |                                .
        .      |       ACP GRASP     |       - ACP GRASP              .
        .      |       loopback      |         loopback interface     .
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 31]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
        .      |       interface     |       - AN-cert auth           .
        .      |         TLS         |                                .
        .   ACP GRASP     |       ACP GRASP  - ACP GRASP virtual      .
@@ -1730,14 +1763,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
        .    IPsec/dTLS        IPsec/dTLS  - AN-cert auth             .
        ...............................................................
                 |                   |   data-plane
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 31]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
                 |                   |
                 |                   |     - ACP secure channel
             link-local        link-local  - encap addresses
@@ -1762,6 +1787,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    has two or more neighbors, the GRASP link-local multicast messages
    are replicated to all neighbor TCP connections.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 32]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    TLS and TLS connections for GRASP in the ACP use the IANA assigned
    TCP port for GRASP (7107).  Effectively the transport stack is
    expected to be TLS for connections from/to the ACP address (e.g.:
@@ -1777,22 +1809,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    temporary packet loss issues (e.g.: WiFi/Powerline link) can reduce
    the probability for loss free transmission so much that applications
    would want to increase the frequency with which they send these
-   messages.  This would result in more traffic flooding than hop-by-hop
-   reliable retransmission as provided for by TCP.
+   messages.  Such shorter periodic retransmission of datagrams would
+   result in more traffic and processing overhead in the ACP than the
+   hop-by-hop reliable retransmission mechanism by TCP and duplicate
+   elimination by GRASP.
 
    TLS is mandated for GRASP non-link-local unicast because the ACP
    secure channel mandatory authentication and encryption protects only
    against attacks from the outside but not against attacks from the
    inside: Compromised ACP members that have (not yet) been detected and
    removed (e.g.: via domain certificate revocation / expiry).
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 32]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    If GRASP peer connections would just use TCP, compromised ACP members
    could simply eavesdrop passively on GRASP peer connections for whom
@@ -1816,6 +1842,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The GRASP TLS connections are run like any other ACP traffic through
    the ACP secure channels.  This leads to double authentication/
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 33]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    encryption.  Future work optimizations could avoid this but it is
    unclear how beneficial/feasible this is:
 
@@ -1842,14 +1876,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    for the ACP.  If possible by the systems software architecture,
    separation options that minimize shared components are preferred,
    such as a logical container or virtual machine instance.  The context
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 33]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    for the ACP needs to be established automatically during bootstrap of
    a node.  As much as possible it should be protected from being
    modified unintentionally by ("data-plane") configuration.
@@ -1871,6 +1897,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    With the algorithm introduced here, all ACP nodes in the same routing
    subdomain have the same /48 ULA global ID prefix.  Conversely, ULA
    global IDs from different domains are unlikely to clash, such that
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 34]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    two networks can be merged, as long as the policy allows that merge.
    See also Section 9.1 for a discussion on merging domains.
 
@@ -1896,16 +1931,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       only use IPv6 link local addresses.  The usage of IPv6 link local
       addressing is discussed in [RFC7404].
 
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 34]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    o  Use-ULA: For loopback interfaces of ACP nodes, we use Unique Local
       Addresses (ULA), specifically ULA-Random, as defined in [[RFC4193]
       with L=1].
@@ -1927,6 +1952,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The ACP is based exclusively on IPv6 addressing, for a variety of
    reasons:
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 35]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    o  Simplicity, reliability and scale: If other network layer
       protocols were supported, each would have to have its own set of
@@ -1953,15 +1987,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
                    Figure 3: ACP Addressing Base Scheme
 
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 35]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    The first 48 bits follow the ULA scheme, as defined in [RFC4193], to
    which a type field is added:
 
@@ -1985,6 +2010,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Type: This field allows different address sub-schemes.  This
       addresses the "upgradability" requirement.  Assignment of types
       for this field will be maintained by IANA.
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 36]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    The sub-scheme may imply a range or set of addresses assigned to the
    node, this is called the ACP address range/set and explained in each
@@ -2010,14 +2042,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Zone-ID: If set to all zero bits: The Node-ID bits are used as an
       identifier (as opposed to a locator).  This results in a non-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 36]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       hierarchical, flat addressing scheme.  Any other value indicates a
       zone.  See Section 6.10.3.1 on how this field is used in detail.
 
@@ -2043,6 +2067,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    address set includes addresses with any Zone-ID value and any V
    value.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 37]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    The "Node-ID" itself is unique in a domain (i.e., the Zone-ID is not
    required for uniqueness).  Therefore, a node can be addressed either
    as part of a flat hierarchy (Zone-ID = 0), or with an aggregation
@@ -2064,15 +2095,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    announce a single prefix for each ACP node.  For example, in a
    network with 20,000 ACP nodes, this avoid 20,000 additional routes in
    the routing table.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 37]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 6.10.3.1.  Usage of the Zone-ID Field
 
@@ -2099,6 +2121,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    the assigned Zone-ID.  This method allows for a smooth transition
    between a flat addressing scheme and an hierarchical one.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 38]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    A node knowing it is in a zone MUST also use that Zone-ID != 0
    address in GRASP locator fields.  This eliminates the use of the
    identifier address (Zone-ID = 0) in forwarding and the need for
@@ -2121,15 +2152,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    zones or zone_id.  ACP zone addresses are not scoped (reachable only
    from within an RFC4007 zone) but reachable across the whole ACP.  An
    RFC4007 zone_id is a zone index that has only local significance on a
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 38]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    node, whereas an ACP Zone-ID is an identifier for an ACP zone that is
    unique across that ACP.
 
@@ -2157,6 +2179,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Interface Identifier.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 39]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    This sub-scheme is meant for "manual" allocation to subnets where the
    other addressing schemes cannot be used.  The primary use case is for
    assignment to ACP connect subnets (see Section 8.1.1).
@@ -2176,15 +2205,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    ACP nodes while Z=1 would be used for node-level assigned Interface
    Identifiers primarily for non-ACP-nodes (on logical subnets where the
    ACP node is a router).
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 39]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Manual addressing sub-scheme addresses SHOULD only be used in domain
    certificates assigned to nodes that cannot fully participate in the
@@ -2214,9 +2234,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    This addressing scheme foregoes the Zone-ID field to allow for
    larger, flatter routed networks (e.g.: as in IoT) with 8421376 Node-
-   Numbers (2^23+2^15).  It also allows for up to 2^16 - 65536 different
-   virtualized addresses within a node, which could be used to address
-   individual software components in an ACP node.
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 40]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
+   Numbers (2^23+2^15).  It also allows for up to 2^16 (i.e. 65536)
+   different virtualized addresses within a node, which could be used to
+   address individual software components in an ACP node.
 
    The fields are the same as in the Zone-ID sub-scheme with the
    following refinements:
@@ -2234,14 +2262,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       is 16 bit long and the V field is 16 bit long.  Otherwise the
       Node-Number is 24 bit long and the V field is 8 bit long.  "0" bit
       Node-Numbers are intended to be used for "general purpose" ACP
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 40]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       nodes that would potentially have a limited number (< 256) of
       clients (ASA/Autonomic Functions or legacy services) of the ACP
       that require separate V(irtual) addresses.  "1" bit Node-Numbers
@@ -2270,6 +2290,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    IANA is asked need to assign a new "type" for each new addressing
    sub-scheme.  With the current allocations, only 2 more schemes are
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 41]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    possible, so the last addressing scheme should consider to be
    extensible in itself (e.g.: by reserving bits from it for further
    extensions.
@@ -2287,16 +2315,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    The establishment of the routing plane and its parameters are
    automatic and strictly within the confines of the autonomic control
    plane.  Therefore, no explicit configuration is required.
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 41]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    All routing updates are automatically secured in transit as the
    channels of the autonomic control plane are by default secured, and
@@ -2328,9 +2346,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    can be handled as non-RPL-aware leafs (or "Internet") according to
    the data-plane architecture explained in
    [I-D.ietf-roll-useofrplinfo].  This non-artifact profile is largely
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 42]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    driven by the desire to avoid introducing the required Hop-by-Hop
-   headers into the ACP VRF control plane.  Many devices will have their
-   VRF forwarding code designed into silicon.
+   headers into the ACP forwarding plane, especially to support devices
+   with silicon forwarding planes that can not support insertion/removal
+   of these headers in silicon.
 
    In this profile choice, RPL has no data-plane artifacts.  A simple
    destination prefix based upon the routing table is used.  A
@@ -2346,13 +2373,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    of view, but it does not represent a single point of failure, as the
    DODAG can reconfigure itself when it detects data plane forwarding
    failures.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 42]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The lack of a RPI (the header defined by [RFC6553]), means that the
    data-plane will have no rank value that can be used to detect loops.
@@ -2378,6 +2398,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Single RPL instance.  Default RPLInstanceID = 0.
 
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 43]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 6.11.1.3.  Storing vs. Non-Storing Mode
 
    RPL Mode of Operations (MOP): mode 3 "Storing Mode of Operations with
@@ -2397,18 +2429,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 6.11.1.5.  Path Metric
 
    Hopcount.
-
-
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 43]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 6.11.1.6.  Objective Function
 
@@ -2437,6 +2457,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Trickle: Not used.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 44]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 6.11.1.8.  Multicast
 
    Not used yet but possible because of the selected mode of operations.
@@ -2457,14 +2486,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    certificate of the ACP node, e.g.: /127 for Zone Addressing Sub-
    Scheme or /112 or /120 for Vlong addressing sub-scheme.  See
    Section 6.10 for more details.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 44]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Every ACP node MUST install a black hole (aka null) route for
    whatever ACP address space that it advertises (i.e.: the /96 or
@@ -2492,6 +2513,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    SRH (RPL Source Routing - RFC6552): Not used.  Storing mode is being
    used.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 45]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 6.11.1.14.  Unknown Destinations
 
    Because RPL minimizes the size of the routing and forwarding table,
@@ -2514,14 +2544,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    defined in this document because the performance requirements depend
    on the intended use case.  It is expected that full autonomic node
    with a wide range of ASA can require high forwarding plane
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 45]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    performance in the ACP, for example for telemetry, but that
    determination is for future work.  Implementations of ACP to solely
    support traditional/SDN style use cases can benefit from ACP at lower
@@ -2547,6 +2569,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    may be an uncommon profile.  Functionally, these are the only
    interactions with the data-plane that the ACP needs to have.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 46]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    To mitigate these interactions with the data-plane, extensions to
    this document may specify additional layer 2 or layer encapsulations
    for ACP secure channels as well as other protocols to auto-discover
@@ -2569,14 +2600,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    over performance, they MAY opt to only expect IPv6 minimum MTU (1280)
    to avoid running into PMTUD implementation bugs or underlying link
    MTU mismatch problems.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 46]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 6.12.4.  Multiple links between nodes
 
@@ -2603,6 +2626,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The term "loopback interface" was introduced initially to refer to an
    internal interface on a node that would allow IP traffic between
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 47]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    transport endpoints on the node in the absence or failure of any or
    all external interfaces, see [RFC4291] section 2.5.3.
 
@@ -2625,14 +2656,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    interfaces in different ways:
 
    ACP point-to-point virtual interface:
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 47]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Each ACP secure channel is mapped into a separate point-to-point ACP
    virtual interface.  If a physical subnet has more than two ACP
@@ -2659,6 +2682,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    ACP nodes MUST perform standard IPv6 operations across ACP virtual
    interfaces including SLAAC (Stateless Address Auto-Configuration -
    [RFC4862]) to assign their IPv6 link local address on the ACP virtual
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 48]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    interface and ND (Neighbor Discovery - [RFC4861]) to discover which
    IPv6 link-local neighbor address belongs to which ACP secure channel
    mapped to the ACP virtual interface.  This is independent of whether
@@ -2670,26 +2701,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    of IPv6 link-local multicast RPL messages - and therefore forego the
    need to send Neighbor Solicitation messages.
 
-   ACP nodes MUST NOT derive their ACP virtual interface IPv6 link local
-   address from their IPv6 link-local address used on the underlying
-   interface (e.g.: the address that is used as the encapsulation
-   address in the ACP secure channel protocols defined in this
-   document).  This ensures that the ACP virtual interface operations
-   will not depend on the specifics of the encapsulation used by the ACP
-   secure channel and that attacks against SLAAC on the physical
-   interface will not introduce new attack vectors against the
-   operations of the ACP virtual interface.
+   The ACP virtual interface IPv6 link local address can be derived from
+   any appropriate local mechanism such as node local EUI-48 or EUI-64
+   ("EUI" stands for "Extended Unique Identifier").  It MUST NOT depend
+   on something that is attackable from the data-plane such as the IPv6
+   link-local address of the underlying phycsial interface, which can be
+   attacked by SLAAC, or parameters of the secure channel encapsulation
+   header that may not be protected by the secure channel mechanism.
 
    The link-layer address of an ACP virtual interface is the address
    used for the underlying interface across which the secure tunnels are
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 48]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    built, typically Ethernet addresses.  Because unicast IPv6 packets
    sent to an ACP virtual interface are not sent to a link-layer
    destination address but rather an ACP secure channel, the link-layer
@@ -2717,6 +2738,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    will send one packet and the ACP will replicate it.  The result is
    the same.  The difference happens when Bob and Carol receive their
    packet.  If they use ACP point-to-point virtual interfaces, their
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 49]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    GRASP instance would forward the packet from Alice to each other as
    part of the GRASP flooding procedure.  These packets are unnecessary
    and would be discarded by GRASP on receipt as duplicates (by use of
@@ -2738,14 +2767,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    across non-broadcast multi-access (NBMA) subnets.  This is common
    when using many radio technologies.  When such NBMA subnets are used,
    they MUST NOT be represented as ACP multi-access virtual interfaces
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 49]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    because the replication of IPv6 link-local multicast messages will
    not reach all NBMA subnet neighbors.  In result, GRASP message
    flooding would fail.  Instead, each ACP secure channel across such an
@@ -2773,6 +2794,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
                                  Figure 7
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 50]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Consider a large L2 LAN with ANrtr1...ANrtrN connected via some
    topology of L2 switches.  Examples include large enterprise campus
    networks with an L2 core, IoT networks or broadband aggregation
@@ -2794,13 +2823,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    connected via switches.  Introducing such a new unpredictable scaling
    factor requirement makes it harder to support the ACP on arbitrary
    platforms and in arbitrary deployments.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 50]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Predictable scaling requirements for ACP neighbors can most easily be
    achieved if in topologies like these, ACP capable L2 switches can
@@ -2828,6 +2850,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    the ACP implementation.  This primarily involves the creation of a
    separate DULL GRASP instance/domain on every such L2 port.  Because
    GRASP has a dedicated link-local IPv6 multicast address
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 51]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    (ALL_GRASP_NEIGHBORS), it is sufficient that all packets for this
    address are being extracted at the port level and passed to that DULL
    GRASP instance.  Likewise the IPv6 link-local multicast packets sent
@@ -2850,14 +2880,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    bound to the L3 (VLAN) interface.  It will simply use link-local IPv6
    multicast packets to the candidate ACP neighbor.  Once a secure
    channel is established to such a neighbor, the virtual interface to
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 51]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    which this secure channel is mapped should then actually be the L2
    port and not the L3 interface to best map the actual physical
    topology into the ACP virtual interfaces.  See Section 6.12.5 for
@@ -2883,6 +2905,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    interface.  This hopefully makes support for per-L2 port ACP on those
    hybrid devices easy.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 52]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    This L2/L3 optimized approach is subject to "address stealing", e.g.:
    where a device on one port uses addresses of a device on another
    port.  This is a generic issue in L2 LANs and switches often already
@@ -2906,14 +2937,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    A generic issue with ACP in L2 switched networks is the interaction
    with the Spanning Tree Protocol.  Ideally, the ACP should be built
    also across ports that are blocked in STP so that the ACP does not
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 52]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    depend on STP and can continue to run unaffected across STP topology
    changes (where re-convergence can be quite slow).  The above
    described simple implementation options are not sufficient for this.
@@ -2939,6 +2962,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    If the NMS host is not autonomic, i.e., it does not support autonomic
    negotiation of the ACP, then it can be brought into the ACP by
    explicit configuration.  To support connections to adjacent non-ACP
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 53]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    nodes, an ACP node must support "ACP connect" (sometimes also connect
    "autonomic connect"):
 
@@ -2952,24 +2983,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    encryption/novel-signaling).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 53]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
                                    data-plane "native" (no ACP)
                                             .
   +--------+       +----------------+       .         +-------------+
@@ -2978,7 +2991,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
   |        |-------|...[ACP VRF]....+-----------------|             |+
   |        |   ^   |.               |                 | NOC Device  ||
   |        |   .   | .[data-plane]..+-----------------| "NMS hosts" ||
-  |        |   .   |  [   VRF    ]  | .          ^    |             ||
+  |        |   .   |  [          ]  | .          ^    |             ||
   +--------+   .   +----------------+  .         .    +-------------+|
                .                        .        .     +-------------+
                .                        .        .
@@ -3005,9 +3018,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    require a second "data-plane" interface outside the ACP for
    connections between the NMS host and administrators, or Internet
    based services, or for direct access to the data-plane.  The document
-   "Autonomic Network Stable Connectivity"
-   [I-D.ietf-anima-stable-connectivity] explains in more detail how the
-   ACP can be integrated in a mixed NOC environment.
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 54]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
+   "Using Autonomic Control Plane for Stable Connectivity of Network
+   OAM" [I-D.ietf-anima-stable-connectivity] explains in more detail how
+   the ACP can be integrated in a mixed NOC environment.
 
    The ACP connect interface must be (auto-)configured with an IPv6
    address prefix.  Is prefix SHOULD be covered by one of the (ULA)
@@ -3016,15 +3037,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    SHOULD NOT use a prefix that is also routed outside the ACP so that
    the addresses clearly indicate whether it is used inside the ACP or
    not.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 54]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The prefix of ACP connect subnets MUST be distributed by the ACP edge
    node into the ACP routing protocol (RPL).  The NMS hosts MUST connect
@@ -3062,6 +3074,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    external systems (NMS hosts) to the ACP but also other applications,
    containers or virtual machines.  In fact, one possible way to
    eliminate the security issue of the external ACP connect interface is
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 55]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    to collocate an ACP edge node and an NMS host by making one a virtual
    machine or container inside the other; and therefore converting the
    unprotected external ACP subnet into an internal virtual subnet in a
@@ -3074,14 +3094,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The core requirement is that the software components need to have a
    network stack that permits access to the ACP and optionally also the
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 55]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    data-plane.  Like in the physical setup for NMS hosts this can be
    realized via two internal virtual subnets.  One that is connecting to
    the ACP (which could be a container or virtual machine by itself),
@@ -3118,6 +3130,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    The ACP edge node acts as the router on the ACP connect subnet,
    providing the (auto-)configured prefix for the ACP connect subnet to
    NMS hosts and/or software components.  The ACP edge node uses route
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 56]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    prefix option of RFC4191 to announce the default route (::/) with a
    lifetime of 0 and aggregated prefixes for routes in the ACP routing
    table with normal lifetimes.  This will ensure that the ACP edge node
@@ -3130,14 +3150,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    (Manual Addressing Sub-Scheme), /127 (ACP Zone Addressing Sub-
    Scheme), /112 or /120 (Vlong Addressing Sub-Scheme) routes of actual
    ACP nodes.  If ACP interfaces are configured with non ULA prefixes,
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 56]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    then those prefixes cannot be aggregated without further configured
    policy on the ACP edge node.  This explains the above recommendation
    to use ACP ULA prefix covered prefixes for ACP connect interfaces:
@@ -3162,7 +3174,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
      |        +-------+.         .[Select].+--------+ "Date Plane  ||
      |        |   ^   | .[Data ].          |        |  Address(es)"||
      |        |   .   |  [Plane]           |        |              ||
-     |        |   .   |  [VRF  ]           |        +--------------+|
+     |        |   .   |  [     ]           |        +--------------+|
      +--------+   .   +--------------------+         +--------------+
                   .
            data-plane "native" and + ACP auto-negotiated/encrypted
@@ -3175,18 +3187,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    Section 8.1.2) may be seen as additional complexity, for example with
    legacy NMS Hosts that support only one IP interface.
 
-   To provide a single subnet into both ACP and data-plane, the ACP Edge
-   node needs to de-multiplex packets from NMS hosts into ACP VRF and
-   data-plane VRF.  This is sometimes called "VRF select".  If the ACP
-   VRF has no overlapping IPv6 addresses with the data-plane (as it
-   should), then this function can use the IPv6 Destination address.
-   The problem is Source Address Selection on the NMS Host(s) according
-   to RFC6724.
-
-   Consider the simple case: The ACP uses only one ULA prefix, the ACP
-   IPv6 prefix for the Combined ACP and data-plane interface is covered
-   by that ULA prefix.  The ACP edge node announces both the ACP IPv6
-
 
 
 Eckert, et al.          Expires November 7, 2018               [Page 57]
@@ -3194,6 +3194,16 @@ Eckert, et al.          Expires November 7, 2018               [Page 57]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
+   To provide a single subnet into both ACP and data-plane, the ACP Edge
+   node needs to de-multiplex packets from NMS hosts into ACP VRF and
+   data-plane.  This is sometimes called "VRF select".  If the ACP VRF
+   has no overlapping IPv6 addresses with the data-plane (as it should),
+   then this function can use the IPv6 Destination address.  The problem
+   is Source Address Selection on the NMS Host(s) according to RFC6724.
+
+   Consider the simple case: The ACP uses only one ULA prefix, the ACP
+   IPv6 prefix for the Combined ACP and data-plane interface is covered
+   by that ULA prefix.  The ACP edge node announces both the ACP IPv6
    prefix and one (or more) prefixes for the data-plane.  Without
    further policy configurations on the NMS Host(s), it may select its
    ACP address as a source address for data-plane ULA destinations
@@ -3232,6 +3242,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    information.  If an NMS Host does not do this, then separate ACP
    connect and data-plane interfaces are the preferable method of
    attachment.  Hosts implementing [RFC8028] should (instead of may)
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 58]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    implement [RFC6724] Rule 5.5, so it is preferred for hosts to support
    [RFC8028].
 
@@ -3242,14 +3260,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    GRASP can and should be possible to use across ACP connect
    interfaces, especially in the architectural correct solution when it
    is used as a mechanism to connect Software (e.g.: ASA or legacy NMS
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 58]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    applications) to the ACP.  Given how the ACP is the security and
    transport substrate for GRASP, the trustworthiness of nodes/software
    allowed to participate in the ACP GRASP domain is one of the main
@@ -3288,16 +3298,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    not sufficient to autonomically create ACP connections across non-ACP
    Layer-3 devices.
 
-8.2.1.  Configured Remote ACP neighbor
-
-   On the ACP node, remote ACP neighbors are configured as follows.
-   Future work could transform this into a YANG ([RFC7950]) data model.
-
-
-
-
-
-
 
 
 
@@ -3305,6 +3305,13 @@ Eckert, et al.          Expires November 7, 2018               [Page 59]
 
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
+
+8.2.1.  Configured Remote ACP neighbor
+
+   On the ACP node, remote ACP neighbors are configured explicitly.  The
+   parameters of such a "connection" are described in the following
+   ABNF.  Future work could transform this into a YANG ([RFC7950]) data
+   model.
 
      connection = [ method , local-addr, remote-addr, ?pmtu ]
      method   = [ "IKEv2" , ?port ]
@@ -3314,9 +3321,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
      address = ("any" | ipv4-address | ipv6-address )
      vrf = tstr ; Name of a VRF on this node with local-address
 
-   Explicit configuration of a remote-peer provides all the information
-   to build a secure channel without requiring a tunnel to that peer and
-   running DULL GRASP inside of it.
+   Explicit configuration of a remote-peer according to this ABNF
+   provides all the information to build a secure channel without
+   requiring a tunnel to that peer and running DULL GRASP inside of it.
 
    The configuration includes the parameters otherwise signaled via DULL
    GRASP: local address, remote (peer) locator and method.  The
@@ -3348,19 +3355,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Pmtu should be configurable to overcome issues/limitations of
       PMTUD (Path MTU Discovery).
 
-   o  IKEv2/IPsec to remote peers should support the optional NAT-T
-      procedures (NAT Traversal).
-
-
-
-
-
 
 
 Eckert, et al.          Expires November 7, 2018               [Page 60]
 
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
+
+   o  IKEv2/IPsec to remote peers should support the optional NAT-T
+      procedures (NAT Traversal).
 
 8.2.2.  Tunneled Remote ACP Neighbor
 
@@ -3406,9 +3409,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    The ACP is self-healing:
 
-   o  New neighbors will automatically join the ACP after successful
-      validation and will become reachable using their unique ULA
-      address across the ACP.
 
 
 
@@ -3417,6 +3417,10 @@ Eckert, et al.          Expires November 7, 2018               [Page 61]
 
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
+
+   o  New neighbors will automatically join the ACP after successful
+      validation and will become reachable using their unique ULA
+      address across the ACP.
 
    o  When any changes happen in the topology, the routing protocol used
       in the ACP will automatically adapt to the changes and will
@@ -3462,10 +3466,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    operator override upon administrative actions that would
    administratively bring down an interface across which the ACP is
    running.  Especially if bringing down the ACP is known to disconnect
-   the operator from the node.  For example any such down administrative
-   action could perform a dependency check to see if the transport
-   connection across which this action is performed is affected by the
-
 
 
 
@@ -3474,6 +3474,9 @@ Eckert, et al.          Expires November 7, 2018               [Page 62]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
+   the operator from the node.  For example any such down administrative
+   action could perform a dependency check to see if the transport
+   connection across which this action is performed is affected by the
    down action (with default RPL routing used, packet forwarding will be
    symmetric, so this is actually possible to check).
 
@@ -3515,12 +3518,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    attack resistant and not consume unnecessary resources even while
    under attack.
 
-9.2.2.  From the inside
 
-   The security model of the ACP is based on trusting all members of the
-   group of nodes that do receive an ACP domain certificate for the same
-   domain.  Attacks from the inside by a compromised group member are
-   therefore the biggest challenge.
+
+
 
 
 
@@ -3530,12 +3530,25 @@ Eckert, et al.          Expires November 7, 2018               [Page 63]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
-   Group members must overall the secured so that there are no easy way
-   to compromise them, such as data-plane accessible privilege level
-   with simple passwords.  This is a lot easier to do in devices whose
-   software is designed from the ground up with security in mind than
-   with legacy software based system where ACP is added on as another
-   feature.
+9.2.2.  From the inside
+
+   The security model of the ACP is based on trusting all members of the
+   group of nodes that do receive an ACP domain certificate for the same
+   domain.  Attacks from the inside by a compromised group member are
+   therefore the biggest challenge.
+
+   Group members must be protected against attackers so that there is no
+   easy way to compromise them, or use them as a proxy for attacking
+   other devices across the ACP.  For example, management plane
+   functions (transport ports) should only be reachable from the ACP but
+   not the data-plane.  Especially for those management plane functions
+   that have no good protection by themselves because they do not have
+   secure end-to-end transport and to whom ACP does not only provides
+   automatic reliable connectivity but also protection against attacks.
+   Protection across all potential attack vectors is typically easier to
+   do in devices whose software is designed from the ground up with
+   security in mind than with legacy software based systems where the
+   ACP is added on as another feature.
 
    As explained above, traffic across the ACP SHOULD still be end-to-end
    encrypted whenever possible.  This includes traffic such as GRASP,
@@ -3565,6 +3578,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    trouble-shooting.  Therefore, an ACP must support all show and debug
    options, as for any other network function.  Specifically, a network
    management system or controller must be able to discover the ACP, and
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 64]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    monitor its health.  This visibility of ACP operations must clearly
    be separated from visibility of data-plane so automated systems will
    never have to deal with ACP aspect unless they explicitly desire to
@@ -3575,16 +3596,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    that by default a traditional controller or network management system
    cannot connect to an ACP.  See Section 8.1.1 for more details on how
    to connect an NMS host into the ACP.
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 64]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.  Further Considerations (Informative)
 
@@ -3623,6 +3634,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    therefore find their ACP address and domain using this field in the
    domain certificate, both for themselves, as well as for other nodes.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 65]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    The use of BRSKI in conjunction with the ACP can also help to further
    simplify maintenance and renewal of domain certificates.  Instead of
    relying on CRL, the lifetime of certificates can be made extremely
@@ -3634,14 +3653,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    registrar honors expired domain certificates and that the pledge
    first attempts to perform TLS authentication for BRSKI bootstrap with
    its expired domain certificate - and only reverts to its IDevID when
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 65]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    this fails.  This mechanism could also render CRLs unnecessary
    because the BRSKI registrar in conjunction with the CA would not
    renew revoked certificates - only a "no-not-renew" list would be
@@ -3680,6 +3691,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    operators are expected to ask, such as "is the ACP working correctly
    ?", or "why is there no ACP connection to a known neighboring node ?"
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 66]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    In current network management approaches, the logic to answer these
    questions is most often built as centralized diagnostics software
    that leverages the above mentioned data models.  While this approach
@@ -3689,15 +3707,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Developing the logic to identify common issues requires
       operational experience with the components of the ANI.  Letting
       each management system define its own analysis is inefficient.  As
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 66]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       much as possible, future work should attempt to standardize data
       models that support common error diagnostic.
 
@@ -3738,6 +3747,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  If no keying material and ANI is supported/enabled, check the
       state of BRSKI (not detailed in this example).
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 67]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  Check the validity of the domain certificate:
 
       *  Does the certificate authenticate against the trust anchor ?
@@ -3746,13 +3762,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
       *  Was the last scheduled attempt to retrieve a CRL successful
          (e.g.: do we know that our CRL information is up to date).
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 67]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
       *  Is the certificate valid: validity start time in the past,
          expiration time in the future ?
@@ -3794,6 +3803,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  If it failed, why:
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 68]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       *  Did the neighbor close the connection on us or did we close the
          connection on it because the domain certificate membership
          failed ?
@@ -3802,13 +3818,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
          diagnostics from the secure channel protocol.
 
       *  If we failed the attempt, display our local reason:
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 68]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
          +  There was no common secure channel protocol supported by the
             two neighbors (this could not happen on nodes supporting
@@ -3848,6 +3857,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Is ACP GRASP running ?
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 69]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  Is at least one SRV.est objective cached (to support certificate
       renewal) ?
 
@@ -3858,13 +3876,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       operating ?
 
    o  ...
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 69]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    These lists are not necessarily complete, but illustrate the
    principle and show that there are variety of issues ranging from
@@ -3902,6 +3913,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    LLDP) so that other observers on the same subnet can determine who is
    an "interested adjacent party".
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 70]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Desirable options for additional diagnostics subject to future work
    include:
 
@@ -3914,13 +3934,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    3.  The IDevID of BRSKI pledges should be included in the selected
        insecure diagnostics option.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 70]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    4.  A richer set of diagnostics information should be made available
        via the secured ACP channels, using either single-hop GRASP or
@@ -3957,6 +3970,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    minimum signaling to auto-assign an IPv6 link-local address and talk
    to neighbors via their link-local address: SLAAC (Stateless Address
    Auto-Configuration - [RFC4862]) and ND (Neighbor Discovery -
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 71]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    [RFC4861]).  When the device is a BRSKI pledge, it may also require
    TCP/TLS connections to BRSKI proxies on the interface.  When the
    device has keying material, and the ACP is running, it requires DULL
@@ -3965,18 +3986,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    IPv6 link-local address of an ACP neighbor on the interface.  It also
    requires TCP/TLS packets for its BRSKI proxy functionality, if it
    does support BRSKI.
-
-
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 71]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.3.2.  Admin Down State
 
@@ -4018,6 +4027,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    In the following sub-sections important aspects to the introduction
    of "admin down" state are discussed.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 72]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 10.3.2.1.  Security
 
    Interfaces are physically brought down (or left in default down
@@ -4026,13 +4042,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    ANI operations which are both well secured.  Ultimately, it is
    subject to security review for the deployment whether "admin down" is
    a feasible replacement for "physical down".
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 72]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The need to trust into the security of ACP/ANI operations need to be
    weighed against the operational benefits of permitting this: Consider
@@ -4073,6 +4082,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Triggering physical down state may also be used as a mean of
    diagnosing cabling in the absence of easier methods.  It is more
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 73]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    complex than automated neighbor diagnostics because it requires
    coordinated remote access to both (likely) sides of a link to
    determine whether up/down toggling will cause the same reaction on
@@ -4082,13 +4099,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    via GRASP could be used to provide neighbor diagnostics, and
    therefore hopefully eliminating the need for "physical down" for
    neighbor diagnostics - as long as both neighbors support ACP/ANI.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 73]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.3.2.3.  Low Level Link Diagnostics
 
@@ -4125,6 +4135,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    for 5 seconds to probe if there is an ACP neighbor on the remote end
    every 500 seconds = 1% power consumption.
 
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 74]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 10.3.3.  Interface level ACP/ANI enable
 
    The interface level configuration option "ACP enable" enables ACP
@@ -4136,15 +4157,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    Unless overridden by global configuration options (see later), "ACP/
    ANI enable" will result in "down" state on an interface to behave as
    "admin down".
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 74]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.3.4.  Which interfaces to auto-enable ?
 
@@ -4182,6 +4194,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    network design questions not specific to the ACP, and there are no
    generic fully automated answers.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 75]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Instead of automatically setting "ACP enable" on these type of
    interfaces, the decision needs to be based on the use purpose of the
    non-native interface and "ACP enable" needs to be set in conjunction
@@ -4192,15 +4212,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    interfaces also need to support configuration of the ACP RPL cost of
    the link - to avoid the problems of attracting too much traffic to
    the link as described above.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 75]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Even native interfaces may not be able to automatically perform BRSKI
    or ACP because they may require additional operator input to become
@@ -4238,6 +4249,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    then "down" state of interfaces with "ACP/ANI enable" is modified to
    behave as "admin down".
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 76]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 10.3.5.1.  Brownfield nodes
 
    A "brownfield" node is one that already has a configured data-plane.
@@ -4249,14 +4269,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    requires set-up of a single BRSKI-registrar node which could also
    implement a CA for the network.  This is the most simple way to
    introduce ACP/ANI into existing (== brownfield) networks.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 76]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The need to explicitly enable ACP/ANI is especially important in
    brownfield nodes because otherwise software updates may introduce
@@ -4294,6 +4306,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    pledge functionality - and once a domain certificate is enrolled they
    automatically enable ACP.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 77]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Attempts for BRSKI pledge operations in greenfield state should
    terminate automatically when another method of configuring the node
    is used.  Methods that indicate some form of physical possession of
@@ -4306,13 +4326,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    should terminate any temporarily needed state on the device to
    perform BRSKI - DULL GRASP, BRSKI pledge and any IPv6 configuration
    on interfaces.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 77]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.3.6.  Undoing ANI/ACP enable
 
@@ -4349,6 +4362,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    It is enabled by default on native interfaces and has to be
    configured explicitly on other interfaces.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 78]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Disabling "ACP/ANI enable" global and per-interface should have
    additional checks to minimize undesired breakage of ACP.  The degree
    of control could be a domain wide parameter in the domain
@@ -4359,16 +4380,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    This section discusses why GRASP DULL was chosen as the discovery
    protocol for L2 adjacent candidate ACP neighbors.  The contenders
    considered where GRASP, mDNS or LLDP.
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 78]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
 10.4.1.  LLDP
 
@@ -4403,17 +4414,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    performance of software forwarding in many L2 switches, this could
    also make the ACP risky to support on such L2 switches.
 
-10.4.3.  Why DULL GRASP
-
-   LLDP was not considered because of the above mentioned issues. mDNS
-   was not selected because of the above L2 mDNS considerations and
-   because of the following additional points:
-
-   If mDNS was not already existing in a node, it would be more work to
-   implement than DULL GRASP, and if an existing implementation of mDNS
-   was used, it would likely be more code space than a separate
-   implementation of DULL GRASP or a shared implementation of DULL GRASP
-   and GRASP in the ACP.
 
 
 
@@ -4426,12 +4426,24 @@ Eckert, et al.          Expires November 7, 2018               [Page 79]
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
+10.4.3.  Why DULL GRASP
+
+   LLDP was not considered because of the above mentioned issues. mDNS
+   was not selected because of the above L2 mDNS considerations and
+   because of the following additional points:
+
+   If mDNS was not already existing in a node, it would be more work to
+   implement than DULL GRASP, and if an existing implementation of mDNS
+   was used, it would likely be more code space than a separate
+   implementation of DULL GRASP or a shared implementation of DULL GRASP
+   and GRASP in the ACP.
+
 10.5.  Choice of routing protocol (RPL)
 
-   This Appendix explains why RPL - "IPv6 Routing Protocol for Low-Power
-   and Lossy Networks ([RFC6550] was chosen as the default (and in this
-   specification only) routing protocol for the ACP.  The choice and
-   above explained profile was derived from a pre-standard
+   This Appendix motivates why RPL - "IPv6 Routing Protocol for Low-
+   Power and Lossy Networks ([RFC6550] was chosen as the default (and in
+   this specification only) routing protocol for the ACP.  The choice
+   and above explained profile was derived from a pre-standard
    implementation of ACP that was successfully deployed in operational
    networks.
 
@@ -4462,6 +4474,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       directed acyclic graph (DODAG), where the main resource
       consumption is at the root of the DODAG.  The closer to the edge
       of the network, the less state needs to be maintained.  This
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 80]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       adapts nicely to the typical network design.  Also, all changes
       below a common parent node are kept below that parent node.
 
@@ -4472,15 +4492,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       routing protocol must support completely unstructured address
       space.  RPL is specifically made for mobile ad-hoc networks, with
       no assumptions on topologically aligned addressing.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 80]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Modularity: To keep the initial implementation small, yet allow
       later for more complex methods, it is highly desirable that the
@@ -4517,6 +4528,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    document, but it will run into problem if it would be used for
    multiple protocols:
 
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 81]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    The need to potentially have multiple of these security associations
    even temporarily run in parallel to determine which of them works
    best does not support the most lightweight implementation options.
@@ -4529,14 +4550,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    protocols would be used, and these protocols would then take on the
    responsibility to support more flexible objectives to negotiate the
    mutually preferred ACP security channel protocol.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 81]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    IKEv2 is the IETF standard protocol to negotiate network security
    associations.  It is meant to be extensible, but it is unclear
@@ -4572,6 +4585,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    peers link-local IPv6 address is used.  When Alice and Bob support
    GRASP negotiation, they do prefer it over any other non-explicitly
    negotiated security association protocol and should wait trying any
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 82]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    non-negotiated ACP channel protocol until after it is clear that
    GRASP/TLS will not work to the peer.
 
@@ -4586,13 +4608,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    TLS.
 
    Notes:
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 82]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Negotiation of a channel type may require IANA assignments of code
       points.
@@ -4627,6 +4642,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Another use case for routing subdomains is as the starting point for
    structuring routing inside an ACP.  For example, different routing
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 83]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    subdomains could run different routing protocols or different
    instances of RPL and auto-aggregation / distribution of routes could
    be done across inter routing subdomain ACP channels based on
@@ -4642,14 +4665,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    have different domain elements in the domain information field.
    These domain elements can be arbitrary, including subdomains of one
    another: Domains "example.com" and "research.example.com" are
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 83]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    separate domains if both are domain elements in the domain
    information element of certificates.
 
@@ -4682,6 +4697,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    negotiate what type of exchanges are desired across that connection.
    This would include routing negotiation, how much GRASP information to
    transit and what data-plane forwarding should be done.  This approach
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 84]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    could also allow for Intent to only be injected into the network from
    one side and propagate via this GRASP connection.
 
@@ -4698,13 +4722,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    choice of options to allow interoperable implementations.  The
    choices made may not be the best for all environments, but the
    concepts used by the ACP can be used to build derived solutions:
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 84]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The ACP specifies the use of ULA and deriving its prefix from the
    domain name so that no address allocation is required to deploy the
@@ -4737,6 +4754,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    transit connectivity impacting functions are fully automated
    (including security), indestructible and resilient, it would be
    possible to eliminate the need for the ACP to be a separate VRF.
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 85]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Consider the most simple example system in which there is no separate
    data-plane, but the ACP is the data-plane.  Add BRSKI, and it becomes
    a fully autonomic network - except that it does not support automatic
@@ -4754,14 +4779,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    support multiple options by deriving them from future parameters in
    the certificate.  Parameters in certificates should be limited to
    those that would not need to be changed more often than certificates
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 85]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    would need to be updated anyhow; Or by ensuring that these parameters
    can be provisioned before the variation of an ACP is activated in a
    node.  Using BRSKI, this could be done for example as additional
@@ -4794,6 +4811,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       is compromised, the security of the ACP is also compromised.  This
       is typically under the control of the network administrator.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 86]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  Security can be compromised by implementation errors (bugs), as in
       all products.
 
@@ -4810,13 +4834,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Many details of ACP are designed with security in mind and discussed
    elsewhere in the document:
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 86]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    IPv6 addresses used by nodes in the ACP are covered as part of the
    nodes domain certificate as described in Section 6.1.1.  This allows
@@ -4848,6 +4865,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    re-enrolled even after unintentional expiry (e.g.: because of
    interrupted connectivity).  See Section 10.1.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 87]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 12.  IANA Considerations
 
    This document defines the "Autonomic Control Plane".
@@ -4866,13 +4892,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    name.  This is a proposed update to the GRASP registry subject to
    future work and only mentioned here for informational purposed to
    explain the unique format of the objective name.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 87]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    The IANA is requested to create an ACP Parameter Registry with
    currently one registry table - the "ACP Address Type" table.
@@ -4902,6 +4921,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    reviews and to Pascal Thubert and Michael Richardson to provide the
    details for the recommendations of the use of RPL in the ACP
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 88]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Further input, review or suggestions were received from: Rene Struik,
    Brian Carpenter, Benoit Claise, William Atwood and Yongkang Zhang.
 
@@ -4922,13 +4950,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Clarified in intro that ACP is for both, between devices, as well
       as for access from a central entity, such as an NMS.
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 88]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Added a section on how to connect an NMS system.
 
@@ -4955,6 +4976,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Clarified the relationship with draft-ietf-anima-stable-
       connectivity
 
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 89]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 14.5.  draft-behringer-anima-autonomic-control-plane-03
 
    o  Took out requirement for IPv6 --> that's in the reference doc.
@@ -4977,14 +5008,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Moved the data-plane ACP out of the main document, into an
       appendix.  The focus is now the virtually separated ACP, since it
       has significant advantages, and isn't much harder to do.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 89]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Changed the self-creation algorithm: Part of the initial steps go
       into the reference document.  This document now assumes an
@@ -5012,6 +5035,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       IANA considerations section.  Suggest GRE protected with IPSec
       transport mode as the default tunnel type.
 
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 90]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  Updated links, lots of small edits.
 
 14.8.  draft-ietf-anima-autonomic-control-plane-02
@@ -5033,14 +5063,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       insecure neighbor discovery and secure ACP operatations raises the
       risk of introducing security issues through implementation issues/
       non-isolation between those two instances of GRASP.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 90]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Shortened the section on GRASP instances, because with mDNS being
       used for discovery, there is no insecure GRASP session any longer,
@@ -5068,6 +5090,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    itself to justify.  Added text to explain how ACP discovery relates
    to BRSKY (bootstrap) discovery and pointed to Michael Richardsons
    draft detailing it.  Removed appendix section that contained the
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 91]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    original explanations why GRASP would be useful (current text is
    meant to be better).
 
@@ -5089,14 +5119,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    o  Added address sub-scheme to the IANA section.
 
    o  Made the routing section more prescriptive.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 91]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Clarified in Section 8.1.1 the ACP Connect port, and defined that
       term "ACP Connect".
@@ -5124,6 +5146,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Added text to suggest admin down interfaces should still run ACP.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 92]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
 14.13.  draft-ietf-anima-autonomic-control-plane-07
 
    o  Changed author association.
@@ -5146,14 +5176,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Changed the rules for mutual authentication of certificates to
       rely on the domain in the ACP information field of the certificate
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 92]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       instead of the OU in the certificate.  Also renewed the text
       pointing out that the ACP information field in the certificate is
       meant to be in a form that it does not disturb other uses of the
@@ -5180,6 +5202,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       describe in the ACP draft the whole format of the M_FLOOD message
       (and not only the actual objective).  This should make it a lot
       easier to read (without having to go back and forth to the GRASP
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 93]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
       RFC/draft).  It was also necessary because the locator in the
       M_FLOOD messages has an important role and its not coded inside
       the objective.  The specification of how to format the M_FLOOD
@@ -5201,14 +5231,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       mDNS from the latest BRSKI document (aka: this section discussed
       discrepancies between GRASP and mDNS discovery which should not
       exist anymore with latest BRSKI.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 93]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    o  Tried to resolve the EDNOTE about CRL vs. OCSP by pointing out we
       do not specify which one is to be used but that the ACP should be
@@ -5235,6 +5257,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    across configured tunnels (GRE, IPinIP etc) a more efficient one via
    directed DULL.
 
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 94]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Moved decription of BRSKI to appendex to emphasize that BRSKI is not
    a (normative) dependency of GRASP, enhanced text to indicate other
    options how Domain Certificates can be provisioned.
@@ -5257,14 +5288,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    section before workarounds, made it instructive enough to explain how
    to implement ACP on L2 ports for L3/L2 switches and made this part of
    normative requirement (L2/L3 switches SHOULD support this).
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 94]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Rewrote section "GRASP in the ACP" to define GRASP in ACP as
    mandatory (and why), and define the ACP as security and transport
@@ -5291,6 +5314,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    domain" is.  Scheme is called "routing subdomain" to have a unique
    name.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 95]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    Added V8 (now called Vlong) addressing sub-scheme according to
    suggestion from mcr in his mail from 30 Nov 2016
    (https://mailarchive.ietf.org/arch/msg/anima/
@@ -5313,14 +5344,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    local address space (on an ACP edge device), subject to approval of
    the implied update to rfc4291/rfc4193 (IID length).  Changed name to
    Vlong addressing sub-scheme.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 95]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Added text in response to Brian Carpenters review of draft-ietf-
    anima-stable-connectivity-04.
@@ -5347,6 +5370,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
       separate ACP connect and data-plane interface.  But not when there
       is a single interface.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 96]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  Added a separate subsection to talk about "software" instead of
       "NMS hosts" connecting to the ACP via the "ACP connect" method.
       The reason is to point out that the "ACP connect" method is not
@@ -5369,14 +5400,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Reaffirm security goal of ACP: Do not permit non-ACP routers into
       ACP routing domain.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 96]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    Made this ACP document be an update to RFC4291 and RFC4193.  At the
    core, some of the ACP addressing sub-schemes do effectively not use
@@ -5403,6 +5426,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Added fixes from 08-mcr-review-reply.txt (on github):
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 97]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    o  AN Domain Names are FQDNs.
 
    o  Fixed bit length of schemes, numerical writing of bits (00b/01b).
@@ -5426,13 +5457,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    6.10.4 Added note that manual address sub-scheme addresses must not
    be used within domain certificates (only for explicit configuration).
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 97]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    6.12.5 Refined explanation of how ACP virtual interfaces work (p2p
    and multipoint).  Did seek for pre-existing RFCs that explain how to
@@ -5458,6 +5482,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    2.  Fixed up definition of ULA.
 
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 98]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    6.1.1 Changed definition of ACP information in cert into ABNF format.
    Added warning about maximum size of ACP address field due to domain-
    name limitations.
@@ -5482,14 +5514,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    Ultimately, this is done to ensure that any apps using GRASP can get
    full end-to-end secrecy for information sent across GRASP.  But for
    publically known ASA services, even this will not provide 100%
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 98]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    security (this is discussed).  Also why double encryption is the
    better/easier solution than trying to optimize this.
 
@@ -5511,6 +5535,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    13.  Added IANA requirements.
 
    Added RFC2119 boilerplate.
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018               [Page 99]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
 14.17.  draft-ietf-anima-autonomic-control-plane-11
 
@@ -5537,15 +5571,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    o  Replaced "device" with "node" in text.  Kept "device" only when
       referring to "physical node".  Added definitions for those words.
-
-
-
-
-Eckert, et al.          Expires November 7, 2018               [Page 99]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
       Includes changes of derived terms, especially in addressing:
       "Node-ID" and "Node-Number" in the addressing details.
 
@@ -5568,6 +5593,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    6.1.2 Moved ACP domainer membership check from section 6.6 to (ACP
    secure channels setup) here because it is not only used for ACP
    secure channel setup.
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 100]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    6.1.3 Fix text about certificate renewal after discussion with Max
    Pritikin/Michael Richardson/Brian Carpenter:
@@ -5595,13 +5628,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    operational experience - ACP/ANI undeployable without at least
    diagnostics like this.
 
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 100]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    10.3 Introduced informational section (enabling/disabling) ACP.
    Important to discuss this for security reasons (e.g.: why to never
    never auto-enable ANI on brownfield devices), for implementers and to
@@ -5622,6 +5648,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    6.10.3.1 New paragraph: Explained how nodes using Zone-ID != 0 need
    to use Zone-ID != 0 in GRASP so that we can avoid routing/forwarding
    of Zone-ID = 0 prefixes.
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 101]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    Rest of feedback from review of -12, see
    https://raw.githubusercontent.com/anima-wg/autonomic-control-
@@ -5650,14 +5685,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    6.3 Simplified CDDL syntax: Only one method per AN_ACP objective
    (because of locators).  Example with two objectives in GRASP message.
 
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 101]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    6.8.1 Added note about link-local GRASP multicast message to avoid
    confusion.
 
@@ -5677,6 +5704,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    2.  Added explanation for "zones" to terminology section and into
    Zone Addressing Sub Scheme section, relating it to RFC4007 zones
    (from Brian Carpenter).
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 102]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    4.  Fixed text for ACP4 requirement (Clients of the ACP must not be
    tied to specific protocol.).
@@ -5706,16 +5742,56 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
    Review from Yongkang Zhang:
 
+   6.10.5 Fixed length of Node-Numbers in ACP Vlong Addressing Sub-
+   Scheme.
+
+14.20.  draft-ietf-anima-autonomic-control-plane-14
+
+   Review from Joel Halpern:
+
+   1. swapped order of "purposes" for ACP to match order in section 3.
+
+   1.  Added notion about manageability of ACP gong beyond RFC7575
+   (before discussion of stable connectivity).
+
+   2.  Changed definition of Intent to be same as reference model
+   (policy lanuage instead of API).
+
+   6.1.1 changed BNF specification so that a local-part without acp-
+   address (for future extensions) would not be rfcSELF.+rsub but
+   simpler rfcSELF+rsub.  Added explanation why rsub is in local-part.
 
 
 
-Eckert, et al.          Expires November 7, 2018              [Page 102]
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 103]
 
 Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
-   6.10.5 Fixed length of Node-Numbers in ACP Vlong Addressing Sub-
-   Scheme.
+   Tried to eliminate unnecessary references to VRF to minimize
+   assumption how system is designed.
+
+   6.1.3 Explained how to make CDP reachable via ACP.
+
+   6.7.2 Made it clearer that constrained devices MUST support dTLS if
+   they can not support IPsec.
+
+   6.8.2.1 clarified first paragraph (TCP restransmissions lightweight).
+
+   6.11.1 fixed up RPL profile text - to remove "VRF".  Text was also
+   buggy. mentioned control plane, but its a forwarding/silicon issue to
+   have these header.
+
+   6.12.5 Clarified how link-local ACP channel address can be derived,
+   and how not.
+
+   8.2.1 Fixed up text to distinguish between configuration and model
+   describing parameters of the configuration (spec only provides
+   parameter model).
+
+   Various Nits.
 
 15.  References
 
@@ -5740,6 +5816,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               DOI 10.17487/RFC3810, June 2004,
               <https://www.rfc-editor.org/info/rfc3810>.
 
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 104]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    [RFC4191]  Draves, R. and D. Thaler, "Default Router Preferences and
               More-Specific Routes", RFC 4191, DOI 10.17487/RFC4191,
               November 2005, <https://www.rfc-editor.org/info/rfc4191>.
@@ -5760,15 +5846,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               "Neighbor Discovery for IP version 6 (IPv6)", RFC 4861,
               DOI 10.17487/RFC4861, September 2007,
               <https://www.rfc-editor.org/info/rfc4861>.
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 103]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    [RFC4862]  Thomson, S., Narten, T., and T. Jinmei, "IPv6 Stateless
               Address Autoconfiguration", RFC 4862,
@@ -5794,6 +5871,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
               January 2012, <https://www.rfc-editor.org/info/rfc6347>.
 
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 105]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    [RFC6550]  Winter, T., Ed., Thubert, P., Ed., Brandt, A., Hui, J.,
               Kelsey, R., Levis, P., Pister, K., Struik, R., Vasseur,
               JP., and R. Alexander, "RPL: IPv6 Routing Protocol for
@@ -5815,16 +5903,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               Kivinen, "Internet Key Exchange Protocol Version 2
               (IKEv2)", STD 79, RFC 7296, DOI 10.17487/RFC7296, October
               2014, <https://www.rfc-editor.org/info/rfc7296>.
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 104]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    [RFC7676]  Pignataro, C., Bonica, R., and S. Krishnan, "IPv6 Support
               for Generic Routing Encapsulation (GRE)", RFC 7676,
@@ -5850,6 +5928,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               draft-ietf-anima-prefix-management-07 (work in progress),
               December 2017.
 
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 106]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
+
    [I-D.ietf-anima-reference-model]
               Behringer, M., Carpenter, B., Eckert, T., Ciavaglia, L.,
               and J. Nobre, "A Reference Model for Autonomic
@@ -5871,16 +5959,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               Robles, I., Richardson, M., and P. Thubert, "When to use
               RFC 6553, 6554 and IPv6-in-IPv6", draft-ietf-roll-
               useofrplinfo-23 (work in progress), May 2018.
-
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 105]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
 
    [MACSEC]   IEEE SA-Standards Board, "IEEE Standard for Local and
               Metropolitan Area Networks: Media Access Control (MAC)
@@ -5904,6 +5982,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    [RFC2821]  Klensin, J., Ed., "Simple Mail Transfer Protocol",
               RFC 2821, DOI 10.17487/RFC2821, April 2001,
               <https://www.rfc-editor.org/info/rfc2821>.
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 107]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    [RFC4007]  Deering, S., Haberman, B., Jinmei, T., Nordmark, E., and
               B. Zill, "IPv6 Scoped Address Architecture", RFC 4007,
@@ -5930,14 +6019,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               IP", RFC 4607, DOI 10.17487/RFC4607, August 2006,
               <https://www.rfc-editor.org/info/rfc4607>.
 
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 106]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    [RFC4610]  Farinacci, D. and Y. Cai, "Anycast-RP Using Protocol
               Independent Multicast (PIM)", RFC 4610,
               DOI 10.17487/RFC4610, August 2006,
@@ -5956,6 +6037,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
    [RFC5321]  Klensin, J., "Simple Mail Transfer Protocol", RFC 5321,
               DOI 10.17487/RFC5321, October 2008,
               <https://www.rfc-editor.org/info/rfc5321>.
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 108]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    [RFC5790]  Liu, H., Cao, W., and H. Asaeda, "Lightweight Internet
               Group Management Protocol Version 3 (IGMPv3) and Multicast
@@ -5986,14 +6079,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               (IPv6)", RFC 6724, DOI 10.17487/RFC6724, September 2012,
               <https://www.rfc-editor.org/info/rfc6724>.
 
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 107]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    [RFC6762]  Cheshire, S. and M. Krochmal, "Multicast DNS", RFC 6762,
               DOI 10.17487/RFC6762, February 2013,
               <https://www.rfc-editor.org/info/rfc6762>.
@@ -6011,6 +6096,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               Addressing inside an IPv6 Network", RFC 7404,
               DOI 10.17487/RFC7404, November 2014,
               <https://www.rfc-editor.org/info/rfc7404>.
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 109]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    [RFC7426]  Haleplidis, E., Ed., Pentikousis, K., Ed., Denazis, S.,
               Hadi Salim, J., Meyer, D., and O. Koufopavlou, "Software-
@@ -6040,16 +6134,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               (Revised)", STD 83, RFC 7761, DOI 10.17487/RFC7761, March
               2016, <https://www.rfc-editor.org/info/rfc7761>.
 
-
-
-
-
-
-Eckert, et al.          Expires November 7, 2018              [Page 108]
-
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
-
-
    [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
               RFC 7950, DOI 10.17487/RFC7950, August 2016,
               <https://www.rfc-editor.org/info/rfc7950>.
@@ -6065,6 +6149,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
               <https://www.rfc-editor.org/info/rfc8126>.
 
 Authors' Addresses
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 110]
+
+Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+
 
    Toerless Eckert (editor)
    Huawei USA - Futurewei Technologies Inc.
@@ -6101,4 +6197,20 @@ Authors' Addresses
 
 
 
-Eckert, et al.          Expires November 7, 2018              [Page 109]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires November 7, 2018              [Page 111]
