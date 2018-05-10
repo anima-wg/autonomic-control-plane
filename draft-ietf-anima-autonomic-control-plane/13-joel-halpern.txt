@@ -1,0 +1,176 @@
+Reviewer: Joel Halpern
+Review result: Ready
+
+I have been selected as the Routing Directorate reviewer for this draft. The
+Routing Directorate seeks to review all routing or routing-related drafts as
+they pass through IETF last call and IESG review, and sometimes on special
+request. The purpose of the review is to provide assistance to the Routing ADs.
+For more information about the Routing Directorate, please see
+​http://trac.tools.ietf.org/area/rtg/trac/wiki/RtgDir
+
+Although these comments are primarily for the use of the Routing ADs, it would
+be helpful if you could consider them along with any other IETF Last Call
+comments that you receive, and strive to resolve them through discussion or by
+updating the draft.
+
+Document: draft-ietf-anima-autonomic-control-plane-13
+Reviewer: Joel Halpern
+Review Date: 1-March-2018
+IETF LC End Date: N/A
+Intended Status: Proposed Standard
+
+Summary: I have some minor concerns about this document that I think should be
+resolved before publication.
+
+Major: N/A (Note that three comment is marked *** as they may be more
+significant.)
+
+Minor:
+    The description of the ACP In the introduction should probably note that
+    the addition of Management capability is beyond the definition provided in
+    section 5 of RFC 7575, and is included to complete the needed set of
+    functionality.
+
+    The definition of data-plane seems to assume that all forwarding (and
+    control?) in all nodes is structured in terms of VRFs.  That seems to
+    overly constrain implementation architecture.  Using VRF to to describe the
+    ACP functionality is a little odd, but likely defnesible.  Declaring that
+    all other functionality is in VRFs seems a step too far.
+
+    The definition of Intent in the terminology section seems to be different
+    from the cited definition in the anima reference model.  "Intent" there
+    seems to refer to a policy language, not an interface.
+
+    It is unclear how the flexible policy defined in section 5 bullet 2 (about
+    which nodes are ACP peer candidates) is consistent with autonomic
+    operation.  It seems that the flexibility is important, so there should be
+    some explanation here about how this is consonant with the stated goals.  I
+    understand that the bootstrap comes from BRSKI, but I do not think that is
+    where the policy comes from?
+
+    The BNF is section 6.1.1 seems to have some oddities.  It may be that none
+    of these can happen for reasons that are described elsewhere, but as
+    written:
+  If the local-info is empty, the localpart will be "rfcxxxx." and thus the
+  domain info will be "rfcxxxx.@domain".  Is the period really required in the
+  absence of the local-info If the rsub is empty, but the extensions are not
+  empty, it looks like there will be two plus signs (following the optional
+  acp-address) before the first extension.  Is that intended as the way to
+  indicate the absence of the rsub? It also seems odd that the rsub (which is a
+  domain extension) appears in the local-part of the domain information, not in
+  the domain name.  Even though for hashing purposes it is concatenated, with a
+  period, with the domain name.
+ If these oddities are intentional, then there ought to be explanations so the
+ reader is not confused.
+
+    I presume there is not an assumption that all ULA addressed communicating
+    with a node which supports the ACP will be over the ACP.  As I understand
+    it, ULAs may well have other uses outside of ANIMA / the ACP.  Which leads
+    to a question about how the text in 6.1.3 "If the CDP URL uses an IPv6 ULA,
+    the ACP node will try to reach it via the ACP." is expected to be supported?
+
+    The discovery text in section6.3 states that discovery should be run in
+    every physical interface.  Is this intended to be restricted by policy, as
+    described in section 5, bullet 2?
+
+***    The explanation in section 6.5 on channel selection (and security
+protocol selection) is worded as if the described behavior will lead to
+reliable interoperation.  The text on why there are limitations (reasonable)
+doe not explain why mandating dTLS support would not be a reasonable step.   (I
+hope I missing something, as otherwise this is a major problem rather than
+being minor.)  It is also hard to align this with the requirements in section
+6.7.3.
+
+    6.8.2.1 has text about "hop-by-hop reliable retransmission as provided for
+    by TCP".  I am unable to determine what this is saying.
+
+    If I have used section 6.10.3 properly, when the Zone-ID is 0, all nodes
+    within the ULA are within a flat address space.  that does turn the address
+    into an identifier.  It is, as far as I can tell from the description,
+    still a locator in that packets will be routed to the node using the
+    address including the node identifier.  It just means that routing has to
+    work in /127 addresses.  (There is also a reference to "identifier" in
+    6.10.3.1.  From the usage there, I think that the intention is that this is
+    the generic "name" for the node.  Given that it is routable, it is simply
+    an addresses, not an identifier or a locator.)
+
+    The description in section 6.10 / 6.10.1 / 6.10.2 is about the schema
+    identification is very confusing, and arguably a bad design.  The two
+    schemas use the same schema identifier.  The difference in interpretation
+    is actually provided by the last bit in the upper 64.  If these are the
+    same schema, then it should not need a bit to differentiate them.  They
+    should be explained as a single schema.  Which would presumably result in
+    the Z bit being part of the zone / subnet field.   If they are two
+    different schemas, then move the differentiation to part of the schema
+    identifier (making it 3 bits).  This sort-of different but sort-of the same
+    makes implementation "interesting".  Even if this is extra bit is only
+    needed for schema 00b, it should be in front of the Zone / subnet, not
+    after it. This leads to the obvious observation that either we need two
+    bits, of which we will have 3 settings, and we will use the fourth setting
+    as an extension mechanism if we ever need more formats, or we need at least
+    three bits all the time because we seriously think there will be more
+    formats.
+
+    In section 6.10.5, after stating that it is not even known what the needed
+    usage is for more V values, the document goes on to introduce the
+    complexity of classful nodes numbers, with the leading bit indicating how
+    long the node-number is.  Yes, the rest of the text in that bullet tries to
+    explain why you need both sizes.  It seems like needless complexity that
+    begs for mistakes in implementation.
+
+    In section 6.11.1.11 in describing the prefix lengths, I thought that the
+    point of zone addressing was to allow the use of /64 prefixes.  But it
+    seems here that we will not do so ?
+
+    Section 6.12.5 says "ACP nodes MUST NOT derive their ACP virtual interface
+    IPv6 link local address from their IPv6 link local address used on the
+    underlying interface".  But it does not then seem to provide any advice on
+    what is expected to be used.  Is the loopback ACP supposed to be used
+    somehow?  Or?
+
+    The "configuration" description in 8.2.1 provides a nice description of
+    what information is needed, and what choices are allowed.  It does NOT
+    describe a method for configuring the information.  Please tune the
+    introductory material.
+
+***    Section 10.3.2 paragraph 2 says that devices should change the meaning
+of "admin down" to mean "down for everything except ACP / Anima".    I can
+understand why, in an autonomic network, such a state is desirable.  However,
+that really should be a different state from "admin down".  Operators already
+understand "admin down" as meaning that this interface will not be used for any
+traffic.  Changing that is fairly drastic.  "admin limited" or "admin ACP-Only"
+would seem much better than changing the meaning of "admin down".  The
+justification in the text seems to be a desire to prevent an operator from
+doing what he intends.  that seems backwards.  (Note that the distinction
+between administrative state vs operational state, aka failed, is already well
+understood.)
+
+***    The notion in 10.3.6 that the device should refuse to disable
+functionality when an authorized administrator directs such seems flatly wrong.
+
+Editorial / Nits:
+    Section 6.3, in talking about DULL GRASP refers to the grasp internet
+    draft.  It refers to section 3.5.2.2.  there is no 3.5.2.2 in the grasp
+    I-D.  As best I can guess the reference should be 2.5.2.
+
+    In the various formats in section 6.10, the lowest bit of the upper 64 bits
+    is mandated to be 0.  Presumably, there is some reason for doing this.  It
+    would be nice to explain it.
+
+    In section 6.10.5, in the text about how many V values are allowed, the
+    text reads: "2^16 - 65536" which would be 0.  I believe that the intention
+    is "2^16 (i.e. 65536)"
+
+   Section 9.2.2 paragraph 2 begins "Group members must overall the secured". 
+   While I can guess what is intended, I would prefer that were in grammatical
+   English so as to avoid guessing.
+
+    Section 10.5 provides the requirements that were met by choosing RPL for
+    the routing protocol.  Likely RPL is a reasonable choice.  Since this
+    section does not provide comparison or list any alternatives, I would
+    suggest changing "explanation" to "motivation".
+
+_______________________________________________
+Anima mailing list
+Anima@ietf.org
+https://www.ietf.org/mailman/listinfo/anima

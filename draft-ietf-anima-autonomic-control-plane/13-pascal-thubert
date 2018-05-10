@@ -1,0 +1,1461 @@
+From pthubert@cisco.com  Mon Feb 26 18:26:14 2018
+Return-Path: <pthubert@cisco.com>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-12.6 required=5.0 tests=DKIM_SIGNED=0.1,
+	DKIM_VALID=-0.1,DKIM_VALID_AU=-0.1,HTML_MESSAGE=0.001,RCVD_IN_DNSWL_HI=-5,
+	USER_IN_DEF_DKIM_WL=-7.5 autolearn=disabled version=3.4.0
+X-Original-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Delivered-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [131.188.34.45])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id 9DDDF58C563
+	for <eckert+ietf@i4.informatik.uni-erlangen.de>; Mon, 26 Feb 2018 18:26:14 +0100 (CET)
+Received: from mail.ietf.org (mail.ietf.org [IPv6:2001:1900:3001:11::2c])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id 2836A74E78C
+	for <tte+ietf@cs.fau.de>; Mon, 26 Feb 2018 18:26:10 +0100 (CET)
+Received: by ietfa.amsl.com (Postfix, from userid 65534)
+	id B582712D77D; Mon, 26 Feb 2018 09:26:08 -0800 (PST)
+X-Original-To: xfilter-draft-ietf-anima-autonomic-control-plane@ietfa.amsl.com
+Delivered-To: xfilter-draft-ietf-anima-autonomic-control-plane@ietfa.amsl.com
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 6C54C12025C;
+ Mon, 26 Feb 2018 09:26:08 -0800 (PST)
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
+ header.d=cisco.com
+Received: from mail.ietf.org ([4.31.198.44])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IRhONc5wkzgf; Mon, 26 Feb 2018 09:26:02 -0800 (PST)
+Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
+ (using TLSv1.2 with cipher DHE-RSA-SEED-SHA (128/128 bits))
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 9AAFC12D77D;
+ Mon, 26 Feb 2018 09:26:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=cisco.com; i=@cisco.com; l=57301; q=dns/txt;
+ s=iport; t=1519665961; x=1520875561;
+ h=from:to:cc:subject:date:message-id:mime-version;
+ bh=tFZ0xaeUeP7ECzpRSVbK9+qDkHj8Jj483zpVFmrzrvo=;
+ b=cmLs+/AYf1Hao8tz0lJPsbShtMHJVG+mPgCOgIOmzqGGJndekm/BO/kd
+ yNOCN6oW+2hYyjCh5gmUoIqMSwoMutUagxRtrY1LxgN7/wpwlxZUxW58R
+ ZJkNBuRJ+U5mcjIc/N2uKznTVNWVFw0OuOzVKoklpXA79GPH+qUVPvLDq I=;
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AqAQARQpRa/5FdJa1dGQEBAQEBAQEBA?=
+ =?us-ascii?q?QEBAQcBAQEBAYJadWZwMo1sjX6DGJYFFIICCQEjhRCCR1QYAQIBAQEBAQECayi?=
+ =?us-ascii?q?FRA0GTBIBQAE/JgEEAQ0NE4QRZBCtJDqIbYIUAQEBAQEBAQEBAQEBAQEBAQEBA?=
+ =?us-ascii?q?QEBGAWGKIEagVeBZoIfhDwBAQOBUgSGCgWKIggPhnWBW45YCQKHN4EZi0WCD4V?=
+ =?us-ascii?q?mg2WHD4xRiHcCERkBgS4BHjiBUXAVGSGCMwEQgkEBHIF7jDuBFwEBAQ?=
+X-IronPort-AV: E=Sophos;i="5.47,397,1515456000"; 
+ d="scan'208,217";a="142865849"
+Received: from rcdn-core-9.cisco.com ([173.37.93.145])
+ by rcdn-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384;
+ 26 Feb 2018 17:25:59 +0000
+Received: from XCH-ALN-004.cisco.com (xch-aln-004.cisco.com [173.36.7.14])
+ by rcdn-core-9.cisco.com (8.14.5/8.14.5) with ESMTP id w1QHPxmY024780
+ (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+ Mon, 26 Feb 2018 17:25:59 GMT
+Received: from xch-rcd-001.cisco.com (173.37.102.11) by XCH-ALN-004.cisco.com
+ (173.36.7.14) with Microsoft SMTP Server (TLS) id 15.0.1320.4;
+ Mon, 26 Feb 2018 11:25:58 -0600
+Received: from xch-rcd-001.cisco.com ([173.37.102.11]) by
+ XCH-RCD-001.cisco.com ([173.37.102.11]) with mapi id 15.00.1320.000; Mon, 26
+ Feb 2018 11:25:58 -0600
+From: "Pascal Thubert (pthubert)" <pthubert@cisco.com>
+To: iot-dir <iot-dir@ietf.org>, "ops-dir@ietf.org" <ops-dir@ietf.org>,
+ "int-dir@ietf.org" <int-dir@ietf.org>
+CC: "anima@ietf.org" <anima@ietf.org>,
+ "draft-ietf-anima-autonomic-control-plane@ietf.org"
+ <draft-ietf-anima-autonomic-control-plane@ietf.org>
+Subject: An IOT DIR review of draft-ietf-anima-autonomic-control-plane
+Thread-Topic: An IOT DIR review of draft-ietf-anima-autonomic-control-plane
+Thread-Index: AdOnCBzSJMKw+zXyQYGzXbZB1Jtadg==
+Date: Mon, 26 Feb 2018 17:25:58 +0000
+Deferred-Delivery: Mon, 26 Feb 2018 17:25:22 +0000
+Message-ID: <449b7e2f10094531b325919710696754@XCH-RCD-001.cisco.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.61.212.148]
+Content-Type: multipart/alternative;
+ boundary="_000_449b7e2f10094531b325919710696754XCHRCD001ciscocom_"
+MIME-Version: 1.0
+Resent-From: <alias-bounces@ietf.org>
+Resent-To: tte+ietf@cs.fau.de, Michael.H.Behringer@gmail.com, sbjarnason@arbor.net
+Resent-Message-Id: <20180226172608.B582712D77D@ietfa.amsl.com>
+Resent-Date: Mon, 26 Feb 2018 09:26:08 -0800 (PST)
+X-Virus-Scanned: clamav-milter 0.99.3 at faui45
+X-Virus-Status: Clean
+Status: RO
+Content-Length: 55938
+Lines: 1363
+
+--_000_449b7e2f10094531b325919710696754XCHRCD001ciscocom_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Reviewer: Pascal Thubert on behalf of IOT-DIR;
+
+
+
+I am an assigned IoT directorate reviewer for draft-ietf-anima-autonomic-co=
+ntrol-plane-13.
+
+
+
+These comments were written primarily for the benefit of the INT and OPS Ar=
+eas Directors from the IoT perspective. Document editors and shepherd(s) sh=
+ould treat these comments just like they would treat comments from any othe=
+r IETF contributors and resolve them along with any other Last Call comment=
+s that have been received. For more details on the IoT Directorate, please =
+see https://datatracker.ietf.org/group/iotdir/about/ and for Directorates i=
+n general please see https://www.ietf.org/about/groups/directorates/.
+
+
+
+I'll be away for  the next 2 weeks and could not finish the review in time =
+for this heavy document, but at least I made it through till the RPL sectio=
+n. In the interest of time, let me share what I already have.
+
+
+
+Summary
+
+-------------
+
+
+
+The summary of the review is that the document is Ready for Publication, wi=
+th comments.
+
+
+
+
+
+Major comments
+
+------------------------
+
+
+
+-          " in-band" and "out of band network "
+
+should be defined since it is fundamental to understand that the ACP takes =
+place in the same physical links as the data plane, as opposed to dedicated=
+ management ports (correct?);
+
+
+
+-          Section 3; the IOT certainly could use an ACP. It would be usefu=
+l to scope the feature that is proposed in this document, whether it is com=
+patible of not with constrained environments, whether it needs adaptations,=
+ point on Michael's enrollment draft. It would also be useful to indicate w=
+hether the ACP works between L3 bridges, IOW whether ACP operates the same =
+(over IP) regardless of the packet forwarding layer in the data plane;
+
+
+
+-         " Inside the ACP VRF, each node sets up a loopback interface with=
+ its ULA IPv6 address"
+This is the first time, IPv6 is discussed; would have been nice to introduc=
+e that the Node has IPv6, that it needs a ULA and that ACP assigns it. This=
+ discussion could be done in conjunction with the comment above;
+
+
+
+-         About  "The ttl
+
+parameter SHOULD be 3.5 times the period so that up to three
+
+consecutive messages can be dropped before considering an
+
+-           announcement expired. "
+
+This is the only discussion on the ttl field of the M_FLOOD. Though its mea=
+ning is quite obvious, the behavior associated to it should be defined.
+
+
+
+-         "In the above (recommended) example the period of sending of the"
+
+Is this RECOMMENDED IOW normative??
+
+
+
+-         Text P 25 says "At this time in the lifecycle of ACP nodes, it is=
+ unclear whether it
+
+is feasible to even decide on a single MTI (mandatory to implement)
+
+security association protocol across all ACP nodes"
+
+but then P27 "It MUST support ESP
+
+with AES256 for encryption and SHA256 hash and MUST NOT permit weaker
+
+crypto options."
+
+and then "   A baseline ACP node MUST support IPsec natively and MAY suppor=
+t IPsec
+
+via GRE. A constrained ACP node MUST support dTLS.  ACP nodes
+
+connecting constrained areas with baseline areas MUST therefore
+
+support IPsec and dTLS."
+
+Seems that text P25 should go?
+
+
+
+
+
+-           "Use-ULA: For loopback interfaces of ACP nodes, we use Unique L=
+ocal
+
+Addresses (ULA), specifically ULA-Random, as defined in [[RFC4193]
+
+with L=3D1]."
+
+This needs to be more crisp. ULA is defined in RFC 4193 but the term ULA-Ra=
+ndom is not. I think you mean that 3.2.2.  of RFC 4193 is the way addresses=
+ are formed, if so please say so.  The best practice RFC 8064 recommends us=
+e of RFC 7217. I understand that privacy is not a concern but does it hurt?=
+ Anyway please point at section 6.10 and 6.11.1.11
+
+
+
+
+
+-           "
+
+RPL Mode of Operations (MOP): mode 3 "Storing Mode of Operations with multi=
+cast support".  Implementations should support also other modes.
+
+Note: Root indicates mode in DIO flow"
+
+Why "should" ? there is no much point supporting the other modes is there? =
+Section 6.11.1.13 says that SRH is not used so this is inconsistent. You on=
+ly need MOP 2 or 3, 3 is you do multicast which at the moment does not appe=
+ar to be the case. SO I would MUST a MOP of 2 and MAY a MOP of 3 which is a=
+ superset of MOP 2, and that's it (see 6.3.1 of RFC 6550).
+
+
+
+
+
+-           "The lack of a RPI (the header defined by [RFC6553]), means tha=
+t the
+
+data-plane will have no rank value that can be used to detect loops.
+
+As a result, traffic may loop until the TTL of the packet reaches
+
+zero. "
+
+Since we have reliable links and no stretch (section 6.11.1.7), loops shoul=
+d be exceedingly rare. It could be recommended to send the DIOs 2-3 times t=
+o inform children when losing the last parent. Note that the technique in s=
+ection "8.2.2.6.  Detaching" of RFC 6550 should be favored over that in sec=
+tion "8.2.2.5.  Poisoning" because it allows local connectivity. Also, It s=
+hould be said that a node should select more than one parent, at least 3 if=
+ possible, and send DAOs to all of then in parallel. This provides multi
+
+
+
+
+
+-           "ACP nodes MUST perform standard IPv6 operations across ACP vir=
+tual
+
+interfaces including SLAAC (Stateless Address Auto-Configuration -
+
+RFC4862])"
+
+They may actually prefer Optimistic DAD RFC 4429 since address duplication =
+is highly improbable as long as you .
+
+
+
+
+
+Minor comments
+
+------------------------
+
+
+
+
+
+-         About "[RFC7575] defines the fundamental ...  "
+
+for readability, it may be nicer to indicate the title of an RFC when it is=
+ referenced first; e.g. the text above would become
+
+" Autonomic Networking: Definitions and Design Goals" [RFC7575] defines the=
+ fundamental ...
+
+
+
+-         about "or network plane (there is no well-established name  for t=
+his)"
+
+The term network plane is not used again in the document. This text may go =
+away. You may consider using "security and transport substrate" instead, si=
+nce it is used elsewhere in the document. Also, please be consistent on whe=
+ther you use hyphen or not and use that globally, e.g. for the above, and p=
+ane like in "forwarding plane" or "out of band network ";
+
+
+
+-         "data-plen"
+
+Typo?
+
+
+
+-         "OAM applications ("Operations Administration and Management)"
+
+Consider using "Operations Administration and Management (OAM) applications=
+ " instead; same goes for SDN, ASA, VRF, etc...
+
+
+
+-          "   MIC:  "Manufacturer Installed Certificate".  Another word no=
+t used in this document to describe an IDevID."
+
+MIC is not used in the document, maybe inform of this equivalence in the ID=
+evID definition instead; same goes for SUDI. Note that UDI is use just once=
+ and may not need an entry here.
+
+
+
+-               "RPL:  \"IPv6 Routing Protocol for Low-Power and Lossy Netw=
+orks\".  The routing protocol used in the ACP."
+
+Maybe point on [RFC6550]?
+
+
+-         "Connecting over non-ACP Layer-3 clouds initially requires a tunn=
+el between ACP nodes."
+
+I understands that it is one tunnel between each pair of adjacent ACP nodes=
+, correct? I read "a tunnel" as an end-to-end tunnel, which sounds differen=
+t
+
+
+
+-          "ACP relies on group security"
+
+Add "The"
+
+
+
+-          "An ACP node MUST have keying
+
+   material consisting of a certificate (LDevID), with which it can
+
+     cryptographically assert its membership in the ACP domain and trust
+
+     anchor(s) associated with that certificate with which it can verify
+
+     the membership of other nodes (see Section 6.1.2)."
+
+This is convoluted. Could you make it 2 sentences?
+
+
+
+-         "  Note: LDevID ("Local Device IDentification") is the term used =
+to
+
+     indicate a certificate that was provisioned by the owner of a node as
+
+opposed to IDevID ("Initial Device IDentifier") that may has been
+
+loaded on the node during manufacturing time.  Those IDevID do not
+
+include owner and deployment specific information to allows autonomic
+
+establishment of trust for the operations of an ACP domain (e.g.:
+
+between two ACP nodes without relying on any third party)."
+
+LDevID was already defined in the terminology. This text may move there or =
+go away.
+
+
+
+-          "   This document uses the term ACP in many places where its ref=
+erence
+
+document use the word autonomic."
+
+Add [RFC7575] after "reference document"
+
+
+
+
+
+-          "   "routing-subdomain" is the autonomic subdomain that is used =
+to
+
+calculate the hash for the ULA prefix of the ACP address of the node."
+
+Do you mean ULA suffix?
+
+
+
+-          "   o  If the node certificates indicate a CDP (or OCSP) then th=
+e peer's
+
+certificate must be valid according to those criteria. e.g.: OCSP
+
+check across the ACP or not listed in the CRL retrieved from the
+
+CDP."
+
+Please define CDP and OSCP, and/or reference a RFC is possible.
+
+Helper: Online Certificate Status Protocol (OCSP)  Certificate Revocation L=
+ist (CRL) Distribution Point (CDP)
+
+
+
+-          "enrolment"
+
+Typo
+
+
+
+-          "This can
+
+use a single GRASP M_FLOOD message as shown in above example."
+
+Actually the example is now below. Please reference the figure.
+
+
+
+-           "The protocol could for example could have been"
+
+Typo
+
+
+
+
+
+-           "if the IPsec connecting"
+
+Typo?
+
+
+
+-           "ACP wide service discovery"
+
+ACP-wide
+
+
+-           "if the IPsec connecting In most other solution
+
+designs such distributed discovery does not exist at all or was added
+
+as an afterthought and relied upon inconsistently"
+
+Consider removing or rephrasing : )
+
+
+
+-         Maybe consider moving the discussion on multicast P29 -30 to anne=
+x? Why Multicast is not used is an interesting discussion but not critical =
+for the protocol operation.
+
+
+
+-           "it is not quite clear yet what exactly the implications are
+
+to make GRASP flooding depend on RPL DODAG convergence and how
+
+difficult it would be to let GRASP flooding access the DODAG
+
+information"
+
+Let's chat then. There's work on reliable multicast for RPL using BIER.
+
+
+
+-         "In the terminology of GRASP ([I-D.ietf-anima-grasp]), the ACP is=
+ the
+
+security and transport substrate for the GRASP instance run inside
+
+the ACP ("ACP GRASP"). "
+
+"running" inside the ACP? Maybe rephrase more globally?
+
+-
+
+
+
+
+
+-           "OAM protocols no not require IPv4: The ACP may carry OAM "
+
+Typo no->do
+
+
+
+
+
+-           "Consider a network that has multiple NOCs in different locatio=
+ns.
+
+Only one NOC will become the DODAG root.  Other NOCs will have to
+
+send traffic through the DODAG (tree) rooted in the primary NOC."
+
+A figure would help. I remember all the discussions we had about setting th=
+e prf bits in remote NOCs
+
+
+
+
+
+-           "RPPL."
+
+Typo
+
+
+
+
+
+-           "Administrative Preference ([RFC6552], 3.2.6  "
+
+The section is correct but that is RFC 6550.
+
+
+
+
+
+-           "This is a standard issue
+
+with tunneling, not specific to running the ACP across it."
+
+Do you really mean Standard or would Classical work better?
+
+
+
+
+
+-           "Even though loopback interfaces where originally d"
+
+Typo Where -> were
+
+
+
+
+
+
+
+-         Section 3, 4, 9 and 10 may move to Annex (by moving the section a=
+fter the </references> tag) since they are not normative and do not contrib=
+ute to the understanding of the protocol. This way there should not be a ne=
+ed to indicate normative in other sections.
+
+
+
+-         Well Noted that Section 14 Will be removed/.
+
+
+
+
+
+Sorry for being interrupted here,
+
+
+
+Pascal
+
+
+
+--_000_449b7e2f10094531b325919710696754XCHRCD001ciscocom_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{mso-style-priority:99;
+	mso-style-link:"Plain Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+pre
+	{mso-style-priority:99;
+	mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{mso-style-priority:34;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-priority:99;
+	mso-style-link:"HTML Preformatted";
+	font-family:"Courier New";}
+p.msonormal0, li.msonormal0, div.msonormal0
+	{mso-style-name:msonormal;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+span.PlainTextChar
+	{mso-style-name:"Plain Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Plain Text";
+	font-family:"Calibri",sans-serif;}
+span.EmailStyle23
+	{mso-style-type:personal;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+span.EmailStyle24
+	{mso-style-type:personal-compose;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+/* List Definitions */
+@list l0
+	{mso-list-id:1448234566;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-317321368 1536716144 67698691 67698693 67698689 676=
+98691 67698693 67698689 67698691 67698693;}
+@list l0:level1
+	{mso-level-start-at:14;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-font-family:Calibri;}
+@list l0:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:"Courier New";}
+@list l0:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Wingdings;}
+@list l0:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l0:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:"Courier New";}
+@list l0:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Wingdings;}
+@list l0:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l0:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:"Courier New";}
+@list l0:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Wingdings;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoPlainText">Reviewer: Pascal Thubert on behalf of IOT-DIR;<o:=
+p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">I am an assigned IoT directorate reviewer for dra=
+ft-ietf-anima-autonomic-control-plane-13.
+<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">These comments were written primarily for the ben=
+efit of the INT and OPS Areas Directors from the IoT perspective. Document =
+editors and shepherd(s) should treat these comments just like they would tr=
+eat comments from any other IETF contributors
+ and resolve them along with any other Last Call comments that have been re=
+ceived. For more details on the IoT Directorate, please see
+<a href=3D"https://datatracker.ietf.org/group/iotdir/about/">https://datatr=
+acker.ietf.org/group/iotdir/about/</a> and for Directorates in general plea=
+se see
+<a href=3D"https://www.ietf.org/about/groups/directorates/">https://www.iet=
+f.org/about/groups/directorates/</a>.
+<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">I&#8217;ll be away for&nbsp; the next 2 weeks and=
+ could not finish the review in time for this heavy document, but at least =
+I made it through till the RPL section. In the interest of time, let me sha=
+re what I already have.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Summary<o:p></o:p></p>
+<p class=3D"MsoPlainText">-------------<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">The summary of the review is that the document is=
+ Ready for Publication, with comments.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Major comments<o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220; <span style=3D"font-family:&quot;Cour=
+ier New&quot;">in-band&#8221; </span>
+and <span style=3D"font-family:&quot;Courier New&quot;">&#8220;out of band =
+network</span> &#8220; <o:p></o:p></p>
+<p class=3D"MsoPlainText">should be defined since it is fundamental to unde=
+rstand that the ACP takes place in the same physical links as the data plan=
+e, as opposed to dedicated management ports (correct?);<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;Section 3; the IOT certainly could use an ACP=
+. It would be useful to scope the feature that is proposed in this document=
+, whether it is compatible of not with constrained environments, whether it=
+ needs adaptations, point on Michael&#8217;s
+ enrollment draft. It would also be useful to indicate whether the ACP work=
+s between L3 bridges, IOW whether ACP operates the same (over IP) regardles=
+s of the packet forwarding layer in the data plane;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220; <span style=3D"font-family:&quot;Courier Ne=
+w&quot;">Inside the ACP VRF, each node sets up a loopback interface with it=
+s ULA IPv6 address</span>&#8221;<o:p></o:p></p>
+<p class=3D"MsoNormal">This is the first time, IPv6 is discussed; would hav=
+e been nice to introduce that the Node has IPv6, that it needs a ULA and th=
+at ACP assigns it. This discussion could be done in conjunction with the co=
+mment above;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>About&nbsp; &#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">The ttl<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">parameter SHOULD be 3.5 times the period so=
+ that up to three<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">consecutive messages can be dropped before =
+considering an<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]><span style=3D"font-family:&quot;Courier New&quot;"=
+>&nbsp;&nbsp;announcement expired.</span> &#8220;<o:p></o:p></p>
+<p class=3D"MsoPlainText">This is the only discussion on the ttl field of t=
+he M_FLOOD. Though its meaning is quite obvious, the behavior associated to=
+ it should be defined.&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220;<span style=3D"font-family:&quot;Courier New=
+&quot;">In the above (recommended) example the period of sending of the</sp=
+an>&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Is this RECOMMENDED IOW normative??<o:p></o:p></p=
+>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>Text P 25 says &#8220;<span style=3D"font-family:&q=
+uot;Courier New&quot;">At this time in the lifecycle of ACP nodes, it is un=
+clear whether it<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">is feasible to even decide on a single MTI =
+(mandatory to implement)<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">security association protocol across all AC=
+P nodes</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt">but then P27 &#8220;=
+<span style=3D"font-family:&quot;Courier New&quot;">It MUST support ESP<o:p=
+></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">with AES256 for encryption and SHA256 hash =
+and MUST NOT permit weaker<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">crypto options.&#8221;</span>
+<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt">and then &#8220;&nbs=
+p;&nbsp; <span style=3D"font-family:&quot;Courier New&quot;">
+A baseline ACP node MUST support IPsec natively and MAY support IPsec<o:p><=
+/o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">via GRE. A constrained ACP node MUST suppor=
+t dTLS.&nbsp; ACP nodes<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">connecting constrained areas with baseline =
+areas MUST therefore<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">support IPsec and dTLS.</span>&#8221;<o:p><=
+/o:p></p>
+<p class=3D"MsoPlainText">Seems that text P25 should go?<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">Use-ULA: For loopback interfaces of ACP nodes, we use U=
+nique Local<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">Addresses (ULA), specifically ULA-Random, a=
+s defined in [[RFC4193]<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">with L=3D1].</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">This needs to be more crisp. ULA is defined in RF=
+C 4193 but the term ULA-Random is not. I think you mean that 3.2.2.&nbsp; o=
+f RFC 4193 is the way addresses are formed, if so please say so.&nbsp; The =
+best practice RFC 8064 recommends use of RFC
+ 7217. I understand that privacy is not a concern but does it hurt? Anyway =
+please point at section 6.10 and 6.11.1.11<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;"><o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">RPL Mode of Operations (MOP): mode 3 &quot;=
+Storing Mode of Operations with multicast support&quot;.&nbsp; Implementati=
+ons should support also other modes.<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">Note: Root indicates mode in DIO flow&#8221=
+;</span>
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Why &#8220;should&#8221; ? there is no much point=
+ supporting the other modes is there? Section 6.11.1.13 says that SRH is no=
+t used so this is inconsistent. You only need MOP 2 or 3, 3 is you do multi=
+cast which at the moment does not appear to be
+ the case. SO I would MUST a MOP of 2 and MAY a MOP of 3 which is a superse=
+t of MOP 2, and that&#8217;s it (see 6.3.1 of RFC 6550).<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">The lack of a RPI (the header defined by [RFC6553]), me=
+ans that the<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">data-plane will have no rank value that can=
+ be used to detect loops.<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">As a result, traffic may loop until the TTL=
+ of the packet reaches<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">zero. &#8221;</span>
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Since we have reliable links and no stretch (sect=
+ion 6.11.1.7), loops should be exceedingly rare. It could be recommended to=
+ send the DIOs 2-3 times to inform children when losing the last parent. No=
+te that the technique in section &#8220;8.2.2.6.&nbsp;
+ Detaching&#8221; of RFC 6550 should be favored over that in section &#8220=
+;8.2.2.5.&nbsp; Poisoning&#8221; because it allows local connectivity. Also=
+, It should be said that a node should select more than one parent, at leas=
+t 3 if possible, and send DAOs to all of then in parallel.
+ This provides multi<o:p></o:p></p>
+<p class=3D"MsoPlainText">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">ACP nodes MUST perform standard IPv6 operations across =
+ACP virtual<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">interfaces including SLAAC (Stateless Addre=
+ss Auto-Configuration -<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">RFC4862])</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">They may actually prefer Optimistic DAD RFC 4429 =
+since address duplication is highly improbable as long as you .<o:p></o:p><=
+/p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Minor comments<o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>About &#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">[RFC7575] defines the fundamental ...</span>&nbsp; &#8220;<o:=
+p></o:p></p>
+<p class=3D"MsoPlainText">for readability, it may be nicer to indicate the =
+title of an RFC when it is referenced first; e.g. the text above would beco=
+me<o:p></o:p></p>
+<p class=3D"MsoPlainText">&quot; Autonomic Networking: Definitions and Desi=
+gn Goals&quot; [RFC7575] defines the fundamental ...&nbsp;&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>about &#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">or network plane (there is no well-established name&nbsp; for=
+ this)</span>&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">The term network plane is not used again in the d=
+ocument. This text may go away. You may consider using &quot;<span style=3D=
+"font-family:&quot;Courier New&quot;">security and transport substrate</spa=
+n>&quot; instead, since it is used elsewhere in the document.
+ Also, please be consistent on whether you use hyphen or not and use that g=
+lobally, e.g. for the above, and pane like in &#8220;<span style=3D"font-fa=
+mily:&quot;Courier New&quot;">forwarding plane</span>&#8221; or
+<span style=3D"font-family:&quot;Courier New&quot;">&#8220;out of band netw=
+ork</span> &#8220;;<o:p></o:p></p>
+<pre><o:p>&nbsp;</o:p></pre>
+<pre style=3D"margin-left:36.0pt;text-indent:-18.0pt;mso-list:l0 level1 lfo=
+2"><![if !supportLists]><span style=3D"font-family:&quot;Calibri&quot;,sans=
+-serif"><span style=3D"mso-list:Ignore">-<span style=3D"font:7.0pt &quot;Ti=
+mes New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </spa=
+n></span></span><![endif]>&quot;data-plen&#8221; <o:p></o:p></pre>
+<pre><span style=3D"font-family:&quot;Calibri&quot;,sans-serif">Typo?</span=
+> <o:p></o:p></pre>
+<pre><o:p>&nbsp;</o:p></pre>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220;<span style=3D"font-family:&quot;Courier New=
+&quot;">OAM applications (&quot;Operations Administration and Management)</=
+span>&quot;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Consider using &#8220;Operations Administration a=
+nd Management (OAM) applications &#8220; instead; same goes for SDN, ASA, V=
+RF, etc&#8230;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;&nbsp;&nbsp; <span style=3D"font-famil=
+y:&quot;Courier New&quot;">MIC:&nbsp; &quot;Manufacturer Installed Certific=
+ate&quot;.&nbsp; Another word not used in this document to describe an IDev=
+ID</span>.&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">MIC is not used in the document, maybe inform of =
+this equivalence in the IDevID definition instead; same goes for SUDI. Note=
+ that UDI is use just once and may not need an entry here.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8220;<span st=
+yle=3D"font-family:&quot;Courier New&quot;">RPL:&nbsp; \&quot;IPv6 Routing =
+Protocol for Low-Power and Lossy Networks\&quot;.&nbsp; The routing protoco=
+l used in the ACP</span>.&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Maybe point on [RFC6550]?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220;<span style=3D"font-family:&quot;Courier New=
+&quot;">Connecting over non-ACP Layer-3 clouds initially requires a tunnel =
+between ACP nodes</span>.&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">I understands that it is one tunnel between each =
+pair of adjacent ACP nodes, correct? I read &#8220;a tunnel&#8221; as an en=
+d-to-end tunnel, which sounds different<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">ACP relies on group security</span>&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Add &#8220;The&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">An ACP node MUST have keying<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:18.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">&nbsp;&nbsp; material consisting of a certi=
+ficate (LDevID), with which it can<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"font-family:&quot;Courier New&quot=
+;">&nbsp;&nbsp; &nbsp; cryptographically assert its membership in the ACP d=
+omain and trust<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"font-family:&quot;Courier New&quot=
+;">&nbsp;&nbsp; &nbsp; anchor(s) associated with that certificate with whic=
+h it can verify<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"font-family:&quot;Courier New&quot=
+;">&nbsp;&nbsp; &nbsp; the membership of other nodes (see Section 6.1.2).&#=
+8221;<o:p></o:p></span></p>
+<p class=3D"MsoPlainText">This is convoluted. Could you make it 2 sentences=
+?<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220;&nbsp; <span style=3D"font-family:&quot;Cour=
+ier New&quot;">Note: LDevID (&quot;Local Device IDentification&quot;) is th=
+e term used to<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"font-family:&quot;Courier New&quot=
+;">&nbsp; &nbsp;&nbsp; indicate a certificate that was provisioned by the o=
+wner of a node as<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">opposed to IDevID (&quot;Initial Device IDe=
+ntifier&quot;) that may has been<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">loaded on the node during manufacturing tim=
+e.&nbsp; Those IDevID do not<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">include owner and deployment specific infor=
+mation to allows autonomic<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">establishment of trust for the operations o=
+f an ACP domain (e.g.:<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">between two ACP nodes without relying on an=
+y third party).&#8221;<o:p></o:p></span></p>
+<p class=3D"MsoPlainText">LDevID was already defined in the terminology. Th=
+is text may move there or go away.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;&nbsp;&nbsp; <span style=3D"font-famil=
+y:&quot;Courier New&quot;">This document uses the term ACP in many places w=
+here its reference<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">document use the word autonomic</span>.&#82=
+21;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Add [RFC7575] after &#8220;reference document&#82=
+21;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><o:p>&nbsp;</o:p></p=
+>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;&nbsp;&nbsp; <span style=3D"font-famil=
+y:&quot;Courier New&quot;">&quot;routing-subdomain&quot; is the autonomic s=
+ubdomain that is used to<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">calculate the hash for the ULA prefix of th=
+e ACP address of the node.&#8221;<o:p></o:p></span></p>
+<p class=3D"MsoPlainText">Do you mean ULA suffix?<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;&nbsp;&nbsp; o&nbsp; <span style=3D"fo=
+nt-family:&quot;Courier New&quot;">If the node certificates indicate a CDP =
+(or OCSP) then the peer's<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">certificate must be valid according to thos=
+e criteria. e.g.: OCSP<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">check across the ACP or not listed in the C=
+RL retrieved from the<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">CDP</span>.&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Please define CDP and OSCP, and/or reference a RF=
+C is possible.&nbsp;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Helper: Online Certificate Status Protocol (OCSP)=
+&nbsp; Certificate Revocation List (CRL) Distribution Point (CDP)<o:p></o:p=
+></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">enrolment</span>&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Typo<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&#8220;<span style=3D"font-family:&quot;Couri=
+er New&quot;">This can<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">use a single GRASP M_FLOOD message as shown=
+ in above example</span>.&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Actually the example is now below. Please referen=
+ce the figure.
+<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><o:p>&nbsp;</o:p></p=
+>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">The protocol could for example could have been</span>&#=
+8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Typo<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><o:p>&nbsp;</o:p></p=
+>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">if the IPsec connecting</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Typo?<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><o:p>&nbsp;</o:p></p=
+>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">ACP wide service discovery&#8221;</span>
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">ACP-wide&nbsp; <span style=3D"font-size:10.0pt;fo=
+nt-family:&quot;Courier New&quot;">
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Co=
+urier New&quot;"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">if the IPsec connecting</span>
+<span style=3D"font-family:&quot;Courier New&quot;">In most other solution<=
+o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:18.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">designs such distributed discovery does not=
+ exist at all or was added<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"text-indent:18.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">as an afterthought and relied upon inconsis=
+tently</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Consider removing or rephrasing : )<o:p></o:p></p=
+>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>Maybe consider moving the discussion on multicast P=
+29 -30 to annex? Why Multicast is not used is an interesting discussion but=
+ not critical for the protocol operation.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">it is not quite clear yet what exactly the implications=
+ are<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">to make GRASP flooding depend on RPL DODAG =
+convergence and how<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">difficult it would be to let GRASP flooding=
+ access the DODAG<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">information</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Let&#8217;s chat then. There&#8217;s work on reli=
+able multicast for RPL using BIER.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&#8220;<span style=3D"font-family:&quot;Courier New=
+&quot;">In the terminology of GRASP ([I-D.ietf-anima-grasp]), the ACP is th=
+e<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">security and transport substrate for the GR=
+ASP instance run inside<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">the ACP (&quot;ACP GRASP&quot;).
+</span>&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText">&#8220;running&#8221; inside the ACP? Maybe rephr=
+ase more globally?<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">OAM protocols no not require IPv4: The ACP may carry OA=
+M
+</span>&#8221; <o:p></o:p></p>
+<p class=3D"MsoPlainText">Typo no-&gt;do<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">Consider a network that has multiple NOCs in different =
+locations.<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">Only one NOC will become the DODAG root.&nb=
+sp; Other NOCs will have to<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">send traffic through the DODAG (tree) roote=
+d in the primary NOC.</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">A figure would help. I remember all the discussio=
+ns we had about setting the prf bits in remote NOCs<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">RPPL.</span>&#8221; <o:p>
+</o:p></p>
+<p class=3D"MsoPlainText">Typo<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">Administrative Preference ([RFC6552], 3.2.6&nbsp; &#822=
+1;</span>
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">The section is correct but that is RFC 6550.<o:p>=
+</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">This is a standard issue<o:p></o:p></span></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><span style=3D"font-=
+family:&quot;Courier New&quot;">with tunneling, not specific to running the=
+ ACP across it.</span>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Do you really mean Standard or would Classical wo=
+rk better?<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>&nbsp;&nbsp;&#8220;<span style=3D"font-family:&quot=
+;Courier New&quot;">Even though loopback interfaces where originally d</spa=
+n>&#8221;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Typo Where -&gt; were<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>Section 3, 4, 9 and 10 may move to Annex (by moving=
+ the section after the &lt;/references&gt; tag) since they are not normativ=
+e and do not contribute to the understanding of the protocol. This way ther=
+e should not be a need to indicate normative
+ in other sections.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt;text-indent:-18.0pt;m=
+so-list:l0 level1 lfo2">
+<![if !supportLists]><span style=3D"mso-list:Ignore">-<span style=3D"font:7=
+.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;
+</span></span><![endif]>Well Noted that Section 14 Will be removed/.<o:p></=
+o:p></p>
+<p class=3D"MsoListParagraph"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Sorry for being interrupted here,<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Pascal<o:p></o:p></p>
+<p class=3D"MsoPlainText" style=3D"margin-left:36.0pt"><o:p>&nbsp;</o:p></p=
+>
+</div>
+</body>
+</html>
+
+--_000_449b7e2f10094531b325919710696754XCHRCD001ciscocom_--
+
