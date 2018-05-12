@@ -45,7 +45,7 @@
                         </address>
                 </author>
 
-                <date day="9" month="May" year="2018"/>
+                <date day="12" month="May" year="2018"/>
 
                 <area>Operations and Management</area>
                 <workgroup>ANIMA WG</workgroup>
@@ -435,6 +435,8 @@ Domain SHOULD be the FQDN of a domain owned by the operator assigning the certif
 
                                 <t>The optional "extensions" field is used for future extensions to this specification.  It MUST be ignored if present and not understood.</t>
 
+  <t>In this specification, the "acp-address" field is REQUIRED, but future variations (see <xref target="reuse-acp"/>) may use local information to derive the ACP address. In this case, "acp-address" could be empty. Such a variation would be indicated by an appropriate "extension". If "acp-address" is empty, and "rsub" is empty too, the "local-part" will have the format "rfcSELF + + extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are empty.</t>
+
 <t>Note that the maximum size of "domain-information" is 254 characters and the maximum size of node-info is 64 characters according to <xref target="RFC5280"/> that is referring to <xref target="RFC2821"/> (superseded by <xref target="RFC5321"/>).</t>
 
 <t>The subjectAltName / rfc822Name encoding of the ACP domain name and ACP address is used for the following reasons: </t>
@@ -568,14 +570,27 @@ EST server.</t>
 -->
 
 <t>The ACP node SHOULD support "Certificate Revocation Lists (CRL)" via HTTPs from one
-or more "CRL Distribution Points (CDPs)".  These CDPs MUST be indicated
-in the Domain Certificate when used.  If the CDP URL uses an IPv6 ULA,
-the ACP node will try to reach it via the ACP.  In that case the
-ACP address in the domain certificate of the CDP as learned by the
-ACP node during the HTTPs TLS handshake SHOULD match that ULA address
-in the HTTPs URL.  Reaching the CDP across the ACP implies that the CDPs
-need to be reachable via the ACP, for example by running CDPs on
-registrars or on devices connected to the ACP via ACP connect (see <xref target="ACPconnect"/>).</t>
+or more "CRL Distribution Points (CDPs)".  The CDP(s) MUST be indicated
+in the Domain Certificate when used.  If the CDP URL uses an IPv6 address
+(ULA address when using the addressing rules specified in this document),
+the ACP node will connect to the CDP via the ACP. If the CDP URL uses an IPv6 address
+(ULA address when using the addressing rules specified in this document),
+the ACP node will connect to the CDP via the ACP. If the CDP uses a
+domain name, the ACP node will connect to the CDP via the data-plane.</t>
+
+<t>It is common to use domain names for CDP(s), but there is no requirement
+for the ACP to support DNS. Any DNS lookup in the data-plane is
+not only a possible security issue, but it would also not indicate whether
+the resolved address is meant to be reachable across the ACP. Therefore,
+the use of an IPv6 address versus the use of a DNS name doubles as an
+indicator whether or not to reach the CDP via the ACP.</t>
+
+<t>A CDP can be reachable across the ACP either by running it on a
+node with ACP or by connecting its node via ACP connect (see <xref target="ACPconnect"/>).
+The CDP SHOULD use an ACP domain certificate for its HTTPs connections.
+The connecting ACP node SHOULD verify that the CDP certificate used
+during the HTTPs connection has the same ACP address as indicated in the
+CDP URL of the nodes ACP domain certificate</t>
 
 <t>Renewal of certificates SHOULD start after less than 50% of the domain certificate
 lifetime so that network operations has ample time to investigate and
@@ -612,15 +627,20 @@ Infrastructures", see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>).</
 
 <section anchor="discovery-grasp" title="Neighbor Discovery with DULL GRASP">
 
-<t>The ACP uses one instance of DULL GRASP ( See section 2.5.2 of <xref target="I-D.ietf-anima-grasp"/> for its formal definition) for every physical L2 subnet of the ACP node
-to discover physically adjacent candidate ACP neighbors.  Native interfaces (e.g.: physical
-interfaces on physical nodes) SHOULD be brought up automatically enough so that ACP discovery
-can be performed and any native interfaces with ACP neighbors can then be brought into the ACP
-even if the interface is otherwise not configured.  Reception of packets on such otherwise
-not configured interfaces MUST be limited so that at first only IPv6 link-local address assignment
-(SLAAC) and DULL GRASP works and then only the following ACP secure channel setup packets
- - but not any other unnecessary traffic (e.g.: no other link-local IPv6 transport stack responders
-for example).</t>
+
+<t>[RFC Editor: GRASP draft is in RFC editor queue, waiting for dependencies, including ACP. Please ensure that this section reference will be updated in case any last-minute changes in GRASP would make this number change.</t>
+
+<t>The ACP uses one instance of DULL GRASP (See section 2.5.2 of
+<xref target="I-D.ietf-anima-grasp"/> for its formal definition) for every L2 interface
+of the ACP node to discover link level adjacent candidate ACP neighbors.  Unless modified
+by policy as noted earlier (<xref target="overview"/> bullet point 2.), native interfaces
+(e.g.: physical interfaces on physical nodes) SHOULD be initialized automatically enough,
+so that ACP discovery can be performed and any native interfaces with ACP neighbors can
+then be brought into the ACP even if the interface is otherwise not configured.
+Reception of packets on such otherwise not configured interfaces MUST be limited so that
+at first only IPv6 link-local address assignment (SLAAC) and DULL GRASP works and then only
+the following ACP secure channel setup packets - but not any other unnecessary traffic
+(e.g.: no other link-local IPv6 transport stack responders for example).</t>
 
 <t>Note that the use of the IPv6 link-local multicast address (ALL_GRASP_NEIGHBORS) implies
 the need to use MLD (<xref target="RFC3810"/>) to announce the desire to receive packets for
@@ -1037,16 +1057,16 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         <!-- base-scheme -->
 
         <section anchor="zone-scheme" title="ACP Zone Addressing Sub-Scheme">
-                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme.</t>
+                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme and 0 in the Z bit.</t>
                 <t><figure title="ACP Zone Addressing Sub-Scheme" anchor='addr-scheme'>
                 <artwork>
 
                  64                             64
-+-----------------+---------+---++-----------------------------+---+
-|  (base scheme)  | Zone-ID | Z ||           Node-ID               |
-|                 |         |   || Registrar-ID |   Node-Number| V |
-+-----------------+---------+---++--------------+--------------+---+
-         50              13   1         48           15          1
++-----------------+---+---------++-----------------------------+---+
+|  (base scheme)  | Z | Zone-ID ||           Node-ID               |
+|                 |   |         || Registrar-ID |   Node-Number| V |
++-----------------+---+---------++--------------+--------------+---+
+         50         1     13            48           15          1
 
                 </artwork>
                 </figure></t>
@@ -1087,16 +1107,16 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         <!-- zone-scheme -->
 
         <section anchor="manual-scheme" title="ACP Manual Addressing Sub-Scheme">
-                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme.</t>
+                <t>The sub-scheme defined here is defined by the Type value 00b (zero) in the base scheme and 1 in the Z bit.</t>
                 <t><figure title="ACP Manual Addressing Sub-Scheme" anchor='manual-scheme-pic'>
                 <artwork>
 
 
                 64                             64
-+---------------------+---------+---++-----------------------------+
-|    (base scheme)    |Subnet-ID| Z ||     Interface Identifier    |
-+---------------------+---------+---++-----------------------------+
-         50             13        1
++---------------------+---+----------++-----------------------------+
+|    (base scheme)    | Z | Subnet-ID||     Interface Identifier    |
++---------------------+---+----------++-----------------------------+
+         50             1    13 
 
                 </artwork>
                 </figure></t>
@@ -1109,7 +1129,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                 </t>
                 <t>This sub-scheme is meant for "manual" allocation to subnets where the other addressing schemes cannot be used.  The primary use case is for assignment to ACP connect subnets (see <xref target="NMS"/>).</t>
                 <t>"Manual" means that allocations of the Subnet-ID need to be done today with pre-existing, non-autonomic mechanisms.  Every subnet that uses this addressing sub-scheme needs to use a unique Subnet-ID (unless some anycast setup is done).  Future work may define mechanisms for auto-coordination between ACP nodes and auto-allocation of Subnet-IDs between them.</t>
-                <t>The Z field is following the Subnet-ID field so that future work could allocate/coordinate both Zone-ID and Subnet-ID consistently and use an integrated aggregatable routing approach across them.  Z=0 (Zone-ID sub-scheme) would then be used for network wide unique, registrar assigned (and certificate protected) Node-IDs primarily for ACP nodes while Z=1 would be used for node-level assigned Interface Identifiers primarily for non-ACP-nodes (on logical subnets where the ACP node is a router).</t>
+                <t>The Z bit field was added to distinguish Zone addressing and manual addressing sub-schemes without requiring one more bit in the base scheme and therefore allowing for the Vlong scheme (described below) to have one more bit available.</t>
 
                 <t>Manual addressing sub-scheme addresses SHOULD only be used in domain certificates assigned to nodes that cannot fully participate in the automatic establishment of ACP secure channels or ACP routing.  The intended use are nodes connecting to the ACP via an ACP edge node and ACP connect (see <xref target="ACPconnect"/>) - such as legacy NOC equipment.  They would not use their domain certificate for ACP secure channel creation and therefore do not need to participate in ACP routing either. They would use the certificate for authentication of any transport services. The value of the Interface Identifier is left for future definitions.</t>
 
@@ -1134,11 +1154,12 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                 which could be used to address individual software components in an ACP node.</t>
                 <t>The fields are the same as in the Zone-ID sub-scheme with the following refinements:</t>
                 <t><list style="symbols">
-                        <t>V: Virtualization bit: Values 0 and 1 as in Zone-ID sub-scheme, further values use via definition in future work.</t>
+                        <t>V: Virtualization bit: Values 0 and 1 are assigned in the same way as in the Zone-ID sub-scheme.</t>
                         <t>Registrar-ID: To maximize Node-Number and V, the Registrar-ID is reduced to 46 bits.  This still allows to use the MAC address of a registrar by removing the V and U bits from the 48 bits of a MAC address (those two bits are never unique, so they cannot be used to distinguish MAC addresses).</t>
 
-                        <t>If the first bit of the "Node-Number" is "1", then the Node-Number is 16 bit long and the V field is 16 bit long.  Otherwise the Node-Number is 24 bit long and the V field is 8 bit long.  "0" bit Node-Numbers are intended to be used for "general purpose" ACP nodes that would potentially have a limited number (&lt; 256) of clients (ASA/Autonomic Functions or legacy services) of the ACP that require separate V(irtual) addresses.  "1" bit Node-Numbers are intended for ACP nodes that are ACP edge nodes (see <xref target="NMS"/>) or that have a large number of clients requiring separate V(irtual) addresses.  For example large SDN controllers with container modular software architecture (see <xref target="software"/>).</t>
+                        <t>If the first bit of the "Node-Number" is "1", then the Node-Number is 16 bit long and the V field is 16 bit long.  Otherwise the Node-Number is 24 bit long and the V field is 8 bit long.</t>
                 </list></t>
+                <t>  "0" bit Node-Numbers are intended to be used for "general purpose" ACP nodes that would potentially have a limited number (&lt; 256) of clients (ASA/Autonomic Functions or legacy services) of the ACP that require separate V(irtual) addresses.  "1" bit Node-Numbers are intended for ACP nodes that are ACP edge nodes (see <xref target="NMS"/>) or that have a large number of clients requiring separate V(irtual) addresses.  For example large SDN controllers with container modular software architecture (see <xref target="software"/>).</t>
                 <t>In the Vlong addressing sub-scheme, the ACP address in the certificate has all V field bits as zero.  The ACP address set for the node includes any V value.</t>
 
         </section>
@@ -3027,6 +3048,12 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       </section>
 
 <section title="draft-ietf-anima-autonomic-control-plane-14">
+      <t>Joel Halpern, review 2:</t>
+      <t>6.1.1: added note about "+ +" format in address field when acp-address and rsub are empty.</t>
+      <t>6.5.10 - clarified text about V bit in Vlong addressing scheme.</t>
+      <t>6.10.3/6.10.4 - moved the Z bit field up front (directly after base scheme) and indicated more explicitly Z is part of selecting of the sub-addressing scheme.</t>
+      <t>Refined text about reaching CRL Distribution Point, explain why address as indicator to use ACP.</t>
+      <t>Note from Brian Carpenter: RFC Editor note for section reference into GRASP.</t>
       <t>IOT directorate review from Pascal Thubert:</t>
       <t>Vrious Nits/typos.</t>
       <t>TBD: Punted wish for mentioning RFC reference titles to RFC editor for now.</t>
