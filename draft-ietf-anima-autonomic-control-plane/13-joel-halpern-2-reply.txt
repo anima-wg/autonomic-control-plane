@@ -1,0 +1,540 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: "Joel M. Halpern" <jmh@joelhalpern.com>
+Cc: rtg-dir@ietf.org, anima@ietf.org, ietf@ietf.org,
+	draft-ietf-anima-autonomic-control-plane.all@ietf.org
+Bcc: 
+Subject: Re: Rtgdir telechat review of
+ draft-ietf-anima-autonomic-control-plane-13
+Reply-To: 
+In-Reply-To: <ddcb5d2c-df2a-3cee-3484-9e9b5d61fbd9@joelhalpern.com>
+
+
+Diff:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/2ae8f47399ae0d0811cb45209186d01f9e0d3077/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/54c9c16f3444b1db13c7cb05744e543dfcdfb63b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14.txt
+
+Latest version:
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/54c9c16f3444b1db13c7cb05744e543dfcdfb63b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14.txt
+
+On Mon, May 07, 2018 at 07:05:10PM -0400, Joel M. Halpern wrote:
+> Comments in line.  Areas of clear agreement elided.
+
+Comments in line.  Removed sections closed by you.
+
+> On 5/7/18 3:30 PM, Toerless Eckert wrote:
+> > >    If the rsub is empty, but the extensions are not
+> > >    empty, it looks like there will be two plus signs (following the optional
+> > >    acp-address) before the first extension.  Is that intended as the way to
+> > >    indicate the absence of the rsub?
+> > 
+> > Yes. Otherwise it would be ambiguous to parse. Haven't
+> > written something about this because i think readers eithrer
+> > don't care or the can figure it out easily.
+> 
+> I think it would help to state it explicitly.
+
+<t>In this specification, the "acp-address" field is REQUIRED, but future variations (see <xref target="adopting-acp"/> may use local information to derive the ACP address. In this case, "acp-address" could be empty. Such a variation would be indicated by an appropriate "extension". If "acp-address" is empty, and "rsub" is empty too, the "local-part" will have the format "rfcSELF + + extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are empty.</t>
+
+> (section 6.1.1)
+> > >    It also seems odd that the rsub (which is a
+> > >    domain extension) appears in the local-part of the domain information, not in
+> > >    the domain name.  Even though for hashing purposes it is concatenated, with a
+> > >    period, with the domain name.
+> > >   If these oddities are intentional, then there ought to be explanations so the
+> > >   reader is not confused.
+> > 
+> > The difference between domain and routing-subdomain are explained directly after
+> > the BNF:
+> > 
+> >   <t>"domain" is used to indicate the ACP Domain across which all ACP nodes trust each other and are willing to build ACP channel to each other.  See <xref target="certcheck"/>.
+> > 
+> >   <t><t>"routing-subdomain" is the autonomic subdomain that is used to calculate the hash for the ULA prefix of the ACP address of the node. ...
+> > 
+> > Added:
+> > 
+> > "rsub" needs to be in the "local-part"; it could not syntactically be separated from "domain-name" if "domain" is just a domain name. It also makes it easier for domain name to be a valid e-mail target.
+> 
+> Okay.  It is odd, but works.
+
+Any easier choice coming to mind ? I wouldn't know how.
+
+> > >      I presume there is not an assumption that all ULA addressed communicating
+> > >      with a node which supports the ACP will be over the ACP.  As I understand
+> > >      it, ULAs may well have other uses outside of ANIMA / the ACP.  Which leads
+> > >      to a question about how the text in 6.1.3 "If the CDP URL uses an IPv6 ULA,
+> > >      the ACP node will try to reach it via the ACP." is expected to be supported?
+> > 
+> > The reason is that the ACP certificate maintenance runs across the ACP so that
+> > we have a simple security model for the ACP certificate lifecycle. We do not
+> > want to have to figure out the impact of attacks against connectivity to the CDP
+> > when it runs across the data plane.  After all, these are ACP certificates are
+> > also renewed via EST across the ACP.
+> > 
+> > I added the following explanation sentence:
+> > 
+> > Reaching the CDP across the ACP implies that the CDPs
+> > need to be reachable via the ACP, for example by running CDPs on
+> > registrars or on devices connected to the ACP via ACP connect (see <xref target="ACPconnect">).</t>
+> 
+> While a useful addition, that is not what I was asking about.  The text as
+> written seems to say that simply because the RDP uses an IPv6 ULA, the node
+> will know to use ACP for the communication.  I understand why we awant the
+> communication to use ACP.  I don't understand how that is achieved.  The way
+> the text is written, it seems to imply that it is a property of IPv6 ULAs.
+> Which I don't think is your intention.
+
+Originally it was meant to be indicated by ULA address, yes, but i think
+its better/simpler just to decide based on DNS being used.
+
+> So I would like to see clarification.
+
+Ok, refined the text as follows:
+
+If the CDP URL uses an IPv6 address
+(ULA address when using the addressing rules specified in this document),
+the ACP node will connect to the CDP via the ACP. If the CDP uses a
+domain name, the ACP node will connect to the CDP via the data-plane.</t>
+
+<t>It is common to use domains name for CDP(s), but there is no requirement
+for the ACP to support DNS. Any DNS lookup in the data-plane is
+not only a possible security issue, but it would also not indicate whether 
+the resolved address is meant to be reachable across the ACP. Therefore,
+the use of an IPv6 address versus the use of a DNS name doubles as an 
+indicator whether or not to reach the CDP via the ACP.</t>
+
+<t>A CDP can be reachable across the ACP either by running it on a
+node with ACP or by connecting its node via ACP connect (see <xref target="ACPconnect"/>). 
+The CDP SHOULD use an ACP domain certificate for its HTTPs connections.
+The connecting ACP node SHOULD verify that the CDP certificate used 
+during the HTTPs connection has the same ACP address as indicated in the
+CDP URL of the nodes ACP domain certificate</t>
+
+> > >      The discovery text in section6.3 states that discovery should be run in
+> > >      every physical interface.  Is this intended to be restricted by policy, as
+> > >      described in section 5, bullet 2?
+> > 
+> > As said above for 5 bullet 2, it is permissible to be modified, the ACP
+> > draft does not suggest or recommends any modifications other than those in 6.3,
+> > aka: physical interfaces.
+> 
+> I think you simply need to say "Unless modified by policy as noted earlier,
+> ..."  As currently written, the text prohibits the policy over-reide you
+> want.
+
+changed to:
+
+Unless modified by policy as noted earlier (<xref target="overview"/> bullet point 2.),
+native interfaces (e.g.: physical interfaces on physical nodes) SHOULD be initialized ...
+
+> > > ***    The explanation in section 6.5 on channel selection (and security
+> > > protocol selection) is worded as if the described behavior will lead to
+> > > reliable interoperation.  The text on why there are limitations (reasonable)
+> > > doe not explain why mandating dTLS support would not be a reasonable step.   (I
+> > > hope I missing something, as otherwise this is a major problem rather than
+> > > being minor.)  It is also hard to align this with the requirements in section
+> > > 6.7.3.
+> > 
+> > I think there is no issue. Let me explain:
+> 
+> I think I understand your reasoning, and the various constraints that you
+> face.  However, when all is said and done, you seem to have two mechanisms,
+> and no requirement that all devices must support one of them.  Which seems
+> to mean that two independent devices may not have an implementation of the
+> channel / security selection that leads to interoperability.  That seems a
+> major issue.  Saying "we couldn't find a good answer" is not usually an
+> acceptable IETF answer for interoperability.
+>  (text retained for future discussion)
+
+Think of channel protocols like interface types. We also do not have
+a requirement that all nodes MUST have WiFI or 100 Mbps ethernet or 40 Gbps
+fiber. And yet we manage to build an Internet across all those device
+interconnecting them all. Same thing with channel security protocols.
+
+The requirement right now describes two profiles (6.7.3):
+
+"baseline ACP node" - MUST support IPsec
+"constrained ACP node" - node that can not support IPsec, MUST support dTLS.
+
+In the same way you use a WiFi access point connecting your ethernet with
+your WiFi equipment, you would use a baseline ACP node that also supports dTLS
+to interconnect constrained and unconstrained nodes.
+
+This also well matches how constrained node networks are built:
+Some gateway node that is not constrained, but also supports
+whatever (mostly constrained) network/radio the constrained nodes use.
+
+If you think this should be explained more in more detail in the doc,
+let me know. I could simply add above example as text.
+
+> > A constrained ACP node that can not support IPsec MUST support dTLS.
+
+> The change helps, but as noted above does not seem sufficient.
+
+See above, the "can not support IPsec" was only meant as a definition of
+what a constrained node is, but not to change the basic property of ACP networks
+that different links / nodes can have different protocol options and that
+there is no "one-fits-all" MTI necessary.
+
+> > >      If I have used section 6.10.3 properly, when the Zone-ID is 0, all nodes
+> > >      within the ULA are within a flat address space.  that does turn the address
+> > >      into an identifier.  It is, as far as I can tell from the description,
+> > >      still a locator in that packets will be routed to the node using the
+> > >      address including the node identifier.  It just means that routing has to
+> > >      work in /127 addresses.  (There is also a reference to "identifier" in
+> > >      6.10.3.1.  From the usage there, I think that the intention is that this is
+> > >      the generic "name" for the node.  Given that it is routable, it is simply
+> > >      an addresses, not an identifier or a locator.)
+> > 
+> > My driver license number is (intended to be) an identifier. It stays an indentifier
+> > even if someone starts building a network with a routing table for driver license
+> > numbers. Likewise, the intent of zone=0 numbers is to be identifiers. And
+> > yes, they do double a locators when you have a flat routing table which is
+> > what we do in this doc.
+> > 
+> > We just didn't describe options where zone=0 would not double as a locator,
+> > that is meant to be left for future work if we see sufficient use cases for it.
+> > We just tried to make the definitions extensible and define the intent of the
+> > format to be that of identifiers.
+> 
+> Since the design specifically uses the same field as both the identifier and
+> the locator, I do not think it is fair or appropriate to describe it as
+> being purely an identifier.    The fact that you could possibly use it as an
+> identifier later doesn't make it so.
+
+Do we (IETF) have any normative or otherwise uncontested definition for the criteria
+required to call an address an identifier ? 
+
+Here are the things that make the ACP address an identifier to me:
+
+- It is assigned once to the device and not meant to change over the lifetime
+  of the device.
+- It does not change when i move the node to a different location
+  and re-connect the device.
+- It is the unique part of the ACP domain certificate (other than the private key)
+  and used to identify the device (privat key is used to authenticate it,
+  but the private key may change over time, for example when renewing the certificate).
+
+Would be happy to elaborate this in the doc more explicitly, e.g.: like written
+above.
+
+> Part of my reaction to this whole section is that it looks much like the
+> mistake we made originally in defining classful IP addresses.  You are
+> trying to guess the correct use cases, and defining specific address
+> structures with specific encodings for each one.  With only a few encodings
+> available.  This seems to be a recipe for being wrong later in ways that
+> hurt.
+
+The only equivalent to classfull addressing i see is for the fixed prefix-length
+handed out to each node, 1 bit (2 addresses) with zone addresses, 8/16 bits
+(256/64k address) for Vlong, but its NOT assignment to network segments 
+as in IPv4 A/B/C but to nodes.
+
+We didn't introduce choices lightly. There are compromises to be made when you
+want some lightweight address allocation scheme, not expecting to have complex
+address registry or management system in the backend but simple registrars.
+
+see below for more
+
+> >        The difference in interpretation
+> > >      is actually provided by the last bit in the upper 64.  If these are the
+> > >      same schema, then it should not need a bit to differentiate them.  They
+> > >      should be explained as a single schema.  Which would presumably result in
+> > >      the Z bit being part of the zone / subnet field.   If they are two
+> > >      different schemas, then move the differentiation to part of the schema
+> > >      identifier (making it 3 bits).
+> > 
+> > We did not want to make Z part of the base schemas 6.10.2 "Type" code because
+> > that would also make the Vlong scheme one bit shorter and that would reduce
+> > virtualization space in Vlong by a factor of 2.
+> > 
+> > So, yes, encoding wise, 6.10.4 manual sub addressing space was carved out
+> > of the 6.10.3 zone address space via the Z bit, but thats just an encoding aspect.
+> > 
+> > Functionally, 6.10.3/6.10.4 are quite different, and therefore it is IMHO
+> > textually correct to have them in different subsections.
+> > 
+> > Carving out bits like Z isn't ideal, but in between the ULA prefix,
+> > the 64 bit local part we must have for external interfaces and
+> > best utilization of bits, we tried to rather optimize address space
+> > utilization and not beauty of encoding.
+> > 
+> > Having  at the end allows (as written) use of /63 instead of  2 * /64
+> > routes. I am not sure how important this would be in the future.
+> > 
+> > If you feel strongly about more beauty in encoding,
+> > i can move Z to the left and remove the notion of the possible /63 route
+> > optimization possible through the placement of Z.
+> 
+> Since the two different uses of the Z bit with type 00b are quite distinct,
+> trying to enable aggregation seems counter-productive.
+> 
+> While I hate to push on a point you describe as aesthetics, having the Z
+> bit, occuring after the Zone / subnet-ID field, but defining whether the
+> field is a zone or a subnet, seems awkward for insufficient reason.
+> 
+> I would recommend moving the Z bit up so it is after the type, and at the
+> front of each of the two sections reiterate that this subscheme is indicated
+> by the Z bit being { 0 | 1 }.
+
+Done. (see diff).
+
+> > I very much hope there is no "interesting" implementation aspect;
+> > nothing in the current scheme that makes implemenation harder. If you
+> > have an example that you fear, i would like to hear it.
+> > 
+> > To me, we are just defining address space allocation schemes.
+> 
+> I suppose likely implementations will use mask definitions that will make it
+> work.  I pity the code reviewer.
+
+I have read the code and tested in the lab IPv6 embedded RP adressing
+and didn't feel pityfull about the job. But i weigh the overall system
+complexity. Embedded-RP simplified a lot of other parts of the
+multicast system at the cost of introducing an addressing scheme.
+I think similarily, the ACP addressing scheme simplifies the overall system
+complexity, especially registrars.
+
+> > >      In section 6.10.5, after stating that it is not even known what the needed
+> > >      usage is for more V values
+> > 
+> > Which sentence are you referring to when you say "not even known what the
+> > needed usage is" ? I can't find it, but i would like to rectify it
+> > if it actually is still there.
+> 
+> The text reads "further values use via definition in future work."  In the
+> zone-id scheme, it is one bit.  For some reason, it is 8 or 16 bits here.
+
+Thanks, changed sentence to:
+
+V: Virtualization bit: Values 0 and 1 are assigned in the same way as in the Zone-ID sub-scheme.
+
+The existing text, now directly after the list, explains examples
+when a device would likely need 256 or 64k addresses:
+
+existing text:
+..."1" bit Node-Numbers are intended for ACP nodes that are ACP edge nodes ...
+
+> > >      the document goes on to introduce the
+> > >      complexity of classful nodes numbers, with the leading bit indicating how
+> > >      long the node-number is.  Yes, the rest of the text in that bullet tries to
+> > >      explain why you need both sizes.  It seems like needless complexity that
+> > >      begs for mistakes in implementation.
+> > 
+> > I was taking the example use cases we brainstormed into account, and
+> > some of them  would require a lot more addresses in the node than others,
+> > therefore these two choices.
+> 
+> See my comments above.  Trying to encode specific use cases into the address
+> format seems a problematic answer to an admittedly difficult question.
+> 
+> What would break if you didn't define any of this?
+
+One could save the 2.5 bits (Type, Z) indicating the structure of the
+address inside the address by encoding the designated format of the
+address instead in an extension field of the ACP address information in
+the certificate. We would certainly still want to have the same type
+of addresses, e.g.: 2,256,64k local addresses, option for zones and
+address to assign to ACP connect interfaces (manual addressing scheme) 
+IMHO. So, at best we could save the 2.5 bits if we wanted to keep the
+functionality, which i think is all required.
+
+I would be quite afraid of doing such a drastic change this late in
+the process because i think it will take a long time to foresee the
+resulting complexity introduced for registars and any other place
+that now can deduct the semantic from the address and would then have
+to access to what the certificate indicates in a different way (e.g.:
+access to the certificate). Note that the length of the ACP information
+field in the cert is also limited, so this type of extension might end
+up looking even uglier to be short *sigh*.
+
+I was always thinking that this type of more flexible option would
+be a good next-step, but not a safe first step. It would make a lot
+more sense after hearing implementation/deployment experiences,
+especially to correctly support important options we may have
+overlooked in the current schemes. Just redoing what we have differently
+to save 2.5 bits isn't worth it IMHO.
+
+> > Ultimately, we need to break through the chicken and egg problem
+> > of how to build more self-managing networks. These will require
+> > a different number of addresses inside nodes. Anything more intelligent
+> > than address space allocations would become a complex dependency
+> > making implementation/adoption even slower. I don't think that
+> > offering 2, 256, 64k addresses per node is too much flexibility.
+> > It IMHO necessary and sufficient to explore and we'll see what sticks.
+> 
+> Variation is needed.  That was true of allocations in IP.  encoding the
+> variations proved a bad choice.
+
+Let me repeat that we are not doing any network/subnet prefix encoding which is
+what IPv4 A/B/C was. And there are IMHO good examples how encoding in IPv6
+did save the day from complexity (at least all the stuff done for IPv6
+multicast, ASM/SSM, zones, Embedded-RP) was highly useful.
+
+> > >      In section 6.11.1.11 in describing the prefix lengths, I thought that the
+> > >      point of zone addressing was to allow the use of /64 prefixes.  But it
+> > >      seems here that we will not do so ?
+> > 
+> > As mentioned above: This document does not describe the routing setup for /64
+> > (or /63 with Z-bit) routing aggregation. There are multiple options,
+> > but we could not conclude on a single solution that we felt to be
+> > appropriate for this document. Instead it was only very important
+> > to carve out addressing space to support this.
+> The net effect seems to be to prohibt the very things that you went to a lot
+> of trouble to enable in your addressing design.
+
+Maybe i do not understand your comment correctly, but i do not
+think it is correct. We just have not defined recommended mechanisms
+how to set up routing to use /64 zone routes. That is something IMHO
+better done in a followup document because all the cases where we
+did see a need for znes where really very specific to particular
+deployment styles and would not be applicable to the mayority of ACPs.
+Nevertheless, we felt those cases where important enough to reserve
+bits for them through the zone field.
+
+> ...
+> > > ***    Section 10.3.2 paragraph 2 says that devices should change the meaning
+> > > of "admin down" to mean "down for everything except ACP / Anima".    I can
+> > > understand why, in an autonomic network, such a state is desirable.  However,
+> > > that really should be a different state from "admin down".  Operators already
+> > > understand "admin down" as meaning that this interface will not be used for any
+> > > traffic.  Changing that is fairly drastic.  "admin limited" or "admin ACP-Only"
+> > > would seem much better than changing the meaning of "admin down".  The
+> > > justification in the text seems to be a desire to prevent an operator from
+> > > doing what he intends.  that seems backwards.  (Note that the distinction
+> > > between administrative state vs operational state, aka failed, is already well
+> > > understood.)
+> > 
+> > Well, this is in an informative section, so hopefully something we can agree to disagree.
+> 
+> If this were truly informative, it would not belong in this document at all.
+> Changing the behavior of widely understood configuration behaviors is NOT a
+> small thing.  Changing the permissions models for widely understood
+> configuration operations is also NOT a small thing.
+> 
+> My suggestion is that you remove all of this material.  If you feel it is
+> important, write an I-D for standards track on evolving the configuration
+> model for robust ANIMA.  While I think the change is a mistake, you clearly
+> have the right to cause the discussion.
+> 
+> Hiding the topic in an "informational" note in the ACP document seems VERY
+> wrong.
+> 
+> Also note that in your discussion below, you talk about the equivalence of
+> admin down and physical down.  Most management models I know of treat these
+> as quite distinct.  SO that is at best a red herring.
+
+Hmm. I really only CLI derived from Cisco IOS, and there the
+interface level "shutdown" command doubles IMHO both as admin down and
+as phy down, so i would contend that this is a red herring. It actually
+does show up in diagnostic CLI as "admin down", but is also bringing down
+phy state. Therefore it is also used to diagnose phy, .e.g: shutting down
+one side of a supposed direct p2p link to verify the phy change on the 
+other side. That practical experience is what the text and direction is
+based on.
+
+Whats an example where admin/phy down are separate in your experience ?
+
+I don't know how you define "truly informative". I simply meant
+informational as compared to standards track wrt. to not impacting
+interoperability, but also as a precursor work to give opportunity
+for gaining more experience before attempting to go standard.
+
+If/when i find time i definitely would like to investigate how this
+could be formalized through a YANG model for ACP so that it can become standard,
+but i definitely agree that especially this part of the YANG model would
+be highly difficult to get to before any experience is gained with
+this.
+
+I therefore would very much hesitate removing this text from the document, it was
+specifically asked for several times in the working group to understand
+how the promised reliability of the ACP against operator/contoller
+operation could be achieved. Having this in a first round (this document)
+as "informational" is IMHO a good and important thing. 
+
+> (text retained for context of further discussions.)
+> 
+> > 
+> > I strongly believe that the most easy way to operationalize the ACP and
+> > achieve its goals is what we have written.
+> > 
+> > The historic equivalence of "down" = "admin down" = "physical down" is one of
+> > the the most fundamental problem of remote management in networks.
+> > 
+> > We really need to start thinking of separate layers of (remote) management.
+> > Network services on one hand and physical infra on the other.
+> > 
+> > The first thing to do this is to separate operations such as "down"
+> > into "admin down" that affects networks services and "phy down" that
+> > affects the physcial infra.
+> > 
+> > If you have existing commands like "shutdown" that today do both,
+> > the safe mapping is to let them do the safe thing in the future, e.g:
+> > only "admin down", and introduce new commands for the phy operations,
+> > e.g.: "phy shutdown" or the like.
+> > And then protect those dangerous commands even further against unintentional or
+> > intentional misuse.
+> > 
+> > Think of ACP/ANI also as a seamless inband version of a DCN. As an operator
+> > of the actual data network, you also didn't have any access to bring down the DCN
+> > and cut yourself off from the network you manage. YOu could only screw
+> > up that network you're meant to manage.
+> > 
+> > And if your network consists of VMs in a DC, a "shutdown" on their
+> > interfaces will also not bring down physical interfaces necessary
+> > to reach the VM.
+> > 
+> > In optical networks you often have an inband physcial ethernet management
+> > channel. Making/breaking that one is completely different from making/breaking
+> > your data-plane, aka: data fiber colors.
+> > 
+> > > ***    The notion in 10.3.6 that the device should refuse to disable
+> > > functionality when an authorized administrator directs such seems flatly wrong.
+> > 
+> > The authorization to break your own remote management connectivity
+> > would be a property of the certificate. clearly whoever enrolled
+> > the device with a certificate denying that capaility to the operator
+> > did NOT authorize the administrator to break connectivity.
+> 
+> The security model change seems as problematic as the above configuration
+> change.
+
+We have recurringly heard from customers that mistakes in managing remote
+equipment and loosing connectivity is a mayor pain point. Creating
+an operational option that limits/disables operators ability to
+impact phy level connectivity that remote management depends upon and therefore
+reducing this risk and cost factor seems to me like a very logical pah
+forward. Whether or not this should be indicated in the certificate
+or differently is definitely wide open.
+
+I agree that none of these operational interface level changes are
+a piece of cake given how we have in the IETF not tried to define
+different access levels to configuration so far, at least not
+between some phy/infra access level and network-services access level.
+
+As said above in my first reply that you didn't comment on, i think a
+good part of what i am looking for may happen through other means
+already, such as when a router is just a VM running on an OS. At least
+in early versions of this that i'd seen, this implicitly disabled
+the ability to modify phy state from the router VM, and of course
+complaints where raised that phy mods where necessary, but at least this
+evolution could give raise to pause and rethink HOW to permit doing this.
+
+So i would at least like to pledge with you that it is a good thing to
+have this type of discussion in an informational way in this RFC instead
+of doing nothing or trying to go standard YANG directly as a first step.
+It did get into the spec because of the desire of the working group.
+
+> > > Editorial / Nits:
+> .
+> > >      In the various formats in section 6.10, the lowest bit of the upper 64 bits
+> > >      is mandated to be 0.  Presumably, there is some reason for doing this.  It
+> > >      would be nice to explain it.
+> > 
+> > Sorry, not clear what you're referring to. Can you give me an
+> > explicit reference ?
+> 
+> I should ahve removed this note.  It was a side-effect of the presentation
+> and ordering, not a problem on its own.  Sorry.
+
+Cheers
+    Toerless
