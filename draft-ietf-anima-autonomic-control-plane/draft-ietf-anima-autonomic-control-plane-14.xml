@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?rfc toc="yes"?>
+<?rfc tocdepth="3"?>
 <!-- You want a table of contents -->
 <?rfc symrefs="yes"?>
 <!-- Use symbolic labels for references -->
@@ -84,7 +85,7 @@
 
 <t>The ACP provides secure IPv6 connectivity, therefore it can not only be used as the secure connectivity for self-management as required for the ACP in <xref target="RFC7575"/>, but it can also be used as the secure connectivity for traditional (centralized) management. The ACP can be implemented and operated without any other components of autonomic networks, except for the GRASP protocol which it leverages.</t>
 
-<t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> describes how the ACP alone can be used to provide secure and stable connectivity for autonomic and non-autonomic "Operations Administration and Management (OAM) applications". That document also explains how existing management solutions can leverage the ACP in parallel with traditional management models, when to use the ACP and how to integrate with potentially IPv4 only OAM backends.</t>
+<t>The document <xref target="RFC8368">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> describes how the ACP alone can be used to provide secure and stable connectivity for autonomic and non-autonomic "Operations Administration and Management (OAM) applications". That document also explains how existing management solutions can leverage the ACP in parallel with traditional management models, when to use the ACP and how to integrate with potentially IPv4 only OAM backends.</t>
 
 <t>Combining ACP with "Bootstrapping Remote Secure Key Infrastructures (BRSKI)", see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>) results in the "Autonomic Network Infrastructure" as defined in <xref target="I-D.ietf-anima-reference-model"/>. which provides autonomic connectivity (from ACP) with full secure zero touch bootstrap (from BRSKI).  The ANI itself does not constitute an Autonomic Network, but it enables building more or less autonomic networks on top of it - using either centralized, "Software Defined Networking (SDN)" (see <xref target="RFC7426"/>), style automation or distributed automation via "Autonomic Service Agents (ASA)" / "Autonomic Functions" - or a mixture of both.  See <xref target="I-D.ietf-anima-reference-model"/> for more information.</t>
 
@@ -166,7 +167,7 @@
             <t hangText="ANI (nodes/network):">"Autonomic Network Infrastructure". 
             The ANI is the infrastructure to enable Autonomic Networks.  It includes ACP, BRSKI and GRASP. 
             Every Autonomic Network includes the ANI, but not every ANI network needs to include autonomic functions beyond the ANI (nor intent).  An ANI network without further autonomic functions can for example support secure zero touch bootstrap
-            and stable connectivity for SDN networks - see <xref target="I-D.ietf-anima-stable-connectivity"/>.
+            and stable connectivity for SDN networks - see <xref target="RFC8368"/>.
             </t>
             <t hangText="ANIMA:">"Autonomic Networking Integrated Model and Approach".
             ACP, BRSKI and GRASP are products of the IETF ANIMA working group.
@@ -256,6 +257,17 @@
             <t hangText="MASA (service):">"Manufacturer Authorized Signing Authority".  A vendor/manufacturer
             or delegated cloud service on the Internet used as part of the BRSKI protocol.
             </t>
+            <t hangText="(ACP/ANI/BRSKI) Registrar:">
+            An ACP registrar is an entity (software and/or person) that is orchestrating
+            the enrollment of ACP nodes with the ACP domain certificate. ANI nodes use
+            BRSKI, so ANI registrars are also called BRSKI registrars. For non-ANI ACP nodes,
+            the registrar mechanisms are undefined by this document. See <xref target="acp-registrars"/>. 
+            Renewal and other maintenance (such as revocation) of ACP domain certificates
+            may be performed by other entities than registrars. EST must be supported for
+            ACP domain certificate renewal (see <xref target="domcert-maint"/>). BRSKI
+            is an extension of EST, so ANI/BRSKI registrars can easily support ACP domain
+            certificate renewal in addition to initial enrollment.
+            </t>
             <t hangText="sUDI:">"secured Unique Device Identifier".  Another term not used in this document
             to refer to an IDevID.
             </t>
@@ -308,7 +320,7 @@ key words.
                                         <t>For control plane protocols, the ACP allows their operation even when the data-plane is temporarily faulty, or during transitional events, such as routing changes, which may affect the control plane at least temporarily.  This is specifically important for autonomic service agents, which could affect data-plane connectivity.</t>
                                 </list>
                                 </t>
-                                <t>The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains this use case for the ACP in significantly more detail and explains how the ACP can be used in practical network operations.</t>
+                                <t>The document <xref target="RFC8368">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains this use case for the ACP in significantly more detail and explains how the ACP can be used in practical network operations.</t>
                         </section>
                         <!-- reachability -->
                 </section>
@@ -320,10 +332,11 @@ key words.
                         <t>The ACP SHOULD provide robust connectivity: As far as possible, it should be independent of configured addressing, configuration and routing.  Requirements 2 and 3 build on this requirement, but also have value on their own.</t>
                         <t>The ACP MUST have a separate address space from the data-plane.  Reason: traceability, debug-ability, separation from data-plane, security (can block easily at edge).</t>
                         <t>The ACP MUST use autonomically managed address space.  Reason: easy bootstrap and setup ("autonomic"); robustness (admin can't mess things up so easily).  This document suggests to use ULA addressing for this purpose ("Unique Local Address", see <xref target="RFC4193"/>).</t>
-                        <t>The ACP MUST be generic.  Usable by all the functions and protocols of the AN infrastructure.  Clients of the ACP MUST NOT be tied to a particular application or transport protocol.</t>
+                        <t>The ACP MUST be generic.  Usable by all the functions and protocols of the ANI.  Clients of the ACP MUST NOT be tied to a particular application or transport protocol.</t>
                         <t>The ACP MUST provide security: Messages coming through the ACP MUST be authenticated to be from a trusted node, and SHOULD (very strong SHOULD) be encrypted.</t>
                         </list></t>
-                        <t>The ACP operates hop-by-hop, because this interaction can be built on IPv6 link local addressing, which is autonomic, and has no dependency on configuration (requirement 1).  It may be necessary to have ACP connectivity across non-ACP nodes, for example to link ACP nodes over the general Internet.  This is possible, but introduces a dependency against stable/resilient routing over the non-ACP hops (see <xref target="remote-acp-neighbors"/>).</t>
+                        <t>Explanation for ACP4: In a fully autonomic network (AN), newly written ASA could potentially all communicate exclusively via GRASP with each other, and if that was assumed to be the only requirement against the ACP, it would not need to provide IPv6 layer connectivity between nodes, but only GRASP connectivity. Nevertheless, because ACP also intends to support non-AN networks, it it is crucial to support IPv6 layer connectivity across the ACP to support any transport and application layer protocols.</t>
+		<t>Th eACP operates hop-by-hop, because this interaction can be built on IPv6 link local addressing, which is autonomic, and has no dependency on configuration (requirement 1).  It may be necessary to have ACP connectivity across non-ACP nodes, for example to link ACP nodes over the general Internet.  This is possible, but introduces a dependency against stable/resilient routing over the non-ACP hops (see <xref target="remote-acp-neighbors"/>).</t>
                 </section>
                 <!-- requirements -->
 
@@ -400,7 +413,7 @@ the TA is used to authenticate the ACP domain membership of other nodes (see <xr
 
                                 <t>Information about the domain MUST be encoded in the domain certificate in a subjectAltName / rfc822Name field according to the following ABNF definition (<xref target="RFC5234"/>):</t>
 
-                <t>[RFC Editor: Please substitute SELF in all occurences of rfcSELF with the RFC number assigned to this document and remove this comment line]</t>
+                <t>[RFC Editor: Please substitute SELF in all occurences of rfcSELF in this document with the RFC number assigned to this document and remove this comment line]</t>
 
 <figure anchor="acp-dominfo-abnf" title="ACP Domain Information Field ABNF">
     <artwork><![CDATA[
@@ -443,11 +456,11 @@ Domain SHOULD be the FQDN of a domain owned by the operator assigning the certif
 <t>
 
     <list style="symbols">
-        <t>There are a wide range of pre-existing protocols/services where authentication with LDevID is desirable.  Enrolling and maintaining separate LDevIDs for each of these protocols/services is often undesirable overhead.  Therefore, the information element required for the ACP in the domain certificate should be encoded in a way that minimizes the possibility of creating incompatibilities with such other uses beside the authentication for the ACP.</t>
-        <t>The elements in the LDevID required for the ACP should not cause incompatibilities with any pre-existing ASN.1 software potentially in use in those other pre-existing SW systems.  This eliminates the use of novel information elements because those require extensions to those pre-existing ASN.1 parsers.</t>
+        <t>It should be possible to share the LDevID with other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses.</t>
+        <t>The information for the ACP should not cause incompatibilities with any pre-existing ASN.1 software.  This eliminates the introduction of a novel information element because that could require extensions to such pre-existing ASN.1 parsers.</t>
         <t>subjectAltName / rfc822Name is a pre-existing element that must be supported by all existing ASN.1 parsers for LDevID.</t>
-        <t>The elements in the LDevID required for the ACP should also not be misinterpreted by any pre-existing protocol/service that might use the LDevID.  If the elements used for the ACP are interpreted by other protocols/services, then the impact should be benign.</t>
-        <t>Using an IP address format encoding could result in non-benign misinterpretation of the domain information field; other protocol/services unaware of the ACP could try to do something with the ACP address that would fail to work correctly.  For example, the address could be interpreted to be an address of the node which does not belong to the ACP VRF.</t>
+        <t>The element required for the ACP should not be misinterpreted by any other uses of the LDevID.  If the element used for the ACP is interpreted by other uses, the impact should be benign.</t>
+        <t>Using an IP address format encoding could result in non-benign misinterpretation of the domain information field; other uses unaware of the ACP could try to do something with the ACP address that would fail to work correctly.  For example, the address could be interpreted to be an address of the node which does not belong to the ACP VRF.</t>
         <t>At minimum, both the AN domain name and the non-domain name derived part of the ACP address need to be encoded in one or more appropriate fields of the certificate, so there are not many alternatives with pre-existing fields where the only possible conflicts would likely be beneficial.</t>
         <t>rfc822Name encoding is quite flexible.  We choose to encode the full ACP address AND the domain name with sub part into a single rfc822Name information element it, so that it is easier to examine/use the "domain information field".</t>
         <t>The format of the rfc822Name is chosen so that an operator can set up a mailbox called
@@ -472,10 +485,26 @@ Domain SHOULD be the FQDN of a domain owned by the operator assigning the certif
         </list></t>
 
     </section>
-    
+
     <section anchor="domcert-maint" title="Certificate Maintenance">
 
-<t>ACP nodes MUST support certificate renewal via EST ("Enrollment over Secure Transport", see <xref target="RFC7030"/>) and MAY support other mechanisms.  An ACP network MUST have at least one ACP node supporting EST server functionality across the ACP so that EST renewal is useable.  The mechanism by which the domain certificate was initially provisioned SHOULD provide a mechanism to store the URL of one EST server with its ACP address into the node for later renewal.  This server does not have to be the same as the one performing the initial certificate enrollment.</t>
+<t>ACP nodes MUST support certificate renewal via EST
+("Enrollment over Secure Transport", see <xref target="RFC7030"/>)
+and MAY support other mechanisms.  An ACP network MUST have at least one
+ACP node supporting EST server functionality across the ACP so that EST
+renewal is useable.</t>
+
+<t>ACP nodes SHOULD be able to remember the EST server from which they last
+renewed their ACP domain certificate and SHOULD provide the ability
+for this remembered EST server to also be set by the ACP Registrar
+(see <xref target="acp-registrars"/>) that initially enrolled the ACP
+device with its ACP domain certificate. When BRSKI (see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>)
+is used, the ACP address of the BRSKI registrar from the BRSKI TLS
+connection SHOULD be remembered and used for the next renewal via
+EST if that registrar also announces itself as an EST server
+via GRASP (see next section) on its ACP address.</t>
+
+        <section anchor="domcert-grasp" title="GRASP objective for EST server">
 
 <t>ACP nodes that are EST servers MUST announce their service via GRASP in the ACP through M_FLOOD messages:</t>
 
@@ -527,14 +556,25 @@ connect to this dead service before this timeout, it will experience a failing c
 use that as an indication that the service is dead and select another instance of the
 same service instead.</t>
 
-<t>Domain certificates SHOULD by default be renewed 50% into their lifetime.
-When performing renewal, the node SHOULD attempt to connect to the remembered EST server. 
-If that fails, it SHOULD attempt to connect to EST server(s) learned via GRASP.  The server
+        </section>
+
+        <section anchor="domcert-renewal" title="Renewal">
+
+<t>When performing renewal, the node SHOULD attempt to connect to the remembered EST server. 
+If that fails, it SHOULD attempt to connect to an EST server learned via GRASP.  The server
 with which certificate renewal succeeds SHOULD be remembered for the next renewal.</t>
 
 <t>Remembering the last renewal server and preferring it provides stickiness
 which can help diagnostics.  It also provides some protection against off-path
 compromised ACP members announcing bogus information into GRASP.</t>
+
+<t>Renewal of certificates SHOULD start after less than 50% of the domain certificate
+lifetime so that network operations has ample time to investigate and
+resolve any problems that causes a node to not renew its domain certificate
+in time - and to allow prolonged periods of running parts of a network
+disconnected from any CA.</t>
+
+        </section>
 
 <!-- DO NOT FORCE THE TTL=255 OPTION RIGHT NOW.
      IT MIGHT MAKE MORE SENSE TO DO FOLLOWUP WORK IN WHICH
@@ -569,6 +609,8 @@ EST server.</t>
 
 -->
 
+        <section anchor="domcert-crl" title="Certificate Revocation Lists (CRLs)">
+
 <t>The ACP node SHOULD support "Certificate Revocation Lists (CRL)" via HTTPs from one
 or more "CRL Distribution Points (CDPs)".  The CDP(s) MUST be indicated
 in the Domain Certificate when used.  If the CDP URL uses an IPv6 address
@@ -592,22 +634,117 @@ The connecting ACP node SHOULD verify that the CDP certificate used
 during the HTTPs connection has the same ACP address as indicated in the
 CDP URL of the nodes ACP domain certificate</t>
 
-<t>Renewal of certificates SHOULD start after less than 50% of the domain certificate
-lifetime so that network operations has ample time to investigate and
-resolve any problems that cause a node to not renew its domain certificate
-in time - and to allow prolonged periods of running parts of a network
-disconnected from any CA.</t>
+        </section>
 
-<t>Certificate lifetime should be set to be as short as feasible.  Given how
-certificate renewal is fully automated via ACP and EST, the primarily
-limiting factor for shorter certificate lifetimes (than the typical one year)
+        <section anchor="domcert-lifetime" title="Lifetimes">
+
+<t>Certificate lifetime may be set to shorter lifetimes than customary
+(1 year) because certificate renewal is fully automated via ACP and EST.
+The primarily limiting factor for shorter certificate lifetimes 
 is load on the EST server(s) and CA.  It is therefore recommended that
 ACP domain certificates are managed via a CA chain where the assigning
-CA has enough performance to manage short lived certificates.</t>
+CA has enough performance to manage short lived certificates. See also
+<xref target="sub-ca"/> for discussion about an example setup achieving
+this.</t>
+
+<t>When certificate lifetimes are sufficiently short, such as few hours,
+certificate revocation may not be necessary, allowing to simplify the overall
+certificate maintenance infrastrucure.</t>
 
 <t>See <xref target="bootstrap"/> for further optimizations of certificate
 maintenance when BRSKI can be used ("Bootstrapping Remote Secure Key 
 Infrastructures", see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>).</t>
+
+        </section>
+
+        <section anchor="domcert-re-enroll" title="Re-enrollment">
+
+<t>An ACP node may determine that its ACP domain certificate
+has expired, for example because the ACP node was powered down or
+disconnected longer than its certificate lifetime. In this case, the ACP
+node SHOULD convert to a role of a re-enrolling candidate ACP node.</t>
+
+<t>In this role, the node does maintain the trust anchor and certificate
+chain associated with its ACP domain certificate exclusively for the purpose
+of re-enrollment, and attempts (or waits) to get re-enrolled with a new ACP
+certificate.  The details depend on the mechanisms/protocols used
+by the ACP registrars.</t>
+
+<t>Please refer to <xref target="acp-registrars"/> for explanations about
+ACP registrars and vouchers as used in the following text.</t>
+
+<t>When BRSKI is used (aka: on ACP nodes that are ANI nodes), the re-enrolling
+candidate ACP node would attempt to enroll like a candidate ACP node (BRSKI pledge), 
+but instead of using the ACP nodes IDevID, it SHOULD first attempt to use its ACP domain
+certificate in the BRSKI TLS authentication.  The BRSKI registrar MAY honor
+this certificate beyond its expiration date purely for the purpose of
+re-enrollment. Using the ACP nodes domain certificate allows the BRSKI
+registrar to learn that nodes ACP domain information field,
+so that the BRSKI registrar can re-assign the same ACP address information 
+to the ACP node in the new ACP domain certificate.</t>
+
+<t>If the BRSKI registrar denies the use of the old ACP domain certificate,
+the re-enrolling candidate ACP node MUST re-attempt re-enrollment using
+its IDevID as defined in BRSKI during the TLS connection setup.</t>
+
+<t>Both when the BRSKI connection is attempted with the old ACP domain certificate
+or the IDevID, the re-enrolling candidate ACP node SHOULD authenticate
+the BRSKI registrar during TLS connection setup based on its existing trust
+anchor/certificate chain information associated with its old ACP certificate.
+The re-enrolling candidate ACP node SHOULD only request a voucher from the BRSKI registrar 
+when this authentication fails during TLS connection setup.</t>
+
+<t>When other mechanisms than BRSKI are used for ACP domain certificate 
+enrollment, the principles of the re-enrolling candidate ACP node are the same.
+The re-enrolling candidate ACP node attempts to authenticate any ACP registrar peers
+during re-enrollment protocol/mechanisms via its existing certificate chain/trust anchor
+and provides its existing ACP domain certificate and other identification
+(such as the IDevID) as necessary to the registrar.</t>
+
+<t>Maintaining existing trust anchor information is especially important
+when enrolment mechanisms are used that unlike BRSKI do not leverage
+a voucher mechanism to authenticate the ACP registrar and where therefore the
+injection of certificate failures could otherwise make the ACP node easily
+attackable remotely.</t>
+
+<t>When using BRSKI or other protocol/mechanisms supporting vouchers,
+maintaining existing trust anchor information allows for re-enrollment
+of expired ACP certificates to be more lightweight, especially in
+environments where repeated acquisition of vouchers during the lifetime
+of ACP nodes may be operationally expensive or otherwise undesirable.</t>
+
+        </section>
+
+        <section anchor="domcert-failing" title="Failing Certificates">
+
+<t>An ACP domain certificate is called failing in this document,
+if/when the ACP node can determine that it was revoked (or explicitly
+not renewed), or in the absence of such explicit local diagnostics,
+when the ACP node fails to connect to other ACP nodes in the same ACP
+domain using its ACP certificate. For connection failures to
+determine the ACP domain certificate as the culprit, the peer
+should pass the domain membership check (<xref target="certcheck"/>)
+and other reasons for the connection failure can be excluded because of 
+the connection error diagnostics.</t>
+
+<t>This type of failure can happen during setup/refresh of a secure ACP channel
+connections or any other use of the ACP domain certificate, such as for the
+TLS connection to an EST server for the renewal of the ACP domain
+certificate.</t>
+
+<t>Example reasons for failing certificates that the ACP node can only
+discover through connection failure are that the domain certificate or
+any of its signing certificates could have been revoked or may have expired,
+but the ACP node can not self-diagnose this condition directly. Revocation
+information or clock synchroniation may only be available across the ACP,
+but the ACP node can not build ACP secure channels because ACP peers reject
+the ACP node's domain certificate.</t>
+
+<t>ACP nodes SHOULD support the option to determines whether its ACP
+certificate is failing, and when it does, put itself into the role of a
+re-enrolling candidate ACP node as explained above (<xref target="domcert-re-enroll"/>).</t>
+
+        </section>
 
             </section>
             <!-- domcert-maint -->
@@ -886,7 +1023,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
     .      |          |          |                                .
     .      |       ACP GRASP     |       - ACP GRASP              .
     .      |       loopback      |         loopback interface     .
-    .      |       interface     |       - AN-cert auth           .
+    .      |       interface     |       - ACP-cert auth          .
     .      |         TLS         |                                .
     .   ACP GRASP     |       ACP GRASP  - ACP GRASP virtual      .
     .   subnet1       |       subnet2      virtual interfaces     .
@@ -908,7 +1045,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
     .      |  /               \  |                                .
     .  ACP IPv6 packets   ACP IPv6 packets                        .
     .      |/                   \|                                .
-    .    IPsec/DTLS        IPsec/DTLS  - AN-cert auth             .
+    .    IPsec/DTLS        IPsec/DTLS  - ACP-cert auth            .
     ...............................................................
              |                   |   data-plane
              |                   |     
@@ -969,8 +1106,8 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
             ACP node would simply announce the objective as well, potentially filter the original
             objective in GRASP when it is a MITM and act as an application level proxy.  This of course
             requires that the compromised ACP node understand the semantic of the GRASP negotiation
-            to an extend that allows it to proxy it without being detected, but in an AN environment
-            this is quite likely public knowledge or evens standardized.</t>
+            to an extend that allows it to proxy it without being detected, but in an ACP environment
+            this is quite likely public knowledge or even standardized.</t>
 
             <t>The GRASP TLS connections are run like any other ACP traffic through the ACP
             secure channels.  This leads to double authentication/encryption.  Future work optimizations
@@ -1005,7 +1142,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                         <section anchor="addressing" title="Addressing inside the ACP">
                                 <t>The channels explained above typically only establish communication between two adjacent nodes.  In order for communication to happen across multiple hops, the autonomic control plane requires ACP network wide valid addresses and routing.  Each ACP node must create a loopback interface with an ACP network wide unique address inside the ACP context (as explained in in <xref target="separation"/>).  This address may be used also in other virtual contexts.</t>
 
-                         <t>With the algorithm introduced here, all ACP nodes in the same routing subdomain have the same /48 ULA prefix.  Conversely, ULA global IDs from different domains are unlikely to clash, such that two networks can be merged, as long as the policy allows that merge.  See also <xref target="self-healing"/> for a discussion on merging domains.</t>
+                         <t>With the algorithm introduced here, all ACP nodes in the same routing subdomain have the same /48 ULA prefix.  Conversely, ULA global IDs from different domains are unlikely to clash, such that two ACP networks can be merged, as long as the policy allows that merge.  See also <xref target="self-healing"/> for a discussion on merging domains.</t>
                          <t>Links inside the ACP only use link-local IPv6 addressing, such that each nodes ACP only requires one routable virtual address.</t>
 
                                 <section anchor="addr-fundamentals" title="Fundamental Concepts of Autonomic Addressing">
@@ -1030,7 +1167,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                                         <list style="symbols">
                                         <t>Simplicity, reliability and scale: If other network layer protocols were supported, each would have to have its own set of security associations, routing table and process, etc.</t>
                                         <t>Autonomic functions do not require IPv4: Autonomic functions and autonomic service agents are new concepts.  They can be exclusively built on IPv6 from day one.  There is no need for backward compatibility.</t>
-                                        <t>OAM protocols do not require IPv4: The ACP may carry OAM protocols.  All relevant protocols (SNMP, TFTP, SSH, SCP, Radius, Diameter, ...) are available in IPv6. See also <xref target="I-D.ietf-anima-stable-connectivity"/> for how ACP could be made to interoperate with IPv4 only OAM.</t>
+                                        <t>OAM protocols do not require IPv4: The ACP may carry OAM protocols.  All relevant protocols (SNMP, TFTP, SSH, SCP, Radius, Diameter, ...) are available in IPv6. See also <xref target="RFC8368"/> for how ACP could be made to interoperate with IPv4 only OAM.</t>
                                         </list></t>
                                 </section>
 
@@ -1049,10 +1186,11 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         <list style="symbols">
                 <t>"fd" identifies a locally defined ULA address.</t>
                 <t>The 40 bits ULA "global ID" (term from <xref target="RFC4193"/>) for ACP addresses carried in the domain information field of domain certificates are the first 40 bits of the SHA256 hash of the routing subdomain from the same domain information field.  In the example of <xref target="domcert-acpinfo"/>, the routing subdomain is "area51.research.acp.example.com" and the 40 bits ULA "global ID" 89b714f3db.</t>
-                <t>To allow for extensibility, the fact that the ULA "global ID" is a hash of the routing subdomain SHOULD NOT be assumed by any ACP node during normal operations.  The hash function is only executed during the creation of the certificate.  If BRSKI is used then the registrar will create the domain information field in response to the CSR Attribute Request by the pledge.</t>
+                <t>To allow for extensibility, the fact that the ULA "global ID" is a hash of the routing subdomain SHOULD NOT be assumed by any ACP node during normal operations.  The hash function is only executed during the creation of the certificate.  If BRSKI is used then the BRSKI registrar will create the domain information field in response to the CSR Attribute Request by the pledge.</t>
                 <t>Type: This field allows different address sub-schemes.  This addresses the "upgradability" requirement.  Assignment of types for this field will be maintained by IANA.</t>
         </list></t>
         <t>The sub-scheme may imply a range or set of addresses assigned to the node, this is called the ACP address range/set and explained in each sub-scheme.</t>
+        <t>Please refer to <xref target="acp-registrars"/> and <xref target="address-spaces"/> for further explanations why the following Sub-Addressing schemes are used and why multiple are necessary.</t>
         </section>
         <!-- base-scheme -->
 
@@ -1078,8 +1216,8 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                 </list></t>
 
                 <t>The 64 bit Node-ID is derived and composed as follows:<list style="symbols">
-                        <t>Registrar-ID (48 bit): A number unique inside the domain that identifies the registrar which assigned the Node-ID to the node.  A MAC address of the registrar can be used for this purpose.</t>
-                        <t>Node-Number: A number which is unique for a given registrar, to identify the node.  This can be a sequentially assigned number.</t>
+                        <t>Registrar-ID (48 bit): A number unique inside the domain that identifies the ACP registrar which assigned the Node-ID to the node.  A MAC address of the ACP registrar can be used for this purpose.</t>
+                        <t>Node-Number: A number which is unique for a given ACP registrar, to identify the node.  This can be a sequentially assigned number.</t>
                         <t>V (1 bit): Virtualization bit: 0: Indicates the ACP itself ("ACP node base system); 1: Indicates the optional "host" context on the ACP node (see below).</t>
                 </list></t>
 
@@ -1155,7 +1293,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                 <t>The fields are the same as in the Zone-ID sub-scheme with the following refinements:</t>
                 <t><list style="symbols">
                         <t>V: Virtualization bit: Values 0 and 1 are assigned in the same way as in the Zone-ID sub-scheme.</t>
-                        <t>Registrar-ID: To maximize Node-Number and V, the Registrar-ID is reduced to 46 bits.  This still allows to use the MAC address of a registrar by removing the V and U bits from the 48 bits of a MAC address (those two bits are never unique, so they cannot be used to distinguish MAC addresses).</t>
+                        <t>Registrar-ID: To maximize Node-Number and V, the Registrar-ID is reduced to 46 bits.  This still allows to use the MAC address of an ACP registrar by removing the V and U bits from the 48 bits of a MAC address (those two bits are never unique, so they cannot be used to distinguish MAC addresses).</t>
 
                         <t>If the first bit of the "Node-Number" is "1", then the Node-Number is 16 bit long and the V field is 16 bit long.  Otherwise the Node-Number is 24 bit long and the V field is 8 bit long.</t>
                 </list></t>
@@ -1166,11 +1304,154 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         <!-- Vlong -->
 
         <section anchor="other-sub-schemes" title="Other ACP Addressing Sub-Schemes">
-<t>Before further addressing sub-schemes are defined, experience with the schemes defined here should be collected.  The schemes defined in this document have been devised to allow hopefully sufficiently flexible setup of ACPs for a variety of situation.  These reasons also lead to the fairly liberal use of address space: The Zone Addressing Sub-Scheme is intended to enable optimized routing in large networks by reserving bits for Zone-ID's.  The Vlong addressing sub-scheme enables the allocation of 8/16 bit of addresses inside individual ACP nodes.  Both address spaces allow distributed, uncoordinated allocation of node addresses by reserving bits for the Registrar-ID field in the address.</t>
+<t>Before further addressing sub-schemes are defined, experience with the schemes defined here should be collected.  The schemes defined in this document have been devised to allow hopefully sufficiently flexible setup of ACPs for a variety of situation.  These reasons also lead to the fairly liberal use of address space: The Zone Addressing Sub-Scheme is intended to enable optimized routing in large networks by reserving bits for Zone-ID's.  The Vlong addressing sub-scheme enables the allocation of 8/16 bit of addresses inside individual ACP nodes.  Both address spaces allow distributed, uncoordinated allocation of node addresses by reserving bits for the registrar-ID field in the address.</t>
 
                 <t>IANA is asked need to assign a new "type" for each new addressing sub-scheme.  With the current allocations, only 2 more schemes are possible, so the last addressing scheme should consider to be extensible in itself (e.g.: by reserving bits from it for further extensions.</t>
 
         </section>
+
+<section anchor="acp-registrars" title="ACP Registrars">
+
+<t>The ACP address prefix is asigned to the ACP node during
+enrollment/provisioning of the ACP domain certificate to the ACP node.
+It is intended to persist unchanged through the lifetime of the ACP node.</t>
+
+<t>Because of the ACP addressing sub-schemes explained above, 
+ACP nodes for a single ACP domain can be enrolled by multiple distributed
+and uncoordinated entities called ACP registrars. These ACP
+registrars are responsible to enroll ACP domain certificates
+and associated trust anchor(s) to candidate ACP nodes and are
+also responsible that an ACP domain information field
+is included in the ACP domain certificate.</t>
+
+    <section anchor="registrars-protocols" title="Use of BRSKI or other Mechanism/Protocols">
+
+<t>Any protocols or mechanisms may be used as ACP registrars,
+as long as the resulting ACP certificate and trust anchors allow
+to perform the ACP domain membership described in <xref target="certcheck"/>
+with other ACP domain members, and meet the ACP addressing
+requirements for its ACP domain information field as described further below in this section.</t>
+
+<t>An ACP registrar could be a person deciding whether to
+enroll a candidate ACP node and then orchestrating the
+enrollment of the ACP certificate and associated trust anchor,
+using command line or web based commands on the candidate ACP node
+and trust anchor to generate and sign the ACP domain certificate
+and configure certificate and trust anchors onto the node.</t>
+ 
+<t>The only currently defined protocol for ACP registrars is BRSKI
+(<xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>). When BRSKI
+is used, the ACP nodes are called ANI nodes, and the ACP registrars
+are called BRSKI or ANI registrars.  The BRSKI specification does not define the
+handling of the ACP domain information field because the rules
+do not depend on BRSKI but apply equally to any protocols/mechanisms an
+ACP registrar may use.</t>
+
+    </section>
+
+    <section anchor="registrars-unique" title="Unique Address/Prefix allocation">
+
+<t>ACP registrars MUST NOT allocate ACP address prefixes to ACP nodes
+via the ACP domain information field that would collide
+with the ACP address prefixes of other ACP nodes in the same ACP domain.
+This includes both prefixes allocated by the same ACP registrar to
+different ACP nodes as well as prefixes allocated by other ACP registrars
+for the same ACP domain.</t>
+
+<t>For this purpose, an ACP registrar MUST have one or more unique 46 bit
+identifiers called Registrar-IDs used to allocate ACP address prefixes.
+The lower 46 bits of a EUI-48 MAC addresses are globally unique 46
+bit identifiers, so ACP registrars with known unique EUI-48 MAC addresses
+can use these as Registrar-IDs.  Registrar-IDs do not need to be
+globally unique but only unique across the set of ACP registrars for
+an ACP domain, so other means to assign unique Registrar-IDs to
+ACP registrars can be used, such as configuration on the ACP registrars.</t>
+
+<t>When the candidate ACP device (called Pledge in BRSKI) is to be
+enrolled into an ACP domain, the ACP registrar needs to allocate
+a unique ACP address to the node and ensure that the ACP certificate
+gets a domain information field (<xref target="domcert-acpinfo"/>)
+with the appropriate information - ACP domain-name, ACP-address,
+and so on. If the ACP registrar uses BRSKI, it signals the ACP
+information field to the Pledge via the EST /csraddrs command
+(see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>,
+section 5.8.2 - "EST CSR Attributes").</t>
+
+<t>[RFC editor: please update reference to section 5.8.2 accordingly with latest BRSKI draft at time of publishing, or RFC]</t>
+
+    </section>
+
+    <section anchor="registrars-policy" title="Addressing Sub-Scheme Policies">
+
+<t>The ACP registrar selects for the candidate ACP node a unique 
+address prefix from an appropriate ACP addressing sub-scheme,
+either a zone addressing sub-scheme prefix (see <xref target="zone-scheme"/>),
+or a vlong addressing sub-scheme prefix (see <xref target="Vlong"/>). The
+assigned ACP address prefix encoded in the domain information field
+of the ACP domain certificate indicates to the ACP node its ACP
+address information. The sub-addressing scheme indicates the
+prefix length: /126 for zone address sub-scheme, /120 or /112
+for vlong address sub-scheme. The first address of the prefix is the ACP address,
+all other addresses in the prefix are for other uses by the ACP node
+as described in the zone and vlong addressing sub scheme sections.
+The ACP address prefix itself is then signalled by the ACP node into
+the ACP routing protocol (see <xref target="routing"/>) to establish
+IPv6 reachability across the ACP.</t>
+
+<t>The choice of addressing sub-scheme and prefix-length in the vlong address
+sub-scheme is subject to ACP registrar policy. It could be an ACP domain
+wide policy, or a per ACP node or per ACP node type policy. For example,
+in BRSKI, the ACP registrar is aware of the IDevID of the candidate ACP node,
+which contains a serialNnumber that is typically indicating the nodes vendor
+and device type and can be used to drive a policy selecting an appropriate
+addressing sub-scheme for the (class of) node(s).</t>
+
+<t>ACP registrars SHOULD default to allocate ACP zone sub-address scheme
+addresses with Subnet-ID 0. Allocation and use of zone sub-addresses
+with Subnet-ID != 0 is outside the scope of this specification because
+it would need to go along with rules for extending ACP routing to multiple
+zones, which is outside the scope of this specification.</t>
+
+<t>ACP registrars that can use the IDevID of a candidate ACP device
+SHOULD be able to choose the zone vs. vlong sub-address scheme for
+ACP nodes based on the serialNumber of the IDevID, for example
+by the PID (Product Identifier) part which identifies the product type,
+or the complete serialNumber.</t>
+
+<t>In a simple allocation scheme, an ACP registrar remembers persistently
+across reboots for its currently used Registrar-ID and for each addressing
+scheme (zone with Subnet-ID 0, vlong with /112, vlong with /120), the
+next Node-Number available for allocation and increases it after successful
+enrollment to an ACP node.  In this simple allocation scheme, the ACP registrar
+would not recycle ACP address prefixes from no longer used ACP nodes.</t>
+
+    </section>
+
+    <section anchor="registrars-renewal" title="Address/Prefix Persistance">
+
+<t>When an ACP domain certificate is renewed or rekeyed via EST or other
+mechanisms, the ACP address/prefix in the ACP domain information field
+MUST be maintained unless security issues or violations of the unique
+ address assignment requirements exist or are suspected by the ACP registrar.
+Even when the renewing/rekeying ACP registrar is not the same as the one
+that enrolled the prior ACP certificate. See <xref target="sub-ca"/> for
+an example.  ACP address information SHOULD also be maintained even after an ACP
+certificate did expire or failed. See <xref target="domcert-re-enroll"/>
+and <xref target="domcert-failing"/>.</t>
+
+    </section>
+
+    <section anchor="registrars-further" title="Further Details">
+
+<t><xref target="registrar-considerations"/> discusses further non-normative
+details of ACP registrars: What interactions registrars need, what
+parameters they require, certificate renewal and limitations, use of sub-CAs on
+registrars and centralized policy control.</t>
+
+    </section>
+
+</section>
+
 </section>
 <!-- addressing -->
 
@@ -1302,8 +1583,8 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         <t>Administrative Preference (<xref target="RFC6550"/>, 3.2.6 – to become root): Indicated in DODAGPreference field of DIO message.
             <list style="symbols">
                 <t>Explicit configured ”root”: 0b100</t>
-                <t>Registrar (Default): 0b011</t>
-                <t>AN-connect (non-registrar): 0b010</t>
+                <t>ACP registrar (Default): 0b011</t>
+                <t>ACP-connect (non-registrar): 0b010</t>
                 <t>Default: 0b001.</t>
             </list>
         </t>
@@ -1328,7 +1609,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                               <t>Since channels are by default established between adjacent neighbors, the resulting overlay network does hop by hop encryption.  Each node decrypts incoming traffic from the ACP, and encrypts outgoing traffic to its neighbors in the ACP.  Routing is discussed in <xref target="routing"/>.</t>
 
                             <section anchor="performance" title="Performance">
-<t>There are no performance requirements against ACP implementations defined in this document because the performance requirements depend on the intended use case.  It is expected that full autonomic node with a wide range of ASA can require high forwarding plane performance in the ACP, for example for telemetry, but that determination is for future work.  Implementations of ACP to solely support traditional/SDN style use cases can benefit from ACP at lower performance, especially if the ACP is used only for critical operations, e.g.: when the data-plane is not available.  See <xref target="I-D.ietf-anima-stable-connectivity"/> for more details.</t>
+<t>There are no performance requirements against ACP implementations defined in this document because the performance requirements depend on the intended use case.  It is expected that full autonomic node with a wide range of ASA can require high forwarding plane performance in the ACP, for example for telemetry, but that determination is for future work.  Implementations of ACP to solely support traditional/SDN style use cases can benefit from ACP at lower performance, especially if the ACP is used only for critical operations, e.g.: when the data-plane is not available.  See <xref target="RFC8368"/> for more details.</t>
                             </section>
                             <!-- performance -->
 
@@ -1656,7 +1937,7 @@ with STP changes.</t>
 
                                 <t>ACP connect has security consequences: All systems and processes connected via ACP connect have access to all ACP nodes on the entire ACP, without further authentication.  Thus, the ACP connect interface and (NOC) systems connected to it must be physically controlled/secured.  For this reason the mechanisms described here do explicitly not include options to allow for a non-ACP router to be connected across an ACP connect interface and addresses behind such a router routed inside the ACP.</t>
 
-<t>An ACP connect interface provides exclusively access to only the ACP.  This is likely insufficient for many NMS hosts.  Instead, they would require a second "data-plane" interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or for direct access to the data-plane.  The document <xref target="I-D.ietf-anima-stable-connectivity">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment.</t>
+<t>An ACP connect interface provides exclusively access to only the ACP.  This is likely insufficient for many NMS hosts.  Instead, they would require a second "data-plane" interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or for direct access to the data-plane.  The document <xref target="RFC8368">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment.</t>
 
                                 <t>The ACP connect interface must be (auto-)configured with an IPv6 address prefix.  Is prefix SHOULD be covered by one of the (ULA) prefix(es) used in the ACP.  If using non-autonomic configuration, it SHOULD use the ACP Manual Addressing Sub-Scheme (<xref target="manual-scheme"/>).  It SHOULD NOT use a prefix that is also routed outside the ACP so that the addresses clearly indicate whether it is used inside the ACP or not.</t>
 
@@ -1671,7 +1952,7 @@ to be deployed with it (such as those physically secure locations like a NOC).  
 certificate of such node could include an extension required to permit configuration of ACP
 connect interfaces.  This prohibits that a random ACP node with easy physical access that is not
 meant to run ACP connect could start leaking the ACP when it becomes compromised and the intruder
-configures ACP connect on it.  The full workflow including the mechanism by which a registrar would
+configures ACP connect on it.  The full workflow including the mechanism by which an ACP registrar would
 select which node to give such a certificate to is subject to future work.</t>
 
                         </section>
@@ -1876,7 +2157,8 @@ discovery and secure channel creation are as follows:</t>
                                 </list>
                         </t>
                         <t>The ACP can also sustain network partitions and mergers.  Practically all ACP operations are link local, where a network partition has no impact.  Nodes authenticate each other using the domain certificates to establish the ACP locally.  Addressing inside the ACP remains unchanged, and the routing protocol inside both parts of the ACP will lead to two working (although partitioned) ACPs.</t>
-                        <t>There are few central dependencies: A certificate revocation list (CRL) may not be available during a network partition; a suitable policy to not immediately disconnect neighbors when no CRL is available can address this issue.  Also, a registrar or Certificate Authority might not be available during a partition.  This may delay renewal of certificates that are to expire in the future, and it may prevent the enrollment of new nodes during the partition.</t>
+                        <t>There are few central dependencies: A certificate revocation list (CRL) may not be available during a network partition; a suitable policy to not immediately disconnect neighbors when no CRL is available can address this issue.  Also, an ACP registrar or Certificate Authority might not be available during a partition.  This may delay renewal of certificates that are to expire in the future, and it may prevent the enrollment of new nodes during the partition.</t>
+                        <t>Highly resilient ACP designs can be built by using ACP registrars with embedded sub-CA, as outlined in <xref target="sub-ca"/>. As long a a partition is left with one or more of such ACP registrars, it can continue to enroll new candidate ACP nodes as long as the ACP registrars sub-CA certificate does not expire. Because the ACP addressing relies on unique Registrar-IDs, a later re-merge of partitions will also not cause problems with ACP addresses assigned during partitioning.</t>
                         <t>After a network partition, a re-merge will just establish the previous status, certificates can be renewed, the CRL is available, and new nodes can be enrolled everywhere.  Since all nodes use the same trust anchor, a re-merge will be smooth.</t>
                         <t>Merging two networks with different trust anchors requires the trust anchors to mutually trust each other (for example, by cross-signing).  As long as the domain names are different, the addressing will not overlap (see <xref target="addressing"/>).</t>
 
@@ -1890,7 +2172,7 @@ discovery and secure channel creation are as follows:</t>
                         <t>As explained in <xref target="self-creation"/>, the ACP is based on secure channels built between nodes that have mutually authenticated each other with their domain certificates.  The channels themselves are protected using standard encryption technologies like DTLS or IPsec which provide additional authentication during channel establishment, data integrity and data confidentiality protection of data inside the ACP and in addition, provide replay protection.</t>
                         <t>An attacker will not be able to join the ACP unless having a valid domain certificate, also packet injection and sniffing traffic will not be possible due to the security provided by the encryption protocol.</t>
                         <t>The ACP also serves as protection (through authentication and encryption) for protocols relevant to OAM that may not have secured protocol stack options or where implementation or deployment of those options fails on some vendor/product/customer limitations.  This includes protocols such as SNMP, NTP/PTP, DNS, DHCP, syslog, Radius/Diameter/TACACS, IPFIX/Netflow - just to name a few.  Protection via the ACP secure hop-by-hop channels for these protocols is meant to be only a stopgap though: The ultimate goal is for these and other protocols to use end-to-end encryption utilizing the domain certificate and rely on the ACP secure channels primarily for zero-touch reliable connectivity, but not primarily for security.</t>
-                        <t>The remaining attack vector would be to attack the underlying AN protocols themselves, either via directed attacks or by denial-of-service attacks.  However, as the ACP is built using link-local IPv6 address, remote attacks are impossible.  The ULA addresses are only reachable inside the ACP context, therefore, unreachable from the data-plane.  Also, the ACP protocols should be implemented to be attack resistant and not consume unnecessary resources even while under attack.</t>
+                        <t>The remaining attack vector would be to attack the underlying ACP protocols themselves, either via directed attacks or by denial-of-service attacks.  However, as the ACP is built using link-local IPv6 address, remote attacks are impossible.  The ULA addresses are only reachable inside the ACP context, therefore, unreachable from the data-plane.  Also, the ACP protocols should be implemented to be attack resistant and not consume unnecessary resources even while under attack.</t>
                     </section>
                     <section anchor="self-protecting-inside" title="From the inside">
 
@@ -1933,13 +2215,13 @@ for future work.</t>
 
     <section anchor="bootstrap" title="BRSKI Bootstrap (ANI)">
 
-        <t><xref target="I-D.ietf-anima-bootstrapping-keyinfra"/> (BRSKI) describes how nodes with an IDevID certificate can securely and zero-touch enroll with a domain certificate (LDevID) to support the ACP.  BRSKI also leverages the ACP to enable zero touch bootstrap of new nodes across networks without any configuration requirements across the transit nodes (e.g.: no DHCP/DS forwarding/server setup).  This includes otherwise not configured networks as described in <xref target="secure-bootstrap"/>.  Therefore BRSKI in conjunction with ACP provides for a secure and zero-touch management solution for complete networks.  Nodes supporting such an infrastructure (BRSKI and ACP) are called ANI nodes (Autonomic Networking Infrastructure), see <xref target="I-D.ietf-anima-reference-model"/>.  Nodes that do not support an IDevID but only an (insecure) vendor specific Unique Device Identifier (UDI) or nodes whose manufacturer does not support a MASA could use some future security reduced version of BRSKI.</t>
+        <t><xref target="I-D.ietf-anima-bootstrapping-keyinfra"/> (BRSKI) describes how nodes with an IDevID certificate can securely and zero-touch enroll with a domain certificate (LDevID) to support the ACP.  BRSKI also leverages the ACP to enable zero touch bootstrap of new nodes across networks without any configuration requirements across the transit nodes (e.g.: no DHCP/DNS forwarding/server setup).  This includes otherwise not configured networks as described in <xref target="secure-bootstrap"/>.  Therefore BRSKI in conjunction with ACP provides for a secure and zero-touch management solution for complete networks.  Nodes supporting such an infrastructure (BRSKI and ACP) are called ANI nodes (Autonomic Networking Infrastructure), see <xref target="I-D.ietf-anima-reference-model"/>.  Nodes that do not support an IDevID but only an (insecure) vendor specific Unique Device Identifier (UDI) or nodes whose manufacturer does not support a MASA could use some future security reduced version of BRSKI.</t>
 
-        <t>When BRSKI is used to provision a domain certificate (which is called enrollment), the registrar (acting as an EST server) must include the subjectAltName / rfc822Name encoded ACP address and domain name to the enrolling node (called pledge) via its response to the pledges EST CSR Attribute request that is mandatory in BRSKI.</t>
+        <t>When BRSKI is used to provision a domain certificate (which is called enrollment), the BRSKI registrar (acting as an enhanced EST server) must include the subjectAltName / rfc822Name encoded ACP address and domain name to the enrolling node (called pledge) via its response to the pledges EST CSR Attribute request that is mandatory in BRSKI.</t>
 
         <t>The Certificate Authority in an ACP network must not change the subjectAltName / rfc822Name in the certificate.  The ACP nodes can therefore find their ACP address and domain using this field in the domain certificate, both for themselves, as well as for other nodes.</t>
 
-        <t>The use of BRSKI in conjunction with the ACP can also help to further simplify maintenance and renewal of domain certificates.  Instead of relying on CRL, the lifetime of certificates can be made extremely small, for example in the order of hours.  When a node fails to connect to the ACP within its certificate lifetime, it cannot connect to the ACP to renew its certificate across it (using just EST), but it can still renew its certificate as an "enrolled/expired pledge" via the BRSKI bootstrap proxy.  This requires only that the BRSKI registrar honors expired domain certificates and that the pledge first attempts to perform TLS authentication for BRSKI bootstrap with its expired domain certificate - and only reverts to its IDevID when this fails.  This mechanism could also render CRLs unnecessary because the BRSKI registrar in conjunction with the CA would not renew revoked certificates - only a "no-not-renew" list would be necessary on registrars/CA.</t>
+        <t>The use of BRSKI in conjunction with the ACP can also help to further simplify maintenance and renewal of domain certificates.  Instead of relying on CRL, the lifetime of certificates can be made extremely small, for example in the order of hours.  When a node fails to connect to the ACP within its certificate lifetime, it cannot connect to the ACP to renew its certificate across it (using just EST), but it can still renew its certificate as an "enrolled/expired pledge" via the BRSKI bootstrap proxy.  This requires only that the BRSKI registrar honors expired domain certificates and that the pledge first attempts to perform TLS authentication for BRSKI bootstrap with its expired domain certificate - and only reverts to its IDevID when this fails.  This mechanism could also render CRLs unnecessary because the BRSKI registrar in conjunction with the CA would not renew revoked certificates - only a "Do-not-renew" list would be necessary on BRSKI registrars/CA.</t>
 
         <t>In the absence of BRSKI or less secure variants thereof, provisioning of certificates may involve one or more touches or non-standardized automation.  Node vendors usually support provisioning of certificates into nodes via PKCS#7 (see <xref target="RFC2315"/>) and may support this provisioning through vendor specific models via Netconf (<xref target="RFC6241"/>).  If such nodes also support Netconf Zero-Touch (<xref target="I-D.ietf-netconf-zerotouch"/>) then this can be combined to zero-touch provisioning of domain certificates into nodes.  Unless there are equivalent integration of Netconf connections across the ACP as there is in BRSKI, this combination would not support zero-touch bootstrap across a not configured network though.</t>
 
@@ -2067,8 +2349,8 @@ network itself.  Consider two examples:
 <list style="numbers">
     <t>BRSKI does not allow for a neighboring
     device to identify the pledges certificate (IDevID).  Only the selected
-    BRSKI-registrar can do this, but it may be difficult to disseminate
-    information about undesired pledges from those registrars to locations/nodes
+    BRSKI registrar can do this, but it may be difficult to disseminate
+    information about undesired pledges from those BRSKI registrars to locations/nodes
     where information about those pledges is desired.</t>
 
     <t>LLDP disseminates information about nodes to their immediate neighbors,
@@ -2102,6 +2384,228 @@ to future work include:<list style="numbers">
 </list></t>
 
 </section>
+
+<section anchor="registrar-considerations" title="ACP Registrar Considerations">
+
+<t>As described in <xref target="acp-registrars"/>, the ACP addressing
+mechanism is designed to enable lightweight, distributed and uncoordinated
+ACP registrars that are providing ACP address prefixes to candidate ACP
+nodes by enrolling them with an ACP domain certificate into an ACP domain via
+any appropriate mechanism/protocol, automated or not.</t>
+
+<t>This section discusses informatively more details and options for ACP registrars.</t>
+
+<section anchor="reg-interact" title="Registrar interactions">
+
+<t>This section summarizes and discusses the interactions with other entities required
+by an ACP registrar.</t>
+
+<t>In a simple instance of an ACP network, no central NOC component beside
+a trust anchor (root CA) is required. One or more uncoordinated acting
+ACP registrar can be set up, performing the following interactions:</t>
+
+<t>To orchestrate enrolling a candidate ACP node autonomically,
+the ACP registrar can rely on the ACP and use Proxies to reach the candidate ACP node,
+therefore allowing minimum pre-existing (auto-)configured network services
+on the candidate ACP node.  BRSKI defines the BRSKI proxy, a design that can be
+adopted for various protocols that Pledges/candidate ACP nodes could want to use,
+for example BRSKI over CoAP (Constrained Application Protocol), or proxying of
+Netconf.</t>
+
+<t>To reach a trust anchor unaware of the ACP, the ACP registrar would use
+the data-plane. ACP and data-plane in an ACP registrar could (and by default
+should be) completely isolated from each other at the network level.
+Only applications like the ACP registrar would need the ability for
+ their transport stacks to access both.</t>
+
+<t>In non autonomic enrollment options, the data plane 
+between a ACP registrar and the candidate ACP node needs to be configured
+first.  This includes the ACP registrar and the candidate ACP node.
+Then any appropriate set of protocols can be used between ACP registrar and
+candidate ACP node to discover the other side, and then connect 
+and enroll (configure) the candidate ACP node with an ACP domain certificate.
+Netconf ZeroTouch (<xref target="I-D.ietf-netconf-zerotouch"/>)
+is an example protocol that could be used for this.  BRSKI using optional
+discovery mechanisms is equally a possibility for candidate ACP nodes
+attempting to be enrolled across non-ACP networks, such as the Internet.</t>
+
+<t>When candidate ACP nodes have secure bootstrap, like BRSKI Pledges,
+they will not trust to be configured/enrolled across the network, unless
+being presented with a voucher (see <xref target="RFC8366"/>) authorizing
+the network to take posession of the node. An ACP registrar will then need a
+method to retrieve such a voucher, either offline, or online from a MASA
+(Manufacturer Authorized Signing Authority). BRSKI and Netconf
+ZeroTouch are two protocols that include capabilities to present the voucher
+to the candidate ACP node.</t>
+
+<t>An ACP registrar could operate EST for ACP certificate renewal and/or
+act as a CRL Distribution point. A node performing these
+services does not need to support performing (initial) enrollment, but
+it does require the same above described connectivity as an ACP
+registrar: via the ACP to ACP nodes and via the data-plane to the trust anchor
+and other sources of CRL information.</t>
+
+</section>
+
+<section anchor="reg-config" title="Registrar Parameter">
+
+<t>The interactions of an ACP registrar outlined <xref target="acp-registrars"/> and
+<xref target="reg-interact"/> above depend on the following parameters:
+<list>
+  <t>A URL to the trust anchor (root CA) and credentials so that the ACP
+   registrar can let the trust anchor sign candidate ACP member certificates.</t>
+  <t>The ACP domain-name.</t>
+  <t>The Registrar-ID to use. This could default to a MAC address of the ACP registrar.</t>
+  <t>For recovery, the next-useable Node-IDs for zone (Zone-ID=0) sub-addressing scheme,
+     for Vlong /112 and for Vlong /1120 sub-addressing scheme. These IDs would only need
+     to be provisioned after recovering from a crash. Some other mechanism would 
+     be required to remember these IDs in a backup location or to recover them
+     from the set of currently known ACP nodes.</t>
+   <t>Policies if candidate ACP nodes should receive a domain certificate or not,
+     for example based on the devices LDevID as in BRSKI. The ACP registrar may have
+     a whitelist or blacklist of devices serialNumbers from teir LDevID.</t>
+   <t>Policies what type of address prefix to assign to a candidate ACP devices,
+     based on likely the same information.</t>
+   <t>For BRSKI or other mechanisms using vouchers: Parameters to determine
+     how to retrieve vouchers for specific type of secure bootstrap candidate
+     ACP nodes (such as MASA URLs), unless this information is automatically
+     learned such as from the LDevID of candidate ACP nodes (as defined in BRSKI).</t>
+</list></t>
+</section>
+
+<section anchor="cert-renewal" title="Certificate renewal and limitations">
+
+<t>When an ACP node renews/rekeys its certificate, it may end up doing so via
+a different registrar (e.g.: EST server) than the one it originally received
+its ACP domain certificate from, for example because that original ACP registrar
+is gone. The ACP registrar through which the renewal/rekeying is performed
+would by default trust the ACP domain information from the ACP nodes current
+ACP domain certificate and maintain this information so that the ACP node
+maintains its ACP address prefix. In EST renewal/rekeying, the ACP nodes current
+ACP domain certificate is signalled during the TLS handshake.</t>
+
+<t>This simple scenario has two limitations:
+<list style="numbers">
+  <t>The ACP registrars can not directly assign certificates to nodes and
+     therefore needs an "online" connection to the trust anchor (root CA).</t>
+  <t>Recovery from a compromised ACP registrar is difficult.
+     When an ACP registrar is compromised, it can insert for example
+     conflicting ACP domain information and create thereby an attack
+     against other ACP nodes through the ACP routing protocol.</t>
+</list></t>
+
+<t>Even when such a malicious ACP registrar is detected, resolving the
+problem may be difficult because it would require identifying all the
+wrong ACP domain certificates assigned via the ACP registrar after it was 
+was compromised. And without additional centralized tracking of assigned
+certificates there is no way to do this - assuming one can not retrieve
+this information from the .</t>
+
+</section>
+
+  <section anchor="sub-ca" title="ACP Registrars with sub-CA">
+
+<t>In situations, where either of the above two limitations are an issue,
+ACP registrars could also be sub-CAs. This removes the need for
+connectivity to a root-CA whenever an ACP node is enrolled, and reduces
+the need for connectivity of such an ACP registrar to a root-CA to only
+those times when it needs to renew its own certificate. The ACP registrar
+would also now use its own (sub-CA) certificate to enroll and sign the
+ACP nodes certificates, and therefore it is only necessary to revoke
+a compromised ACP registrars sub-CA certificate. Or let it expire and
+not renew it, when the certificate of the sub-CA is appropriately
+short-lived.</t>
+
+<t>As the ACP domain membership check verifies a
+peer ACP node's ACP domain certicate trust chain, it will also verify
+the signing certificate which is the compromised/revoked sub-CA certificate.
+Therefore ACP domain membership for an ACP node enrolled from a
+compromised ACP registrar will fail.</t>
+
+<t>ACP nodes enrolled by a compromised ACP registrar
+would automatically fail to establish ACP channels and ACP domain
+certificate renewal via EST and therefore revert to their role as 
+a candidate ACP members and attempt to get a new ACP domain certificate
+from an ACP registrar - for example via BRSKI. In result, ACP registrars that have an
+associated sub-CA makes isolating and resolving issues with
+compromised registrars easier.</t>
+
+<t>Note that ACP registrars with sub-CA functionality also can control the
+lifetime of ACP domain certificates easier and therefore also be used as
+a tool to introduce short lived certificates and not rely on CRL,
+whereas the certificates for the sub-CAs themselves could be longer
+ lived and subject to CRL.</t>
+
+  </section>
+
+  <section anchor="pms" title="Centralized Policy Control">
+
+<t>When using multiple, uncoordinated ACP registrars, several advanced
+operations are potentially more complex than with a single, resilient
+ policy control backend, for example including but not limited to:
+<list>
+  <t>Which candidate ACP node is permitted or not permitted into an
+     ACP domain. This may not be a decision to be taken upfront, so that
+     a per-serialNumber policy can be loaded into ever ACP registrar.
+     Instead, it may better be decided in real-time including potentially
+     a human decision in a NOC.</t>
+  <t>Tracking of all enrolled ACP nodes and their certificate information.
+     For example in support of revoking individual ACP nodes certificates.</t>
+  <t>More flexible policies what type of address prefix or even what specific
+     address prefix to assign to a candidate ACP node.</t>
+</list>
+</t>
+
+<t>These and other operations could be introduced more easily by
+introducing a centralized Policy Management System (PMS) and modifying 
+ACP registrar behavior so that it queries the PMS for any policy decision
+occuring during the candidate ACP node enrollment process and/or the
+ACP node certificate renewal process. For example, which ACP address
+prefix to assign. Likewise the ACP registrar would report any relevant state
+change information to the PMS as well, for example when a certificate
+was successfully enrolled onto a candidate ACP node. Such an ACP registrar
+PMS interface definition is subject to future work.</t>
+  </section>
+
+</section>
+
+
+<section anchor="address-spaces" title="Address Space Considerations">
+
+<t>This document defines the Zone, Vlong and Manual sub
+address schemes primarily to support address prefix assignment
+via distributed, potentially uncoordinated ACP registrars as defined
+in <xref target="acp-registrars"/>. This
+costs 48/46 bit identifier so that these ACP registrar can assign
+non-conflicting address prefixes. This design does not leave enough
+bits to simultaneously support a large number of nodes (Node-ID)
+plus a large prefix of local addresses for every node plus a
+large enough set of bits to identify a routing Zone. In result,
+Zone, Vlong 8/16 attempt to support all features, but in via 
+separate prefixes.</t>
+
+<t>In networks that always expect to rely on a centralized PMS
+as described above (<xref target="pms"/>), the 48/46 bits for
+the Registrar-ID could be saved. Such variations of the ACP
+addressing mecchanisms could be introduct through future work
+in different ways. If the prefix rfcSELF in the ACP information
+field was changed, incompatible ACP variations could be created
+where every design aspect of the ACP could be changed. Including
+all addressing choices. If instead a new addressing sub-type
+would be defined, it could be a backward compatible extension
+of this ACP specification. Information such as the size of a
+zone-prefix and the length of the prefix assigned to the ACP
+node itself could be encoded via the extension field of the
+ACP domain information.</t>
+
+<t>Note that an explicitly defined "Manual" addressing sub-scheme
+is always beneficial to provide an easy way for ACP nodes to prohibit
+incorrect manual configuration of any non-"Manual" ACP address spaces
+and therefore ensure hat "Manual" operations will never impact 
+correct routing for any non-"Manual" ACP addresses assigned via
+ACP domain certificates.</t>
+
+    </section>
 
     <section anchor="enabling-acp" title="Enabling and disabling ACP/ANI">
 
@@ -2239,7 +2743,7 @@ if there is an ACP neighbor on the remote end every 500 seconds = 1% power consu
 
 <t>A "brownfield" node is one that already has a configured data-plane.</t>
 
-<t>Executing global "ACP/ANI enable [up-if-only]" on each node is the only command necessary to create an ACP across a network of brownfield nodes once all the nodes have a domain certificate.  When BRSKI is used ("ANI enable"), provisioning of the certificates only requires set-up of a single BRSKI-registrar node which could also implement a CA for the network.  This is the most simple way to introduce ACP/ANI into existing (== brownfield) networks.</t>
+<t>Executing global "ACP/ANI enable [up-if-only]" on each node is the only command necessary to create an ACP across a network of brownfield nodes once all the nodes have a domain certificate.  When BRSKI is used ("ANI enable"), provisioning of the certificates only requires set-up of a single BRSKI registrar node which could also implement a CA for the network.  This is the most simple way to introduce ACP/ANI into existing (== brownfield) networks.</t>
 
 <t>The need to explicitly enable ACP/ANI is especially important in brownfield nodes because otherwise software updates may introduce support for ACP/ANI: Automatic enablement of ACP/ANI in networks where the operator does not only not want ACP/ANI but where he likely never even heard of it could be quite irritating to him.  Especially when "down" behavior is changed to "admin down".</t>
 
@@ -2465,8 +2969,8 @@ but the concepts used by the ACP can be used to build derived solutions:</t>
 <t>The ACP specifies the use of ULA and deriving its prefix from the domain name
 so that no address allocation is required to deploy the ACP. The ACP will equally
 work not using ULA but any other /50 IPv6 prefix.  This prefix could simply be a configuration 
-of the registrars when using BRSKI to enroll the domain certificates - instead
-of the registrar deriving the /50 ULA prefix from the AN domain name.</t>
+of the ACP registrars (for example when using BRSKI) to enroll the domain certificates - instead
+of the ACP registrar deriving the /50 ULA prefix from the AN domain name.</t>
 
 <t>Some solutions may already have an auto-addressing scheme, for example derived from 
 existing unique device identifiers (e.g.: MAC addresses).  In those cases it may not be desirable
@@ -2526,8 +3030,8 @@ Any future network OAM should always use end-to-end security anyhow and can
 leverage the domain certificates and is therefore not dependent on security to
 be provided for by ACP secure channels.</t>
                     </section>
-
                 </section>
+
         <!-- further considerations -->
 
 <!-- REMOVED this section in version 12 due to feedback by working group
@@ -2666,9 +3170,6 @@ specification for this value is this document, <xref target="domcert-maint"/>.</
 for any &lt;service-name> that is an <xref target="RFC6335"/> registered service
 name.  This is a proposed update to the GRASP registry subject to future work and 
 only mentioned here for informational purposed to explain the unique format of the objective name.</t>
-
-<t> The IANA is requested to create an ACP Parameter Registry with
-currently one registry table - the "ACP Address Type" table.</t>
 
 <t> The IANA is requested to create an ACP Parameter Registry with
 currently one registry table - the "ACP Address Type" table.</t>
@@ -3048,14 +3549,72 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       </section>
 
 <section title="draft-ietf-anima-autonomic-control-plane-14">
-      <t>Joel Halpern, review 2:</t>
+      <t>Disclaimer: All new text introduced by this revision provides only additional explanations/
+      details based on received reviews and analysis by the authors. No changes to beavior already
+      specified in prior revisions.</t>
+      
+      <t>Joel Halpern, review part 3:</t>
+      <t>Define/explain "ACP registrar" in reply to Joel Halpern review part 3, resolving primarily 2 documentation issues::</t>
+      <t><list style="numbers">
+          <t>Unclear how much ACP depends on BRSKI. ACP document was referring unqualified
+          to registrars and registrar-ID in the addressing section without explaining what
+          a registrar is, leading to the assumption it must be a BRSKI Registrar.</t>
+          <t>Unclear how the ACP addresses in ACP domain certificates are assigned
+          because the BRSKI document does not defines this, but refers to this ACP document.</t>
+      </list></t>
+      <t>Wrt. 1: ACP does NOT depend on BRSKI registrars, instead ANY appropriate automated
+      or manual mechanism can be used to enroll ACP nodes with ACP domain certificates.
+      This revision calls defines such mechanisms the "ACP jegistrar" and defines requirements.
+      Eg: In ANI devices, ACP Registrars are BRSKI registras. In non-ANI ACP networks, the
+      registrar may simply be a person using CLI/web-interfaces to provision domain certificates
+      and set the ACP address correctly in the ACP domain certificate.</t>
+
+      <t>Wrt. 2.: The BRSKI document does rightfully not define how the ACP address assignment
+      and creation of the ACP domain information field has to work because this is independent
+      of BRSKI and needs to follow the same rules whatever protocol/mechanisms are used
+      to implement an ACP Registrar. Another set of protocols that could be used instead of
+      BRSKI is Netconf/Netconf-Call-Home, but such an alternative ACP Registrar solution
+      would need to be speficied in it's own document.</t>
+
+      <t>Additional text/sections had to be added to detail important conditions so that
+      automatic certificate maintenance for ACP nodes (with BRSKI or other mechanisms) can
+      be done in a way that as good as possible maintains ACP address information of ACP
+      nodes across the nodes lifetime because that ACP address is intended as an identifier
+      of the ACP node.</t>
+      <t>Summary of sections added:
+      <list style="bullets">
+        <t>6.1.3.5/6.1.3.6 (normative): re-enrollment of ACP nodes after certificate exiry/failure in a
+        way that allows to maintain as much as possible ACP address information.</t>
+        <t>6.10.7 (normative): defines "ACP Registrar" including requirements and how it
+        can perform ACP address assignment.</t>
+        <t>10.3 (informative): details / examples about registrars to help implementers and operators
+        understand easier how they operate, and provide suggestion of models that a likely
+        very ueful (sub-CA and/or centralized policy manaement).</t>
+        <t>10.4 (informative): Explains the need for the multiple address sub-spaces defined
+        in response to discuss with Joel.</t>
+      </list></t>
+      <t></t>
+      <t>Other changes:</t>
+      <t>Updated references (RFC8366, RFC8368).</t>
+      <t>Introduced sub-section headings for 6.1.3 (certificate maintenance) because
+      section became too long with newly added sub-sections. Also some small text fixups/remove of 
+      duplicate text.</t>
+      <t>Gen-ART review, Elwyn Davies:</t>
+      <t>[RFC Editor: how can i raise the issue of problematic cross references of terms in the terminology section - rendering is problematic. ].</t>
+      <t>4. added explanation for ACP4 (finally).</t>
+      <t>6.1.1 Simplified text in bullet list explaining rfc822 encoding.</t>
+      <t>6.1.3 refined second paragraph defining remembering of previous EST server and explaiing how to do this with BRSKI.</t>
+      <t>9.1 Added paragraph outlining the benefit of the sub-CA Registrar option for supporting partitioned networks.</t>
+      <t>Joel Halpern, review part 2:</t>
       <t>6.1.1: added note about "+ +" format in address field when acp-address and rsub are empty.</t>
       <t>6.5.10 - clarified text about V bit in Vlong addressing scheme.</t>
       <t>6.10.3/6.10.4 - moved the Z bit field up front (directly after base scheme) and indicated more explicitly Z is part of selecting of the sub-addressing scheme.</t>
       <t>Refined text about reaching CRL Distribution Point, explain why address as indicator to use ACP.</t>
+      <t></t>
       <t>Note from Brian Carpenter: RFC Editor note for section reference into GRASP.</t>
+      <t></t>
       <t>IOT directorate review from Pascal Thubert:</t>
-      <t>Vrious Nits/typos.</t>
+      <t>Various Nits/typos.</t>
       <t>TBD: Punted wish for mentioning RFC reference titles to RFC editor for now.</t>
       <t>1. Added section 1.1 - applicability, discussing protocol choices re. applicability to constrained devices (or not). Added notion of TCP/TLS va CoAP/DTLS to section 10.4 in support of this.</t>
       <t>2. Added in-band / out of band into terminology.</t>
@@ -3068,7 +3627,9 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       <t>6.11.1.1 added suggested text about mechanisms to further reduce opportunities for loop during reconvergence (active signaling options from RFC6550).</t>
       <t>6.11.1.3 made mode 2 MUST and mode 2 MAY (RPL MOP - mode of operations). Removes ambiguity ambiguity.</t>
       <t>6.12.5 Added recommendation for RFC4429 (optimistic DAD).</t>
+      <t></t>
       <t>Nits from Benjamin Kaduk: dTLS -> DTLS:</t>
+      <t></t>
       <t>Review from Joel Halpern:</t>
       <t>1. swapped order of "purposes" for ACP to match order in section 3.</t>
       <t>1. Added notion about manageability of ACP gong beyond RFC7575 (before discussion of stable connectivity).</t>
@@ -3153,9 +3714,10 @@ ted so that one can compare changes from -09 and changes to the next version (-1
                         <?rfc include='reference.RFC.7950'?>
                         <?rfc include='reference.RFC.8028'?>
                         <?rfc include='reference.RFC.8126'?>
+                        <?rfc include='reference.RFC.8366'?>
+                        <?rfc include='reference.RFC.8368'?>
                         <?rfc include="reference.I-D.ietf-anima-bootstrapping-keyinfra.xml"?>
                         <?rfc include="reference.I-D.ietf-anima-reference-model.xml"?>
-                        <?rfc include="reference.I-D.ietf-anima-stable-connectivity.xml"?>
                         <?rfc include="reference.I-D.ietf-netconf-zerotouch" ?>
 
                         <reference anchor="AR8021" target="http://standards.ieee.org/findstds/standard/802.1AR-2009.html">
