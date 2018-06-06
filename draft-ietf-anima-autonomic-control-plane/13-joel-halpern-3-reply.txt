@@ -1,0 +1,104 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: "Joel M. Halpern" <jmh@joelhalpern.com>
+Cc: rtg-dir@ietf.org, draft-ietf-anima-autonomic-control-plane.all@ietf.org,
+	ietf@ietf.org, anima@ietf.org
+Bcc: 
+Subject: Re: [Anima] Rtgdir telechat review of?
+ draft-ietf-anima-autonomic-control-plane-13
+Reply-To: 
+In-Reply-To: <6c4f9527-1b96-9c14-ffe0-186a24eb9793@joelhalpern.com>
+
+On Mon, May 14, 2018 at 11:15:58PM -0400, Joel M. Halpern wrote:
+> (Sorry about the excess caps.  Did not intentd to shout.)
+> 
+> From some off-line disucssions, I understand that the actual address
+> allocation is tied to the registration process.  The registration process is
+> not described in this document.
+> 
+> As far as I can tell, the ACP does not depend upon the address allocation
+> strategy.  The address allocation strategy does require the ACP.  And it
+> requires and is closely coupled to the registration process.
+> 
+> If that is true, the address allocation seems to be better described with
+> the registration process.  Which I presume is in the BRSKI document.
+> 
+> All I would put in here is the basic ULA allocation (hash based generation)
+> mechanism.
+
+Hi Joel (round 3)
+
+Here is the github version after the fixes discussed below
+
+https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14-jh3.txt
+
+Here is the diff vs. the prior versin (round 2)
+
+http://tools.ietf.org//rfcdiff?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/54c9c16f3444b1db13c7cb05744e543dfcdfb63b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-14-jh3.txt
+
+Alas (but i think for the better), after
+all the questions from and discussion with you, i tried to figure out how
+to best document the answers to the questions you raised, and it started
+answering why we need multiple address range - because have to waste
+48/46 bits on Registrar-IDs. Ok, Why ? Because we want multiple uncoordinated
+registrars. Ok, what is a registrar. Especially when ACP does not use
+BRSKI, which it claims it can. And how does certificate maintenance work
+when you have multiple registrars. Aka: once i started to write text to
+asnwer your questions i kinda got sucked into having the spec also answer
+other questions.
+
+So, with this rev., we now define and use the term "ACP Registrar",
+and define that thats a BRSKI Registrar in ANI nodes, but it can be
+anything in non-ANI ACP nodes. Does not have to be software. It could
+be you, if you want the job.  Maybe Netconf or other protocols that 
+want to compete with BRSKI.
+
+Actually, verified i can be a registrar a long time ago, using old
+crypto PKI CLI on ACP capable routers to manually hack in certificates
+with specific properties i wanted. And getting them via web interface from
+a CA.
+
+So, i think this is a very clean solution of documentation. The normative
+part of the spec now has what i think was the minimum to define the
+requirements for any ACP registrar.
+
+So, then there is an informative section explaining the need for the
+multiple address spaces because of those uncoordinated registrars.
+And an informative section about how you would need to set up
+such uncoordinated registrars, aka: each with their own sub-CA. All
+in section 10.3 now.
+
+Then of course the whole point you made about about ACP addresses
+being identifiers or not. So i wanted to document the point  that they
+are, but that also meant to explain how the ACP address information
+will survive in the presence of renewal and re-enrollment with a different registrar
+(which may not know the nodes assigned ACP address unless its presented
+during re-enrollment/renewal). Then of course the case where a cert
+is revoked maybe indirectly, because the registrar was attacked, not
+the ACP node gets a new cert from another registrar but of course this is
+is the only case where you want it to get a certificate with new ACP
+address information (because the prior registrar became untrusted so
+you don't trust what ACP information it assigned).
+
+So, this ended up being two new normative subsections in 6.1.3 -
+re-enrollment and failing certificates, describing the requirements against ACP nodes
+during renewal or failure of their cert.
+
+The informative part of the doc also got a section about registrars documenting
+hopefully the key pieces: how it works in general (so folks get
+an idea how they would be built with or without BRSKI), what parameters
+they need, discussion about that multi-registrar renewal and sub-CA
+case, and finally a discussion about how registrars could integrate
+with centralized policy control. After all, the world is SDN, so if
+we'd only document the cool distributed registrar case, this wouldn't sell well
+in todays world *sigh*.
+
+The reasoning for this new text sections is all summarized/documented in the changelog for -14.
+
+I'd like to point out  that even though this is a bunch of additional text,
+it is in no way changing the way the ACP or registrars are meant to
+operate. It is really just adding missing documentation about it.
+
+Hope this answers your questions and resolves your discuss.
+
+Cheers
+    Toerless

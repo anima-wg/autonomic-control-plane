@@ -1,0 +1,385 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Elwyn Davies <elwynd@dial.pipex.com>
+Cc: "gen-art@ietf.org" <gen-art@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane.all@ietf.org
+Bcc: 
+Subject: Re: Gen-art LC Review of draft-ietf-anima-autonomic-control-plane-13
+Reply-To: 
+Message-ID: <a6351b48-ae97-5212-58cb-40a1f242fafb@dial.pipex.com>
+
+I am the assigned Gen-ART reviewer for this draft. The General Area
+Review Team (Gen-ART) reviews all IETF documents being processed
+by the IESG for the IETF Chair.  Please treat these comments just
+like any other last call comments.
+
+For more information, please see the FAQ at
+
+<https://trac.ietf.org/trac/gen/wiki/GenArtfaq>.
+
+Document: draft-ietf-anima-autonomic-control-plane-13.txt
+Reviewer: Elwyn Davies
+Review Date: 2016/02/27
+IETF LC End Date:  2016/02/26
+IESG Telechat date: (if known) -
+
+Summary:  Not ready.  There are a number of minor issues and a host of nits and editorial fixes needed.  I would also consider that the expected status (expeimental vs standards track) ought to be discussed on account of the areas where it is incomplete (e.g., incompleteness of the key Intent mechanism).
+
+Major issues:
+I am sure this has been considered elsewhere, but the amount of future work and areas where operation might discover problems indicates to me that maybe this should be an experimental proposal rather than standards track.
+
+Minor issues:
+Clarity regarding limitations of the ACP approach:The document is relentlessly positive about the ACP approach.  Clearly certain problems will not allow the ACP to function.  For example it implies that the physical network and interfaces are a shared resource: low level failures or misconfiguration at (say) Level 2, may still knockout the ACP as well as the data-plane.  Some brief words on this would not go amiss.  This could well be in s4.
+
+s2, para 2: There are several instances in the terminology definitions that are confusing before the term has been fully introduced later (and in some cases even then, e.g., the cryptic reference to 'paragraph 21' in the ACP address definition.)  This should be cleared up.  Notes are given in the Nits/Editorial comments below,
+
+s4, "ACP4", also s6.8.2:
+> Clients of the ACP MUST
+>            NOT be tied to a particular application or transport protocol.
+
+It may be that I don't understand the problem, but the communication between the ACP nodes seems to be tied to the secure channels.  I am not sure how this is compatible with the any transport protocol requirement.  There doesn't seem to be any further explanation of how this requirement is fufilled.  This is linked to he means that is not specified by which the ACP address TLS connections are connected to the secure channels.  This may be because I don't understand the problem
+
+s6.1.1:  RFC 5280 discusses the option of leaving the subjectName blank if the subjectAltName is present.  What would we expect to find in the subjectName field of the ACP Domain cert?
+
+s6.1.1:  I don't understand where the routing-subdomain element is
+carried.  routing-subdomain is a top level production in the ABNF that
+isn't referenced in the rest of the ABNF and a separate example is
+given.  Is the intention that the subjectAltName would consist of a
+sequence of two rfc822names as allowed by the X.509 syntax if the
+routing-subdomain is required?
+
+s6.1.3: I don't understand why the EST renewal server address has to (or, at least, might) be configured into all ACP nodes when the EST server announces itself with M_FLOOD messages.  For one thing it goes (further) against automicity.
+
+s6.7.x, Security algorithm agility?:  Each of the options specifies a
+MTI, minimum (in today's tems) capability set of cyypto algorithms. It
+is not clear (to me) how this will be adapted if and when these
+algorithms are no longer adequately secure.  Some words on ths may be
+necessary.
+
+s9.1, "Network Partition":  I am not sure I believe the story on partition - It seems possinle that one of the segments could be left without an enrollment server after partition.  Am I right and does it matter?
+
+s12: There is no registration policy specified for the new registry created.
+
+Nits/editorial comments:
+
+General: The style used for introducing acronyms is not consistent with
+normal RFC style, which is expansion followed by acronym in parentheses,
+thus...
+Example (in the Abstract): s/OAM (Operations Administration and
+Management)/Operations Administration and Management (OAM)/
+
+General: s/e.g.:/e.g.,/ (global)
+
+General: In English thequestion mark (?) is not separated by space from the
+last word in the sentence.  There are many instanxes of this problem,
+especially in s10.
+
+Exclusive usage of IPv6: It would be useful to mention (probably somewhere
+in the last two paras of s1) that the ACP is stricly an IPv6 construct.
+
+Abstract and 3 other places: s/out of band/out-of-band/
+
+Abstract:  In the last sentence is "not misconfigured" correct?  I would
+have thought it shuld be "misconfigured".
+
+s1, para 1: The phraseology "currently being defined in the document" for
+the reference model is not future proof.  Replace with "specified in".
+
+s1, para 3:  A construct cannot 'run' in a table:
+OLD:
+runs in the global routing table
+NEW:
+runs over the network defined by the global routing table
+END
+
+s1, para 3: s/to recover/to avoid or allow recovery/, s/personnel
+is/personnel are/
+
+s1,para 6: s/data-plen/data-plane/
+
+s1, para 8: Expand GRASP on first occurrence  (the terminology definitions
+come in s2).
+
+s1, para 13 (2nd para on page 6): Suggest  s/without dependency
+against/without reliance on/
+
+s1, next to last para: s/It also explains on how existing management
+solutions/It also explains how existing management solutions/
+
+s1,last para: s/with full secure/with fully secure/,
+s/[I-D.ietf-anima-reference-model]. which/[I-D.ietf-anima-reference-model],
+which/ [period ->comma], s/it enables building more/it allows the building
+of more/
+
+s2: There are a few terms that have special meaning within the context of
+the document (e.g., data-plane, loopback interface) which do not use
+capitalized names.  It might be helpful to globally change the names  to
+(eg.) Data-plane Loopback interface where the special meaning is implied.
+
+s2:  It would be useful to note the terms imported from RFC7575.
+
+s2, para 2:  ADD:
+Note that definitions may contain terms that are defined later in the list
+as a result of the alphabetic ordering.
+END
+
+s2, "ACP": The term "zero-touch" is jargon that may not be understood by
+non-English mother tongue readers.  Please add a definition or expand it
+here.
+
+s2, "ACP address":  The term "ACP domain certificate" probably needs a
+definition - this would then point to the RFC that defines the certificate
+type used and hence allow the reader to locate the domain information
+field.  I am unclear what "(paragraph 21)" refers to  - is this terminology
+used in the certificate type?
+
+s2, "ACP connect": For consistency this should be "ACP connect interface".
+
+s2, "ACP secure channel protocol": Expand IKEv2, dTLS.(IPsec is well-known).
+
+s2, "ACP (ULA) prefixes":  Given that ULA is a term defined in RFC 4193, I
+would be inclined to expand on first use (here) and refer to the RFC rather
+than part duplicating the formal definition further down.
+
+s2, "data-plane": s/In a full Autonomic Network node/In a fully Autonomic
+Network node/
+
+s2, "Intent": The term 'Northbound' is a piece of jargon that is not
+well-known outside the SDN community.   This is the only usage in the
+document.  Please expand it here.
+
+s2, "RPL": Please add the ref to RFC 6550 here.
+
+s2, last para: Given the last sentence, change RFC 2119 -> RFC 8174.
+
+s3.3, para 1: s/(global routing table)/using the global routing table/ [See
+comment on s1, para 3 above]
+
+s3.3, para 2: s/unreachable can lock/unreachable or can lock/
+
+s3.3, para 4: s/allows control plane and management plane/allows the control
+plane and the management plane/
+
+s4, "ACP3": s/suggests to use/suggests using/
+
+s5, bullet #5:
+> each node sets up a loopback interface with
+>         its ULA IPv6 address.
+Given the way the IPv6 loopback interface works, this might be better
+described as "adding the ULA IPv6 address to the loopback interface" - there
+is only ever one IPv6 loopback interface per device or VRF.
+
+s6, para 2: What certificate must it have?             (the ACP domain cert
+according to s6.1.)
+
+s6.1, para 3:
+OLD:
+Those IDevID do not
+   include owner and deployment specific information to allows autonomic
+   establishment of trust for the operations of an ACP domain
+NEW:
+A IDevID does not
+   include owner and deployment specific information that would allow
+autonomic
+   establishment of trust for the operations of an ACP domain
+END
+
+s6.1, para 4:  The  term 'its reference document is unclear.  I guess it
+means RFC 7575.
+OLD:
+   This document uses the term ACP in many places where its reference
+   document use the word autonomic.  This is done because those
+   reference document consider fully autonomic network and nodes, but
+   support of ACP does not require support for other components of
+   autonomic networks.  Therefore the word autonomic would be irritating
+   to operators interested in only the ACP:
+NEW:
+   This document uses the term ACP in many places where the Autonomic
+Networking reference
+   model  document [RFC7575] uses the word "autonomic".  This is done
+because those
+   reference model document considers fully autonomic network and nodes, but
+   support of ACP does not require support for other components of
+   autonomic networks.  Therefore the using just the word "autonomic" might
+be confusing
+   to operators interested in only the ACP:
+END
+
+s6.1.1, title: s/Field/Fields/?  Not sure if this is better?
+
+s6.1.1: Turn RFC 1034 into a proper reference to shut up idnits.
+
+s6.1.2, bullets #2 and #4: s/peers/peer's/
+
+s6.1.2, bullet #3:Expamd CDP, OCSP and CRL - not in RFC editor well-known
+list (and indeed CDP as used here is not in the list at all.)
+
+s6.1.3: Point to Section 2.8.11 of the GRASP draft for the flood message
+definition.
+
+s6.1.3: Expand CDDL on first occurrence.
+
+s6.1.3, top of page 20: So high?  Surely 'sufficiently low'?
+OLD:
+It must be so
+   high that the aggregate amount of periodic M_FLOODs from all flooded
+   objectives causes only negligible traffic across the ACP.
+NEW:
+The frequency of sending MUST be such
+   that the aggregate amount of periodic M_FLOODs from all flooding
+sources  causes only negligible traffic across the ACP.
+END
+
+s6.1.2, para 2: s/directly adjacent/diectly adjacent (i.e., not on a link
+connected to this node)/
+
+s6.1.3: To make the introduction of BRSKI at the end of Section 6.3 more
+comprehensible, it would be useful to explain that the initial domain
+certificate can possibly be installed using BRSKI or some other mechanism
+rather than by out-of-band configuration as set out in the BRSKI draft. 
+Alternatively this could be part of s5, the overview.
+
+s6.1.3, next to last para: s/primarily/primary/
+
+s6.2, para 1: The term Node-ID should probably be in the terminology
+section.  Either that or it needs to be explained here
+
+s6.2, para 2: s/node-ID/Node-ID/
+
+s6.3: It would be helpful to reinforce that this part of the operation (and
+the reason for the existence of DULL GRASP) is that it operates on an
+unsecured channel - otherwise the appearance of DULL is unexplained.  DULL
+should be expanded on first use.
+
+s6.3, para 1: The DULL section in the GRASP draft is now s2.5.2.
+
+s6.3, para 1: Expand SLAAC on first use. Maybe refer to RFC 4862.
+
+s6.3, para 2: Since RFC3810 is referenced. is MLDv2 REQUIRED (not sure if
+MLDv1 is still implemented ever)?
+
+s6.3, para 3: s/how to enable/on how to enable/
+
+s6.5, paras 2-4:  Para 2 ends with a colon: It maybe that the original
+intention was to format the next two (?) paras as bullet points introduced
+by para 2.  If so then adjust the formatting of paras 3-4; otherwise change
+the colon to a period.
+
+s6.5, para 3: Need a reference for MacSec and probably an expansion of the
+name - I presume this is referring to IEEE 802.1AE.
+
+s6.5, paras 5-8: As above para 5 ends with a colon.  It seems that there are
+two rules to enumerate  after this - para 6 and paras 7-8.  If so arrange
+these paras as two bullet points.  Otherwise the wording of para 5 needs
+altering.
+
+s6.5, para 6: s/itmust be used/they must be used/
+
+s6.6, "(with throttling)":  Some greater precision is needed here.
+
+s6.8.1, para 1:
+OLD:
+   They function in GRASP that makes it
+   fundamental as a service is the ability for ACP wide service
+   discovery (called objectives in GRASP).
+NEW:
+   The function in GRASP that makes it
+   fundamental as a service is the ability to provide ACP wide service
+   discovery (using objectives in GRASP).
+END
+
+s6.8.1, para 2: s/described below/see Section 6.11/
+
+s6.8.1, para 3: s/in the following section/in Section 6.8.2/
+
+s6.8.1, para 4: s/original form/the original form/
+
+s6.8.1, para 4: s/that has never been attempted to be solved/where no attempt at a solution has been described/
+
+s6.8.1, para 5: s/Future ASA/A future ASA/, s/These ASA/Such an ASA/
+
+s6.8.1, para 6: The concept 'constrained flooding' used here for M_DISCOVERY messages is not defined either in this document or the GRASP draft.  This needs to be explained more cearly.
+
+s6.8.1, para 4: Expand PIM-SM.
+
+s6.8.2, para 2: s/responsible to ensure/responsible for ensuring/
+
+s6.8.2:
+>     [RFC Editor: please try to put the following picture on a single page
+>     and remove this note.  We cannot figure out how to do this with XML.
+>     The picture does fit on a single page.]
+Layout hints:
+You can get an extra 9 lines for the figure by
+- Moving the heading ACP: either to the left of the first line or put it as part of the title (which you haven't specified as yet) so it doesn't need a line to itself.
+- Removing 2 essentially blank lines (the second line and the line above ACP-loopback Intetf.
+- Forcing a page break after the paragaph above the figure
+- Removing the RFC Editor note.
+
+Assuming you are using xml2rfc v2, insert the Processing Instruction PI
+<?rfc needLines="46" ?>
+above the figure text (assuming I have counted right).  I think it will then fit on one page.
+
+s6.8.2.1, para 4: s/the semantic of the GRASP negotiation to an extend/the
+semantics of the GRASP negotiation to an extent/
+
+s6.9, para 1: s/ACP channels/ACP channels'/
+
+s6.9, para 2: s/systems/system's/
+
+s6.10.1, last bullet: s/no not/do not/
+
+s6.10.2, bullet #3: Expand CSR.
+
+s6.10.3, next to last para: s/allows to easily add/allows the easy addition
+of/, Expand SW.
+
+s6.10.3, last para: s/allows to announce/allws the announcement of/
+
+s6.10.4, next to last para: s/The Z field is following/The Z field follows/
+
+s6.10.5, bullet #1: s/use via/that might be used/
+
+s6.10.5, bullet #2: s/allows to use/permits the use of/
+
+s6.10.6, last para: s/should consider to be extensible in itself/should
+consider making provision for further extensions/
+
+s6.11.1.1, para 1:s/reasonable fast/with reasonably fast/
+
+s6.11.1.1: Expand DODAG, NOC, RPI, RPPL on first occurrence. ( or is it
+s/RPPL/RPL/?)
+
+s6.11.1.4: Expand DAO on first occurrence.
+
+s6.11.1.11, last para: s/is avoid/is to avoid/
+
+s6.11.1.12: Expand DIO.
+
+s6.12.2, para 1: s/only specify/only specifies/
+
+s6.12.3, para 2: s/to be prioritize/to prioritize/
+
+Reviewer note: There are a rather smaller density of nits in s7 and s8 - I
+have run out of time to record them at this point.  If it is useful I can
+forward notes separately in a few days time.
+
+s10, para 1: s/cope/scope/
+
+s10.2: expand LLDP on first occurrence. May need a reference.
+
+s10.3.2.2: Expand BFD on (only) occurrence.  May need a reference.
+
+s10.4.1: Expand CDP on firat occurrence.
+
+s10.4.2: Expand mDNS and DNS-SD on first occurrence.
+
+s10.5:
+This Appendix explains why RPL
+> This Appendix explains why RPL...
+S10.5 is not an appendix (although aguably the whole of s10 should be an
+appendix.).
+
+s12, paras 5 and 6: These are duplicates. Remove one!
+
+s15.2: I think some of these references are normative:
+especially  ietf-anima-reference-model, ietf-roll-useofrplinfo, RFC 6553,
+RFC 5234
