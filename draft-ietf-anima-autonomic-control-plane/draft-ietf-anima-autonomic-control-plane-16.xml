@@ -68,7 +68,7 @@
 
                         <t>Autonomic functions need an autonomically built communications infrastructure.  This infrastructure needs to be secure, resilient and re-usable by all autonomic functions.  Section 5 of <xref target="RFC7575"/> introduces that infrastructure and calls it the Autonomic Control Plane (ACP).  More descriptively it would be the "Autonomic communications infrastructure for Management and Control".  For naming consistency with that prior document, this document continues to use the name ACP though.</t>
 
-                        <t>Today, the management and control plane of networks typically uses the global routing table, which is dependent on correct configuration and routing.  Misconfigurations or routing problems can therefore disrupt management and control channels.  Traditionally, an out-of-band network has been used to avoid or allow recovery from such problems, or personnel are sent on site to access devices through console ports (craft ports).  However, both options are expensive.</t>
+                        <t>Today, the management and control plane of networks typically uses a routing and forwarding table which is dependent on correct configuration and routing.  Misconfigurations or routing problems can therefore disrupt management and control channels.  Traditionally, an out-of-band network has been used to avoid or allow recovery from such problems, or personnel are sent on site to access devices through out-of-band management ports (also called craft ports, serial console, management ethernet port).  However, both options are expensive.</t>
 
                         <t>
                         In increasingly automated networks either centralized management systems or distributed autonomic service agents in the network require a control plane which is independent of the configuration of the network they manage, to avoid impacting their own operations through the configuration actions they take.</t>
@@ -249,9 +249,9 @@
              An out-of-band network is a secondary network
              used to manage a primary network. The equipment of the primary network is connected to
              the out-of-band network via dedicated management ports on the primary network equipment.
-             Serial (console) management ports are most common, higher end network equipment also has
-             ethernet ports dedicated only for management. An out-of-band network provides management
-             access to the primary network independent of the configuration state of the primary
+             Serial (console) management ports where historically most common, higher end network equipment
+             now also has ethernet ports dedicated only for management. An out-of-band network provides
+             management access to the primary network independent of the configuration state of the primary
              network. One of the goals of the ACP is to provide this benefit of out-of-band
              networks virtually on the primary network equipment. The ACP VRF acts as a virtual out
              of band network device providing configuration independent management access.
@@ -287,7 +287,7 @@
             <xref target="RFC4193"/>.  It is the approximate IPv6 counterpart of the IPv4 private address
             (<xref target="RFC1918"/>). The ULA Global ID prefix are the first 48 bit of a ULA address. In this document it is abbreviated as "ULA prefix". 
             </t>
-            <t hangText="(ACP) VRF:">The ACP is modeled in this document as a "Virtual Routing and Forwarding" instance (VRF). This means that it is based on a "virtual router" consisting of a separate IPv6 forwarding table to which the ACP virtual interfaces are attached and an associated separate IPv6 routing table. Unlike the VRFs on MPLS/VPN-PE (<xref target="RFC4364"/>) or LISP XTR (<xref target="RFC6830"/>), the ACP VRF does not have any special "core facing" functionality or routing/mapping protocols shared across multiple VRFs. In vendor products a VRF such as the ACP-VRF may also be referred to as a so called VRF-lite.
+            <t hangText="(ACP) VRF:">The ACP is modeled in this document as a "Virtual Routing and Forwarding" instance (VRF). This means that it is based on a "virtual router" consisting of a separate IPv6 forwarding table to which the ACP virtual interfaces are attached and an associated IPv6 routing table separate from the Data-Plane. Unlike the VRFs on MPLS/VPN-PE (<xref target="RFC4364"/>) or LISP XTR (<xref target="RFC6830"/>), the ACP VRF does not have any special "core facing" functionality or routing/mapping protocols shared across multiple VRFs. In vendor products a VRF such as the ACP-VRF may also be referred to as a so called VRF-lite.
             </t>
             <t hangText="(ACP) Zone:">An ACP zone is a connected region of the ACP where nodes derive from their non-aggregatable ACP address (identifier address) an aggregatable ACP zone address (locator address). See the definition of the ACP Zone Addressing Sub-Scheme (<xref target="zone-scheme"/>). The complete definition of zones is subject to future work because this document does not describe the routing protocols details for aggregation of ACP zone addresses, but only their addressing scheme.
             </t>
@@ -313,17 +313,20 @@ key words.
 
                         <section anchor="secure-bootstrap" title="Secure Bootstrap over a not configured Network">
                                 <t>Today, bootstrapping a new node typically requires all nodes between a controlling node such as an SDN controller ("Software Defined Networking", see <xref target="RFC7426"/>) and the new node to be completely and correctly addressed, configured and secured.  Bootstrapping and configuration of a network happens in rings around the controller - configuring each ring of devices before the next one can be bootstrapped.  Without console access (for example through an out-of-band network) it is not possible today to make devices securely reachable before having configured the entire network leading up to them.</t>
-                                <t>With the ACP, secure bootstrap of new devices can happen without requiring any configuration such as the transit connectivity to bootstrap further devices.  A new device can automatically be bootstrapped in a secure fashion and be deployed with a domain certificate.  This does not require any configuration on intermediate nodes, because they can communicate zero-touch and securely through the ACP.</t>
+
+                                <t>With the ACP, secure bootstrap of new devices and whole new networks can happen without requiring any configuration of unconfigured device along the path: As long as all devices along the path support ACP and a zero-touch bootstrap mechanism like BRSKI, the ACP across a whole network of unconfigured devices can be brought up without operator/provisioning intervention. The ACP also provides additional security for any bootstrap mechanism, because it encrypts the traffic along the path hop-by-hop.</t>
+
                         </section>
                         <!-- bootstrap -->
 
                         <section anchor="reachability" title="Data-Plane Independent Permanent Reachability">
-                                <t>Today, most critical control plane protocols and network management protocols are using the Data-Plane (global routing table) of the network.  This leads to undesirable dependencies between control and management plane on one side and the Data-Plane on the other: Only if the Data-Plane is operational, will the other planes work as expected.</t>
-                                <t>Data-Plane connectivity can be affected by errors and faults, for example misconfigurations that make AAA (Authentication, Authorization and Accounting) servers unreachable or can lock an administrator out of a device; routing or addressing issues can make a device unreachable; shutting down interfaces over which a current management session is running can lock an admin irreversibly out of the device.  Traditionally only console access can help recover from such issues.</t>
-                                <t>Data-Plane dependencies also affect applications in a Network Operations Center (NOC) such as SDN controller applications: Certain network changes are today hard to operate, because the change itself may affect reachability of the devices.  Examples are address or mask changes, routing changes, or security policies.  Today such changes require precise hop-by-hop planning.</t>
+                                <t>Today, most critical control plane protocols and network management protocols are using the Data-Plane of the network.  This leads to often undesirable dependencies between control and management plane on one side and the Data-Plane on the other: Only if the Data-Plane is operational will the other planes work as expected.</t>
+                                <t>Data-Plane connectivity can be affected by errors and faults, for example misconfigurations that make AAA (Authentication, Authorization and Accounting) servers unreachable or can lock an administrator out of a device; routing or addressing issues can make a device unreachable; shutting down interfaces over which a current management session is running can lock an admin irreversibly out of the device.  Traditionally only out-of-band access can help recover from such issues (such as serial console or ethernet management port).</t>
+                                <t>Data-Plane dependencies also affect applications in a Network Operations Center (NOC) such as SDN controller applications: Certain network changes are today hard to implement, because the change itself may affect reachability of the devices.  Examples are address or mask changes, routing changes, or security policies.  Today such changes require precise hop-by-hop planning.</t>
+                                <t>Note that specific control plane functions for the Data-Plane often want to depend on forwarding of their packets via the Data-Plane: Aliveness and routing protocol signaling packets across the Data-Plane to verify reachability across the Data-Plane, using IPv4 signaling packets for IPv4 routing vs. IPv6 signaling packets for IPv6 routing.</t>
                                 <t>The ACP provides reachability that is independent of the Data-Plane (except for the dependency discussed in <xref target="general_addressing"/> which can be removed through future work), which allows the control plane and management plane to operate more robustly:
                                 <list style="symbols">
-                                        <t>For management plane protocols, the ACP provides the functionality of a Virtual out of Band (VooB) channel, by providing connectivity to all nodes regardless of their configuration or global routing table.</t>
+                                        <t>For management plane protocols, the ACP provides the functionality of a Virtual out of Band (VooB) channel, by providing connectivity to all nodes regardless of their Data-Plane configuration, routing and forwarding tables.</t>
                                         <t>For control plane protocols, the ACP allows their operation even when the Data-Plane is temporarily faulty, or during transitional events, such as routing changes, which may affect the control plane at least temporarily.  This is specifically important for autonomic service agents, which could affect Data-Plane connectivity.</t>
                                 </list>
                                 </t>
@@ -785,8 +788,8 @@ insecure link-local scope.  See section 2.5.2 of <xref target="I-D.ietf-anima-gr
 formal definition.  The ACP uses one instance of DULL GRASP for every L2 interface
 of the ACP node to discover link level adjacent candidate ACP neighbors.  Unless modified
 by policy as noted earlier (<xref target="overview"/> bullet point 2.), native interfaces
-(e.g., physical interfaces on physical nodes) SHOULD be initialized automatically enough,
-so that ACP discovery can be performed and any native interfaces with ACP neighbors can
+(e.g., physical interfaces on physical nodes) SHOULD be initialized automatically to a state in which
+ACP discovery can be performed and any native interfaces with ACP neighbors can
 then be brought into the ACP even if the interface is otherwise not configured.
 Reception of packets on such otherwise not configured interfaces MUST be limited so that
 at first only IPv6 State Less Address Auto Configuration (SLAAC - <xref target="RFC4862"/>)
@@ -1151,7 +1154,7 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
                         <section anchor="separation" title="Context Separation">
                                 <t>The ACP is in a separate context from the normal Data-Plane of the node.  This context includes the ACP channels' IPv6 forwarding and routing as well as any required higher layer ACP functions.</t>
                                 <t>In classical network system, a dedicated so called Virtual routing and forwarding instance (VRF) is one logical implementation option for the ACP.  If possible by the systems software architecture, separation options that minimize shared components are preferred, such as a logical container or virtual machine instance.  The context for the ACP needs to be established automatically during bootstrap of a node.  As much as possible it should be protected from being modified unintentionally by ("Data-Plane") configuration.</t>
-                                <t>Context separation improves security, because the ACP is not reachable from the global routing table.  Also, configuration errors from the Data-Plane setup do not affect the ACP.</t>
+                                <t>Context separation improves security, because the ACP is not reachable from the Data Plane routing or forwarding table(s).  Also, configuration errors from the Data-Plane setup do not affect the ACP.</t>
                                 </section>
                         <!-- separation -->
 
@@ -1472,7 +1475,7 @@ registrars and centralized policy control.</t>
 <!-- addressing -->
 
                         <section anchor="routing" title="Routing in the ACP">
-                                <t>Once ULA address are set up all autonomic entities should run a routing protocol within the autonomic control plane context.  This routing protocol distributes the ULA created in the previous section for reachability.  The use of the autonomic control plane specific context eliminates the probable clash with the global routing table and also secures the ACP from interference from the configuration mismatch or incorrect routing updates.</t>
+                                <t>Once ULA address are set up all autonomic entities should run a routing protocol within the autonomic control plane context.  This routing protocol distributes the ULA created in the previous section for reachability.  The use of the autonomic control plane specific context eliminates the probable clash with Data-Plane routing tables and also secures the ACP from interference from the configuration mismatch or incorrect routing updates.</t>
                                 <t>The establishment of the routing plane and its parameters are automatic and strictly within the confines of the autonomic control plane.  Therefore, no explicit configuration is required.</t>
                                 <t>All routing updates are automatically secured in transit as the channels of the autonomic control plane are by default secured, and this routing runs only inside the ACP.</t>
                                 <t>The routing protocol inside the ACP is RPL (<xref target="RFC6550"/>).  See <xref target="why-rpl"/> for more details on the choice of RPL.</t>
@@ -2433,7 +2436,7 @@ should be) completely isolated from each other at the network level.
 Only applications like the ACP registrar would need the ability for
  their transport stacks to access both.</t>
 
-<t>In non autonomic enrollment options, the data plane 
+<t>In non autonomic enrollment options, the Data-Plane 
 between a ACP registrar and the candidate ACP node needs to be configured
 first.  This includes the ACP registrar and the candidate ACP node.
 Then any appropriate set of protocols can be used between ACP registrar and
@@ -2602,7 +2605,7 @@ PMS interface definition is subject to future work.</t>
 <section anchor="admin-down" title="Admin Down State" >
 
 
-<t>Interfaces on most network equipment have at least two states: "up" and "down".  These may have product specific names.  "down" for example could be called "shutdown" and "up" could be called "no shutdown".  The "down" state disables all interface operations down to the physical level.  The "up" state enables the interface enough for all possible L2/L3 services to operate on top of it and it may also auto-enable some subset of them.  More commonly, the operations of various L2/L3 services is controlled via additional node-wide or interface level options, but they all become only active when the interface is not "down".  Therefore an easy way to ensure that all L2/L3 operations on an interface are inactive is to put the interface into "down" state.  The fact that this also physically shuts down the interface is in many cases just a side effect, but it may be important in other cases (see below).</t>
+<t>Interfaces on most network equipment have at least two states: "up" and "down".  These may have product specific names.  "down" for example could be called "shutdown" and "up" could be called "no shutdown".  The "down" state disables all interface operations down to the physical level.  The "up" state enables the interface enough for all possible L2/L3 services to operate on top of it and it may also auto-enable some subset of them.  More commonly, the operations of various L2/L3 services is controlled via additional node-wide or interface level options, but they all become only active when the interface is not "down".  Therefore an easy way to ensure that all L2/L3 operations on an interface are inactive is to put the interface into "down" state.  The fact that this also physically shuts down the interface is in many cases just a side effect, but it may be important in other cases (see below, <xref target="down-fast-state-propagation"/>).</t>
 
 <t>To provide ACP/ANI resilience against operators configuring interfaces to "down" state, this document 
 recommends to separate the "down" state of interfaces into an "admin down" state where the physical layer is kept running and ACP/ANI can use the interface and a "physical down" state.  Any existing "down" configurations would map to "admin down".  In "admin down", any existing L2/L3 services of the Data-Plane should see no difference to "physical down" state.  To ensure that no Data-Plane packets could be sent/received, packet filtering could be established automatically as described above in <xref target="secure-enabling"/>.</t>
@@ -2673,13 +2676,13 @@ neighbors support ACP/ANI.</t>
 </section>
 
 
-<section anchor="power-consumption" title="Power Consumption">
+<section anchor="power-consumption" title="Power Consumption Issues">
 
-<t>Power consumption of "physical down" interfaces may be significantly lower than those
-in "admin down" state, for example on long range fiber interfaces.  Assuming reasonable
-clocks on devices, mechanisms for infrequent periodic probing could allow to automatically
-establish ACP connectivity across such links.  Bring up interfaces for 5 seconds to probe
-if there is an ACP neighbor on the remote end every 500 seconds = 1% power consumption.</t>
+<t>Power consumption of "physical down" interfaces, may be significantly lower than those
+in "admin down" state, for example on long-range fiber interfaces. Bringing up
+interfaces, for example to probe reachabiliy, may also consume additional power. This
+can make these type of interfaces inappropriate to operate purely for the ACP when 
+they are not currently needed for the Data-Plane.</t>
 
 </section>
 
@@ -2737,7 +2740,7 @@ if there is an ACP neighbor on the remote end every 500 seconds = 1% power consu
 
 <t>Nodes supporting full ANI functionality set "ANI enable" automatically when they decide that they are greenfield, e.g., that they are powering on from factory condition.  They will then put all native interfaces into "admin down" state and start to perform BRSKI pledge functionality - and once a domain certificate is enrolled they automatically enable ACP.</t>
 
-<t>Attempts for BRSKI pledge operations in greenfield state should terminate automatically when another method of configuring the node is used.  Methods that indicate some form of physical possession of the device such as configuration via the serial console could lead to immediate termination of BRSKI, while other parallel auto configuration methods subject to remote attacks might lead to BRSKI termination only after they were successful.  Details of this may vary widely over different type of nodes.  When BRSKI pledge operation terminates, this will automatically unset "ANI enable" and should terminate any temporarily needed state on the device to perform BRSKI - DULL GRASP, BRSKI pledge and any IPv6 configuration on interfaces.</t>
+<t>Attempts for BRSKI pledge operations in greenfield state should terminate automatically when another method of configuring the node is used.  Methods that indicate some form of physical possession of the device such as configuration via the serial console port could lead to immediate termination of BRSKI, while other parallel auto configuration methods subject to remote attacks might lead to BRSKI termination only after they were successful.  Details of this may vary widely over different type of nodes.  When BRSKI pledge operation terminates, this will automatically unset "ANI enable" and should terminate any temporarily needed state on the device to perform BRSKI - DULL GRASP, BRSKI pledge and any IPv6 configuration on interfaces.</t>
 
 </section>
 
@@ -3692,10 +3695,18 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       </section>
 
       <section title="draft-ietf-anima-autonomic-control-plane-16">
-      <t>Fixed pagination for "ACP as security and transport substrate for GRASP" picture.</t>
+      <t>Warren Kumari:</t>
+      <t>Removed "global routing table", replacced with "Data-Plane routing (and forwarding) tables.</t>
+      <t>added text to indicate how routing protocols do like to have data-plane dependencies.</t>
+      <t>Changed power consumption section re. admin-down state. Power needed to bring up such interfaces make t inappropriate to probe. Need to think more about best sugests -> beyond scope.</t>
+      <t>Replaced "console" with out-of-band... (console/management ethernet).</t>
+      <t>Various nits.</t>
+      <t></t>
       <t>Joel Halpern:</t>
       <t>Fixed up domain information field ABNF to eliminate confusion that rsub is not an FQDN but only a prefix to routing-subdomain.</t>
       <t>Corrected certcheck to separate out cert verification into lifetime validity and proof of ownership of private key.</t>
+      <t></t>
+      <t>Fixed pagination for "ACP as security and transport substrate for GRASP" picture.</t>
       </section>
 
 <section title="wish-list">
