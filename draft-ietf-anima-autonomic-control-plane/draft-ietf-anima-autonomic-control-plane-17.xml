@@ -17,7 +17,7 @@
 <?rfc compact="yes"?>
 <!-- REMOVED in version 12: updates="4291,4193" -->
 <rfc ipr="trust200902"
-     docName="draft-ietf-anima-autonomic-control-plane-16" category="std">
+     docName="draft-ietf-anima-autonomic-control-plane-17" category="std">
         <front>
                 <title abbrev="An Autonomic Control Plane (ACP)">An Autonomic Control Plane (ACP)</title>
                 <author role="editor" fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
@@ -51,7 +51,7 @@
                         </address>
                 </author>
 
-                <date day="8" month="June" year="2018"/>
+                <date day="23" month="July" year="2018"/>
 
                 <area>Operations and Management</area>
                 <workgroup>ANIMA WG</workgroup>
@@ -64,7 +64,7 @@
         </front>
         <middle>
                 <section anchor="intro" title="Introduction">
-                        <t>Autonomic Networking is a concept of self-management: Autonomic functions self-configure, and negotiate parameters and settings across the network. <xref target="RFC7575"/> defines the fundamental ideas and design goals of Autonomic Networking.  A gap analysis of Autonomic Networking is given in <xref target="RFC7576"/>.  The reference architecture for Autonomic Networking in the IETF is specified in the document <xref target="I-D.ietf-anima-reference-model"/></t>
+                        <t>Autonomic Networking is a concept of self-management: Autonomic functions self-configure, and negotiate parameters and settings across the network. <xref target="RFC7575"/> defines the fundamental ideas and design goals of Autonomic Networking.  A gap analysis of Autonomic Networking is given in <xref target="RFC7576"/>.  The reference architecture for Autonomic Networking in the IETF is specified in the document <xref target="I-D.ietf-anima-reference-model"/>.</t>
 
                         <t>Autonomic functions need an autonomically built communications infrastructure.  This infrastructure needs to be secure, resilient and re-usable by all autonomic functions.  Section 5 of <xref target="RFC7575"/> introduces that infrastructure and calls it the Autonomic Control Plane (ACP).  More descriptively it would be the "Autonomic communications infrastructure for Management and Control".  For naming consistency with that prior document, this document continues to use the name ACP though.</t>
 
@@ -81,7 +81,7 @@
 <t>The Autonomic Control Plane serves several purposes at the same time:
                         <list style="numbers">
                         <t>Autonomic functions communicate over the ACP.  The ACP therefore supports directly Autonomic Networking functions, as described in <xref target="I-D.ietf-anima-reference-model"/>.  For example, Generic Autonomic Signaling Protocol (GRASP - <xref target="I-D.ietf-anima-grasp"/>) runs securely inside the ACP and depends on the ACP as its "security and transport substrate".</t>
-                        <t>A controller or network management system can use it to securely bootstrap network devices in remote locations, even if the network in between is not yet configured; no Data-Plane dependent bootstrap configuration is required.  An example of such a secure bootstrap process is described in <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/> </t>
+                        <t>A controller or network management system can use it to securely bootstrap network devices in remote locations, even if the network in between is not yet configured; no Data-Plane dependent bootstrap configuration is required.  An example of such a secure bootstrap process is described in <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>.</t>
                         <t>An operator can use it to log into remote devices, even if the network is misconfigured or not configured.</t>
                         </list></t>
                         <t>This document describes these purposes as use cases for the ACP in <xref target="usage"/>, it defines the requirements in <xref target="requirements"/>. <xref target="overview"/> gives an overview how the ACP is constructed, and in <xref target="self-creation"/> the process is defined in detail. <xref target="acp-l2-switches"/> defines how to support ACP on L2 switches. <xref target="workarounds"/> explains how non-ACP nodes and networks can be integrated.</t>
@@ -415,7 +415,7 @@ the TA is used to authenticate the ACP domain membership of other nodes (see <xr
 
 <t>This document uses the term ACP in many places where the Autonomic Networking reference documents <xref target="RFC7575"/> and <xref target="I-D.ietf-anima-reference-model"/> use the word autonomic.  This is done because those reference documents consider (only) fully autonomic networks and nodes, but support of ACP does not require support for other components of autonomic networks.  Therefore the word autonomic might be misleading to operators interested in only the ACP:</t>
 
-<t><xref target="RFC7575"/> defines the term "Autonomic Domain" as a collection of autonomic nodes.  ACP nodes do not need to be fully autonomic, but when they are, then the ACP domain is an autonomic domain.  Likewise, <xref target="I-D.ietf-anima-reference-model"/> defines the term "Domain Certificate" as the certificate used in an autonomic domain.  The ACP domain certificate is that domain certificate when ACP nodes are (fully) autonomic nodes.  Finally, this document uses the term ACP network to refer to the network created by active ACP nodes in an ACP domain.  The ACP network itself can extend beyond ACP nodes through the mechanisms described in <xref target="ACPconnect"/>).</t>
+<t><xref target="RFC7575"/> defines the term "Autonomic Domain" as a collection of autonomic nodes.  ACP nodes do not need to be fully autonomic, but when they are, then the ACP domain is an autonomic domain.  Likewise, <xref target="I-D.ietf-anima-reference-model"/> defines the term "Domain Certificate" as the certificate used in an autonomic domain.  The ACP domain certificate is that domain certificate when ACP nodes are (fully) autonomic nodes.  Finally, this document uses the term ACP network to refer to the network created by active ACP nodes in an ACP domain.  The ACP network itself can extend beyond ACP nodes through the mechanisms described in <xref target="ACPconnect"/>.</t>
 
 <t>The ACP domain certificate can and should be used for any authentication between ACP nodes where the required security is domain membership. <xref target="certcheck"/> defines this "ACP domain membership check".  The uses of this check that are standardized in this document are for the establishment of ACP secure channels (<xref target="neighbor_verification"/>) and for ACP GRASP (<xref target="GRASP-substrate"/>).  Other uses are subject to future work, but it is recommended that it is the default security check for any end-to-end connections between ASA.  It is equally useable by other functions such as legacy OAM functions.</t>
 
@@ -2093,7 +2093,7 @@ are also assumed to belong to the ACP address space.</t>
     The parameters of such a "connection" are described in the following ABNF.
     Future work could transform this into a YANG (<xref target="RFC7950"/>) data model.</t>
 
-<figure title="ABNF for parameters of explicitly configured remote ACP neighbors">
+<figure anchor="abnf" title="Parameters for remote ACP neighbors">
  <artwork><![CDATA[
   connection = [ method , local-addr, remote-addr, ?pmtu ]
   method   = [ "IKEv2" , ?port ]
@@ -2774,7 +2774,7 @@ One very controlled option would be to not permit these commands unless the doma
 </section>
 
                 <section anchor="security" title="Security Considerations">
-                        <t>An ACP is self-protecting and there is no need to apply configuration to make it secure.  Its security therefore does not depend on configuration.</t>
+                        <t>An ACP is self-protecting and there is no need to apply configuration to make it secure.  Its security therefore does not depend on configuration. See <xref target="self-protecting"/> for details of how the ACP protects itself against attacks from the outside and to a more limited degree from the inside as well.</t>
                         <t>However, the security of the ACP depends on a number of other factors:
                                 <list style="symbols">
                                    <t>The usage of domain certificates depends on a valid supporting PKI infrastructure.  If the chain of trust of this PKI infrastructure is compromised, the security of the ACP is also compromised.  This is typically under the control of the network administrator.</t>
@@ -3317,6 +3317,13 @@ ted so that one can compare changes from -09 and changes to the next version (-1
       <t>Corrected certcheck to separate out cert verification into lifetime validity and proof of ownership of private key.</t>
       <t></t>
       <t>Fixed pagination for "ACP as security and transport substrate for GRASP" picture.</t>
+      </section>
+
+      <section title="draft-ietf-anima-autonomic-control-plane-17">
+      <t>Fixed typo /126 -> 127 for prefix length with zone address scheme.</t>
+      <t>Overlooked early SecDir review from frank.xialiang@huawei.com:</t>
+      <t>most issues fixed through other review in -16. Added reference to self-protection section 9.2
+      into security considerations section.</t>
       </section>
 
 <section title="wish-list">
