@@ -5,10 +5,10 @@
 ANIMA WG                                                  T. Eckert, Ed.
 Internet-Draft                                                    Huawei
 Intended status: Standards Track                       M. Behringer, Ed.
-Expires: November 13, 2018
+Expires: December 8, 2018
                                                             S. Bjarnason
                                                           Arbor Networks
-                                                            May 12, 2018
+                                                            June 6, 2018
 
 
                     An Autonomic Control Plane (ACP)
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 13, 2018.
+   This Internet-Draft will expire on December 8, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 1]
+Eckert, et al.          Expires December 8, 2018                [Page 1]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    (https://trustee.ietf.org/license-info) in effect on the date of
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 2]
+Eckert, et al.          Expires December 8, 2018                [Page 2]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
        6.12.1.  Performance  . . . . . . . . . . . . . . . . . . . .  55
@@ -165,9 +165,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 3]
+Eckert, et al.          Expires December 8, 2018                [Page 3]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
      10.8.  ACP Information Distribution and multicast . . . . . . .  95
@@ -221,9 +221,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 4]
+Eckert, et al.          Expires December 8, 2018                [Page 4]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Plane (ACP).  More descriptively it would be the "Autonomic
@@ -277,9 +277,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 5]
+Eckert, et al.          Expires December 8, 2018                [Page 5]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
        bootstrap process is described in
@@ -333,9 +333,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 6]
+Eckert, et al.          Expires December 8, 2018                [Page 6]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 1.1.  Applicability and Scope
@@ -389,9 +389,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 7]
+Eckert, et al.          Expires December 8, 2018                [Page 7]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    GRASP is the only completely novel protocol used in the ACP, and this
@@ -445,9 +445,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 8]
+Eckert, et al.          Expires December 8, 2018                [Page 8]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    ACP domain:  The ACP domain is the set of nodes with ->"ACP domain
@@ -501,9 +501,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018               [Page 9]
+Eckert, et al.          Expires December 8, 2018                [Page 9]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    ANI (nodes/network):  "Autonomic Network Infrastructure".  The ANI is
@@ -557,9 +557,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 10]
+Eckert, et al.          Expires December 8, 2018               [Page 10]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       the "ACP instance of GRASP".  This instance of GRASP runs across
@@ -613,9 +613,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 11]
+Eckert, et al.          Expires December 8, 2018               [Page 11]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Node-ID:  The identifier of an ACP node inside that ACP.  It is the
@@ -669,9 +669,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 12]
+Eckert, et al.          Expires December 8, 2018               [Page 12]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    ULA: (Global ID prefix)  A "Unique Local Address" (ULA) is an IPv6
@@ -725,9 +725,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 13]
+Eckert, et al.          Expires December 8, 2018               [Page 13]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    correctly addressed, configured and secured.  Bootstrapping and
@@ -781,9 +781,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 14]
+Eckert, et al.          Expires December 8, 2018               [Page 14]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       to all nodes regardless of their configuration or global routing
@@ -837,9 +837,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 15]
+Eckert, et al.          Expires December 8, 2018               [Page 15]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    support IPv6 layer connectivity across the ACP to support any
@@ -893,9 +893,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 16]
+Eckert, et al.          Expires December 8, 2018               [Page 16]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  None of the above operations (except explicit configured ones) are
@@ -949,9 +949,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 17]
+Eckert, et al.          Expires December 8, 2018               [Page 17]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    certificate (chain) used to sign the LDevID of all ACP domain
@@ -1005,9 +1005,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 18]
+Eckert, et al.          Expires December 8, 2018               [Page 18]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.1.1.  Certificate Domain Information Field
@@ -1061,9 +1061,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 19]
+Eckert, et al.          Expires December 8, 2018               [Page 19]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    "routing-subdomain" is the autonomic subdomain that is used to
@@ -1117,9 +1117,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 20]
+Eckert, et al.          Expires December 8, 2018               [Page 20]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Using an IP address format encoding could result in non-benign
@@ -1173,9 +1173,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 21]
+Eckert, et al.          Expires December 8, 2018               [Page 21]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       certificate across the ACP must succeed or the peer certificate
@@ -1229,9 +1229,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 22]
+Eckert, et al.          Expires December 8, 2018               [Page 22]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
     flood-message = [M_FLOOD, session-id, initiator, ttl,
@@ -1285,9 +1285,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 23]
+Eckert, et al.          Expires December 8, 2018               [Page 23]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Renewal of certificates SHOULD start after less than 50% of the
@@ -1341,9 +1341,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 24]
+Eckert, et al.          Expires December 8, 2018               [Page 24]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    See Section 10.1 for further optimizations of certificate maintenance
@@ -1397,9 +1397,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 25]
+Eckert, et al.          Expires December 8, 2018               [Page 25]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    authenticate any ACP registrar peers during re-enrollment protocol/
@@ -1453,9 +1453,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 26]
+Eckert, et al.          Expires December 8, 2018               [Page 26]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.2.  ACP Adjacency Table
@@ -1509,9 +1509,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 27]
+Eckert, et al.          Expires December 8, 2018               [Page 27]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    brought into the ACP even if the interface is otherwise not
@@ -1565,9 +1565,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 28]
+Eckert, et al.          Expires December 8, 2018               [Page 28]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
          Example:
@@ -1621,9 +1621,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 29]
+Eckert, et al.          Expires December 8, 2018               [Page 29]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The locator-option is optional and only required when the secure
@@ -1677,9 +1677,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 30]
+Eckert, et al.          Expires December 8, 2018               [Page 30]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Future extensions to this document including Intent can change this
@@ -1733,9 +1733,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 31]
+Eckert, et al.          Expires December 8, 2018               [Page 31]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    To support extensible secure channel protocol selection without a
@@ -1789,9 +1789,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 32]
+Eckert, et al.          Expires December 8, 2018               [Page 32]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    determined after examining the certificate after a successful
@@ -1845,9 +1845,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 33]
+Eckert, et al.          Expires December 8, 2018               [Page 33]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.7.1.2.  IPsec with GRE encapsulation
@@ -1901,9 +1901,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 34]
+Eckert, et al.          Expires December 8, 2018               [Page 34]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    association mechanisms such as re-keying are used as they would be
@@ -1957,9 +1957,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 35]
+Eckert, et al.          Expires December 8, 2018               [Page 35]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.8.2.  ACP as the Security and Transport substrate for GRASP
@@ -2013,9 +2013,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 36]
+Eckert, et al.          Expires December 8, 2018               [Page 36]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
        .   subnet1       |       subnet2      virtual interfaces     .
@@ -2069,9 +2069,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 37]
+Eckert, et al.          Expires December 8, 2018               [Page 37]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    expected to be TLS for connections from/to the ACP address (e.g.,
@@ -2125,9 +2125,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 38]
+Eckert, et al.          Expires December 8, 2018               [Page 38]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  The security considerations for GRASP change against attacks from
@@ -2181,9 +2181,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 39]
+Eckert, et al.          Expires December 8, 2018               [Page 39]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Links inside the ACP only use link-local IPv6 addressing, such that
@@ -2237,9 +2237,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 40]
+Eckert, et al.          Expires December 8, 2018               [Page 40]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Simplicity, reliability and scale: If other network layer
@@ -2293,9 +2293,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 41]
+Eckert, et al.          Expires December 8, 2018               [Page 41]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Type: This field allows different address sub-schemes.  This
@@ -2349,9 +2349,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 42]
+Eckert, et al.          Expires December 8, 2018               [Page 42]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  V (1 bit): Virtualization bit: 0: Indicates the ACP itself ("ACP
@@ -2405,9 +2405,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 43]
+Eckert, et al.          Expires December 8, 2018               [Page 43]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    automatically through a to-be-defined algorithm; or it could be
@@ -2461,9 +2461,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 44]
+Eckert, et al.          Expires December 8, 2018               [Page 44]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
                    64                             64
@@ -2517,9 +2517,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 45]
+Eckert, et al.          Expires December 8, 2018               [Page 45]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.10.5.  ACP Vlong Addressing Sub-Scheme
@@ -2573,9 +2573,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 46]
+Eckert, et al.          Expires December 8, 2018               [Page 46]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    In the Vlong addressing sub-scheme, the ACP address in the
@@ -2629,9 +2629,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 47]
+Eckert, et al.          Expires December 8, 2018               [Page 47]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    certificate and associated trust anchor, using command line or web
@@ -2685,9 +2685,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 48]
+Eckert, et al.          Expires December 8, 2018               [Page 48]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.10.7.3.  Addressing Sub-Scheme Policies
@@ -2741,9 +2741,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 49]
+Eckert, et al.          Expires December 8, 2018               [Page 49]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.10.7.4.  Address/Prefix Persistence
@@ -2797,9 +2797,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 50]
+Eckert, et al.          Expires December 8, 2018               [Page 50]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.11.1.  RPL Profile
@@ -2853,9 +2853,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 51]
+Eckert, et al.          Expires December 8, 2018               [Page 51]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    according to Section 6.11.1.7, loops should be exceedingly rare
@@ -2909,9 +2909,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 52]
+Eckert, et al.          Expires December 8, 2018               [Page 52]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.11.1.5.  Path Metric
@@ -2965,9 +2965,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 53]
+Eckert, et al.          Expires December 8, 2018               [Page 53]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    certificate of the ACP node, e.g., /127 for Zone Addressing Sub-
@@ -3021,9 +3021,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 54]
+Eckert, et al.          Expires December 8, 2018               [Page 54]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 6.12.1.  Performance
@@ -3077,9 +3077,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 55]
+Eckert, et al.          Expires December 8, 2018               [Page 55]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    stacks running across ACP can perform normal PMTUD (Path MTU
@@ -3133,9 +3133,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 56]
+Eckert, et al.          Expires December 8, 2018               [Page 56]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    ACP secure channels, e.g., IPsec, DTLS or other future security
@@ -3189,9 +3189,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 57]
+Eckert, et al.          Expires December 8, 2018               [Page 57]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The ACP virtual interface IPv6 link local address can be derived from
@@ -3245,9 +3245,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 58]
+Eckert, et al.          Expires December 8, 2018               [Page 58]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    layered on top of ACP virtual interfaces to add TCP reliability to
@@ -3301,9 +3301,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 59]
+Eckert, et al.          Expires December 8, 2018               [Page 59]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    A full mesh of ACP connections like this can creates fundamental
@@ -3357,9 +3357,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 60]
+Eckert, et al.          Expires December 8, 2018               [Page 60]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The rest of ACP operations can operate in the same way as in L3
@@ -3413,9 +3413,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 61]
+Eckert, et al.          Expires December 8, 2018               [Page 61]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    considered and used as a separate L3 subnet for all ACP operations.
@@ -3469,9 +3469,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 62]
+Eckert, et al.          Expires December 8, 2018               [Page 62]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
                                    Data-Plane "native" (no ACP)
@@ -3525,9 +3525,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 63]
+Eckert, et al.          Expires December 8, 2018               [Page 63]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The prefix of ACP connect subnets MUST be distributed by the ACP edge
@@ -3581,9 +3581,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 64]
+Eckert, et al.          Expires December 8, 2018               [Page 64]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Data-Plane.  Like in the physical setup for NMS hosts this can be
@@ -3637,9 +3637,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 65]
+Eckert, et al.          Expires December 8, 2018               [Page 65]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    then those prefixes cannot be aggregated without further configured
@@ -3693,9 +3693,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 66]
+Eckert, et al.          Expires December 8, 2018               [Page 66]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    further policy configurations on the NMS Host(s), it may select its
@@ -3749,9 +3749,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 67]
+Eckert, et al.          Expires December 8, 2018               [Page 67]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    transport substrate for GRASP, the trustworthiness of nodes/software
@@ -3805,9 +3805,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 68]
+Eckert, et al.          Expires December 8, 2018               [Page 68]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
      connection = [ method , local-addr, remote-addr, ?pmtu ]
@@ -3861,9 +3861,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 69]
+Eckert, et al.          Expires December 8, 2018               [Page 69]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 8.2.2.  Tunneled Remote ACP Neighbor
@@ -3917,9 +3917,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 70]
+Eckert, et al.          Expires December 8, 2018               [Page 70]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  When any changes happen in the topology, the routing protocol used
@@ -3973,9 +3973,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 71]
+Eckert, et al.          Expires December 8, 2018               [Page 71]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    It is also highly desirable for implementation of the ACP to be able
@@ -4029,9 +4029,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 72]
+Eckert, et al.          Expires December 8, 2018               [Page 72]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    attack resistant and not consume unnecessary resources even while
@@ -4085,9 +4085,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 73]
+Eckert, et al.          Expires December 8, 2018               [Page 73]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    trouble-shooting.  Therefore, an ACP must support all show and debug
@@ -4141,9 +4141,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 74]
+Eckert, et al.          Expires December 8, 2018               [Page 74]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    therefore find their ACP address and domain using this field in the
@@ -4197,9 +4197,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 75]
+Eckert, et al.          Expires December 8, 2018               [Page 75]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Diagnostic supports should help to quickly answer the questions
@@ -4253,9 +4253,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 76]
+Eckert, et al.          Expires December 8, 2018               [Page 76]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Does the node have keying material - domain certificate, trust
@@ -4309,9 +4309,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 77]
+Eckert, et al.          Expires December 8, 2018               [Page 77]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Do we know the MAC address of the neighbor with the ACP objective?
@@ -4365,9 +4365,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 78]
+Eckert, et al.          Expires December 8, 2018               [Page 78]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Is there for each direct ACP neighbor not reachable over the ACP
@@ -4421,9 +4421,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 79]
+Eckert, et al.          Expires December 8, 2018               [Page 79]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    IDevID of a BRSKI pledge is not meant to be protected - it just has
@@ -4477,9 +4477,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 80]
+Eckert, et al.          Expires December 8, 2018               [Page 80]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Pledges/candidate ACP nodes could want to use, for example BRSKI over
@@ -4533,9 +4533,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 81]
+Eckert, et al.          Expires December 8, 2018               [Page 81]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       The Registrar-ID to use.  This could default to a MAC address of
@@ -4589,9 +4589,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 82]
+Eckert, et al.          Expires December 8, 2018               [Page 82]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Even when such a malicious ACP registrar is detected, resolving the
@@ -4645,9 +4645,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 83]
+Eckert, et al.          Expires December 8, 2018               [Page 83]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       per-serialNumber policy can be loaded into ever ACP registrar.
@@ -4701,9 +4701,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 84]
+Eckert, et al.          Expires December 8, 2018               [Page 84]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Note that an explicitly defined "Manual" addressing sub-scheme is
@@ -4757,9 +4757,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 85]
+Eckert, et al.          Expires December 8, 2018               [Page 85]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.5.2.  Admin Down State
@@ -4813,9 +4813,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 86]
+Eckert, et al.          Expires December 8, 2018               [Page 86]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The need to trust into the security of ACP/ANI operations need to be
@@ -4869,9 +4869,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 87]
+Eckert, et al.          Expires December 8, 2018               [Page 87]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.5.2.3.  Low Level Link Diagnostics
@@ -4925,9 +4925,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 88]
+Eckert, et al.          Expires December 8, 2018               [Page 88]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.5.4.  Which interfaces to auto-enable?
@@ -4981,9 +4981,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 89]
+Eckert, et al.          Expires December 8, 2018               [Page 89]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Even native interfaces may not be able to automatically perform BRSKI
@@ -5037,9 +5037,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 90]
+Eckert, et al.          Expires December 8, 2018               [Page 90]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The need to explicitly enable ACP/ANI is especially important in
@@ -5093,9 +5093,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 91]
+Eckert, et al.          Expires December 8, 2018               [Page 91]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.5.6.  Undoing ANI/ACP enable
@@ -5149,9 +5149,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 92]
+Eckert, et al.          Expires December 8, 2018               [Page 92]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.6.1.  LLDP
@@ -5205,9 +5205,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 93]
+Eckert, et al.          Expires December 8, 2018               [Page 93]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 10.7.  Choice of routing protocol (RPL)
@@ -5261,9 +5261,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 94]
+Eckert, et al.          Expires December 8, 2018               [Page 94]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Modularity: To keep the initial implementation small, yet allow
@@ -5317,9 +5317,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 95]
+Eckert, et al.          Expires December 8, 2018               [Page 95]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Multicast, see [RFC4607]) for the IP multicast replication.  SSM
@@ -5373,9 +5373,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 96]
+Eckert, et al.          Expires December 8, 2018               [Page 96]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    IKEv2 is the IETF standard protocol to negotiate network security
@@ -5429,9 +5429,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 97]
+Eckert, et al.          Expires December 8, 2018               [Page 97]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Negotiation of a channel type may require IANA assignments of code
@@ -5485,9 +5485,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 98]
+Eckert, et al.          Expires December 8, 2018               [Page 98]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    separate domains if both are domain elements in the domain
@@ -5541,9 +5541,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018              [Page 99]
+Eckert, et al.          Expires December 8, 2018               [Page 99]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    The ACP specifies the use of ULA and deriving its prefix from the
@@ -5597,9 +5597,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 100]
+Eckert, et al.          Expires December 8, 2018              [Page 100]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    DTLS for GRASP), and the variant used in a deployment could be chosen
@@ -5653,9 +5653,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 101]
+Eckert, et al.          Expires December 8, 2018              [Page 101]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    There is no prevention of source-address spoofing inside the ACP.
@@ -5709,9 +5709,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 102]
+Eckert, et al.          Expires December 8, 2018              [Page 102]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 12.  IANA Considerations
@@ -5765,9 +5765,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 103]
+Eckert, et al.          Expires December 8, 2018              [Page 103]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 14.  Change log [RFC Editor: Please remove]
@@ -5821,9 +5821,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 104]
+Eckert, et al.          Expires December 8, 2018              [Page 104]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Changed focus: more focus on autonomic functions, not only virtual
@@ -5877,9 +5877,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 105]
+Eckert, et al.          Expires December 8, 2018              [Page 105]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 14.8.  draft-ietf-anima-autonomic-control-plane-02
@@ -5933,9 +5933,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 106]
+Eckert, et al.          Expires December 8, 2018              [Page 106]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 14.11.  draft-ietf-anima-autonomic-control-plane-05
@@ -5989,9 +5989,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 107]
+Eckert, et al.          Expires December 8, 2018              [Page 107]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 14.13.  draft-ietf-anima-autonomic-control-plane-07
@@ -6045,9 +6045,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 108]
+Eckert, et al.          Expires December 8, 2018              [Page 108]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
       RFC/draft).  It was also necessary because the locator in the
@@ -6101,9 +6101,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 109]
+Eckert, et al.          Expires December 8, 2018              [Page 109]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Moved decription of BRSKI to appendex to emphasize that BRSKI is not
@@ -6157,9 +6157,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 110]
+Eckert, et al.          Expires December 8, 2018              [Page 110]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Added V8 (now called Vlong) addressing sub-scheme according to
@@ -6213,9 +6213,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 111]
+Eckert, et al.          Expires December 8, 2018              [Page 111]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  Added a separate subsection to talk about "software" instead of
@@ -6269,9 +6269,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 112]
+Eckert, et al.          Expires December 8, 2018              [Page 112]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    o  AN Domain Names are FQDNs.
@@ -6325,9 +6325,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 113]
+Eckert, et al.          Expires December 8, 2018              [Page 113]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    6.1.1 Changed definition of ACP information in cert into ABNF format.
@@ -6381,9 +6381,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 114]
+Eckert, et al.          Expires December 8, 2018              [Page 114]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
 14.17.  draft-ietf-anima-autonomic-control-plane-11
@@ -6437,9 +6437,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 115]
+Eckert, et al.          Expires December 8, 2018              [Page 115]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    6.1.3 Fix text about certificate renewal after discussion with Max
@@ -6493,9 +6493,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 116]
+Eckert, et al.          Expires December 8, 2018              [Page 116]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Rest of feedback from review of -12, see
@@ -6549,9 +6549,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 117]
+Eckert, et al.          Expires December 8, 2018              [Page 117]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    4.  Fixed text for ACP4 requirement (Clients of the ACP must not be
@@ -6605,9 +6605,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 118]
+Eckert, et al.          Expires December 8, 2018              [Page 118]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    2.  Unclear how the ACP addresses in ACP domain certificates are
@@ -6661,9 +6661,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 119]
+Eckert, et al.          Expires December 8, 2018              [Page 119]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Updated references (RFC8366, RFC8368).
@@ -6717,9 +6717,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 120]
+Eckert, et al.          Expires December 8, 2018              [Page 120]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    TBD: Punted wish for mentioning RFC reference titles to RFC editor
@@ -6773,9 +6773,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 121]
+Eckert, et al.          Expires December 8, 2018              [Page 121]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    2.  Changed definition of Intent to be same as reference model
@@ -6829,9 +6829,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 122]
+Eckert, et al.          Expires December 8, 2018              [Page 122]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [I-D.ietf-anima-grasp]
@@ -6885,9 +6885,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 123]
+Eckert, et al.          Expires December 8, 2018              [Page 123]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
@@ -6941,9 +6941,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 124]
+Eckert, et al.          Expires December 8, 2018              [Page 124]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [RFC7296]  Kaufman, C., Hoffman, P., Nir, Y., Eronen, P., and T.
@@ -6997,9 +6997,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 125]
+Eckert, et al.          Expires December 8, 2018              [Page 125]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [I-D.ietf-roll-useofrplinfo]
@@ -7053,9 +7053,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 126]
+Eckert, et al.          Expires December 8, 2018              [Page 126]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [RFC4541]  Christensen, M., Kimball, K., and F. Solensky,
@@ -7109,9 +7109,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 127]
+Eckert, et al.          Expires December 8, 2018              [Page 127]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.
@@ -7165,9 +7165,9 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 128]
+Eckert, et al.          Expires December 8, 2018              [Page 128]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    [RFC7721]  Cooper, A., Gont, F., and D. Thaler, "Security and Privacy
@@ -7221,9 +7221,9 @@ Authors' Addresses
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 129]
+Eckert, et al.          Expires December 8, 2018              [Page 129]
 
-Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
+Internet-Draft      An Autonomic Control Plane (ACP)           June 2018
 
 
    Michael H. Behringer (editor)
@@ -7277,4 +7277,4 @@ Internet-Draft      An Autonomic Control Plane (ACP)            May 2018
 
 
 
-Eckert, et al.          Expires November 13, 2018             [Page 130]
+Eckert, et al.          Expires December 8, 2018              [Page 130]
