@@ -486,8 +486,16 @@ the TA is used to authenticate the ACP domain membership of other nodes (see <xr
                                 <t>"acp-domain-name" is used to indicate the ACP Domain across which all ACP nodes trust each other and are willing to build ACP channels to each other.  See <xref target="certcheck"/>.
 Acp-domain-name SHOULD be the FQDN of a DNS domain owned by the operator assigning the certificate.  This is a simple method to ensure that the domain is globally unique and collision of ACP addresses would therefore only happen due to ULA hash collisions.  If the operator does not own any FQDN, it should choose a string (in FQDN format) that it intends to be equally unique.</t>
 
-                                <t>"routing-subdomain" is the autonomic subdomain that is used by Registrar(s) within the same ACP domain to calculate the hash for the ULA prefix of the ACP address of the network.  This is a recommended heuristic. "rsub" is optional; its syntax is defined in this document, but its semantics are for further study.  Understanding the benefits of using rsub may depend on the results of future work on enhancing routing for the ACP.  When "rsub" is not used, "routing-subdomain" is the same as "domain".</t>
-                                "routing-subdomain" determines the /48 ULA prefix for ACP addresses. "rsub" therefore allows to use multiple /48 ULA prefixes in an ACP domain.  See <xref target="domain-usage"/> for example use-cases.</t>
+                                <t>
+                                  "routing-subdomain" is a heuristic that
+                                  allows a Registrar to consistently generate a
+                                  unique 48-bit ULA prefix for ACP addresses.
+                                  The presence of the "rsub" component allows
+                                  to a single ACP domain to employ multiple /48
+                                  ULA prefixes.
+                                  See <xref target="domain-usage"/> for example
+                                  use-cases.
+                                </t>
 
                                 <t>The optional "extensions" field is used for future standardized extensions to this specification.  It MUST be ignored if present and not understood.</t>
 
