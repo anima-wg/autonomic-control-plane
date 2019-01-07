@@ -1385,23 +1385,72 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
           50                              78
 +---------------------++-----------------------------+----------+
 |    (base scheme)    ||           Node-ID                      |
-|                     || Registrar-ID |   Node-Number|        V |
+|                     || Registrar-ID |F| Node-Number|        V |
 +---------------------++--------------+--------------+----------+
-          50                46             24/16          8/16
+          50                46         1   23/15          8/16
                 </artwork>
                 </figure></t>
-                <t>This addressing scheme foregoes the Zone-ID field to allow for larger, flatter routed networks (e.g., as in IoT)
-                with 8421376 Node-Numbers (2^23+2^15).  It also allows for up to 2^16 (i.e. 65536) different virtualized addresses within a node,
-                which could be used to address individual software components in an ACP node.</t>
-                <t>The fields are the same as in the Zone-ID sub-scheme with the following refinements:</t>
+                <t>
+                  This addressing scheme foregoes the Zone-ID field to allow
+                  for larger, flatter routed networks (e.g., as in IoT) with
+                  8421376 Node-Numbers (2^23+2^15).  It also allows for up to
+                  2^16 (i.e. 65536) different virtualized addresses within a
+                  node, which could be used to address individual software
+                components in an ACP node.
+                </t>
+                <t>
+                The fields are the same as in the Zone-ID sub-scheme with the
+                following refinements:</t>
                 <t><list style="symbols">
-                        <t>V: Virtualization bit: Values 0 and 1 are assigned in the same way as in the Zone-ID sub-scheme.</t>
-                        <t>Registrar-ID: To maximize Node-Number and V, the Registrar-ID is reduced to 46-bits.  This still permits the use of the MAC address of an ACP registrar by removing the V and U bits from the 48-bits of a MAC address (those two bits are never unique, so they cannot be used to distinguish MAC addresses).</t>
+                  <t>
+                    F: format bit.  This bit determines the format of the
+                    subsequent bits.
+                  </t>
+                  <t>
+                    V: Virtualization bit: this is a field that is
+                    either 8 or 16 bits.  For F=0, it is 8 bits, for F=1
+                    it is 16 bits.  The V bits are assigned by the ACP
+                    node.  In the certificate <xref target="domcert-acpinfo" />, the V-bits are always
+                    set to 0.
+                  </t>
+                  <t>
+                    Registrar-ID: To maximize Node-Number and V, the
+                    Registrar-ID is reduced to 46-bits.  This still permits the
+                    use of the MAC address of an ACP registrar by removing the
+                    V and U bits from the 48-bits of a MAC address (those two
+                    bits are never unique, so they cannot be used to
+                    distinguish MAC addresses).
+                  </t>
 
-                        <t>If the first bit of the "Node-Number" is "1", then the Node-Number is 16-bit long and the V field is 16-bit long.  Otherwise the Node-Number is 24-bit long and the V field is 8-bit long.</t>
-                </list></t>
-                <t>  "0" bit Node-Numbers are intended to be used for "general purpose" ACP nodes that would potentially have a limited number (&lt; 256) of clients (ASA/Autonomic Functions or legacy services) of the ACP that require separate V(irtual) addresses.  "1" bit Node-Numbers are intended for ACP nodes that are ACP edge nodes (see <xref target="NMS"/>) or that have a large number of clients requiring separate V(irtual) addresses.  For example large SDN controllers with container modular software architecture (see <xref target="software"/>).</t>
-                <t>In the Vlong addressing sub-scheme, the ACP address in the certificate has all V field bits as zero.  The ACP address set for the node includes any V value.</t>
+                  <t>
+                    The Node-Number is unique to each ACP node.  There are
+                    two formats for the Node-Number.   When F=0, the
+                    node-number is 23 bits,  for F=1 it is 15 bits.
+                    Each format of node-number is considered to be in a
+                    unique number space.
+                  </t>
+                </list>
+                </t>
+                <t>
+                  The F=0 bit format addresses are intended to be used for
+                  "general purpose" ACP nodes that would potentially have a
+                  limited number (&lt; 256) of clients (ASA/Autonomic Functions
+                  or legacy services) of the ACP that require separate
+                  V(irtual) addresses.
+                </t>
+                <t>
+                  The F=1 bit Node-Numbers are intended for
+                  ACP nodes that are ACP edge nodes (see <xref target="NMS"/>)
+                  or that have a large number of clients requiring separate
+                  V(irtual) addresses.  For example large SDN controllers with
+                  container modular software architecture (see <xref
+                  target="software"/>).
+                </t>
+                <t>
+                  In the Vlong addressing sub-scheme, the ACP address in the
+                  certificate has all V field bits as zero.  The ACP address
+                  set for the node includes any V value.
+                </t>
 
         </section>
         <!-- Vlong -->
