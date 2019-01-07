@@ -188,8 +188,7 @@
             <t hangText="LDevID:">A "Local Device IDentity" is an X.509 certificate installed during
             "enrollment".  The Domain Certificate used by the ACP is an LDevID.  See <xref target="AR8021"/>.
             </t>
-            <t hangText="MIC:">"Manufacturer Installed Certificate".  Another word not used in this document
-            to describe an IDevID.
+            <t hangText="MIC:">"Manufacturer Installed Certificate".  This is another word to describe an IDevID in referenced materials.  This term is not used in this document.
             </t>
             <t hangText="native interface:">Interfaces existing on a node without configuration of the already running node.  On physical nodes these are usually physical interfaces.  On virtual nodes their equivalent.
             </t>
@@ -200,8 +199,7 @@
             <t hangText="MASA (service):">"Manufacturer Authorized Signing Authority".  A vendor/manufacturer
             or delegated cloud service on the Internet used as part of the BRSKI protocol.
             </t>
-            <t hangText="sUDI:">"secured Unique Device Identifier".  Another term not used in this document
-            to refer to an IDevID.
+            <t hangText="sUDI:">"secured Unique Device Identifier".  This is another word to describe an IDevID in referenced material.  This term is not used in this document.
             </t>
             <t hangText="UDI:">"Unique Device Identifier".  In the context of this document unsecured
             identity information of a node typically consisting of at least device model/type and
