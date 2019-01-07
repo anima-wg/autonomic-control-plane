@@ -1269,6 +1269,24 @@ IPsec security setup via IKEv2, IPsec transport mode, local and peer link-local 
         </list></t>
         <t>The sub-scheme may imply a range or set of addresses assigned to the node, this is called the ACP address range/set and explained in each sub-scheme.</t>
         <t>Please refer to <xref target="acp-registrars"/> and <xref target="address-spaces"/> for further explanations why the following Sub-Addressing schemes are used and why multiple are necessary.</t>
+        <t>
+          The following summarizes the addressing schemes:
+<figure title="Addressing schemes" anchor='addr-scheme-summary'>
+  <artwork>
++------+-----+----------------+-------+------------+
+| type | Z   | name           | F-bit | V-bit size |
++------+-----+----------------+-------+------------+
+| 0x00 | 0   | ACP Zone       | N/A   | 1 bit      |
++------+-----+----------------+-------+------------+
+| 0x00 | 1   | ACP Manual     | N/A   | 1 bit      |
++------+-----+----------------+-------+------------+
+| 0x01 | N/A | VLong-ASA      | 0     | 8-bits     |
++------+-----+----------------+-------+------------+
+| 0x01 | N/A | VLong-ACP-edge | 1     | 16-bits    |
++------+-----+----------------+-------+------------+
+  </artwork>
+        </figure>
+</t>
         </section>
         <!-- base-scheme -->
 
