@@ -459,13 +459,19 @@ the TA is used to authenticate the ACP domain membership of other nodes (see <xr
   acp-address = 32hex-dig | 0
   hex-dig = DIGIT / "a" / "b" / "c" / "d" / "e" / "f"
   rsub = [ <subdomain> ] ; <subdomain> as of RFC1034, section 3.5
-  routing-subdomain = [ rsub " ." ] acp-domain-name
   acp-domain-name = ; <domain> ; as of RFC 1034, section 3.5
   extensions = *( "+" extension )
   extension = ; future standard definition.
               ; Must fit RFC5322 simple dot-atom format.
 
+  routing-subdomain = [ rsub " ." ] acp-domain-name
+
   Example:
+     given a node allocation of fd89:b714:f3db:0:200:0:6400:0000
+           and a domain-name of acp.example.com
+           and an extenstion of area51.research
+
+  then this results in:
   domain-information = rfcSELF+fd89b714f3db00000200000064000000
                        +area51.research@acp.example.com
   acp-domain-name    = acp.example.com
@@ -480,8 +486,8 @@ the TA is used to authenticate the ACP domain membership of other nodes (see <xr
                                 <t>"acp-domain-name" is used to indicate the ACP Domain across which all ACP nodes trust each other and are willing to build ACP channels to each other.  See <xref target="certcheck"/>.
 Acp-domain-name SHOULD be the FQDN of a DNS domain owned by the operator assigning the certificate.  This is a simple method to ensure that the domain is globally unique and collision of ACP addresses would therefore only happen due to ULA hash collisions.  If the operator does not own any FQDN, it should choose a string (in FQDN format) that it intends to be equally unique.</t>
 
-                                <t>"routing-subdomain" is the autonomic subdomain composed of "rsub" and "acp-domain-name".  "rsub" is optional.  When not present, "routing-subdomain" is the same as "acp-domain-name". "routing-subdomain" determines the /48 ULA prefix for ACP addresses. "rsub" therefore allows to use multiple /48 ULA prefixes in an ACP domain.  See <xref target="domain-usage"/> for example use-cases.</t>
-
+                                <t>"routing-subdomain" is the autonomic subdomain that is used by Registrar(s) within the same ACP domain to calculate the hash for the ULA prefix of the ACP address of the network.  This is a recommended heuristic. "rsub" is optional; its syntax is defined in this document, but its semantics are for further study.  Understanding the benefits of using rsub may depend on the results of future work on enhancing routing for the ACP.  When "rsub" is not used, "routing-subdomain" is the same as "domain".</t>
+                                "routing-subdomain" determines the /48 ULA prefix for ACP addresses. "rsub" therefore allows to use multiple /48 ULA prefixes in an ACP domain.  See <xref target="domain-usage"/> for example use-cases.</t>
 
                                 <t>The optional "extensions" field is used for future standardized extensions to this specification.  It MUST be ignored if present and not understood.</t>
 
