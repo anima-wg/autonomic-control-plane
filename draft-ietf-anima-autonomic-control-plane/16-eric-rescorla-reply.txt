@@ -1,0 +1,1217 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Eric Rescorla <ekr@rtfm.com>
+Cc: The IESG <iesg@ietf.org>, anima-chairs@ietf.org,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima@ietf.org
+Bcc: 
+Subject: Re: Eric Rescorla's Discuss on
+ draft-ietf-anima-autonomic-control-plane-16: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <153316779818.21822.14156274165395996235.idtracker@ietfa.amsl.com>
+
+Thanks Eric, inline
+
+This file is: https://github.com/anima-wg/autonomic-control-plane/blob/master/draft-ietf-anima-autonomic-control-plane/16-eric-rescorla-reply.txt
+
+The following inline answers to your discuss have been integrated
+into -19 of the draft which i just submitted. It also includes the
+feedback to the comments by Eric and Ben. I was backlogged, and
+after your review of -16 i had first responded to other reviewers
+with -16/-17.
+
+Note that this includes a hopefully more comprehensive section 6.1.3 explaining the Trust Anchor details required for the ACP, resulting from the variety of discuss of the reviewers on this topic.
+
+Bens and Erics review where very good and comprehensive but alas
+didn't make it easy for me to answer to them as quickly as i would have
+wanted to. Unfortunately, i also had to go back and forth between
+them, so i couldn't create a separate checkpoint version
+showing ONLY changes for each of them. So the following diffs are
+hopefully useful:
+
+-18 to -19: Changes made for Ben and Eric
+
+http://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-18.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt
+
+Note that this includes a hopefully more comprehensive section 6.1.3 explaining the Trust Anchor details required for the ACP, resulting from the variety of discuss of the reviewers on this topic.
+
+-16 to -19: Changes since your last review (includes Alissa Coopers review)
+
+http://tools.ietf.org//rfcdiff?url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt
+
+Cheers
+    Toerless
+
+On Wed, Aug 01, 2018 at 04:56:38PM -0700, Eric Rescorla wrote:
+> Eric Rescorla has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-16: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> Rich version of this review at:
+> https://mozphab-ietf.devsvcdev.mozaws.net/D9959
+> 
+> 
+> I found this document extremely hard to follow due to a large number
+> of grammar errors. It really needs a very thorough copy-edit pass,
+> which I believe is beyond the RFC-editor's usual process. Ideally, the
+> WG would do this.
+> 
+> 
+> DETAIL
+> S 6.1.1.
+> >      each other.  See Section 6.1.2.  Acp-domain-name SHOULD be the FQDN
+> >      of a DNS domain owned by the operator assigning the certificate.
+> >      This is a simple method to ensure that the domain is globally unique
+> >      and collision of ACP addresses would therefore only happen due to ULA
+> >      hash collisions.  If the operator does not own any FQDN, it should
+> >      choose a string (in FQDN format) that intends to be equally unique.
+> 
+> These rules do not seem to be strong enough. Unless you have disjoint
+> trust anchors, there is a potential for cross-domain attac.
+
+Yes, two independent operators would use their own separate trust anchors.
+
+If you are are owning the PKI root for multiple independent ACP networks,
+you COULD also establish a process by which you validate that there is no
+SHA256 hash collision between the different ACP domain names that want
+to use your one trust anchor.
+
+So, i am not sure what your point is.
+
+> S 6.1.2.
+> >      See section 4.2.1.6 of [RFC5280] for details on the subjectAltName
+> >      field.
+> >   
+> >   6.1.2.  ACP domain membership check
+> >   
+> >      The following points constitute the ACP domain membership check of a
+> 
+> What is the relationship of these rules to the existing 5280 rules?
+
+Note that there where already i hope good improvements in this text from -16
+you reviewed to -18.
+
+The first three bullet points are meant to summarise what we understand to be
+the standard certificate verification rules for another entity (Bob). Use
+ACP trust anchor and some proof of posession mechanism for the private key
+(as in e.g.: TLS), verify Bobs cert is in its lifetime. 
+
+It is not clear to me if RFC5280 is normative for this as i could not find
+a single section i could point to as a reference.  I welcome suggestions
+to shorten those rules by referring to prior established rules for the
+same. This text was based on suggestions from the BRSKI authors who are more
+experts on PKI.
+
+Bullet item four mandates support for CRL / OCSP if used in the certificate.
+Likewise: Better text welcome.
+
+The fifts bullet item is the only new requirement. The ACP information
+field must be present, syntactically correct and have the same acp-domain-name
+field as the local node performing the ACP domain membership check.
+
+> S 6.1.2.
+> >   
+> >      o  The peer has proved ownership of the private key associated with
+> >         the certifictes public key.
+> >   
+> >      o  The peer's certificate is signed by one of the trust anchors
+> >         associated with the ACP domain certificate.
+> 
+> So you don't allow chaining? It seems later that you say you do, but
+> this language prohibits it.
+
+No, that was an oversight. Changed second bullet to:
+
+The peer's certificate passes certificate path validation as defined in [RFC5280] against one of the Trust Anchors associated with the ACP nodes ACP domain certificate (see <xref target="trust-points"/> below)
+
+Better text suggestion welcome if this is correct.
+
+> S 6.1.3.1.
+> >      The objective value "SRV.est" indicates that the objective is an
+> >      [RFC7030] compliant EST server because "est" is an [RFC6335]
+> >      registered service name for [RFC7030].  Future backward compatible
+> >      extensions/alternatives to [RFC7030] may be indicated through
+> >      objective-value.  Future non-backward compatible certificate renewal
+> >      options must use a different objective-name.
+> 
+> EST runs over HTTPS. What is the certificate that the server presents?
+
+I could add text like:
+
+The EST server MUST present a certificate that
+is passing ACP domain membership check (<xref target="certcheck"/>) in its HTTPS 
+(<xref target="RFC7540"/>) connection setup.
+
+But i am actually not sure this is required, so i would rather like to do it
+only when we understand it is. The way i understand it, there really does
+not need to be transport layer security for certificate renewal because
+the client can verify the certificate on its own merit. AFAIK,
+draft-ietf-acme-star leverages that for example to provide certs from 
+arbitrary caches.
+
+The situation may be different for BRSKI, and likely the EST server can also
+be the BRSKI server, but that would still make it better to describe
+rewuirements against the server cert in BRSKI rather than in ACP if it
+doesn't matter in the EST renewal case. 
+
+> S 6.4.
+> >      information in the ACP Adjacency table.
+> >   
+> >      The ACP is by default established exclusively between nodes in the
+> >      same domain.  This includes all routing subdomains.  Appendix A.7
+> >      explains how ACP connections across multiple routing subdomains are
+> >      special.
+> 
+> I must be missing something, but how do you know what the routing
+> domain is of an ACP node? I don't see it in the message above. Is it
+> in some common header?
+
+The routing subdomain is indicated via the ACP domain information field
+in the certificate, but it is ignored during step 4 of the ACP domain membership
+check hence resulting in above text that the ACP is built across all
+routing-subdomains. It only serves to assign different address prefixes
+within the same ACP network right now.
+
+> S 6.5.
+> >   
+> >      o  Once the first secure channel protocol succeeds, the two peers
+> >         know each other's certificates because they must be used by all
+> >         secure channel protocols for mutual authentication.  The node with
+> >         the lower Node-ID in the ACP address becomes Bob, the one with the
+> >         higher Node-ID in the certificate Alice.
+> 
+> A ladder diagram would really help me here, because I'm confused about
+> the order of events.
+
+Can not figure out how to RFC-ASCII'fy a ladder diagram with the two
+parallel connection setups, so i rather added the following more explicit
+list of steps as a picture after the example. Hope this suffices to
+answer your request.
+
+| [1]    Node 1 sends GRASP AN_ACP message to announce itself
+| 
+| [2]    Node 2 sends GRASP AN_ACP message to announce itself
+| 
+| [3]    Node 2 receives [1] from Node 1
+| 
+| [4:C1] Because of [3], Node 2 starts as initiator on its
+|        preferred secure channel protocol towards Node 1.
+|        Connection C1.
+| 
+| [5]    Node 1 receives [2] from Node 2
+| 
+| [6:C2] Because of [5], Node 1 starts as initiator on its
+|        preferred secure channel protocol towards Node 2.
+|        Connection C2.
+| 
+| [7:C1] Node1 and Node2 have authenticated each others
+|        certificate on connection C1 as valid ACP peers.
+| 
+| [8:C1] Node 1 certificate has lower ACP Node-ID than  Node2,
+|        therefore Node 1 considers itself Bob and Node 2 Alice
+|        on connection C1. Connection setup C1 is completed.
+| 
+| [9]    Node 1 (Bob)) refrains from attempting any further secure
+|        channel connections to Node 2 (Alice) as learned from [2]
+|        because it knows from [8:C1] that it is Bob relative
+|        to Node 1.
+| 
+| [10:C2] Node1 and Node2 have authenticated each others
+|        certificate on connection C2 (like [7:C1]).
+| 
+| [11:C2] Node 2 certificate has lower ACP Node-ID than  Node2,
+|         therefore Node 1 considers itself Bob and Node 2 Alice
+| 	on connection C1, but they also identify that C2 is to the
+| 	same mutual peer as their C1, so this has no further impact.
+| 
+| [12:C2] Node 1 (Alice) closes C1. Because of [8:C1], Node 2 (Bob)
+|         expected this.
+| 
+| [13]    Node 1 (Alice) and Node 2 (Bob) start data transfer across
+|         C2, which makes it become a secure channel for the ACP.
+| 
+> As I understand it, Alice and Bob are both flooding their AN_ACP
+> objectives. So, Alice sees Bob's and starts trying to connect to Bob.
+> But Bob may not have Alice's objective, right? So, in the case you
+> describe below, she just has to wait for it before she can try the
+> remaining security protocols?
+
+A node can initiate and complete in parallel any number of secure
+channel protocol to a candidate peer (from which it has received
+a AN_ACP GRASP objective). But as soon as one of those connection
+succeeds and the node know it is "Bob" on the connection (because
+of the comparison with the peers certificates ACP domain information field),
+it will stop trying new connections to that peers IPv6 link-local address,
+and its Alice's choice to figure out which of the potentially
+parallel established connections to close and which to continue.
+
+Aka: The logic is intended to be as simple as possible and secure.
+The Alice/Bob self selection is secure because it is based on what
+is learned from successfull secure channel setup.
+
+> I note that you have no downgrade defense on the meta-negotiation
+> between the protocols, so an attacker could potentially force you down
+> to the weakest joint protocol. Why did you not provide a defense here?
+
+Remember that the goal of this process is the negotiation to select
+one of potentially multiple completely disjoint secure channel
+protocols. Such as DTLS vs. IPsec.  And attempting to avoid he ned
+to a network wide MTI protocol because we only use these protocols
+for peer-to-peer and not every two nodes in the network need to be able to
+directly peer with each other (you won't connect an IoT gateway to
+an Internet backbone core-router).
+
+One approach we thought of to allow negotiation of "the best" crypto
+mutually supported would be to have a two-stage negotiation, e.g.:
+first build some TLS connection and negotiate the next-stage, IPsec or DTLS.
+But that would make thast first stage a network-wide MTI and run into
+the risk that that protocols crypto becomes the weakest link. I actually
+had that option in an earlier version of the draft and the WG and IETF
+reviewers didn't like this double complexity, so it was removed.
+
+If i have a man-in-the-middle, i also don't think eve such a two-stage
+would work. I could negotiate what i think is the better crypto option
+(let's say DTLS) all day long, but if the MiTM simply filters all DTLS
+and only lets through IPsec, what can i do ?
+
+> S 6.7.1.1.
+> >      To run ACP via IPsec natively, no further IANA assignments/
+> >      definitions are required.  An ACP node that is supporting native
+> >      IPsec MUST use IPsec security setup via IKEv2, tunnel mode, local and
+> >      peer link-local IPv6 addresses used for encapsulation.  It MUST then
+> >      support ESP with AES256 for encryption and SHA256 hash and MUST NOT
+> >      permit weaker crypto options.
+> 
+> This is not sufficient to guarantee interop. Also, this is an odd
+> cipher suite chioice.
+> 
+>     Why are you requiring AES-256 rather than AES-128?
+
+In all the implementations i was involved in we did not find hardware
+that did not support AES-256, but there where platforms that could
+not go higher, so this looked like the highest crypto safe length
+to support common hardware crypto.
+
+>     Why aren't you requiring AES-GCM?
+
+Thanks. The need to specify this level of detail was not raised in before.
+I have replaces AES256 with AES-256-GCM (rfc4106).
+
+>     Why aren't you requiring specific key establishment methods (e.g.,
+> ECDHE with P-256...)
+
+Added. 
+
+If the text is still insufficient in your opinion, i would welcome suggested
+text that you consider to be a good recommendation, or at least the
+set of parameters that we missed to specifiy. 
+
+> S 6.7.2.
+> >   
+> >      To run ACP via UDP and DTLS v1.2 [RFC6347] a locally assigned UDP
+> >      port is used that is announced as a parameter in the GRASP AN_ACP
+> >      objective to candidate neighbors.  All ACP nodes supporting DTLS as a
+> >      secure channel protocol MUST support AES256 encryption and MUST NOT
+> >      permit weaker crypto options.
+> 
+> This is not sufficiently specific to guarantee interoperability. Which
+> cipher suites? Also, why are you requiring AES-256 and not AES-128?
+
+Removed AES-256 notion.
+
+The reason for AES-256 was to be aligned with the IPsec requirements,
+but of course, our expectation is that DTLS would be a SW implementation, so
+this is not necessarily a good choice. Although i think the lowest common
+denominator for DTLS is 128 ?
+
+In any case, i changed the text to be equivalent to RFC8310 section 9. This
+is the RFC thast you suggested me to leverge some time ago in email:
+
+| All ACP nodes supporting DTLS as a secure channel protocol MUST
+| adhere to the DTLS implementation recommendations and security
+| considerations of <xref target="rfc7525"/> except with respect
+| to the DTLS version. ACP nodes supporting DTLS MUST implement only
+| DTLS 1.2 or later.  For example, implementing DTLS-1.3
+| (<xref target="I-D.ietf-tls-dtls13"/>) is also an option.
+
+The other MUST/SHOULD from RFC8310 section 9 did not seem to be relevant 
+for our purposes.
+
+> S 6.7.3.
+> >   
+> >      A baseline ACP node MUST support IPsec natively and MAY support IPsec
+> >      via GRE.  A constrained ACP node that can not support IPsec MUST
+> >      support DTLS.  An ACP node connecting an area of constrained ACP
+> >      nodes with an area of baseline ACP nodes MUST therefore support IPsec
+> >      and DTLS and supports threefore the baseline and constrained profile.
+> 
+> These MTIs do not provide interop between constrained and baseline
+> nodes, because a baseline node might do IPsec and the constrained node
+> DTLS.
+
+Yes. 6.5.  Channel Selection:
+
+I improved the text of this paragraph also for this review (example
+was not as strong in before):
+
+<t>Not all type of ACP nodes can or need to connect directly to each other or are able to support or prefer all possible secure channel mechanisms.  For example, code space limited IoT devices may only support DTLS because that code exists already on them for end-to-end security, but high-end core routers may not want to support DTLS because they can perform IPsec in accelerated hardware but would need to support DTLS in an underpowered CPU forwarding path shared with critical control plane operations. This is not a deployment issue for a single ACP across these type of nodes as long as there are also appropriate gateway ACP nodes that support sufficiently many secure channel mechanisms to allow interconnecting areas of ACP nodes with a more constrained set of secure channel protocols. On the edge between IoT areas and high-end core networks, general-purpose routers that act as those gateways and that can support a variety of secure channel protocols is the norm already.</t>
+
+Aka: there is no MTI and no need for an MTI because we don't need end-to-end
+security for ACP secure channels but only hop-by-hop,  and we define
+different profiles in "ACP Secure Channel Requirements" (6.7.3)
+
+> S 6.10.2.
+> >         hash of the routing subdomain SHOULD NOT be assumed by any ACP
+> >         node during normal operations.  The hash function is only executed
+> >         during the creation of the certificate.  If BRSKI is used then the
+> >         BRSKI registrar will create the domain information field in
+> >         response to the EST Certificate Signing Request (CSR) Attribute
+> >         Request message by the pledge.
+> 
+> you need to lay out the security assumptions here. It's not difficult
+> to create a new domain with the same 40bit hash.
+
+If you don't attempt to do this, the chance for this to happen is a lot
+lower than winning the lottery, so it would have to be a suicidal operator.
+
+Prepended before that paragraph:
+
+| When creating a new routing-subdomain for an existing autonomic network,
+| it MUST be ensured, that rsub is selected so the resulting hash of the
+| routing-subdomain does not collide with the hash of any pre-existing
+| routing-subdomains of the autonomic network. This ensures that ACP
+| addresses created by registrars for different routing subdomains do not
+| collide with each others.
+
+And appended after that paragraph:
+
+| Establishing connectivity between different autonomic networks
+| (different acp-domain-name) is outside the scope of this specification.
+| If it is being done through future extensions, then the rsub of all
+| routing-subdomains across those autonomic networks need to be selected
+| so their hashes do not collide. For example a large cooperation with its
+| own private Trust Anchor may want to create different autonomic networks
+| that initially should not be able to connect but where the option to do
+| so should be kept open. When taking this future possibility into account,
+| it is easy to always select rsub so that no collisions happen.</t>
+
+> If you have a private
+> CA, this probably isn't an issue, but if you are sharing a public CA,
+> it would allow me to produce a domain with other people's addresses.
+
+The following is the pre-existing text from 6.1.3 intended
+to cover this:
+
+   Trust Points for ACP domain certificates must be trusted to sign
+   certificates with valid ACP domain information fields only for
+   trusted ACP registrars of that domain.  This can be achieved by using
+   Trust Anchors private to the owner of the ACP domain or potentially
+   through appropriate contractual agreements between the involved
+   parties.  Public CA without such obligations and guarantees can not
+   be used.
+
+   A single owner can operate multiple independent ACP domains from the
+   same set of private trust anchors (CAs).  When the ACP Registrars are
+   trusted not to permit certificates with incorrect ACP information
+   fields to be signed. ...
+
+Let me know if you think more elaboration is required.
+
+> S 8.1.1.
+> >      configured to be put into the ACP VRF.  The ACP is then accessible to
+> >      other (NOC) systems on such an interface without those systems having
+> >      to support any ACP discovery or ACP channel setup.  This is also
+> >      called "native" access to the ACP because to those (NOC) systems the
+> >      interface looks like a normal network interface (without any
+> >      encryption/novel-signaling).
+> 
+> This seems pretty unclear. Is the idea that you connect natively to
+> the ACP Connect node and then it forwards your packets over the ACP?
+
+Yes. No secure channel used, needs to be explicitly configured. Expects
+appropriate physical security. Limited to one L3 subnet hop, so typically
+an ACP edge node co-located via an ethernet cable to e.g.: an SDN
+controller in a room with physcial access control.
+
+> Does that mean they need to be GRASP or whatever? I think that's what
+> you are saying below.
+
+ACP has two type of GRASP instances, ACP grasp and secure channel
+autoconfig DULL GRASP.
+
+ACP GRASP runs over those interfaces like it runs over ACP interfaces
+constructed across secure channels. But there is no DULL GRASP neighbor
+discovery, as thats only needed to construct ACP secure channels.
+
+Not sure how to improve text to make it easier readable. Suggestions welcome.
+
+> S 8.1.5.
+> >      interface is physically protected from attacks and that the connected
+> >      Software or NMS Hosts are equally trusted as that on other ACP nodes.
+> >      ACP edge nodes SHOULD have options to filter GRASP messages in and
+> >      out of ACP connect interfaces (permit/deny) and MAY have more fine-
+> >      grained filtering (e.g., based on IPv6 address of originator or
+> >      objective).
+> 
+> Given that this is an important security requirement, it seems like it
+> should be a normative requirement that it be filtered.
+
+This is not a security requirement but an administrative policy filtering
+requirement. You assume the servers you allow to connect to an ACP connect
+network to be trusted. They may just not provide flexible filtering of
+the services they offer so the network device can add that through above
+mentioned policy filtering of the GRASP announcements.
+
+> S 9.1.
+> >      same trust anchor, a re-merge will be smooth.
+> >   
+> >      Merging two networks with different trust anchors requires the trust
+> >      anchors to mutually trust each other (for example, by cross-signing).
+> >      As long as the domain names are different, the addressing will not
+> >      overlap (see Section 6.10).
+> 
+> Why does it require the *trust anchors* to trust each other? Can't the
+> endpoints just have the union of the trust anchors.
+> 
+> This is way underspecified for actual implementation.
+
+Yepp. goes back to version 6 of the doc, before i started to refine the text
+from a more declarative to a more implementable level of detail. Overlooked
+so far by me when i started write down all the PKI details. Replaced with:
+
+| Merging two networks with different trust anchors requires the ACP nodes
+| to trust the union of Trust Anchors.  As long as the routing-subdomain
+| hashes are different, the addressing will not overlap (see <xref target="addressing"/>).
+| Note that the complete mechanisms to merge networks is out of scope of
+| this specification.
+
+Btw: this is already the start of informative text again (post normative).
+
+> S 10.2.1.
+> >      registrar can rely on the ACP and use Proxies to reach the candidate
+> >      ACP node, therefore allowing minimum pre-existing (auto-)configured
+> >      network services on the candidate ACP node.  BRSKI defines the BRSKI
+> >      proxy, a design that can be adopted for various protocols that
+> >      Pledges/candidate ACP nodes could want to use, for example BRSKI over
+> >      CoAP (Constrained Application Protocol), or proxying of Netconf.
+> 
+> I am finding it very difficult to work out the security properties of
+> this mechanism and the security considerations do not help. What can a
+> malicious registrar do? For that matter, you say "uncoordinated", so
+> does that mean anyone in the ACP can just decide to be a registrar?
+
+The uncoordinated refers to the fact that each ACP registrar creates the
+ACP domain informatin field, thereby assigning an ACP address to a pledge
+for which it enrolls the certificate. The ACP addressing schemes are designed
+so that each ACP registrar can do this without having to coordinate with
+other ACP registrars or another central entity. Therefore the only central
+entity required is some hopefully pre-existing, PKI CA/sub-CA infra that
+doesn't have to know about ACP specifics at all.
+
+This section is already informal, and in a presentation i tried to show
+how even a person could be a registrar, aka: no formal need of ACP for
+it to be software. Hence the very protocol unspecific definition.
+
+I added the following paragraph to the end of 6.10.7(.0) which is the normative
+part for ACP registrar to hopefully answer the security question sufficiently:
+
+| ACP registrars are PKI registration authorities (RA) enhanced with
+| the handling of the ACP domain certificate specific fields. They
+| request certificates for ACP nodes from a Certificate Authority
+| through any appropriate mechanism (out of scope in this document,
+| but required to be BRSKI for ANI registrars). Only nodes that
+| are trusted to be compliant with the requirements against registrar
+| described in this section must be given the necessary credentials
+| to perform this RA function, such as credentials for the BRSKI
+| connection to the CA for ANI registrars.
+
+And to Security considerations:
+
+| Every ACP registrar is criticial infrastructure that needs to be hardened against attacks similar to a CA. A malicious registrar can enroll enemy plegdes to an ACP network or break ACP routing by duplicate ACP address assignment to pledges via their ACP domain certificates.
+
+> S 11.
+> >   
+> >   11.  Security Considerations
+> >   
+> >      An ACP is self-protecting and there is no need to apply configuration
+> >      to make it secure.  Its security therefore does not depend on
+> >      configuration.
+> 
+> This is not true. You need to configure the trust anchor and the
+> domain name.
+
+Changed to:
+
+| After seeding an ACP by configuring at least one ACP registrar with routing-subdomain and a CA, an ACP is self-protecting and there is no need to apply configuration to make it secure (typically the ACP Registrar doubles as EST server for certificate renewal).
+
+Originally the idea was to consider ACP registrar/EST server part of the BRSKI effort in ANIMA, hence the simpler original statement. But it turned out to be illogical to describe all the ACP specifics of ACP registrars in BRSKI if we wanted to make it reuseable without ACP.
+
+> S 11.
+> >         all products.
+> >   
+> >      There is no prevention of source-address spoofing inside the ACP.
+> >      This implies that if an attacker gains access to the ACP, it can
+> >      spoof all addresses inside the ACP and fake messages from any other
+> >      node.
+> 
+> You need to be clear that the security is just group security and that
+> any compromised ACP node compromises the entire system.
+
+Right. Ben had more points about the insufficiency of the security considerations
+text, so i expanded the point here with several paragraphs.
+
+A bit too long to paste here. Starts and ends with the follwing, easy to see in rfcdiff:
+
+| The ACP It is designed to enable automation of current network management and future autonomic peer-peer/distributed network automation. ...
+...
+| Higher layer service built using ACP domain certificates should not solely rely on undifferentiated group security....
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> S 1.
+> >      possibilities that where considered not to be appropriate for
+> >      standardization in this document but were considered important to
+> >      document.
+> >   
+> >      The ACP provides secure IPv6 connectivity, therefore it can not only
+> >      be used as the secure connectivity for self-management as required
+> 
+> Nit: this would be clearer as "can be used not only"
+
+Thanks.
+
+> S 2.
+> >         equally be used in simple ANI networks (with no other Autonomic
+> >         Functions) or completely by itself.
+> >   
+> >      ACP address:  An IPv6 address assigned to the ACP node.  It is stored
+> >         in the domain information field of the ->"ACP domain certificate"
+> >         ().
+> 
+> Something wrong here.
+
+See note on top of Section 2 introduced in -17, its about the XML
+xref's. If RFC-editor can't help, we'll fix manually (reference containing () ).
+
+> S 2.
+> >   
+> >      domain information (field):  An rfc822Name information element (e.g.,
+> >         field) in the domain certificate in which the ACP relevant
+> >         information is encoded: the domain name and the ACP address.
+> >   
+> >      ACP Loopback interface:  The Loopback interface in the ACP VRF that
+> 
+> Please expand VRF on first use.
+
+Done (pre -19).
+
+> S 2.
+> >         routing and forwarding in the node other than the ACP VRF.  In a
+> >         simple ACP or ANI node, the Data-Plane is typically provisioned
+> >         non-autonomic, for example manually (including across the ACP) or
+> >         via SDN controllers.  In a fully Autonomic Network node, the Data-
+> >         Plane is managed autonomically via Autonomic Functions and Intent.
+> >         Note that other (non-ANIMA) RFC use the Data-Plane to refer to
+> 
+> Nit: RFCs
+
+Done.
+
+> S 4.
+> >             protocols of the ANI.  Clients of the ACP MUST NOT be tied to
+> >             a particular application or transport protocol.
+> >   
+> >      ACP5:  The ACP MUST provide security: Messages coming through the ACP
+> >             MUST be authenticated to be from a trusted node, and SHOULD
+> >             (very strong SHOULD) be encrypted.
+> 
+> Why isn't this a MUST? Once you have done the key setup, the
+> encryption is very cheap.
+
+This is the section describing the input requirements into the specification
+of the ACP (charter didn't allow a separate requirements document). It is
+ not the actual normative requirement for the ACP described in section 6 (there
+it is a MUST for encryption).
+
+Various reasons for customers not wanting encryption: regulation (e.g.: finance networks
+auditing), inability to support HW enryption at speeds/cost-point needed (e.g.:
+data-center).  Hop-by-hop encryption to protect infrastructure is something completely
+different from end-to-end encryption wrt. cost. We don't even have a good idea
+how much performance for transit traffic we need across ACP nodes. if yo want to
+build across the ACP more intelligent network automation you may want to pull a lot
+of telemetry across it.
+
+Alas, we had to conclude that for the start it would be too much work to
+include all necessary work to make those requirements work, so this base
+ACP specification has the MUST in the normative part. Solutions for different
+markets for whom this is not appropriate would be different anyhow. Finance
+regulations could result in networks effectively uses message integrity but
+not encryption, whereas DC might use a lower security model.. 
+
+> S 4.
+> >      between nodes, but only GRASP connectivity.  Nevertheless, because
+> >      ACP also intends to support non-AN networks, it it is crucial to
+> >      support IPv6 layer connectivity across the ACP to support any
+> >      transport and application layer protocols.
+> >   
+> >      Th eACP operates hop-by-hop, because this interaction can be built on
+> 
+> Nit: The ACP
+
+Done.
+
+> S 6.1.1.
+> >      hash collisions.  If the operator does not own any FQDN, it should
+> >      choose a string (in FQDN format) that intends to be equally unique.
+> >   
+> >      "routing-subdomain" is the autonomic subdomain that is used to
+> >      calculate the hash for the ULA Global ID of the ACP address of the
+> >      node.  "rsub" is optional; its syntax is defined in this document,
+> 
+> This section about the hash isn't clear without referencing some
+> future section.
+
+Added reference to section defining the use of ULA (addressing section).
+
+> S 6.1.1.
+> >      In this specification, the "acp-address" field is REQUIRED, but
+> >      future variations (see Appendix A.8) may use local information to
+> >      derive the ACP address.  In this case, "acp-address" could be empty.
+> >      Such a variation would be indicated by an appropriate "extension".
+> >      If "acp-address" is empty, and "rsub" is empty too, the "local-part"
+> >      will have the format "rfcSELF + + extension(s)".  The two plus
+> 
+> Are these spaces part of local-part? They appear to be forbidden by
+> the ABNF
+
+No, spaces where just meant for visualization, but obviously confusing. Removed spaces.
+
+> S 6.1.1.
+> >      The subjectAltName / rfc822Name encoding of the ACP domain name and
+> >      ACP address is used for the following reasons:
+> >   
+> >      o  It should be possible to share the LDevID with other uses beside
+> >         the ACP.  Therefore, the information element required for the ACP
+> >         should be encoded so that it minimizes the possibility of creating
+> 
+> Is this really not normative?
+
+No. We can not use the ACP spec to force any non-ACP function on a router to
+share the ACP certificate. We can just design the ACP certificate content so
+that it would not conflict with the content required for other uses and hope that
+this eliminates an important limiter to minimizing the number of redundant
+certificates a router needs to maintain across various functions.
+
+(If there are good reasons for different certs, they are not "redundant" ;-)
+
+> S 6.1.3.5.
+> >      protocols used by the ACP registrars.
+> >   
+> >      Please refer to Section 6.10.7 for explanations about ACP registrars
+> >      and vouchers as used in the following text.
+> >   
+> >      When BRSKI is used (aka: on ACP nodes that are ANI nodes), the re-
+> 
+> I think you mean "i.e.", not "aka".
+
+Thanks.
+
+> S 6.1.3.5.
+> >      certificate or the IDevID, the re-enrolling candidate ACP node SHOULD
+> >      authenticate the BRSKI registrar during TLS connection setup based on
+> >      its existing trust anchor/certificate chain information associated
+> >      with its old ACP certificate.  The re-enrolling candidate ACP node
+> >      SHOULD only request a voucher from the BRSKI registrar when this
+> >      authentication fails during TLS connection setup.
+> 
+> This is all pretty hard to understand without having read BRSKI
+
+Updated lead in text to say:
+
+<t>Please refer to <xref target="acp-registrars"/> and <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>
+for explanations about ACP registrars and vouchers as used in the following text.
+When ACP is intended to be used without BRSKI, the details about BRSKI and
+vouchers in the following text can be skipped.</t>
+
+> S 6.1.3.6.
+> >   
+> >      An ACP domain certificate is called failing in this document, if/when
+> >      the ACP node can determine that it was revoked (or explicitly not
+> >      renewed), or in the absence of such explicit local diagnostics, when
+> >      the ACP node fails to connect to other ACP nodes in the same ACP
+> >      domain using its ACP certificate.  For connection failures to
+> 
+> I don't understand the thing on the other side of this "or". I'm
+> supposed to conclude based on some remote diagnostic that my cert is
+> bad>
+
+This is primarily a definition, independent of who makes the assertion.
+Could be the node itself, could be a registrar
+
+Depends on capabilities of secure channel protocols, the node may be able
+to self-diagnose. For example if the secure channel protocol allows to
+authenticate the peer as a valid domain peer but the connection setup
+still fails because the peer does not accout our certificate.
+
+Isn't there also in some secure channel mechanism a way to receive revocation
+lists ? That would be an explicit way to learn our certificate has failed
+(revocation is a failure).
+
+> S 6.1.3.6.
+> >      or any of its signing certificates could have been revoked or may
+> >      have expired, but the ACP node can not self-diagnose this condition
+> >      directly.  Revocation information or clock synchronization may only
+> >      be available across the ACP, but the ACP node can not build ACP
+> >      secure channels because ACP peers reject the ACP node's domain
+> >      certificate.
+> 
+> Is the idea here that I'm supposed to inspect the TLS alerts?
+
+Secure channels considered right now are IPsec and DTLS. I don't even know
+what TLS alerts provide, but if they are supported via DTLS and provide
+useful diagnosis for this condition, it might be useful to mention.
+Any pointer to what a TLS alert can tell me ?
+
+> S 6.3.
+> >      dependencies, including ACP.  Please ensure that references to I-
+> >      D.ietf-anima-grasp that include section number references (throughout
+> >      this document) will be updated in case any last-minute changes in
+> >      GRASP would make those section references change.
+> >   
+> >      DULL GRASP is a limited subset of GRASP intended to operate across an
+> 
+> Please expand DULL
+
+Done.
+
+> S 6.4.
+> >   
+> >      o  ACP connections across domains with different Certificate
+> >         Authorities (CA) could establish a common ACP by installing the
+> >         alternate domains' CA into the trusted anchor store.  This is an
+> >         executive management action that could easily be accomplished
+> >         through the control channel created by the ACP.
+> 
+> How would you know if other domains had a given CA?
+
+This future intent stuff was moved into A.8 by Alissa's review.  Says for example:
+
+<t>If each domain has its own source of Intent, then the Intent would simply have to
+allow adding the peer domains trust anchors (CA) and domain names to the ACP domain membership check
+(<xref target="certcheck"/>) so that nodes from those other domains are accepted as ACP peers.</t>
+
+Aka: inject the other domains info into network wide intent. Which we haven't defined. Hence A.8.
+(not really difficult to do though, we have a draft for Intent distribution).
+
+> 
+> S 6.5.
+> >      version 1.2", see [RFC6347]) because that code exists already on them
+> >      for end-to-end security, but low-end in-ceiling L2 switches may only
+> >      want to support Media Access Control Security (MacSec, see 802.1AE
+> >      ([MACSEC]) because that is also supported in their chips.  Only a
+> >      flexible gateway device may need to support both of these mechanisms
+> >      and potentially more.
+> 
+> Why are you mentioning MACSEC? Your negotiation syntax doesn't support
+> it.
+
+Added:
+
+Note that MacSec is not required by any profiles of the ACP in this specification but just mentioned as a likely next interesting secure channel protocol.
+
+(MacSec might be the only encryption we could get into data centers ;-)
+
+> S 6.5.
+> >      version 2", see [RFC7296].  It is now up to Alice to decide how to
+> >      proceed.  Even if the IPsec connection from Bob succeeded, Alice
+> >      might prefer another secure protocol over IPsec (e.g., FOOBAR), and
+> >      try to set that up with Bob.  If that preference of Alice succeeds,
+> >      she would close the IPsec connection.  If no better protocol attempt
+> >      succeeds, she would keep the IPsec connection.
+> 
+> When would you get partial failrues?
+
+The text does not mention partial failures. Can you please rephrase your question ?
+
+> S 6.7.1.2.
+> >      support IPsec transport mode with next protocol equal to GRE (47)
+> >      followed by the offer for native IPsec as described above (because
+> >      that option is mandatory to support).
+> >   
+> >      If IKEv2 initiator and responder support GRE, it will be selected.
+> >      The version of GRE to be used must the according to [RFC7676].
+> 
+> See above interop comments.
+
+See above answer to above interop comment.
+
+> S 6.7.3.
+> >      An ACP secure channel MUST immediately be terminated when the
+> >      lifetime of any certificate in the chain used to authenticate the
+> >      neighbor expires or becomes revoked.  Note that this is not standard
+> >      behavior in secure channel protocols such as IPsec because the
+> >      certificate authentication only influences the setup of the secure
+> >      channel in these protocols.
+> 
+> How does this interact with reissue? I am supposed to reconnect?
+
+Yes. I have actually not managed to insight into whether we can maintain
+an IPsec connection without interrupting its data-plane when one of
+the peers has to renew its certificate (is that what you call reissue ?).
+
+I hope this is possible, otherwise we have to reconsider how strong we want to
+make the termination of secure channels. If i wanted to build an ACP
+with short-term certificates valid for 30 minutes and effectively
+get renewed every 20 minutes, i do not want to have interruption of ACP secure
+channels every 20 minutes.
+
+> 
+> S 6.8.2.
+> >           Figure 7: ACP as security and transport substrate for GRASP
+> >   
+> >      GRASP unicast messages inside the ACP always use the ACP address.
+> >      Link-local ACP addresses must not be used inside objectives.  GRASP
+> >      unicast messages inside the ACP are transported via TLS 1.2
+> >      ([RFC5246]) connections with AES256 encryption and SHA256.  Mutual
+> 
+> Again, why AES256/SHA256?
+
+Longest key length we now to be widely supported in HW. Changed to AES-256-GCM.
+
+Any better recommendations welcome.
+
+> S 6.8.2.1.
+> >      original objective in GRASP when it is a MITM and act as an
+> >      application level proxy.  This of course requires that the
+> >      compromised ACP node understand the semantics of the GRASP
+> >      negotiation to an extent that allows it to proxy it without being
+> >      detected, but in an ACP environment this is quite likely public
+> >      knowledge or even standardized.
+> 
+> Just to make sure I'm clear: you would know you were talking to A and
+> not B (because the certificate) so that would be of some use, right?
+
+TLS avoids easy MITM active attacks. It does not eliminate complex
+MITM acive attacks if your communication does not have a specific known
+identity of the peer (such as a domain name where the certificate validates
+the domain). Or another mean to distinguish it from an imposter.
+
+ The original autonomic networking goal is that any node could
+start any type of service, and the client just connects to a node offering
+the service. In such an application environment, an onpath compromised
+node could not only take over the role of a service provider but also
+do MITM between two other nodes.
+
+My brain hurts trying to figure out an example where the compromised node
+would actually create more havoc by being such a MITM instead of just
+being an imposter of a service provided or service consumed ;-)
+
+Luckily these are questions to the next layer of services on top of te
+ACP. Here we just wanted to describe what the ACP (including ACP GRASP)
+infra can and what it can not provide.
+
+> S 6.8.2.1.
+> >      encryption.  Future work optimizations could avoid this but it is
+> >      unclear how beneficial/feasible this is:
+> >   
+> >      o  The security considerations for GRASP change against attacks from
+> >         non-ACP (e.g., "outside") nodes: TLS is subject to reset attacks
+> >         while secure channel protocols may be not (e.g., IPsec is not).
+> 
+> I don't think the distinction here is between "secure channel" and
+> "TLS"; usually I would call TLS a secure channel protocol. Maybe
+> "secure transport" or "L3"?
+> 
+> Note that QUIC would not have this problem.
+
+How about TLS 1.3 ?
+
+> S 6.12.5.
+> >      the same.  The difference happens when Bob and Carol receive their
+> >      packet.  If they use ACP point-to-point virtual interfaces, their
+> >      GRASP instance would forward the packet from Alice to each other as
+> >      part of the GRASP flooding procedure.  These packets are unnecessary
+> >      and would be discarded by GRASP on receipt as duplicates (by use of
+> >      the GRASP Session ID).  If Bob and Charly's ACP would emulate a
+> 
+> Charly? Do you mean Carol?
+
+Fixed by Bens review.
+
+> S 7.1.
+> >      create ACP point-to-point virtual interfaces for these secure
+> >      channels.
+> >   
+> >   7.  ACP support on L2 switches/ports (Normative)
+> >   
+> >   7.1.  Why
+> 
+> This hed could be better.
+
+Changed to: Why (Benefits of ACP on L2 switches)
+
+> S 8.1.1.
+> >      explicit configuration.  To support connections to adjacent non-ACP
+> >      nodes, an ACP node must support "ACP connect" (sometimes also called
+> >      "autonomic connect"):
+> >   
+> >      "ACP connect" is a function on an autonomic node that is called an
+> >      "ACP edge node".  With "ACP connect", interfaces on the node can be
+> 
+> This sentence is confusing.  Perhaps first explain what an edge node
+> is and then say ACP connect is a function of it.
+
+Changed to:
+
+"ACP connect" is an interfacel level configured workaround for connection of trusted non-ACP nodes to the ACP. The ACP node on which ACP connect is configured is called an "ACP edge node". With ACP connect, the ACP is accessible from those non-ACP nodes (such as NOC systems) on such an interface without those non-ACP nodes having to support any ACP discovery or ACP channel setup.
+
+> S 8.1.2.
+> >      only even more trusted software components will get access to both
+> >      the ACP virtual subnet and the Data-Plane (because those ACP users
+> >      could leak traffic between ACP and Data-Plane).  This trust could be
+> >      established for example through cryptographic means such signed
+> >      software packages.  The specification of these mechanisms is subject
+> >      to future work.
+> 
+> This all seems pretty handwavingly speculative. I would remove it
+
+Why ? This is going on everywhere already inside data centers for example
+in reorchestrated service provider pops where instead of plugging together
+physical systems, VNF/NFV are orchestrated into trusted software based
+network infrastructure. You're replacing the people operator verifying the
+integrity/authenticity of physcial components with a software system doing the same.
+
+> S 8.1.4.
+> >      legacy NMS Hosts that support only one IP interface.
+> >   
+> >      To provide a single subnet into both ACP and Data-Plane, the ACP Edge
+> >      node needs to de-multiplex packets from NMS hosts into ACP VRF and
+> >      Data-Plane.  This is sometimes called "VRF select".  If the ACP VRF
+> >      has no overlapping IPv6 addresses with the Data-Plane (as it should),
+> 
+> Does this mean it should have no overlapping addresses or it should
+> have overlapping addresses? The text here is kind of unclear though I
+> believe from context it is "should have no"
+
+Replaced with "it should have no overlapping addresses"
+
+> S 9.2.2.
+> >      under attack.
+> >   
+> >   9.2.2.  From the inside
+> >   
+> >      The security model of the ACP is based on trusting all members of the
+> >      group of nodes that do receive an ACP domain certificate for the same
+> 
+> Nit: "receive", not "do receive"
+
+Thanks
+
+> S 10.2.3.
+> >      Even when such a malicious ACP registrar is detected, resolving the
+> >      problem may be difficult because it would require identifying all the
+> >      wrong ACP domain certificates assigned via the ACP registrar after it
+> >      was was compromised.  And without additional centralized tracking of
+> >      assigned certificates there is no way to do this - assuming one can
+> >      not retrieve this information from the .
+> 
+> from the .?
+
+vi fumble. remove from " - assuming".
+
+> S 10.2.4.
+> >      In situations, where either of the above two limitations are an
+> >      issue, ACP registrars could also be sub-CAs.  This removes the need
+> >      for connectivity to a root-CA whenever an ACP node is enrolled, and
+> >      reduces the need for connectivity of such an ACP registrar to a root-
+> >      CA to only those times when it needs to renew its own certificate.
+> >      The ACP registrar would also now use its own (sub-CA) certificate to
+> 
+> When you say "sub CA" do you mean "intermediate"?
+
+I hope i am not fumbling on terminology. In the example given we only
+need a chain of two CA, a root CA and another CA below it. I have most
+often heard the term sub-CA used to describe this. I hope the description
+applies more generically to any chain of two CA even if the actual hierarchy
+is longer, therefore i didn't use "assigning CA", which is what i heard
+to be the term for the leaf CA.
+
+"intermediate" sounds as if one is talking about at least three tiers of CA.
+
+Happy to take guidance if the termins to use should be improved.
+
+> S 10.3.2.1.
+> >      provides also a high level of security because it only permits ACP/
+> >      ANI operations which are both well secured.  Ultimately, it is
+> >      subject to security review for the deployment whether "admin down" is
+> >      a feasible replacement for "physical down".
+> >   
+> >      The need to trust into the security of ACP/ANI operations need to be
+> 
+> "trust into" is not grammatical
+
+Removed "into"
+
+> S 10.3.4.
+> >      whether or not to set "ACP/ANI enable".
+> >   
+> >      The goal of automatically setting "ACP/ANI enable" on interfaces
+> >      (native or not) is to eliminate unnecessary "touches" to the node to
+> >      make its operation as much as possible "zero-touch" with respect to
+> >      ACP/ANI.  If there are "unavoidable touches" such a creating/
+> 
+> such as
+
+Thanks
+
+> S 10.3.5.
+> >      parameters on SIM card shipped to remote location), then the default
+> >      should be to enable ACP/ANI.
+> >   
+> >   10.3.5.  Node Level ACP/ANI enable
+> >   
+> >      A node level command "ACP/ANI enable [up-if-only]" enables ACP or ANI
+> 
+> I got lost here. In what context does this command exist?
+
+"node level" (Cisco IOS calls this "global configuration mode").
+
+> S 10.3.5.1.
+> >   
+> >      Automatically setting "ANI enable" on brownfield nodes where the
+> >      operator is unaware of it could also be a critical security issue
+> >      depending on the vouchers used by BRKSI on these nodes.  An attacker
+> >      could claim to be the owner of these devices and create an ACP that
+> >      the attacker has access/control over.  In network where the operator
+> 
+> "In networks"
+
+Gracias.
+
+> S 10.3.6.
+> >   
+> >      Disabling ANI/ACP by undoing "ACP/ANI enable" is a risk for the
+> >      reliable operations of the ACP if it can be executed by mistake or
+> >      unauthorized.  This behavior could be influenced through some
+> >      additional property in the certificate (e.g., in the domain
+> >      information extension field) subject to future work: In an ANI
+> 
+> This also seems handwavy.
+
+I disagree. Encoding desired operational parameters into the certificates
+is a simple to understand concept. In this case its a binary flag.
+
+The problem is mostly how far we want to drive (ab)-using the certificate
+as a carrier for configuration (which the ACP domain information field really
+is). Theoretical the answer is simple: Only for config you really can't do
+via other configuration mechanisms available after enrolment.
+And for this particular functionality i am not 100% sure how to judge it.
+
+> S 15.2.
+> >      because it is not quite clear yet what exactly the implications are
+> >      to make GRASP flooding depend on RPL DODAG convergence and how
+> >      difficult it would be to let GRASP flooding access the DODAG
+> >      information.
+> >   
+> >   A.6.  Extending ACP channel negotiation (via GRASP)
+> 
+> This section seems like it's entirely speculative. I recommend
+> removing it.
+
+This was for aforementioned dual stage secure channel negotiation. Given
+how it came up in this discussion, i am curious to learn what you think
+abou this option compared to the mechanism we have specified not in the
+standards text. If there are simple reasons to rule out this type
+of dual stage negotiation being useful in the future, i am happy to
+remove, otherwise i would love to not loose the cycles invested into the
+text (if we ever would want to finish it).
+
+> That said, I don't really understand the rationale for multiple
+> concurrent security protocols. If you have clear UDP on the network
+> (and you must or none of this works), then you can do DTLS and IKEv2,
+> so you should be able to have one side decide which to negotiate and
+> negotiate that. Why does this not work?
+
+Are you saying i would use a dual stage mechanism, where the first
+stage is clear text ? The problem with that is that that UDP protocol
+is additional attack surface. Thats why my initial proposal was this
+dual-stage secure negotiation. But as mentioned initially, the first
+stage becomes the lowest common denominator.
+
+> S 15.2.
+> >   
+> >      If multiple independent networks choose the same domain name but had
+> >      their own CA, these would not form a single ACP domain because of CA
+> >      mismatch.  Therefore there is no problem in choosing domain names
+> >      that are potentially also used by others.  Nevertheless it is highly
+> >      recommended to use domain names that one can have high probability to
+> 
+> Are these normative?
+
+Strange how you seem to be listing these under a section 15.2.
+
+This text is in -16 from appendix A.7, so Informative (all of appendix).
+
+> S 15.2.
+> >      If different domains have different CAs, they should start to trust
+> >      each other by intent injected into both domains that would add the
+> >      other domains CA as a trust point during the ACP connection setup -
+> >      and then following up with the previous point of inter-domain
+> >      connections across domains with the same CA (e.g., GRASP
+> >      negotiation).
+> 
+> This all seems speculative (and hard to analyze at this state of
+> handwaving). I suggest removal.
+
+The purpose of appendix A is to capture in an informative fashion the status
+of the work that the WG invested solving problems we would have liked to solve (or
+that the WG was very interested in discussing) - but which did not result
+in output that allowed normative specification.
+
+In the case of exchanging trust anchors/domain-names i think this is really
+not difficult to finish: You need to be have roles in certs indicating specific
+ACP nodes (like registrars) are trusted intent originators, then you sign a
+piece of configuration in whatever format you like (YANG+transport encoding)
+with such a cert, flood it via ACP/GRASP (we have draft for that), and
+e voila extended trust anchors/permissible ACP domain names. 
+
+> S 15.2.
+> >      other domains CA as a trust point during the ACP connection setup -
+> >      and then following up with the previous point of inter-domain
+> >      connections across domains with the same CA (e.g., GRASP
+> >      negotiation).
+> >   
+> >   A.8.  Adopting ACP concepts for other environments
+> 
+> I would also remove this appendix.
+
+There was interest from multiple WG members to have these explanations written
+and included in the output of the WG. 
+
+Just as a reminder: While the ADs seeding the ANIMA WG where very much focussed
+in producing standards track output to create immediate product applicability,
+ ANIMA is still an OPS WG and hence discussings about applicability to market segments
+sould be a core interest of work output, and the ACP as specified in this specification,
+as good as it is, can not yet make all market segments happy, but future work with
+in comparison limited modifications could expand the ACP applicability. At least
+that is our hope that we try to express in this section.
+
+Thank you so much for your thorough review!
