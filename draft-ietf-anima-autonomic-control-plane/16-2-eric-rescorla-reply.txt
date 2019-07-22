@@ -1,0 +1,306 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Benjamin Kaduk <kaduk@mit.edu>
+Cc: Eric Rescorla <ekr@rtfm.com>, anima-chairs@ietf.org,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	The IESG <iesg@ietf.org>, anima@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Eric Rescorla's Discuss on draft-ietf-anima-autonomic-control-plane-16: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <20190716233939.GC58520@kduck.mit.edu>
+
+--- Context:
+
+I hope i am correctly restating, that this reply is as follows:
+-> Eric reviewed -16, i posted reply into -19, then Erics term as AD finished,
+   then Ben (Kaduk) stepped in for Eric, responded to my -19 fixes for -16,
+   and this email is my reply. Integrated into -20
+
+-> The diff for the changes discussed in this email is:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.1.txt&amp;url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.2.txt
+   They are also summarized under section (2) of the -20 changelog.
+
+-> The total changes -19 to -20 are of course:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-20.txt
+
+--- Reply:
+
+On Tue, Jul 16, 2019 at 06:39:41PM -0500, Benjamin Kaduk wrote:
+> Not Eric, but playing that role for a bit...
+
+Hi Eric, nice to meet you. Inline, removed uncontentuous blocks.
+
+> > > S 6.1.2.
+> > > >      See section 4.2.1.6 of [RFC5280] for details on the subjectAltName
+> > > >      field.
+> > > >   
+> > > >   6.1.2.  ACP domain membership check
+> > > >   
+> > > >      The following points constitute the ACP domain membership check of a
+> > > 
+> > > What is the relationship of these rules to the existing 5280 rules?
+> > 
+> > Note that there where already i hope good improvements in this text from -16
+> > you reviewed to -18.
+> 
+> My read here is that we could address this by "we use the standard PKIX
+> [RFC 5280] certificate validation rules with some additional ACP-specific
+> procedures.  In particular: [...]".  That is, have a  statement about the
+> relationship of this procedure to the 5280 rules (namely, we add to them),
+> to make clear that we are not trying to do some similar but subtly
+> different thing.
+
+The ACP certificate check is really more about authentication and authorization,
+rfc5280 mostly about formatting, not saying what you're supposed to do, but how
+to format it if you do. The only authentication related stuff i found in rfc5280
+that is relevant is the cert-chain-check procedure, that the ACP text is accordingly
+referring to.
+
+So, i tried to solve your ask as follows:
+
+I inserted a new subsection at the beginning of "6.1 ACP Domain, Certificate and Network"
+to talk about the certificate itself (before the ACP domain membership check):
+
+| <t>ACP domain certificates are <xref target="RFC5280"/> compliant X.509 certificates.</t>
+| 
+| <t>ACP domain certificates MUST be ECC certificates which SHOULD be signed with an ECDH public key. It MAY be signed with an RSA key. Any secure channel protocols used for the ACP as specified in this document or extensions MUST therefore support authentication (e.g.:signing) starting with these type of certificates. See <xref target="RFC4492"/> for more information.</t>
+|
+| ... existing text moved here...
+| </t>The ACP domain membership check requires a minimum amount of elements in a certificate as described in <xref target="certcheck"/>. All elements are <xref target="RFC5280"/> compliant. The identity of an ACP node in the ACP is carried via the ACP Domain Information Field (see <xref target="domcert-acpinfo"> encoded as an existing rfc822Name field.</t>
+
+That part about ECC is the best i can come up right now as a interoperability (at sufficient
+security) requirements for the certs themselves - independent of specific protocols (IPsec, TLS, DTLS, ...).
+And of course this needs to go into a cert specific section, not a security protocol specific
+section. If we are missing more cert parameters for interop, we can add them here. But i didn't
+find any good RFC yet for more. all the good protocol interop RFCs i found was something like
+"Cryptographic recommendations regarding certificate validation are out of scope of this document.
+ What is mandatory to implement is provided by the PKIX community" (RFC8247) *sigh*.
+
+Then in the ACP domain membership check section i did the following fixes:
+
+Refined points 2 and 3 to be more explicit with references (especially pointing out that point 2 has nothing to do with rfc5280):
+
+| <t hangText="2: ">The peer has proved ownership of the private key associated with the certificate's public key. This check is performed by the security association protocol used, for example <xref target="RFC7296"/>, section 2.15.</t>
+| <t hangText="3: ">The peer's certificate passes certificate path validation as defined in <xref target="RFC5280"/>, section 6 against one of the Trust Anchors associated with the ACP nodes ACP domain certificate (see <xref target="trust-points"/> below).</t>
+
+Finally, i restated the summary in a way that hopefully also makes the relationship to pre-existing standards easier to understand:
+
+|    <t>In summary:
+|        <list>
+|          <t>Steps 1...4 constitute standard certificate validity verification and private key authentication as defined by <xref target="RFC5280"/> and security association protocols (such as <xref target="RFC5996">IKEv2</xref> when leveraging certificates. These steps do not include verification of any pre-existing form of non-public-key-only based identity elements of a certificate such as a web servers domain name prefix often encoded in certificate common name (this is done in step 5 and 6).</t>
+|          <t>Step 4 Constitutes standard CRL/OCSP checks refined for the case of missing connectivity and limited functionality security association protocols.</t>
+|          <t>Step 5 Checks for the presence of an ACP identity for the peer. Steps 1..6 authorizes to build any secure connection between members of the same ACP domain except for ACP secure channels.</t>
+|          <t>Step 6 is the additional verification of the ACP address. Steps 1...6 authorize a security association be used as an ACP secure channel.</t>
+|       </list></t>
+
+Hope this solves the ask.
+
+> > > S 6.1.3.1.
+> > > >      The objective value "SRV.est" indicates that the objective is an
+> > > >      [RFC7030] compliant EST server because "est" is an [RFC6335]
+> > > >      registered service name for [RFC7030].  Future backward compatible
+> > > >      extensions/alternatives to [RFC7030] may be indicated through
+> > > >      objective-value.  Future non-backward compatible certificate renewal
+> > > >      options must use a different objective-name.
+> > > 
+> > > EST runs over HTTPS. What is the certificate that the server presents?
+> > 
+> > I could add text like:
+> > 
+> > The EST server MUST present a certificate that
+> > is passing ACP domain membership check (<xref target="certcheck"/>) in its HTTPS 
+> > (<xref target="RFC7540"/>) connection setup.
+> 
+> As some background, in general, whenever we use HTTPS (or even just TLS),
+> the client needs to have some procedure for how to verify that the server
+> is the entity the client is attempting to talk to.  This is almost always
+> certificate validation, but in addition to ensuring that the signatures
+> chain up to a trusted root, the client needs to ensure that the entity that
+> got certified is the (usually named) entity it wants to talk to.  So, we
+> might talk about validating that the cert has an RFC 6125 DNS-ID or SRV-ID
+> that matches the initial name that the client sent into DNS, if we were
+> going to use the web PKI.  Here, we don't necessarily have or want the web
+> PKI since we can have ACP domain certificates as well.
+> 
+> So with my current understanding of the intent (sic) behind the ACP, you do
+> need to include text with this sort of membership check, and probably also
+> want a "the  client SHOULD require that the server's certificate include a
+> (as-of-yet, site-specific) X.509 extension to indicate that it is
+> authorized to function as an EST server".  (Actually I thought there was
+> something very similar that is already defined and was mentioned in BRSKI,
+> but I'm failing to remember the right search term to find it.)
+
+Thanks for the explanations. Yes, we do not want DNS given how ACP would be
+infra that needs to operate first before the network could bring up DNS
+(circular dependency).
+
+I have now added the following text to 6.1.4. This is before the GRASP
+objective as this has nothing to do with GRASP:
+
+<t>The EST server MUST present a certificate that is passing ACP domain
+membership check in its TLS connection setup (<xref target="certcheck"/>,
+rules 1..5, not rule 6 as this is not for an ACP secure channel setup).
+The EST server certificate MUST also contain the id-kp-cmcRA <xref target="RFC6402"/>
+extended key usage extension and the EST client must check its presence.</t>
+
+<t>The additional check against the id-kp-cmcRA extended key usage extension field
+ensures that clients would not fall prey to an illicit EST server.  While such
+servers should not be able to support client certificate signing requests (as they
+are not able to elicit a signing response from a CA), such an illicit server would
+be able to provide faked CA certificates to clients that need to renew their
+CA certificates when they expire.</t>
+
+<t>Note that EST servers supporting multiple ACP domains will need to have for each
+of these ACP domains a separate certificate and respond on a different transport
+address (IPv6 address and/or TCP port), but this is easily automated on the
+EST server as long as the CA does not restrict registrars to request certificates
+with the id-kp-cmcRA extended usage extension for themselves.</t>
+
+I sent this to the BRSKI (EST) authors for review as i have only tried to
+figure out the real attack vector in the 2nd paragraph of above text, and i am
+not 100% sure.
+
+> Talking things through...
+...[MITM attack with the ACP proposed simple "try all accepted crypto algos in parallel]
+
+> In the MITM case such as this, the idea would be to just drop all
+> connection attempts other than the "weakest link" so that Alice and Bob
+> both think that each other don't support the strong mechanisms. 
+
+Right.
+
+> If the attacker can realtime break the weakest link, then they can inject
+> themselves  into the secure connection; if either Alice or Bob (or both)
+> were unwilling to support the weakest link, then the attacker could only
+> block traffic but not MITM the secure connection.
+
+Right.
+
+> Generally we can prevent
+> this by requiring Alice and Bob to verify what connection types they
+> respectively support, preferrably by directly using this information as
+> input to a key schedule (so it *has* to get verified) but a separate
+> comparison will still work if actually implemented.  Then the only other
+> check is that the  negotiated connection is the strongest that's mutually
+> supported.  Since we're doing Alice's preference, Alice would need to make
+> the check (and Bob is reliant on Alice to detect such MITM downgrade
+> attacks).  For TLS, it's fairly common to stuff this sort of information
+> into a TLS Extension and have the appropriate party check what the other
+> side got, but I  don't remember a similar mechanism for IKEv2.  (Maybe
+> transform attributes, but I'm not sure.)  Trying  to make the check happen
+> after the secure connection is established doesn't work, because by then
+> the attacker is already in place with the MITM.  I guess in the case the
+> attacker doesn't have a full break, the post-facto check would still let
+> you detect the attacker's presence.
+
+So, first of all, ACP just uses IPsec, DTLS or with additional docs any
+other crypto mechanisms feasible. Any long-term evolution of the
+appropriate crypto options with those protocols would equally be
+benefitting ACP. Aka: RFC8221/RFC8247 and their future evolutions get into
+IPsec/IKEv2 implementations and raise over time the crypto to counter
+attacks. Thats of course very long term.
+
+Whats discussed here is really about supporting multiple, mutually incompatible
+crypto protocols such as IKEv2 and DTLS (MACsec would be my next favourite).
+
+I don't think there are any perfect solutions for this case unless
+you're willing to crearte a network wide mandatory to implement secure
+channel protocol, which would drastically reduce the flexibility and range
+of devices that could be supported. Assume low end devices would never
+want to do IKEv2, and you just choose IKEv2 as network wide MTI.
+
+I also proposed multi-stage, aka: start with TLS, use that only to negotiate
+what to really do, e.g.: across all IKEv2, DTLS, MACsec, etc. option. That
+was before your time as AD, and was fored out even from an appendix due to
+being too complex (and also creating just another MTI).
+
+> It does seem like we should be able to do at least a little better than
+> "just trust everybody to disable bad connection types when they are known
+> to be broken".
+
+Well, and thats IMHO not even a good example of what operators really need to happen:
+consider the update to the security policy is (for the sake of the argument)
+something like: we need to raise minimum keylength from X to Y. Lets figure out
+if all nodes support this. Oh darn. These type of nodes can't. Can we
+replace them  ? Oh, expensive. Lets see, the MITM have to be locally
+originated. Whats the risk for this to happen. Ok, 70% of those nodes are
+in location where the likelyhood of local attack is farily low, lets start
+with those other 30% first, shut them down and get them physcially replaced,
+and work in the meantime on the remaining 70% maybe we can force the vendor
+to build a better firmware upgrade with more security.
+
+Aka: We can come up with easy flooding of updated security policies via GRASP
+(we've got drafts lying around to do so), but its highly unlikely that you
+really can make a lot of real-world security progress with very simple
+network wide policies on these complex judgement calls about security 
+communication channels. But of course ANIMA will be very happy to get proposals
+ what type of agile crypto-agility policies are desirable. We serve to please ;-)
+
+> > > S 8.1.5.
+> > > >      interface is physically protected from attacks and that the connected
+> > > >      Software or NMS Hosts are equally trusted as that on other ACP nodes.
+> > > >      ACP edge nodes SHOULD have options to filter GRASP messages in and
+> > > >      out of ACP connect interfaces (permit/deny) and MAY have more fine-
+> > > >      grained filtering (e.g., based on IPv6 address of originator or
+> > > >      objective).
+> > > 
+> > > Given that this is an important security requirement, it seems like it
+> > > should be a normative requirement that it be filtered.
+> > 
+> > This is not a security requirement but an administrative policy filtering
+> > requirement. You assume the servers you allow to connect to an ACP connect
+> > network to be trusted. They may just not provide flexible filtering of
+> > the services they offer so the network device can add that through above
+> > mentioned policy filtering of the GRASP announcements.
+> 
+> "this is a trusted network" does tend to get skeptical responses from the
+> IETF security community, it is true.
+
+Ok, but now your point sems to be different than your initial ask for making
+filtering mandatory.
+
+First of all, i have changed the text outlining the security expectations,
+pls. let me know if the following is more acceptable to you:
+
+| <t>Given how the ACP is the security and transport substrate for GRASP, the requirements
+| for devices connected via ACP connect is that those are equivalently (if not better)
+|  secured against attacks and run only software that is equally (if not better)
+|  protected, known (or trusted) not to be malicious and accordingly designed to isolate
+| access to the ACP against non-equally protected/trusted external equipment.</t>
+| 
+| <t>The difference in security is that cryptographic security of the
+| ACP secure channel is replaced by required physical security of the network connection
+| between an ACP edge node and the NMS or other host reachable via the ACP connect
+| interface. Node integrity too is expected to be easier because the ACP connect
+| node, the ACP connect link and the nodes connecting to it must be in a contiguous
+| secure location, hence assuming there can be no physical attack against the devices.</t>
+
+If the way this describes the security is ok. with you, i might still want to
+move it to a different place in the doc as i am not sure this GRASP specific section
+is really the best place for this more generic text.
+
+But no use moving this text unless we agree upon how to appropriately word the security
+expectations of ACP connect.  Especially given the big divide between a lot of IETF
+security people only considering cryptographic security real security (where the ACP
+ channel fits) vs. typical intra-NOC/DC setups, where solution often only work because
+of a lot of methods and layers of physical security (which is where ACP connect is
+ meant to live, if its not purely between VMs/Containers in a single device).
+
+
+Secondly, i simply erased the text about ACP edge nodes filtering of GRASP
+because i don't want it to be perceived as a security requirement (like you did)
+ when its just a suggestion for a policy function from deployment experience with
+pre-standard solution where we used mDNS and the announcements from NOC
+servers where often contradicting, wrong or missing, and we would had to have a
+policy function to "massage" those service announcement. Maybe service announcement
+broker would be a better way to think about it. Still something i think is needed
+overall, but not foundational enough to justify a presence here in this document.
+
+> -Ben
+
+Thanks a lot, Eric (*grin*)
+
+Cheers
+    Toerless

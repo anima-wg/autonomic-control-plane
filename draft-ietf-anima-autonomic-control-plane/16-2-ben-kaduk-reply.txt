@@ -1,0 +1,484 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Benjamin Kaduk <kaduk@mit.edu>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Benjamin Kaduk's Discuss on draft-ietf-anima-autonomic-control-plane-16: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <20190716223545.GB58520@kduck.mit.edu>
+
+
+--- Context:
+
+I hope i am correctly restating, that this reply is as follows:
+-> Ben reviewed -16, i posted reply into -19, then created a second email reply,
+   and this email is the reply to that second reply from me with the changes
+   put into -20 that i just posted.
+
+-> The diff for the changes discussed in this email is:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane-19.txt&amp;url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.1.txt
+   They are also summarized under section (1) of the -20 changelog.
+
+-> The total changes -19 to -20 are of course:
+  
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-20.txt
+
+-- Start of reply:
+
+Ben: Thanks a lot!
+
+Inline. Deleted all sections where i couldn't write anything
+but "thanks, ok, .. or the like" (and didn't have to do any fixes).
+
+On Tue, Jul 16, 2019 at 05:35:47PM -0500, Benjamin Kaduk wrote:
+> Thanks for the updates.  I'm sorry it took so long to get feedback on them
+> -- it took me a while to get a free day to review the whole document while
+> I've been moving across the country and with my family's schedule.
+
+No worries. I still caused more delay over the years, so when Brian Carpenter
+should start to chase down who is responsible for his GRASP hanging in RFC
+editor queue forever, you can hide behind me.
+
+> > Aka: We wanted to use a field where we know every implementation supports
+> > but that is also not conflicting with other pre-existing uses.
+> > We did not want to rely on additional ASN.1 parsing of its content, because
+> > embedded implementations might have fixed parsers. Thats why we choose a
+> > a simple non-ASN.1 encoding of a field we know is always supported but
+> > never used for actual network functionality so it can not conflict. And
+> > if anything else uses already this field, you would actually see emails
+> > to an address because the format we choose is a working rfc822name
+> 
+> I still feel like this is not the best architectural choice.  Later on you
+> ask for some guidance on what the ASN.1 structure for an otherName solution
+> would/could look like; I'll include that in my updated ballot position's
+> Comment section.
+
+Sure. there is a list of several bullet points in favor of the current encoding
+in section 6.1.1. It would be good to see arguments explaining why a pure ASN.1
+option is better.  I can repeat those points as question in an appropriate thread
+about the updated ballot position and how it addresses these bullet points.
+
+
+> > > In a few places, the MTI cryptographic mechanisms are under-specified,
+> > > whether the cipher mode for IKE or the TLS ciphersuites.  I have attempted
+> > > to note these locations in my section-by-section comments.
+> > 
+> > Thanks. See below. Should also have been fixed through Erics review.
+> 
+> There seem to be a tweak or two left (though to be honest I will need to
+> consult someone more knowledgable in IKEv2 than me).
+
+See below in comments section, it was a good trigger to hopefully significantly
+improve the text for -20.
+
+> > > Section 6.11.1.14 places a normative ("SHOULD") requirement on the RPL
+> > > root, but if I understand correctly the RPL root is automatically
+> > > determined within the ACP, and thus the operator does not a priori know
+> > > which node will become the RPL root.  Am I misunderstanding, or is this
+> > > effectively placing this requirement on all ACP nodes?
+> > 
+> > More or less, yes. Packet counter on the default route to a null interface for example,
+> > maybe a HW register for the last thus discarded packets destination address,
+> > allowing at least sampling of such addresses. Thats what i was thinking
+> > of suggesting if i ever manage to move on from this spec to the YANG model for
+> > the ACP. 
+> > 
+> > I am sure we could reduce requirements by differentiating between nodes
+> > that should never become root, but that would lead to even more text
+> > lamenting about ad-hoc type of ACP setups. Besides, its a SHOULD and even
+> > low-end IoT devices using CPU forwarding would have no issue implementing this.
+> 
+> I agree with the assessment of low likelihood of actual problems, but would
+> appreciate a brief note in the text.
+
+Added the following override and explnation:
+
+      <t>As this requirement raises additional data plane requirements, it does not apply to nodes where the administrative parameter to become root (<xref target="rpl-admin">) can always only be 0b001, e.g.: the node does not support explicit configuration to be root, or to be ACP registrar or to have ACP-connect functionality. If an ACP network is degraded to the point where there are no nodes that could be configured roots, ACP registrars or ACP-connect nodes, traffic to unknown destinations could not be diagnosed, but in the absence of any intelligent nodes supporting other than 0b001 administrative preference, there is likely also no diagnostic function possible.</t>
+
+> > > ----------------------------------------------------------------------
+> > > COMMENT:
+> > > ----------------------------------------------------------------------
+
+> I think it's a big help!  If I were going to change anything, I might add a
+> note about how preexisting NMSes will need ACP-connect until such time as
+> there is a single device that is ACP-native and also exposes a non-ACP
+> admin interface to any relevant ACP functionality.  But that assumes that I
+> understand the current and desired future state of affairs, which I am not
+> fully confident is correct.
+
+Changed existing bullet point to be more explicit about these details:
+
+   <t>When non-ACP capable nodes such pre-existing NMS need to be physcially connected to the ACP, the ACP node to which they attach to needs to be configured with ACP-connect according to <xref target="ACPconnect"/>. It is also possible to use that single physcial connection to connect both to ACP and the data-plane of the network as explained in <xref target="SingleIF"/>.</t>
+
+
+> > hex-dig = DIGIT / "a" / "b" / "c" / "d" / "e" / "f"
+> > 
+> > DIGIT was predefined ABNF, couldn't find any hex, didn't find a
+> > reason why case insensitivity would be a lot of help here...
+> 
+> If I'm reading https://tools.ietf.org/html/rfc5234#section-2.3 properly you
+> have to go for %d97 etc. to get case-sensitivity; RFC 7405 adds the %s
+> extension that is more readable.
+
+There is no real intention to be case sensitive or insensitive. We originally
+had lowercase when we started with standard IPv6 string encoding address format,
+but the ":" required do not fit the local address part of rfc1034, so now there
+is really no reason to use lowercase hex-characters.
+
+So, i simplified the ABNF to use HEXDIG (upper case) and adjusted the example
+accordingly.
+
+> > As said: If it was me, i would still prefer to not use ASN.1 for the
+> > internal encoding due to risk of non-extensibility of existing low-end
+> > parsers and more limited diagnostic to humans.
+> 
+> As mentioned above, I put some more thoughts on this in my new ballot
+> position.  We should probably fork off a new subthread for the rfc822Name
+> vs. otherName question.
+
+ok.
+
+> > We had a pretty broad discussion asking folks if they where aware of
+> > email addresses in certificates of network devices ever being used
+> > for something automatically (aka: not through visual inspection by a human),
+> > and nobody had an example. Thats why we felt it was quite safe to choose
+> > the rfc822 format. The use of "+" then was just opportunistically using
+> > what might be the best use of existing practices, but without expecation
+> > that this would actually be ever used.
+> 
+> We do occasionally publish documents that change the semantics or
+> expectations around existing fields after such analyses, but AFAIK we
+> always include the justification and summary of research in the document
+> doing so, along with calling out that there is a change.
+
+Ok. If that observation was a hint for me to add text, i didn't get it,
+but we can disuss in the forked-of thread.
+
+> > > Is this supposed to be an exact byte-for-byte match, or is some form of
+> > > insensivity allowed that would require normalization/canonicalization prior
+> > > to comparison?
+> > 
+> > Added "(lowercase normalized)" to the comparison requirement for the acp-domain-name.
+> 
+> Does this imply A-labels (RFC 5890)?
+
+No. Added the following explanation:
+
+To keep the encoding simple, there is no consideration for internationalized acp-domain-names. The ACP domain information is not intended for enduser consumption, and not an element of inter-operator security, but purely as a hash seed for ULA prefixes and for operator diagnostics. Any operator owning only an internationalized domain name simply needs to pick an equivalently unique 7-bit ASCII acp-domain-name string.
+
+While i admire all the internationalization work for end users, i hope i am
+well representing operator preferences to not be bothered with that complexities
+within their operational user interfaces unless really necessary.
+
+> > > Section 6.1.3.1
+[...]
+> It looks like I wanted a few things changed/clarified:
+> 
+> - the hardcoded loop-count of 255 with comment "recommended" seems jarring;
+>   "automated detection not possible" or something similar to what you write
+>   above might be more helpful
+
+changed to:
+
+    loop-count      = 255        ; recommended because there is not mechanism
+                                 ; to discover network diameter.
+
+> - "Not used (yet)" is also a bit informal; "reserved for future extensions"
+>   might be more typical
+
+ack.
+
+> - I wasn't sure if we needed to call out 'initiator' and 'ttl' specifically
+>   as being used unchanged from another ref (assuming that ttl and
+>   loop-count are different).
+
+added:
+
+                                ; see example above and explanation below
+				; for initiator and ttl
+
+> > > Using both "[t]he objective value" and an "objective-value" field for
+> > > different things is needlessly confusing; can the body text be clarified
+> > > somewhat about the value "SRV.est"?
+> > 
+> > That was a bug on my behalf. SRV.est is called the objective name in GRASP.
+> > Fixed.
+> > 
+> > > Can "negligbile traffic" be quantified?
+> > 
+> > No. Its in the eye of the beholder (network admin). 30...60 seconds is used
+> > in all typical protocols i remember and will be fine for all non-low bitrate
+> > networks. Once you get into lower bitrates (below 1 Mbps ?) i would expect
+> > operators may find 30...60 seconds not negligible.
+> 
+> I see this question is still coming up in the BRSKI balloting, but I  don't
+> think I myself have more to say on  the subject.
+
+We had >> 10 years in which a lot of multicast info was flooded across enterprise
+networks with SAP/SDP, and that only failed when endusers injected too much
+of such information. But in the case of ACP this can not be user but only
+operator controlled devices injected. So from that experience i feel very safe
+for the ACP use-case.
+
+[ There is always the solution of self-adjusting the rate of flooded information
+  like in RTCP-RR, but given how we never felt that to be necessary in  SAP/SDP,
+  i am sure i won't have to hold my breath for this to become an issue in GRASP.
+  It would be a lovely option to add, but its a generic GRASP issue, so better done
+  as a simple GRASP extension draft. And of course it could be more fancy than
+  RTCP-RR by figuring out the slowest network links and hence adjusting the rate for
+  that ;-))] 
+
+> > Aka: this is more about mutual agreement of two domains to trust each other
+> > and coming up with appropriate means to share trust anchor (aka: not easy).
+> 
+> I'm still kind of unclear about Intent and how baked it is (see new ballot
+> text) ...
+
+Me too, but the point of the ACP document as of >= -19 is that it shouldn't
+depend on intent at all, so this question should not stand in the way of the ACP
+to become RFC. The only significant mentioning of Intent is
+in A.8 with the goal to emphasize the ACP specific issue that there can be
+circular dependencies between Intent being applied to the ACP and the ACP
+distributing that Intent. And the goal of that is of course that future work on
+Intent should be done in such a way that this circular dependency can accordingly
+be resolved so that ACP policy can be built on Intent.
+
+> > If you don't mind elaborate about public list, i am interested if
+> > that would be a simpler solution.
+> 
+> ... but the public suffix list is a hack in the web community to avoid
+> over-coalescing for things like cookie storage: https://publicsuffix.org/
+> I don't think anyone's particularly happy that it exists, but the
+> alternatives we know about (including not having it) are worse.
+
+Maybe i was unclear: I had no idea what the public suffix list was. Through
+your URL i read up and now i am marvelled and confused about all these browser
+use-cases, but wrt to ACP: 
+
+The text you pointed to in 6.4 is now in A.8. I think there is no relationship to
+the public suffix list. The Intent to form a common ACP domain across the
+different domains in the example in A.8 is purely a local operator decision
+(or a decision of a few federated operators), there wouldn't shouldn't be a need
+for any global knowledge. 
+
+Hope A.8 explains this better, if not, let me know.
+
+> > Let me know if there are any other forgotten parameters. Sugggestest
+> > MTI choice highly welcome. Guidance is simply the currently likely
+> > most widely HW accelerated supported option meeting common security
+> > level expectations (yes i know thats hard to quantify).
+> 
+> I think we should probably check with an IKEv2 expert.
+
+Can you set that up or tell me how i would find one ?
+
+> In general I'd
+> expect referring to specific codepoints from
+> https://www.iana.org/assignments/ikev2-parameters/ikev2-parameters.xhtml to
+> be more reliable than just textual descriptions.
+
+So, when trying to figure out how to do this, i stumbled across RFC8221 and RFC8247.
+I had asked Eric eternities for good IPsec/IKEv2 requirements RFC, but maybe that
+was even before these where published ;-) Maybe the authors would be on the
+shortlist of suspects to ask for review.
+
+I created a more comprehensive requirements text against native IP, but then
+cut down on the duplication of text for GRE/IPsec, just referring to the native
+IPsec text and only pointing out differences.
+
+Here is the IPsec text:
+
+<t>An ACP node that is supporting native IPsec MUST use IPsec security setup via IKEv2 for tunnel mode and IPsec/IKE signaling according for IPv6 payload (e.g.: ESP next header of 41). It  MUST use local and peer link-local IPv6 addresses for encapsulation.
+
+<t>IPsec tunnel mode is required because the ACP will route/forward packets received from any other ACP node across the ACP secure channels, and not only its own generated ACP packets.  With IPsec transport mode, it would only be possible to send packets originated by the ACP node itself.</t>
+
+<t>IPsec MUST use ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST
+ NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carryin
+g legacy management protocol traffics as well as hop-by-hop GRASP).</t>
+
+<t>These IPsec requirements are derived from <xref target="RFC8221"/> but limited to the minimum necessary options because ACP is not a general purpose use case today with a wide range of interoperability requirements against legacy devices. Once there a
+re updates to <xref target="RFC8221"/>, these should accordingly be reflected in updates to these ACP requirements (for example
+ if ENCR_AES_GCM_16 is superceeded in the future). Additional requirements from <xref target="RFC8221"/> MAY be used for ACP ch
+annels as long as they do not result in a reduction of security over the above MTI requirements. For example, ESP compression M
+AY be used.</t>
+
+<t>IKEv2 MUST follow <xref target="RFC8247"/> as necessary to support the above listed IPsec requirements.</t>
+
+
+And here the IPsec/GRE text:
+
+<t>The requirements for ESP/IPsec/IKEv2 are the same as for native IPsec (see <xref target="IPsec"/>) except that IPsec transport mode and next protocol GRE (47) are to be negotiated. Tunnel mode is not required because of GRE.</t>
+
+<t>If IKEv2 initiator and responder support IPsec over GRE, it will be preferred over native IPsec.  The ACP IPv6 traffic has to be carried across GRE according to <xref target="RFC7676"/>.</t>
+
+> > <t>All ACP nodes supporting DTLS as a secure channel protocol MUST
+> > adhere to the DTLS implementation recommendations and security considerations of <xref target="RFC7525"/> except with respect to the DTLS version. ACP nodes supporting DTLS MUST implement only DTLS 1.2 or later.  For example, implementing DTLS-1.3 (<xref target="I-D.ietf-tls-dtls13"/>) is also an option.</t>
+> 
+> I think there was still somewhere that talked about TLS encryption/ciphers
+> specifically (and not as ciphersuite codepoints).  Especially if you
+> reference it as BCP195, omitting any specific ciphersuite/etc. values from
+> this document is fine.
+
+Ok. Changed reference to use BCP 195 name.
+
+> > TBD: Could you recommend a good equivalent to rfc7525 to refer to for a
+> > good TLS 1.2 profile that i could refer to
+> 
+> I think I'm confused; why is 7525 itself not usable?
+
+Because Toerless completely overlooked that 7525 not only covers DTLS but also TLS *sigh*.
+
+Changed text to:
+
+GRASP unicast messages  inside the ACP are transported via TLS according to <xref target="RFC7525"/> execept that only TLS version 1.2 (<xref target="RFC5246"/>) or higher MUST be used because there is no need for backward compatibility in the new use-case of ACP.
+
+I hope i do not have to come up with additional constraints to limit implementation complexity, but given how software-only implementation should suffice in this case (It's just for GRASP), i am not too worried before we try to attack more than opportunistically constrained devices.
+
+> > <t> When an ACP Edge node receives a packet from an ACP connect interface, it
+> > MUST only forward it into the ACP if it has an IPv6 source address from that interface.
+> >  This is sometimes called "RPF filtering".
+> > 
+> > (somehow i can't shorten it, but hopefully its easier to read).
+> 
+> It is (even though "it" is used for both the packet and the edge node),
+> thanks.
+
+Thanks. Replaced the "it".
+
+> > Thought we only do this the first time we encounter ?
+> > Up in the GRASP objective section.
+> 
+> Whoops, that was too far ago for me to have remembered.  You're right.
+
+Wonder if RFC editors have tools for this. Hope they do. 
+
+> > >    Merging two networks with different trust anchors requires the trust
+> > >    anchors to mutually trust each other (for example, by cross-signing).
+> > >    As long as the domain names are different, the addressing will not
+> > >    overlap (see Section 6.10).
+> > > 
+> > > Subject to the risk of a 40-bit collision in SHA256!  While not necessarily
+> > > a critical flaw at this time, the limitation should probably be mentioned.
+> > 
+> > Right. Added: except for the low probability of a 40-bit hash collision in SHA256.
+> 
+> The current wording "As long as the routing-subdomain hashes are
+> different, the addressing will not overlap, except for the low probability
+> of a 40-bit hash collision in SHA256" takes a bit of work to tease apart.
+> It's  not technically incorrect (the hashes can be different but share a
+> 40-bit initial prefix), but readers might take "routing-subdomain hashes"
+> to mean the post-truncation hash, in which case we might want to s/except
+> for the low probability/which only happens in the unlikely event/.
+
+Thanks, fixed.
+
+> > Yes, typo. IDevID was meant. The voucher RFC defined a MASA URL option.
+> > Fixed.
+> 
+> I think you  fixed a different instance than I quoted (so it's duplicated
+> in my new ballot comments).  Eventually between the two of us we'll catch
+> them all, right?
+
+Yepp. Found two more LDevID that where meant to be IDevID and fixed.
+
+> 10.3.x specifically feels less-baked than the rest of 10, to me, but I'm
+> not going to insist on changes here.
+
+Not sure how i could bake it better, but it would probably not be worth it
+in this document, given how this is mostly food for thought not impacting
+interoperability and standardization would only come through implementation
+and deployment experimentation followed by some Yang model. Other reviewers
+(Joel if i remember correctly) where grumbling, but couldn't provide any better
+suggestions of how to make operator level interface shutdowns more resilient against
+unintential network disconnect. Hence i argued strongly to keep this section in there
+as important food for thought, especially because its been the #1 ask against ACP to
+figure out by operators i talked to.
+
+> > > Section 10.3.7
+> > > 
+> > > The control names indicated within double quotes are mostly incomplete
+> > > references; it seems better to say, e.g., """the "up-if-only" option for
+> > > node-level ACP/ANI enablement""".
+> > 
+> > Not sure i completely understood what you meant. Pls. check.
+> 
+> I think I was concerned about:
+> 
+>    If the option "up-if-only" is not selected, interfaces enabled for
+>    ACP/ANI interpret "down" state as "admin down" and not "physical
+>    down".  In "admin-down" all non-ACP/ANI packets are filtered, but the
+>    physical layer is kept running to permit ACP/ANI to operate.
+> 
+> since I was confused about what scope "up-if-only" applied to.  (But I was
+> somewhat generally confused when reading this section, and it may have just
+> been my fault and not the document's.)
+
+If your comment is about how to syntactically represent whats being written
+better than with "", then pls. make explicit recommendations. Otherwise i would
+just wait for RFC editor to hit me over the head if they don't like this. Its
+just that unlike all the other formal languages, we do not have anything formal
+for CLI, so i was using how it typically could look in descriptions of operator
+CLI documentation (which often have also bold and italic, which to the best
+of my knowledge we're missing in RFC format, so i had to be creative). It
+probably is a bit lazy, but waiting for RFC editor is IMHO appropriate here because
+they would better be able to suggest all formatting tricks i may not have thought
+of.
+
+If its about technical: The technical idea of "if-up-only" was to bring in another
+up/down level into the operator interface (CLI, Yang). Normally you have something
+like two levels, physically up/down and protocol level up/down. Operators often use physcially
+down because they want to bring down all protocols at once on an interface
+ (e.g.: IPv4, IPv6, L2 briding, whatever). So to avoid that that commonly
+used command disconnects the operator itself when its managing the device
+remotely, the semantic of that "down" needs to be changed to what i call "admin down",
+which is basically bringing down everything except for ACP. So if the operator really
+wants to physcially disconnect himself, he has to issue a new command (physcial down),
+ which makes it a lot more unlikely to happen unintentional.
+
+> > Let me explain how us authors cam up with that statement.
+> > Here is how simple/autonomic ANI (ACP+BRSKI) can be with existing spec alone:
+> > 
+> > |  -> Select an ANI server-router.
+> > |     Configure "autonomic-network-server <domain-name>"
+> > |               "autonomic-connect ethernet 1/1"
+> > |  
+> > |  -> Plug together a network of greenfield routers (no config, fresh from factory)
+> > |     BRSKI bootstraps all routers, ACP comes up. No data-plane whatsoever.
+> > |  
+> > |  -> Connect management station to server-router ethernet 1/1
+> > |     Manage / provision network through ACP using ssh/netconf/whatever
+> > |  
+> > |  Under the hood, server-router config simply creates an autonomic registrar
+> > |  and a CA with self-signed root cert, allocates ULA prefix from domain-name,
+> > |  an registers any greenfield devices registering. Then these devices
+> > |  hop-by-hop create ACP.
+> > |  
+> > |  The CLI of a commercial ANI implementation is very similar and as simple.
+> >  
+> > Does this give you a better sense of the reasoning behing the statement made ?
+> 
+> I think my confusion is mostly about how tightly the "server-router" is
+> integrated with the ACP and ANI.  My mental model has existing
+> off-the-shelf NMSes that are not tightly integrated, so you need
+> ACP-connect to inject (e.g.) registrar and CA configuration into the ACP.
+> But your description  makes it sound more tightly integrated already than I
+> expected.
+
+Right. Thats a different packaging option which could also be equally painless,
+but requires more GRASP service discovery extensions, which are drafts i am
+trying to get back to once ACP rolls downhill to RFC editor.
+
+I also didn't want to write too much about packaging options because it
+a) It is IMHO not really something that belongs int this doc (co-packaging of
+   different functions).
+c) I am sure implementors in vendors will know how to read user documentation for
+   existing pre-standard implementations that describe the above mentioned
+   packaging for example.
+b) There are a lot of packaging variations, and who am i to know what for a particular
+   vendors product line is the best. 
+
+
+Thanks a lot for thi very thorough review.

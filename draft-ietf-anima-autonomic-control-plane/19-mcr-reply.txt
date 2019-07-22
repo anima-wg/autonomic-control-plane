@@ -1,0 +1,37 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: mcr+ietf@sandelman.ca
+Cc: draft-ietf-anima-autonomic-control-plane@ietf.org, anima@ietf.org, jiangsheng@huawei.com
+Bcc: 
+Subject: Mcr changes for draft-ietf-anima-autonomic-control-plane-19
+Reply-To: 
+
+
+--- Context:
+
+-> This is the last set of changes integrated into -20.
+
+-> The diff for the changes discussed in this email is:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.3.txt&amp;url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.4.txt
+   They are also summarized under section (4) of the -20 changelog.
+
+-> The total changes -19 to -20 are of course:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-20.txt
+
+--- Reply:
+
+Michael, *:
+
+Sorry, i am still not a native github speake and completely overlooked the textual improvement
+you made in March before IETF104. It was a bit of a trouble trying to up-rev them after i had
+already done all the other -19 review, but maybe one of these days i will catch those
+github-only notifications.
+
+Also integrated the proposed fix for HTTPs for EST connections.
+
+Wrt cleaning up older documents on github: Thats nice, but please keep the .19.x.txt versions
+as i have included those into the rfcdiffs of the changelog in the draft (as above).
+
+Cheers
+    Toerless

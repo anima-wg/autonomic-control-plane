@@ -1,0 +1,1373 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Benjamin Kaduk <kaduk@mit.edu>
+Cc: The IESG <iesg@ietf.org>, anima-chairs@ietf.org,
+	draft-ietf-anima-autonomic-control-plane@ietf.org, anima@ietf.org,
+	jiangsheng@huawei.com
+Bcc: 
+Subject: Re: [Anima] Benjamin Kaduk's Discuss on draft-ietf-anima-autonomic-control-plane-19: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <156331768227.15267.2488890611024053018.idtracker@ietfa.amsl.com>
+
+--- Context:
+
+I hope i am correctly restating, that this reply is as follows:
+-> After finishing second round of replies for -16, Ben Kaduk provided a reply
+   that is now also his new DISCUS position on datsatracker. this is my reply
+   to that DISCUS. 
+
+-> The diff for the changes discussed in this email is:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.2.txt&amp;url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/master/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.19.3.txt
+   They are also summarized under section (3) of the -20 changelog.
+
+-> The total changes -19 to -20 are of course:
+
+   http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-19.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-20.txt
+
+--- Reply:
+
+Thanks a lot Ben.
+
+I hope this leaves open two points:
+
+-> ASN encoding of domain-information. See compromise proposal in answer to DISCUSS.
+
+-> Some hopefully minimal parameters for crypto.
+   - mentioned in the according discuss/nits.
+   - I'll also draft another separate email thread to quickly close
+     on this and try to see if we can suck in others from some of he
+     reference docs into the solution - or other IPsec experts you would suggest.
+
+Rest inline.
+
+On Tue, Jul 16, 2019 at 03:54:42PM -0700, Benjamin Kaduk via Datatracker wrote:
+> Benjamin Kaduk has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-19: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> [trimming to just the topics still under discussion; no change to the
+> text of the remaining items even though some changes have been made
+> to the document]
+> 
+> I think there needs to be some justification of why rfc822Name is chosen
+> over a more conventional structure in the otherName portion of the
+> subjectAltName, which is explicitly designed to be extensible.
+
+Let me but the compromise proposal and conditions on top:
+
+Compromise proposal (not integrated into current text yet):
+
+   The document defines a new otherName like ACPdomainIdentity, type IA5String
+   
+   I can figure out how to write the the necessary formal text for this,
+   stealing from e.g.: rfc8398 or the like (asking for IANA registration etc..)
+      i will whine for help (from you) when i fail with that text formalisms/ASN1. stuff.
+   
+   The encoding of the string is the existing domain-information
+
+   The length limitation of 64 for the local part is lifted (yeah).
+
+   The rest of the text (justification for formatting etc.) is appropriately
+   fixed up. I will remove all the text suggesting this could be an actual
+   rfc822 address and just escribe it in terms of below reasoning (nice format
+   to express domain based identities "local+policies@domain" or the like.
+
+Condition:
+
+   Sufficient support in WG (tomorrow meeting) wrt. the following key aspects:
+   -> Belief that even the most stupid existing libraries to
+      deparse certificates can give access to this information without rev'ing
+      such libraries (we assume this is true for rfc822Name).
+   -> Ability of a good amount of existing diagnostics tools to actually
+      display the string content as a string, even when it obviously doesn't know
+      what type the otherName is.
+      This is based on my hope that i correctly understand BER/DER to be self
+      identifying, so deparser would know the element is string, but thats's what
+      i am not sure about.
+
+Reasons:
+  - We need both a human readable and in-cmputer representation of the information.
+    I really don't see enough reason to have two different ones, and i really
+    don't want to write to structure defintions. So i think the existing
+    ABNF string is nice for both purposes. This info will go into all type
+    of backend systems, inventory tracking etc.. deparsing specifically formatted
+    strings is quite common there.
+
+  - The domain-information is really the non-cryptographic part of the ACP device
+    identity. and the local@domain part is an established way to represent this,
+    so its hopefully "nice" too - e.g.: i woldn't know a more appropriate
+    format.
+
+> In a few places, the MTI cryptographic mechanisms are under-specified,
+> whether the cipher mode for IKE or the TLS ciphersuites.  I have attempted
+> to note these locations in my section-by-section comments.
+
+Right.
+a) I couldn't find good references for certificate requirements.
+   The IPsec/IKEv2 reference STANDARDS RFCs lamely said something like
+   "problem for the PKIX community".
+
+   (seems like a gapipng big interop hope for those protocols if it doesn't exist).
+
+b) I am confused about TLS parameters needed beside what i wrote in latest
+   update. See nit discuss below.
+
+> Section 6.11.1.14 places a normative ("SHOULD") requirement on the RPL
+> root, but if I understand correctly the RPL root is automatically
+> determined within the ACP, and thus the operator does not a priori know
+> which node will become the RPL root.  Am I misunderstanding, or is this
+> effectively placing this requirement on all ACP nodes?
+
+Fixed by adding an option to not ask for this diagnostics to lowest-end
+nodes least in line to become root. When one of those nodes becomes
+root, the network is already in a worst degraded state, so this advanced
+diagnostics is then likely the least of problems.
+
+Details in reply to original -16 review answer you sent.
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> Thank you for adding the implementation experience note to the shepherd
+> writeup; it is helpful to understand the maturity level of the document.
+> 
+> The comments here are probably best understood in the context of my
+> previous ballot position, specifically with respect to certain topics
+> being "speculative" or a matter for "future work".
+> 
+> One somewhat general comment that occurred to me on the reread is that
+> by encoding the ACP address into a node's LDevID, we are on the face of
+> things locking it into a given addressing model, though in practice it
+> should be fairly straightforward to issue a new certificate through
+> regular update/renewal mechanisms.  I forget if we have discussion of
+> this non-issue already.
+
+Readdressing is possible, but the address is really the non-security
+part of the identity of an ACP node (security part is key-pair), so all
+the ACP text talks about trying to maintain it whenever possible (discussed
+in the text for example in the face of change of registrars, so the originally
+assigning registrar is gone). 
+
+There is really nothing breaking in the ACP when ACP nodes change their
+addresses, but typically the short-term adoptions of ACP into non-fully
+autonomic environments would love to see persistent addresses, because thats
+what they do today:
+
+Operators have used IP addresses as ideally never-changing network services
+identifiers of nodes for decades (loopback addresses). Thats just what
+we do with ACP, and the assignment via certificate is an elegant way to solve the
+current manual problem of network wide unique assignment, it just gets a
+bit complicated under the hood in above mentioned cases (registrar change
+during cert renewal).
+
+The use of well-defined address plans standardized in the ACP document is also
+something that effectively just automates operational practices and keeps
+deployment specific options at a minimum.
+
+> Section 1
+> 
+>    Combining ACP with Bootstrapping Remote Secure Key Infrastructures
+>    (BRSKI), see [I-D.ietf-anima-bootstrapping-keyinfra]) results in the
+>    "Autonomic Network Infrastructure" as defined in
+>    [I-D.ietf-anima-reference-model], which provides autonomic
+>    connectivity (from ACP) with fully secure zero-touch (automated)
+>    bootstrap from BRSKI.  The ANI itself does not constitute an
+> 
+> nit: It's unclear that there's universal agreement about what "fully
+> secure" might mean, so I'd suggest just using "secure".
+
+Done. 
+
+> Section 2
+> 
+>    ACP (ANI/AN) Domain Certificate:  A provisioned [RFC5280] certificate
+>       (LDevID) carrying the domain information field which is used by
+> 
+> nit: I think the reference is for "certificate", not "provisioned".
+> 
+>    ACP secure channel:  A cryptographically authenticated and encrypted
+>       data connection established between (normally) adjacent ACP nodes
+>       to carry traffic of the ACP VRF secure and isolated from Data-
+>       Plane traffic in-band over the same link/path as the Data-Plane.
+> 
+> nit: I'm not sure if "secure" or "securely" is better (but what does
+> "secure from" mean?)
+
+securely sounds find. fixed.
+I think its read ... "secure(ly)" and "isolated from".
+> 
+>    Enrollment:  The process where a node presents identification (for
+>       example through keying material such as the private key of an
+>       IDevID) to a network and acquires a network specific identity and
+>       trust anchor such as an LDevID.
+> 
+> nit: the LDevID is the identity; it's not a trust anchor.
+
+Fixed to:
+
+network specific identity such as an LDevID and trust anchors such as Certificate Authority (CA) certificate.
+
+> Section 5
+> 
+>    3.  For each node in the candidate peer list, it authenticates that
+>        node (according to Section 6.1.2) and negotiates a mutually
+>        acceptable channel type.
+> 
+>    4.  For each node in the candidate peer list, it then establishes a
+>        secure tunnel of the negotiated type.  The resulting tunnels are
+>        then placed into the previously set up VRF.  This creates an
+>        overlay network with hop-by-hop tunnels.
+> 
+> nit: the "channel type" of (3) is the "negotiated type" of the "secure
+> tunnel" in (4), right?  It might be nice to use the same word in
+> both items, to help tie the language together.
+
+Changed to "negotiated channel type in 4".
+
+> Section 6
+> 
+> nit: "must have it's ACP domain certificate" gained an apostrophe in "it's"
+> but the original "its" was correct.
+
+fixed.
+
+> Section 6.1
+> 
+>    members.  The LDevID is used to cryptographically authenticate the
+>    membership of its owner node in the ACP domain to other ACP domain
+>    members, the TA is used to authenticate the ACP domain membership of
+>    other nodes (see Section 6.1.2).
+> 
+> nit: comma splice
+
+fixed (two sentences).
+
+>    The ACP does not mandate specific mechanisms by which this keying
+>    material is provisioned into the ACP node, it only requires the
+>    Domain information field as specified in Section 6.1.1 in its domain
+>    certificate as well as those of candidate ACP peers.  See
+> 
+> nit: comma splice
+
+fixed (two sentences).
+
+>    The ACP domain certificate SHOULD be used for any authentication
+>    between nodes with ACP domain certificates (ACP nodes and NOC nodes)
+>    where the required condition is ACP domain membership, such as ACP
+> 
+> nit(?) I'd suggest s/required condition/required authorization
+> condition/
+
+fixed.
+
+> Section 6.1.1
+> 
+> The ABNF in Figure 2 seems to have multiple what I'll call for lack of a
+> better term "terminal constructions" (i.e., routing-subdomain and
+> domain-information) that are not used in other rules.  Some text on
+> which one is used in the rfc822Name and which is just informational for
+> other purposes is probably in order.
+
+Added below figure:
+
+<t>domain-information is the encoded information that is put into the ACP domain certificates subjectAltName / rfc822Name field. routing-subdomain is a string that can be constructed from the domain-information, and it is used in the hash-creation of the ULA (see below). The requirements and sementics of the parts of this information are explained in the following paragraphs:</t>
+
+I think there are no more terminal name than those two.
+
+>    o  The maximum size of "domain-information" is 254 characters and the
+>       maximum size of node-info is 64 characters according to [RFC5280]
+>       that is referring to [RFC2821] (superseded by [RFC5321]).
+> 
+> nit: I don't think we refer to node-info anywhere.
+
+s/node-info/local-part/
+
+> On the topic of rfc822Name vs. otherName, I note that there's no
+> requirement to use ASN.1 for the internal structure of the value; it's
+> perfectly acceptable to make it an OCTET STRING and shove a
+> more-friendly data structure in there.  (It's a little bit weird in
+> terms of mental models, but funny looks aside, it's pretty common.)  If
+> the other structure is fixed-length, there is not any actual ASN.1
+> knowledge required by the recipient; they just check that the length is
+> right and the data starts with the correct fixed prefix (corresponding
+> to the OID and ASN.1 length encoding), before processing the encoded
+> data in whatever  manner is appropriate.  Since we want to put domain
+> names in, fixed-length is probably out of the figure, but even if we're
+> limited to what openssl provides, getting an ASN1_OCTET_STRING and
+> extracting its contents to a pointer+length is pretty well established;
+> we don't need to make people learn about ASN1_SEQUENCE() at all.  So you
+> could have the fundamental structure of the otherName be something like:
+> 
+>                      1                   2                   3
+>  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+> +---------------------------------------------------------------+
+> |                        Flags                              |M|A|
+> +---------------------------------------------------------------+
+> |                                                               |
+> +                                                               +
+> |                                                               |
+> +                         [acp-address]                         +
+> |                                                               |
+> +                                                               +
+> |                                                               |
+> +---------------------------------------------------------------+
+> |     rsub-len                 |   rsub...                      |
+> +------------------------------+                                +
+> ~                                                               ~
+> +---------------------------------------------------------------+
+> |     acp-domain-len           |   acp-domain...                |
+> +------------------------------+                                +
+> ~                                                               ~
+> +---------------------------------------------------------------+
+> |                    [TLV extensions]                           |
+> +---------------------------------------------------------------+
+> 
+> where M means that the holder of the cert is allowed to establish an ACP
+> secure channel (what the '0' acp-address does in the present
+> formulation) and A means that the acp-address field is present
+> 
+> and just pack that into an OCTET STRING.
+> 
+> Is the rfcSELF@acp.example.com email address for human use really
+> providing much value?  This is pretty clearly breaking an abstraction
+> barrier, from my point of view.
+
+See above at the DISCUSS for my list of reasons to go with the rfc822name
+encoding. Compared to your (more efficient) encoding, its specifically
+about diagnostics and the ability for any existing certificarte tool to
+correctly display a string for an existing field (rfc822name). What would
+a randomn existing tool show a human for your field ? could i easily
+copy & paste it, could i easily have a script put it into a list,
+copy into excel spreadsheet (annoyingly enough we still live in a world
+where we need to deal with humans and their preferences. We're trying to minize
+what humans need to manage in ANIMA/ACP, but this is exactly the pieces they
+will need to deal with whenever they troubleshoot).
+
+We wouldn't only have to redo the whole encoding into the certificate
+as you proposed, but also come up with recommended standard representations for humans
+to make it easy to operate across all type of tool chains where humans
+are involved. Which could be the rfc822 representation because its
+kinda nicely human logical ("node+tags@domain"...).
+
+>       It also makes acp-domain-name a valid e-mail target across all
+>       routing-subdomains.
+> 
+> nit: rfcSELF@acp-domain-name
+
+actually "domain-information", fixed.
+
+>    o  It should be possible to share the LDevID with other uses beside
+>       the ACP.  Therefore, the information element required for the ACP
+>       should be encoded so that it minimizes the possibility of creating
+>       incompatibilities with such other uses.
+> 
+> otherName with an ACP-specific OID has zero possibility of collisions
+> with other uses; reusing rfc822Name has nonzero possibility of
+> collision.  (Note that having multiple otherNames is allowed.)
+
+Q1: Who allocates the OID ?
+Q2: Could we put the currently domain-information into the otherName as a string ?
+Q3: Would existing tools that deparse certificates human readable display
+    OtherNames that are string type (with e.g.: BER) ?
+
+>    o  The information for the ACP should not cause incompatibilities
+>       with any pre-existing ASN.1 software.  This eliminates the
+>       introduction of a novel information element because that could
+>       require extensions to such pre-existing ASN.1 parsers.
+> 
+> Even getting to the rfc822Name requires some level of ASN.1 parsing, so
+> it's unclear how strong this argument really is.
+
+From what we discussed in the WG, all ASN.1 parsers people knew would
+already be able to parse those defined fields, especially rfc822Name
+
+> 
+>    o  The element required for the ACP should not be misinterpreted by
+>       any other uses of the LDevID.  If the element used for the ACP is
+>       interpreted by other uses, the impact should be benign.
+> 
+> [OIDs are by construction unique]
+
+See Q1.
+
+>    o  At minimum, both the AN domain name and the non-domain name
+>       derived part of the ACP address need to be encoded in one or more
+>       appropriate fields of the certificate, so there are not many
+>       alternatives with pre-existing fields where the only possible
+>       conflicts would likely be beneficial.
+> 
+> It's even possible to define multiple OIDs for otherName use, one for
+> acp-domain-name, one for rsub, etc.. But that feels kind of like
+> overkill to me.
+
+See above. I am a lot more partial to keep a easily human readable string
+representation of the information than using rfc822Name. And i do not really
+want to bother about two representations (human vs. machine) in this case.
+
+Not using rfc822Name would also give the ability to define a longer limit for
+local-part which is my biggest worry when we're talking future extensions.
+
+> Section 6.1.2
+> 
+>    3:   The peer's certificate passes certificate path validation as
+>       defined in [RFC5280] against one of the Trust Anchors associated
+>       with the ACP nodes ACP domain certificate (see Section 6.1.3
+>       below).
+> 
+> nit: "node's" possessive
+
+Fixed.
+
+>    4:   If the node certificate indicates a Certificate Revocation List
+>       (CRL) Distribution Point (CDP) ([RFC5280], section 4.2.1.13) or
+>       Online Certificate Status Protocol (OCSP) responder ([RFC5280],
+>       section 4.2.2.1), then the peer's certificate must be valid
+>       according to those criteria: An OCSP check for the peer's
+>       certificate across the ACP must succeed or the peer certificate
+>       must not be listed in the CRL retrieved from the CDP.  [...]
+> 
+> side note: we could (but don't have to)  note that OCSP stapling is a
+> way to get an OCSP response to check.
+
+Right. thats why i fixed the text already via feedback to i think your first
+round by adding that this only applies when the security association protocol
+is incapable to carry the CDP/OCSP information itself.
+
+>    5:   The peer's certificate has a syntactically valid ACP domain
+>       information field (encoded as subjectAltName / rfc822Name) and the
+>       acp-domain-name in that peer's domain information field is the
+>       same as in this ACP node's certificate (lowercase normalized).
+> 
+> (Writing this as "has an otherName subjectAltName using the ACP OID"
+> seems more concise to me, but I'll try to stop beating that horse.)
+
+;-) Let me understand your answers to Q1...Q3 and also tell me what you
+think about keeping the string ("looks like an email identity") enoding
+but using your suggested field.
+
+>    When an ACP node learns later via OCSP/CRL that an ACP peers
+>    certificate for which rule 4 had to be skipped during ACP secure
+>    channel establishment is invalid, then the ACP secure channel to that
+>    peer SHOULD be closed even if this peer is the only connectivity to
+>    access CRL/OCSP.  The ACP secure channel connection MUST be retried
+>    periodically to support the case that the neighbor aquires a new,
+>    valid certificate.
+> 
+> nit: we could probably tighten up the writing here about "MUST be
+> retried periodically" in terms of needing to reestablish the TLS
+> connection provisionally and repeat the initial connection steps, though
+> on second read the current text seems better than I thought on first read.
+
+I will not take action against this comment as i am not clear what
+the suggestion exactly is. Do you want me to try to cut the first sentence
+into multiple smaller ones to make sound less like a german hold hostage by
+the english language (or vice versa).
+
+>    Only when checking a candidate peer's certificate for the purpose of
+>    establishing an ACP secure channel, one additional check is
+>    performed:
+> 
+> nit: I'd suggest s/Only when/When/
+
+Done.
+
+>    Formally, the ACP domain membership check includes both the
+>    authentication of the peers certificate (steps 1...4) and a check
+>    authorizing this node and the peer to establish an ACP connection
+>    and/or any other secure connection across ACP or data-plane end to
+>    end.  Step 5 authorizes to build any non-ACP secure connection
+>    between members of the same ACP domain, step 5 and 6 are required to
+>    build an ACP secure channel.  For brevity, the remainder of this
+>    document refers to this process only as authentication instead of as
+>    authentication and authorization.
+> 
+> I'd prefer to see a penultimate sentence along the lines of "Other
+> authorization models are possible by local policy, but for this
+> specification (and to some extent, autonomic systems in general), domain
+> membership is deemed sufficient authorization for all operations."
+
+"_local_ policy" is in general a big no-no for us except where we can't avoid it,
+so i better don't say "local" this without good reason.
+
+I also don't find this section specifically talking about ACP Domain membership 
+check the right place to say this.
+
+I did ad the following paragraph to the new section 6.1.1 about ACP domain certificates:
+
+<t>Note that is no intention to constrain authorization within the ACP or autonomic networks using the ACP to just the ACP domain membership check as defined in this document. It can be extended or modified with future requirements. Such future authorizations can use and require additional elements in certificates or policies or even additional certificates. For example, see <xref target=""role-assignments"/>.</t>
+
+Aka: that example in the appendix already is explaining our recognition
+that for higher layers at least roles seem to be clearly needed to create
+better security. Indeed the flag in the certificate for an EST server is
+really just a speific example of such a role. Except that it seems to be
+called "extended certificate usage" instead of role ;-).
+
+> Section 6.1.3
+> 
+>    A certificate path is a chain of certificates starting at a self-
+>    signed certificate of a so called root-CA or Trust Anchor, followed
+> 
+> nit(?): I'm used to seeing chain construction start at the
+> leaf/end-entity and chain up to the root, but to some extent this is an
+> editorial question.
+
+In routing and biology, trees start at the root, so pls. excuse my ignorance ;-)
+
+fixed to:
+
+A certificate path is a chain of certificates starting at 
+the ACP certificate (leaf/end-entity) followed by zero or more
+intermediate Trust Point or sub-CA certificates and ending with 
+a self-signed certificate of a so called root-CA or Trust Anchor.
+
+>    A single owner can operate multiple independent ACP domains from the
+>    same set of private trust anchors (CAs) when the ACP Registrars are
+>    trusted not to permit certificates with incorrect ACP information
+>    fields to be signed.  Such as ACP information with a wrong acp-domain
+>    field.  [...]
+> 
+> nit: This last sentence is a sentence fragment (I suggest joining it to
+> the previous one with a comma).
+
+Done.
+
+> Section 6.1.4
+> 
+>    with its ACP domain certificate.  When BRSKI (see
+>    [I-D.ietf-anima-bootstrapping-keyinfra]) is used, the ACP address of
+>    the BRSKI registrar from the BRSKI TLS connection SHOULD be
+>    remembered and used for the next renewal via EST if that registrar
+>    also announces itself as an EST server via GRASP (see next section)
+>    on its ACP address.
+> 
+> IIUC, the BRSKI spec currently advertises BRSKI registrars with the
+> EST-TLS objective, and I don't really understand how this interacts with
+> SRV.est or whether this text should change.
+
+The equivalent to the SRV.est announcement is actually in BRSKI the 
+AN_join_registrar announcement. A registrar that does both BRSKI (initial
+enrollment) and renewal (EST propoer) would send both announcements.
+I think this text is fine.
+
+> Section 6.1.4.1
+> 
+>    The objective name "SRV.est" indicates that the objective is an
+>    [RFC7030] compliant EST server because "est" is an [RFC6335]
+>    registered service name for [RFC7030].  Objective-value MUST be
+>    ignored if present.  Backward compatible extensions to [RFC7030] MAY
+>    be indicated through objective-value.  Non [RFC7030] compatible
+>    certificate renewal options MUST use a different objective-name.
+> 
+> I'd consider adding some text about ignoring unrecognized
+> objective-values, to attempt to preserve the usability of this extension
+> point.
+
+Non-recognized objective-values (or parts thereof if it is a structure partially understood) MUST be ignored.
+
+> Section 6.1.4.3
+> 
+>    The ACP node SHOULD support Certificate Revocation Lists (CRL) via
+>    HTTPs from one or more CRL Distribution Points (CDPs).  The CDP(s)
+> 
+> My understanding is that HTTP-not-s is commonly used for CRL
+> distribution since the CRL content itself is signed, and there would be
+> a risk of a circular dependency in validating the server's TLS
+> certificate to get to the CRL information.
+
+Fixed.
+
+>    HTTPs connections.  The connecting ACP node SHOULD verify that the
+>    CDP certificate used during the HTTPs connection has the same ACP
+>    address as indicated in the CDP URL of the nodes ACP domain
+>    certificate if the CDP URL uses an IPv6 address.
+> 
+> nit: "node's" possessive.
+
+fixed.
+
+> Section 6.1.4.5
+> 
+>    enrollment.  Using the ACP node's domain certificate allows the BRSKI
+>    registrar to learn that nodes ACP domain information field, so that
+> 
+> nit: "node's" possessive.
+
+fixed
+
+>    with its old ACP certificate.  The re-enrolling candidate ACP node
+>    SHOULD only request a voucher from the BRSKI registrar when this
+>    authentication fails during TLS connection setup.
+> 
+> I might suggest "SHOULD only fall back to requesting a voucher".
+
+fixed.
+
+> Section 6.1.4.6
+> 
+>    An ACP domain certificate is called failing in this document, if/when
+>    the ACP node can determine that it was revoked (or explicitly not
+>    renewed), or in the absence of such explicit local diagnostics, when
+>    the ACP node fails to connect to other ACP nodes in the same ACP
+>    domain using its ACP certificate.  For connection failures to
+> 
+> nit: maybe "the ACP node to which the certificate was issued", since
+> when I first read this I was expecting it to be about telling that some
+> other node's certificate is failing, not a node's own certificate.
+
+fixed.
+
+> Section 6.5
+> 
+>    At this time in the lifecycle of ACP nodes, it is unclear whether it
+>    is feasible to even decide on a single MTI (mandatory to implement)
+>    security association protocol across all ACP nodes.
+> (This is a future-looking statement that implies uncertainty in the
+> current spec.)
+
+Yikes. How did this sentence survive so long.
+With all the other places pounding on the key thing
+being to not mandate a single network wide MTI because there is sufficient
+insight that it would be way too limiting.
+
+removed. Thanks a lot.
+
+>    [11:C2] Node 2 certificate has lower ACP Node-ID than  Node2,
+>            therefore Node 1 considers itself Bob and Node 2 Alice
+>            on connection C1, but they also identify that C2 is to the
+> 
+> I think this first "Node 2"  should be "Node 1"?
+
+Fixed.
+
+>    interface" that they both connect to.  An autonomic node must not
+>    assume that neighbors with the same L2 or link-local IPv6 addresses
+>    on different L2 interfaces are the same node.  This can only be
+>    determined after examining the certificate after a successful
+>    security association attempt.
+> 
+> This could potentially be a "MUST NOT".
+
+fixed.
+
+> Section 6.7.1.1
+> 
+>    To run ACP via IPsec natively, no further IANA assignments/
+>    definitions are required.  An ACP node that is supporting native
+>    IPsec MUST use IPsec security setup via IKEv2, tunnel mode, local and
+>    peer link-local IPv6 addresses used for encapsulation.  It MUST then
+>    support ESP with AES-256-GCM ([RFC4106]) for encryption and SHA256
+>    hash and MUST NOT permit weaker crypto options.  Key establishment
+>    MUST support ECDHE with P-256.
+> 
+> I don't think "SHA256 hash" is quite specific enough (and we probably
+> want GMAC for integrity anyway).
+
+In the answer to your i already changed this text to ENCR_AES_GCM_16.
+The way i understand it (pls. help me if i am wrong), it comes with its
+own integrity protection mechanism. Pls. check new text in 6.7.1.1
+
+> Section 6.7.1.2
+> 
+>    To run ACP via GRE/IPsec, no further IANA assignments/definitions are
+>    required.  An ACP node that is supporting ACP via GRE/IPsec MUST then
+>    support IPsec security setup via IKEv2, IPsec transport mode, local
+>    and peer link-local IPv6 addresses used for encapsulation, ESP with
+>    AES256 encryption and SHA256 hash.
+> 
+> Why is IPsec/GRE using AES256/SHA256 when IPsec native is using
+> AES256-GCM?
+
+Error in duplication. New text from your and erics review 
+removes all duplication and has GRE just
+refer to the native requirements and only explain changes.
+
+> Section 6.7.2
+> 
+>    We define the use of ACP via DTLS in the assumption that it is likely
+>    the first transport encryption code basis supported in some classes
+>    of constrained devices.
+> 
+> nit: I don't think "basis" is quite the right word, here; maybe "base"
+> (or collapsed back to "codebase" as one word) or omit it entirely.
+
+deleted term.
+
+> Section 6.7.3
+> 
+>    support DTLS.  An ACP node connecting an area of constrained ACP
+>    nodes with an area of baseline ACP nodes MUST therefore support IPsec
+>    and DTLS and supports therefore the baseline and constrained profile.
+> 
+> nit: this could probably work just fine as a non-normative "must", since
+> it's just describing facts.
+
+fixed.
+
+> Section 6.8.2
+> 
+> nit: Figure 8 has a doubled word "ACP GRASP virtual virtual interfaces"
+> in the second box from the top.
+> 
+fixed
+
+>        ...............................................................
+>        .      |          |          |   ^^^ Users of ACP (GRASP/ASA) .
+>        .      |          |          |   ACP interfaces/addressing    .
+>        .      |          |          |                                .
+>        .      |          |          |                                A
+>        .      | ACP-Loopback Interf.|      <- ACP Loopback interface C
+>        .      |      ACP-address    |       - address (global ULA)   P
+>        .    subnet1      |        subnet2  <- ACP virtual interfaces .
+>        .  link-local     |      link-local  - link-local addresses   .
+>        ...............................................................
+> 
+> I'm still a bit confused by this box in the figure -- is the "Users of
+> ACP" label supposed to apply to the previous box(es) or the current one?
+> If the former, it's confusing to see the "ACP security and transport
+> substrate for GRASP" being described as a "user of ACP".
+
+Changed to "Users of ACP interfaces".
+
+Alas i have no more lines without breaking the picture onto multiple
+pages in RFC TXT so i can not well try to carve out better space to
+show where ASA sit (difficult as they would use both ACP interfaces
+as well as some GRASP API.
+
+>    GRASP unicast messages inside the ACP always use the ACP address.
+>    Link-local addresses from the ACP VRF must not be used inside
+>    objectives.  GRASP unicast messages inside the ACP are transported
+>    via TLS 1.2 ([RFC5246]) connections with AES256 encryption and
+>    SHA256.  Mutual authentication uses the ACP domain membership check
+>    defined in (Section 6.1.2).
+> 
+> Just "AES256 encryption and SHA256" describes quite a few TLS
+> ciphersuites
+> (https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4);
+> I'd suggest limiting to a specific handful like
+> "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 and
+> TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and
+> TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384" (the "Recommended" column in
+> the registry will be helpful at picking things).
+> It's probably also useful to specify a RSA/ECDSA key size (and elliptic
+> curve for ECDSA) and the nature of the ECDHE or DHE.
+
+Can you please suggest recommended text here ? I spent a lot of reading
+up on the whole IPsec/channel level especially also because you indicated
+we would need other folks to help on IPsec, but i figure you would be
+a good person to ask for TLS.
+
+Given how this is all new code, i see no reason to have mor than one MTI,
+its also easy to override at application level (this would ahppen for
+application scoped GRASP TLS connections).
+
+How about mandating LS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 
+
+I have no idea how ECDHE are intermixed with RSA here, and what key sizes
+we talk about - i hope the one from the cert, but the cert would only hae
+one type of public key, ECDHE or RSA, right ?
+
+> Section 6.8.2.1
+> 
+>    If GRASP peer connections would just use TCP, compromised ACP members
+>    could simply eavesdrop passively on GRASP peer connections for whom
+>    they are on-path ("Man In The Middle" - MITM).  Or intercept and
+> 
+> nit: I'd suggest "were to use just TCP".
+
+fixed.
+
+>    modify them.  With TLS, it is not possible to completely eliminate
+> 
+> nit: sentence fragment
+
+merged with prior sentence.
+> 
+> Section 6.10
+> 
+>    Links inside the ACP only use link-local IPv6 addressing, such that
+>    each nodes ACP only requires one routable virtual address.
+> 
+> nit: "node's" possessive.
+
+fixed.
+
+> Section 6.10.2
+> 
+>    o  Establishing connectivity between different ACP (different acp-
+>       domain-name) is outside the scope of this specification.  If it is
+>       being done through future extensions, then the rsub of all
+>       routing-subdomains across those autonomic networks need to be
+>       selected so their hashes do not collide.  For example a large
+> 
+> nit: the grammar could be more clear that it's hash(routing-subdomain)
+> that must be collision-free, rather than hash(rsub)
+
+Fixed to .. so the resulting routing-subdomain hashes..
+
+> Section 6.10.7.2
+> 
+>    information - ACP domain-name, ACP-address, and so on.  If the ACP
+>    registrar uses BRSKI, it signals the ACP domain information field to
+>    the Pledge via the EST /csraddrs command (see
+>    [I-D.ietf-anima-bootstrapping-keyinfra], section 5.8.2 - "EST CSR
+>    Attributes").
+> 
+> I don't see a "csraddrs" EST well-known URL in either BRSKI or RFC 7030
+> (and the section number is probably stale as well, as the RFC Editor
+> note attests).  Oh, but /csrattrs is very close, so this is likely just
+> a typo.
+
+fixed to csrattr, section now 5.9.2 in brski-22
+
+> Section 6.10.7.3
+> 
+>    scheme.  The first address of the prefix is the ACP address, all
+>    other addresses in the prefix are for other uses by the ACP node as
+>    described in the zone and Vlong addressing sub scheme sections.  The
+> 
+> nit: comma splice
+
+fixed.
+
+>    policy.  For example, in BRSKI, the ACP registrar is aware of the
+>    IDevID of the candidate ACP node, which contains a serialNnumber that
+>    is typically indicating the nodes vendor and device type and can be
+> 
+> nits: "serialNumber", "node's vendor" possessive
+
+fixed
+
+> 
+>    ACP registrars SHOULD default to allocate ACP zone sub-address scheme
+>    addresses with Subnet-ID 0.  Allocation and use of zone sub-addresses
+>    with Subnet-ID != 0 is outside the scope of this specification
+> 
+> nit: it's only referred to as "Subnet-ID" in the manual addressing
+> sub-scheme; for the zone addressing sub-scheme it's "Zone-ID".
+> 
+
+*yikes*. Good catch. There was one more further down of this mistake.
+fixed.
+
+> Section 6.11.1.1
+> 
+>    Additionally, failed ACP tunnels can be quickly discovered the secure
+>    channel protocol mechanisms such as IKEv2 Dead Peer Detection.  This
+> 
+> nit: missing word, maybe "through the secure channel protocol"
+
+fixed.
+
+> Section 6.11.1.9
+> 
+>    [RFC6550] security not used, substituted by ACP security.
+> 
+>    Because the ACP links already include provisions for confidentiality
+>    and integrity protection, their usage at the RPL layer would be
+>    redundant, and so RPL security is not used.
+> 
+> The ACP links provide only hop-by-hop security, but it looks like at
+> least some of the RFC6550 mechanisms provide more global source
+> authentication.  (I'm not suggesting we change the protocol to use RPL
+> security, just noting that this text is not quite right about being
+> entirely redundant.)
+
+I really have no idea. I had these profile template points be filled
+out by Pascal Thubert, so i would assume it is correct. I forwarded
+the nit to him, let's see what he says.
+
+> Section 6.11.1.14
+> 
+> I still think it's worth calling out that the RPL root is not
+> necessarily preconfigured and this "SHOULD" requirement could
+> potentially apply to any node, but this is only Comment-level and you
+> should feel free to ignore it.
+
+Check the paragraph i inserted into the section for your first review email
+talking about how this does not apply to nodes supporting only
+"default" administrative preference. Hope this is a good trick to
+aleviate the need for forwarding plane enhancemeents on that wouldn't
+never become root in a network operating in a state where this diagnostic
+function would be useful.
+
+> Section 6.12.5
+> 
+>    Care must also be taken when creating multi-access ACP virtual
+>    interfaces across ACP secure channels between ACP nodes in different
+>    domains or routing subdomains.  The policies to be negotiated may be
+>    described as peer-to-peer policies in which case it is easier to
+>    create ACP point-to-point virtual interfaces for these secure
+>    channels.
+> 
+> nit: the text is unclear about what sort of policies are being
+> negotiated.
+
+Changed sentence to:
+If for example future inter-domain ACP policies are defined as "peer-to-peer" policies, it is easier to create ACP point-to-point virtual interfaces for these inter-domain secure channels.
+
+> Section 8.1.1
+> 
+>    When an ACP Edge node receives a packet from an ACP connect
+>    interface, it MUST only forward it intot he ACP if it has an IPv6
+> 
+> nit: "into the"
+
+fixed.
+
+> Section 9.1
+> 
+>       when using OCSP/CRL.  The same benefit can be achieved when using
+>       CRL/OCSP, periodically refreshing the revocation information and
+>       also tearing down ACP secure channels when the peers (long-lived)
+>       certificate is revoked.  There is no requirement against ACP
+> 
+> nit: "peer's" possessive
+
+fixed.
+
+>    partition is left with one or more of such ACP registrars, it can
+>    continue to enroll new candidate ACP nodes as long as the ACP
+>    registrars sub-CA certificate does not expire.  Because the ACP
+> 
+> nit: "registrar's sub-CA" possessive
+
+fixed.
+
+> Section 9.2.2
+> 
+>    not the Data-Plane.  Especially for those management plane functions
+>    that have no good protection by themselves because they do not have
+>    secure end-to-end transport and to whom ACP does not only provides
+>    automatic reliable connectivity but also protection against attacks.
+> 
+> nit: s/does not only/not only/
+
+fixed
+
+> Section 9.3
+> 
+>    An ACP is self-forming, self-managing and self-protecting, therefore
+>    has minimal dependencies on the administrator of the network.
+>    Specifically, since it is (intended to be) independent of
+>    configuration, there is no scope for configuration errors on the ACP
+>    itself.  The administrator may have the option to enable or disable
+> 
+> nit: Given that Section 8.2.1 talks about configuring ACP neighbors and
+> 8.2.2 about configuring tunneled neighbors, I'd suggest to s/no
+> scope/only limited scope/, 
+
+fixed.
+
+> and perhaps similar tweaks in the following paragraphs.
+
+fixed to.
+
+While configuration (except for <xref target="workarounds"/> and  <xref target="registrar-considerations"/>) is not possible
+
+> Section 10.1
+> 
+>    o  Check the validity of the domain certificate:
+> 
+>       *  Does the certificate authenticate against the trust anchor?
+> 
+> nit: s/authenticate/validate/
+
+fixed.
+
+>             -  The neighbors certificate does not have the required
+>                trust anchor.  Provide diagnostics which trust anchor it
+>                has (can identify whom the device belongs to).
+> 
+>             -  The neighbors certificate does not have the same domain
+>                (or no domain at all).  Diagnose domain-name and
+>                potentially other cert info.
+> 
+>             -  The neighbors certificate has been revoked or could not
+>                be authenticated by OCSP.
+> 
+>             -  The neighbors certificate has expired - or is not yet
+>                valid.
+> 
+> nit: s/neighbors/neighbor's/ (every time)
+
+fixed
+
+> Section 10.2.2
+> 
+>       For BRSKI or other mechanisms using vouchers: Parameters to
+>       determine how to retrieve vouchers for specific type of secure
+>       bootstrap candidate ACP nodes (such as MASA URLs), unless this
+>       information is automatically learned such as from the LDevID of
+>       candidate ACP nodes (as defined in BRSKI).
+> 
+> I thought the LDevID was essentially synonymous with "ACP domain
+> certificate" in this document, so I can't understand what this means
+> (unless IDevID was intended).
+
+Yes, this and i think one or two more typos LDevID -> IDevID where fixed
+already for your first review email.
+
+> Section 10.2.3
+> 
+>    Even when such a malicious ACP registrar is detected, resolving the
+>    problem may be difficult because it would require identifying all the
+>    wrong ACP domain certificates assigned via the ACP registrar after it
+>    was compromised.  And without additional centralized tracking of
+>    assigned certificates there is no way to do this.
+> 
+> side note: RFC 6962-style certificate transparency is a somewhat
+> decentralized way to do such tracking, though I do not think the
+> engineering tradeoffs favor trying to use it for this situation.
+
+Interesting RFC. i pondered adding a reference to it, because some of the
+actual logging data structures seems quite useful, but the openness model
+would very likely scare operators off ("ACP makes me public how
+many and what nodes my network has ??? go away").
+
+> Section 10.2.5
+> 
+>       Which candidate ACP node is permitted or not permitted into an ACP
+>       domain.  This may not be a decision to be taken upfront, so that a
+>       per-serialNumber policy can be loaded into ever ACP registrar.
+> 
+> nit: "every"
+
+fixed.
+
+> Section 10.3.x
+> 
+> I still think the document quality here is not as mature as the majority
+> of the document, though concede there is value in covering these topics
+> to some extent in the initial work.
+
+Copied from reply to your first mail:
+
+Not sure how i could bake it better, but it would probably not be worth it
+in this document, given how this is mostly food for thought not impacting
+interoperability and standardization would only come through implementation
+and deployment experimentation followed by some Yang model. Other reviewers
+(Joel if i remember correctly) where grumbling, but couldn't provide any better
+suggestions of how to make operator level interface shutdowns more resilient against
+unintential network disconnect. Hence i argued strongly to keep this section in there
+as important food for thought, especially because its been the #1 ask against ACP to
+figure out by operators i talked to.
+
+> Section 10.3.5
+> 
+>    interface level "ACP/ANI enable" is ignored.  Once set, ACP/ANI will
+>    operate interface where "ACP/ANI enable" is set.  Setting of
+> 
+> nit: "operate on interfaces where"
+
+fixed
+
+> Section 10.3.5.1
+> 
+>    Automatically setting "ANI enable" on brownfield nodes where the
+>    operator is unaware of it could also be a critical security issue
+>    depending on the vouchers used by BRKSI on these nodes.  An attacker
+>    could claim to be the owner of these devices and create an ACP that
+>    the attacker has access/control over.  In networks where the operator
+>    explicitly wants to enable the ANI this could not happen, because he
+>    would create a BRSKI registrar that would discover attack attempts.
+>    Nodes requiring "ownership vouchers" would not be subject to that
+>    attack.  See [I-D.ietf-anima-bootstrapping-keyinfra] for more
+>    details.  Note that a global "ACP enable" alone is not subject to
+>    these type of attacks, because it always depends on some other
+>    mechanism first to provision domain certificates into the device.
+> 
+> It's probably worth double-checking  that all of these details are still
+> synchronized with RFC 8366 and the current state of BRSKI.
+
+Yepp. Nothing changed as this is very fundamental, but i still rewrote the
+paragraph somewhat to better express the main concern, which is that
+an operator with no clue what BRSKI/MASA is even though his devices support it
+would not attempt to get an account at the MASA and that opens the door
+to attackers to easier do some form of identity theft
+
+"Frank, we got a letter from our router-vendor with techno-mumbo-jumbo-masa-account", 
+"oh, no idea, we're not using that stuff. throw it in the trash bin".
+
+And then someone who did forge the request to get the account for the company
+goes through that company's trash.
+
+> Section 10.3.6
+> 
+>    Disabling ANI/ACP by undoing "ACP/ANI enable" is a risk for the
+>    reliable operations of the ACP if it can be executed by mistake or
+>    unauthorized.  This behavior could be influenced through some
+>    additional property in the certificate (e.g., in the domain
+>    information extension field) subject to future work: In an ANI
+> 
+> [I don't know if it was intentional or an omission to leave this "future
+> work" note in place when most others were removed.]
+
+I only got rid of all "future" in the normative part, which didn't
+only consist of removing the word, but moving text out of the normative section
+referring to this - and this is where such text ended up being (non-normative).
+
+Consider this 10.3.x stuff to be staging for hopefully something we would
+put into YANG in followup work (and as in this case extensions to the cert).
+(unless we define operator interfaces via YANG, we can't standardize them anyhow).
+
+> Section 10.4
+> 
+>    There is no desirable configuration for the ACP.  Instead, all
+>    parameters that need to be configured in support of the ACP are
+>    limitations of the solution, but they are only needed in cases where
+>    not all components are made autonomic.  Whereever this is necessary,
+>    it will rely on pre-existing mechanisms for configuration such as CLI
+> 
+> "will rely on" can also be seen as an indicator for future work.
+
+In this case i was just thinking about the future as implementations of this
+spec, not future features. So i reworded to "it relies on".
+
+> 
+>    o  When the ACP needs to be extended across interfacess other than
+>       L2, the ACP as defined in this document can not autodiscover
+>       candidate neighbors automatically.  Remove neighbors need to be
+>       configured, see Section 8.2.
+> 
+> nit: s/Remove/Remote/
+
+fixed.
+
+>    Once the ACP is operating, any further configuration for the data-
+>    lane can be configured more reliably across the ACP itself because
+> 
+> nit: data-plane
+
+fixed before.
+
+> Section 11
+> 
+>    o  Every ACP registrar is criticial infrastructure that needs to be
+>       hardened against attacks similar to a CA.  A malicious registrar
+> 
+> nit: as written, this parses as saying that the attacks are similar to a
+> CA, not the amount of hardening needed on  the ACP registrar.  Adding a
+> comma would probably help.
+
+fixed.
+
+>    The ACP It is designed to enable automation of current network
+>    management and future autonomic peer-to-peer/distributed network
+> 
+> s/It //
+
+fixed.
+
+>    Attacks from impacted ACP nodes against the ACP are more difficult
+>    than against the data-plane because of the autoconfiguration of the
+>    ACP and the absence of configuration options that could be abused
+>    that allow to change/break ACP behavior.  This is excluding
+>    configuration for workaround in support of non-autonomic components.
+>   [...]
+>    The ACP acts as a security (and transport) substrate for GRASP inside
+>    the ACP such that GRASP is not only protected by attacks from the
+>    outside, but also by attacks from compromised inside attackers - by
+>    relying not only on hop-by-hop security of ACP secure channels, but
+>    adding end-to-end security for those GRASP messages.  See
+>    Section 6.8.2.
+> 
+> This is true, but the system as a whole still has the weakness that the
+> compromised node is able to announce GRASP objectives for arbitrary
+> services and potentially cause legitimate traffic to be directed towards
+> it.  The  connection  would still validate (until the certificate
+> expires or is revoked) and the attacker could return bad data that
+> causes honest nodes to misbehave.
+
+Yes. For non-autonomic networks such as those we target via rfc8368,
+i think we can most easily solve this problem easily via cert bits for Roles (A.10.5),
+so only NOC equipment can announce services.
+
+Note that this was traditionally not a real issue which is why we didn't wanted
+to add all these aspects to certs initially: you would have
+a real hard time to get new attack software into a typical legacy HW network infra.
+You'd have to attack by adding new hardware that has the software. Of course,
+in the last 5 years (after we started this  *sigh*) network infra components
+become a lot more like PCs, so adding software becomes easier and hence also
+attacks from such software. And i fear that even though secure boot etc. exists,
+the security chains there are not necesssarily very strong.
+
+More fully distributed, self-organizing "Autonomic" solutions of course will
+be tougher. I would be happy if we can show that the security shell provided
+by the ACP and secure router platforms would be strong enough that there is
+enough room for starting to deploy more distributed services management
+without necessarily having to figure out upfront how to build self-organizing higher
+levels of security such as through self-learning reputation sccoring or the
+like. There is just a difference between what would be fun to do, and what i
+as an operator would be willing to accept as baked enough at any point in time ;-)
+
+>    revocation and non-renewal of short-lived cdrtificates.  In this
+> 
+> nit: "certificates"
+
+fixed.
+
+> Section A.6
+> 
+> In my opinion, a lot of this could be split out into a separate draft
+> (that need not be published as an RFC) and just a couple paragraphs left
+> here with a pointer to that separate draft.  But this is only a
+> Comment-level point, and I do not insist on it.
+
+Hah. In the other reply i gave you i think i referred to this text as already removed,
+but i forgot that the idea was to remove it before publication.  So now i
+added the two notes to the top of this section:
+
+<t>[RFC Editor: This section to be removed before RFC.</t>
+<t>[This section kept for informational purposes up until the last draft version as that would be the version that readers interested in the changelog would also go to to revisit it.]</t> 
+
+E.g.: I think its hard to justify putting more time (like separate RFC)
+into something that should be called "leftover ramblings from when we worked
+out the ACP, that we really should not forget".
+
+Going up to last draft seems like a low-cost compromise.
+
+Btw: Its nice you didn't say this is crazy, because as i mentioned in the other
+mail, the WG conclusion was that this type of multi-stage negotiation would be
+way too complex (hence also the removal). ;-)
+
+> Section A.7
+> 
+>    An ACP domain is the set of all ACP nodes using certificates from the
+>    same CA using the same domain field.  GRASP inside the ACP is run
+>    across all transitively connected ACP nodes in a domain.
+> 
+> It's not entirely clear to me that we need to insist on a single shared
+> CA; given our discussion of potentially joining two distinct ACT domains
+> into a combined network, it seems that we just need to have all nodes
+> using the same set of trust anchor(s), which could potentially include
+> multiple CAs.  (There would of course need to be some out-of-band
+> mechanism to avoid address-assignment collisions, which could be as
+> simple as rsub.)
+
+"from one or more Trust Anchors (TA) (typically one CA)"
+
+> Section A.8
+> 
+>    For example, Intent could indicate the desire to build an ACP across
+>    all domains that have a common parent domain (without relying on the
+>    rsub/routing-subdomain solution defined in this document).  For
+>    example ACP nodes with domain "example.com", "access.example.com",
+>    "core.example.com" and "city.core.example.com" should all establish
+>    one single ACP.
+> 
+> It is interesting to see this discussion in the context of the text in
+> the previous section about """If different ACP domains are to be created
+> [...] Domains "example.com" and "research.example.com" are separate
+> domains if both are domain elements in the domain information element of
+> certificates."""
+
+Because this document doesn't intend to fnish working this out, its in appendices ;-)
+
+> Section A.8
+> 
+> There still feels like a lot of speculative things in here; I'd suggest
+> adding a disclaimer/introduction at the top that "Intent is the
+> architecture component [...].  Its applicability for use is quite
+> flexible and freeform, with potential applications including:"
+
+Its applicability for use is quite  flexible and freeform, with potential applications including policies flooded across ACP GRASP and interpreted on every ACP node.
+
+i like "flexible and freeform" as a euphemism for
+"unclear, undefined and ongoing contentuous" ;-))
+
+But yes, once we come up with specific policies we want to get standardized,
+we'll figure out a fitting way to do it, and thats what we then call Intent ;-)
+
+> Section A.9
+> 
+>    Some solutions may already have an auto-addressing scheme, for
+>    example derived from existing unique device identifiers (e.g., MAC
+>    addresses).  In those cases it may not be desirable to assign
+>    addresses to devices via the ACP address information field in the way
+>    described in this document.  The certificate may simply serve to
+>    identify the ACP domain, and the address field could be empty/unused.
+>    The only fix required in the remaining way the ACP operate is to
+>    define another element in the domain certificate for the two peers to
+>    decide who is Alice and who is Bob during secure channel building.
+> 
+> I think we need to mention this requirement for tiebreaking earlier in
+> the document, when we introduce the possibility of a certificate with
+> ACP address of '0'.
+
+The "0" address ACP nodes are not allowed to build secure channels,
+they are for ACP-connect'ed nodes in the NOC (i added that explanation
+through the reply to your first review email).
+
+The ++ = no-address ACP addresses are the ones that this spec does
+not define but supports interop with (by defining the address format).
+Added to the channel selection text in 6.5:
+
+A peer with an empty ACP address field in its ACP domain certificate becomes Bob (this specification does not define such peers, only the interoperability with them)
+
+In other words: I do not know nor care yet how to decide on Alive vs. Bob
+when both peers have no ACP address in their certificate. Subject to
+future work.
+
+> Section A.10
+> 
+> nit: the section title uses "futures" as a standalone term synonymous
+> with "future work"; unfortunately, "futures" is already an English word
+> with a quite distinct meaning.
+
+Changed to: "Further (future) options"
+
+I could sell you some A.10.7 options, sure they will go up in value ;-)
+(is that what you meant ?).
+
+> Section A.10.7
+> 
+>    1.  Consider if LLDP should be a recommended functionality for ANI
+>        devices to improve diagnostics, and if so, which information
+>        elements it should signal (insecure).  Includes potentially new
+>        information elements.
+> 
+> I'd suggest changing the parenthetical to "noting that such information
+> is conveyed in an insecure manner)".
+
+Fixed.
+
+>    3.  The IDevID of BRSKI pledges should be included in the selected
+>        insecure diagnostics option.
+> 
+> In some environments (not really the current target case of Enterprise
+> networks) the IDevID would be considered privacy-sensitive, which may be
+> worth mentioning again here.
+
+Hmm. i went with a security example (which is arguably one reason for the desire of privacy, but i think many readers would associate privacy mostly with humans, so would be harder to read by some):
+
+This may be undesirable when exposure of device information is seen as too much of a security issue (ability to deduce possible attack vectors from device model for example)
+
+I also added a similar note to the end of the paragraph in 6.1.1 about certificates:
+
+<t>Any other field of the ACP domain certificate is to be populated as required by <xref target="rfc5280"/> or desired by the operator of the ACP domain ACP registrars/CA and required by other purposes that the ACP domain certificate is intended to be used for. For diagnostic and other operational purposes, it is beneficial to  copy the device identifying fields of the node's IDevID into the ACP domain certificate, such as the "serialNumber" (see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/> section 2.3.1). Inclusion of this information makes it easier to potentially attack the node though, for example by learning the device model, which may help to select a fitting subset of attacks. Neighboring attackers can retrieve the certificate through an otherwise unsuccessful initiation of a secure channel association.</t>
+
+> Section A.10.8
+> 
+>    Ensuring that manaement sessions using invalidated credentials are
+> 
+> typo: "management"
+
+Fixed.
