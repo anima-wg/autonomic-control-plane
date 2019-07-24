@@ -1,0 +1,613 @@
+From tte@cs.fau.de Wed Aug  8 04:33:48 2018
+Date: Wed, 8 Aug 2018 04:33:48 +0200
+From: Toerless Eckert <tte@cs.fau.de>
+To: Alissa Cooper <alissa@cooperw.in>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Subject: Re: Alissa Cooper's Discuss on
+ draft-ietf-anima-autonomic-control-plane-16: (with DISCUSS and COMMENT)
+Message-ID: <20180808023348.7j4k32dlt4cmzmna@faui48f.informatik.uni-erlangen.de>
+References: <153313873429.21703.8495153083509673746.idtracker@ietfa.amsl.com>
+
+Sorry, too many typos in -17 to wait for next mayor fix version.
+had to rev to -18 *sigh*
+
+Thanks, Alissa
+
+Changes for your review have been committed together with
+changes for Elwin's review.  into just posted -18 rev of the doc.
+
+rfcdiff here:
+http://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-18.txt
+
+I hope this resolve all the issues you raised, give or take the
+postponed formatting asks i wanted to push off to RFC editor as they
+are tooling related).
+
+point by point replies inline below.
+
+Cheers
+    Toerless
+
+On Wed, Aug 01, 2018 at 08:52:14AM -0700, Alissa Cooper wrote:
+> Alissa Cooper has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-16: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> Section 6.10.4:
+> 
+> "The value of the Interface Identifier is left for future definitions."
+> 
+> I don't understand how this is usable without some definition. I.e., if I
+> assign every interface ID in my ACP to be 0, it's not going to work. Could you
+> elaborate about what is expected in this field?
+
+Thanks. This sentence was an overlooked leftover from before i added the whole section
+8.1 (ACP connect), which is where the setup in which these addresses are used
+is defined/standardized.
+
+I replaced the sentence in question with:
+
+| <t>Address management of ACP connect subnets is done using traditional assignment methods and existing IPv6 protocols. See <xref target="ACautoconfig"/> for details.</t>
+
+8.1.3. says normal IPv6 manual or preferrably SLAAC autoconfiguration of the
+interface identifiers, but really focusses on the RFCs to automatically
+learn prefixes through IPv6 RD, because that is the most important part of
+a LAN connecting to the ACP.  Nothing new. Just a hopefully good
+profile of the most popular IPv6 autoconfig options.
+
+[ I'll respond to Brians proposal for specific stable addressin separate on the
+ thread he opened.]
+
+Note that i did fixed up other text in conjunction with this discuss and the
+discussion below about the requirement to have or not to have the ACP address
+in the ACP domain certificate. These changes have the following result:
+
+The ABNC syntax for acp-address in the certificate allows a full ACP addres
+(32hex digits), no acp-address at all, or a placeholder address "0".
+
+The text changes make this work and explain it:
+
+- ACP nodes get a 32bit hex-digit
+- Non ACP-channel capable nodes, like NOC equipment gets an empty acp-address field.
+  they use the manual ACP addresses, but given how those use traditional assignment
+  methods, those are not managed by the registrar. Those nodes can still use
+  their ACP certificate for any end-to-end authenticartion, just not to build ACP
+  channels.
+- (future) ACP nodes that have some other method to assign their ACP address
+  beside getting it through the certificate use "0". Thats the indication from the
+  registrar that those nodes are permitted to build ACP secure channels, but did
+  not get their address from the Registrar(s).
+
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> FIXED: 
+> General:
+> 
+> Please address the Gen-ART reviewer's latest round of comments.
+
+See separate reply.
+
+------------------
+> FIXED:
+> There are a bunch of places in this document where it seems like there is a
+> tension between specifying a limited set of functionality here and being able
+> to support a wider variety of deployment scenarios. This is noted in Section 1
+> but I think in general it would be clearer if uses of the term "future"
+> throughout the document could be more surgical as well as more specific about
+> whether they mean "people might deploy this differently in the future" or
+> "standards would need to be developed in the future."
+
+> I've made a few
+> suggestions about some of these turns of phrase below but would suggest someone
+> do a full edit pass with this in mind because there are a large number of
+> mentions of "future work." Of course there is always more work to do, but every
+> bit of "future work" need not be mentioned in this document, and in cases where
+> it is mentioned I think there should be a specific reason for doing so that
+> bears on people implementing this specification. I don't think this fits in the
+> DISCUSS criteria but for a document that intends to be published on the
+> standards track I would expect it to be crisper about the dividing line between
+> the normative behavior being specified here versus changes or extensions that
+> may or may not be made in the future.
+
+Let me answer in 5 points:
+
+1. All relevant sections have "Normative" vs. "Informative" in their title.
+   added "Informative" to sections where it was missing.
+
+   Modified section 4: Requirements":
+   Informative - ask from AD was not to have separate use-case/requirements
+   document in charter round 1, so the use-case/requirements sections here
+   are really only the input to the specification.
+
+   The words in 4./Requirements are now _MUST_, _SHOULD_ to set them apart from
+   rfc2119 and text explains it (i can change to any other preferrable 
+   syntactic differentiation).
+
+2. Normative MUST/SHOULD are only in the normative sections.
+
+3. Introduction also summarizes which sections are normative and which informative.
+
+   I fixed up the text in the intro to be more complete wrt. to that.
+   
+|    <t>The normative part of this document starts with
+|    <xref target="self-creation"/> where the ACP is defined in detail.
+|    <xref target="acp-l2-switches"/> defines normative how to support ACP
+|    on L2 switches. <xref target="workarounds"/> explains normative how
+|    non-ACP nodes and networks can be integrated.</t>
+|     <t>The remaining sections are non-normative:...
+
+      Also added sentence to introduction:
+
+|     There are no dependencies against Appendix A to build a complete working and interoperable
+|     ACP according to this document.
+   
+4. Eliminating gratuitous future - primarily from normative text.
+  
+I have tried as good as possible to eliminate "futures" from the
+normative section (6...8,10). Here is a list of the changes
+except for the mayor ones you inquired about separately be low:
+
+
+1)
+| See <xref target="reuse-acp"/> for discussions about how variations
+| of the ACP could be defined in the future (standard or proprietary)
+| to better meet different expectations from those on which the current design is based
+
+In informative section (applicability statement), forward pointer to A.
+
+I added "(standard or proprietary)" to be clearer. I insered this sentence
+because there where over the course of the WG work a lot of discussion
+about how to do things differently, the gist of it is in appendix A, so
+this is just a forward pointer. 
+
+4)
+| Connecting over non-ACP Layer-3 clouds requires explicit configuration.
+| See <xref target="remote-acp-neighbors"/>.
+| This may be automated in the future through auto discovery mechanisms across L3.
+
+Ok, this "future" is pretty gratuitous without explanation. Removed.
+
+5)
+| Other uses are subject to future work, but it is recommended that
+| it is the default security check for any end-to-end connections
+| between ASA.  It is equally useable by other functions such as
+| legacy OAM functions.
+
+Removed, refined first sentence of paragraph to hopefully be
+well inclusive of any such future work:
+
+| <t>The ACP domain certificate SHOULD be used for any authentication
+| between nodes with ACP domain certificates (ACP nodes and NOC nodes)
+| where the required condition is ACP domain membership, such as ACP
+| node to NOC/OAM end-to-en security and ASA to ASA end-to-end security.
+
+6)
+| extension = ; future definition.
+
+This is in the ABNF of the certificte extension specification, and that
+spec needs a hook to support for future definitions.
+
+9) DELETED:
+| Future work optimizations could avoid this but it is unclear how
+| beneficial/feasible this is
+
+replaced with:
+
+| which has the following benefits:
+
+10) DELETED:
+|   <t>If a node learns through a future autonomic method or through configuration that it is part of a zone
+
+ replaced with:
+
+| If a node learns (see <xref target="auto-aggregation"/>) that it is part of a zone
+
+(auto-aggregation subsection is one of two new A. sections created in rely
+ to this DISCUSS, see below).
+
+11) DELETED:
+| (subject to future work) (in zone-id explanationt ext)
+
+no replacement (gratuitous).
+
+12) DELETED:
+| Future work may define mechanisms for auto-coordination between ACP nodes and auto-allocation of Subnet-IDs between them
+
+no replacement (gratuitous).
+
+
+14) IMPROVED:
+Future is used to explain the semantic of the "objective-value"
+in the SRV.est GRASP objective. I fixed up the text to be more
+precise:
+
+| Objective-value MUST be ignored if present. Backward compatible
+| extensions to <xref target="RFC7030"/> MAY be indicated through
+| objective-value.  Non <xref target="RFC7030"/> compatible certificate
+| renewal options MUST use a different objective-name.
+
+
+15) 6.11.1.1- moved notion about future improved RPL option (for multiple NOC)
+into appendix A
+
+16) 6.12.2 - remove "future" from wording of performance through rewording
+(this is really just a matter of impleemntation choice, applicable
+to both first-generation or future geneation implementations, so no
+need to talk about futures.
+
+17) 6.12.5 "future protocols".
+Just refined wording, but kept it unchanged. The reason to use the
+word "future" here was solely to emphasize on the independence of
+the described mechanisms, but not to suggest future work:
+
+| Any type of ACP secure channels to another ACP node can
+| be mapped to ACP virtual interfaces in different ways.
+| This is independent of the choosen secure channel protocol (IPsec, DTLS
+| or other future protocol):
+
+18) 8.1.1 "ACP connect security:
+
+removed notion of future work, but instead gave an example that could be
+impleemtned without future (work outside the scope of this spec), and
+moved the suggestion that would require future standards work (using
+ACP spec extension) into A.10.
+
+19) 7.2 - removed senetence with notion of future (MacSec) - gratuitous.
+
+20) 8.1.2 - removed sentence with future. This was just describing interla
+implementation options, so that work wold be in scope of implementations
+of this spec, no need to call it futures.
+
+21) 9.2.2 (informative section). Removed notion of future role based
+security. This is not one paragraph in A.10 
+
+22) Removed notion that we need a YANG data model (future work)  for ACP/ANI
+Obvious enough so we will not forget even without this note.
+
+Overall: In the few places where i have kept "futures" in the normative text,
+i did try tou be explicit about "standard vs. non-standard" futures.
+
+In summary: there should now be close to minimal possible instances of
+"futures" in the normative text. I hope for this document this will suffice.
+
+5.  Futures discussion in section A:
+
+Note: Half of A. is futures, the other half is explanations. The
+futures where the part of the WG time we spent but concluded it was
+too much work to put into the current spec, but we hink it is crucial not
+to loose this work.  (I have seen so many IETF standards RFC where this
+actual WG work context isn't kept but thrown out, and 10 years later 
+the few people left with institutional memory have to re-explain the stuff,
+but why doc made decisions, and also what was seen as next steps).
+
+------------------
+>FIXED:
+> "Intent" is used both capitalized and in lower case throughout the document and
+> I'm unclear if this is meant to signify a distinction or not.
+
+Thanks. 3 occurances of intent -> Intent.
+
+------------------
+> POSTPONED/RFC-editor:
+> Section 2:
+> 
+> Please remove the -->"..."() notation.
+
+Discussed in prior review, but the outcome ended up only in changelog. I've now
+inserted the following note on top of section 2 to avoid further comments on this:
+
+   <t>[RFC Editor: WG/IETF/IESG review of the terms below asked for references
+       betwen these terms when they refer to each other. The only option in RFC/XML
+       i found to point to a hanging text acronym definition that also displays
+       the actual term is  the format="title" version, which leads to references
+       like '->"ACP domain certificate" ()'. I found no reasonable way to eliminate
+       the trailing '()' generated by this type of cross references. Can you
+       please take care of removing these artefacts during editing (after conversion
+       to nroff ?). Also created ticket to ask for xml2rfc enhancement to avoid this
+       in the future: https://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/347.</t>
+
+------------------
+> FIXED:
+> Please use the exact boilerplate from RFC 8174, not a variation.
+
+Thanks. i copied the text from what an earlier reviewer suggested.
+ Must have come from RFC8196. Only RFC with that mistake (says google).
+
+> It seems like RFC citations should appear for IKEv2 and DTLS upon first use in
+> this section. Otherwise, it seems they are first cited at different future
+> points in the document (Section 6.3 and 6.7, respectively).
+
+Yepp. applicability section was added late, forgot to fixup first references.
+
+------------------
+> FIXED/NEW TEXT:
+> Section 3.3:
+> 
+> "The ACP provides reachability that is independent of the Data-Plane
+>    (except for the dependency discussed in Section 6.12.2 which can be
+>    removed through future work),"
+> 
+> Isn't this kind of a big exception, given that there is meant to be a secure
+> channel between pairs of nodes in the ACP and that developing future
+> encapsulations is non-trivial? It seems like phrasing this the other way around
+> (the ACP is dependent on the Data-Plane for <XYZ> but is otherwise independent
+> of it) would be more accurate.
+
+Nice! Thanks a lot to have me reconsider this text. This text is wrong because
+it is elevating limitations of the implementation of ACP that i helped build and
+am familiar with to limitation of the spec standard. So sometimes, knowing
+too much code doesn't help writing a spec *sigh*.
+
+Text changed to:
+
+| Depending on the implementation (see <xref target="general_addressing"/>
+| for more details), the ACP provides reachability that can be
+| independent of the Data-Plane. This allows the control plane and management
+| plane to operate more robustly.
+
+"general_addressing" 6.12.2 (informative) text is fixed up to explain 
+the candidate implementation issues better than in -16:
+
+| <t>To avoid that Data-Plane configuration can imact the operations of the
+| IPv6 (link-local) interface/address used for ACP channels, appropriate
+| implementation considerations are required. If the IPv6 interface/link-local
+| address is shared with the Data-Plane it needs to be impossible to unconfigure/disable
+| it through configuration. Instead of sharing the IPv6 interface/link-local
+| address, a separate (virtual) interface with a separate IPv6 link-local
+| addresss could be used. For example, the ACP interface could be run over a separate
+| MAC addres of the underlying Ethernet type interface.  For more details and options, 
+| see <xref target="dp-dependency"/>.</t>
+
+I added "A.10.2.  Removing IPv6 data plane dependency" to further detail
+implementation options, and also one possible future that would require
+additional specification (different ethertype). The reason for regurgitating
+on this point i that its really the most difficult part of an implemenation
+if you want to be independent of the data plane.
+
+------------------
+> UNCHANGED/EXPLAINED:
+> Section 6:
+> 
+> "Indestructible" seems like an overstatement. Maybe "resilient" would be more
+> accurate?
+
+As written, the ACP is meant to be resilient and indestructible.
+
+We use resilient to describe the ability to recover
+(from errors/attacks). This applies mostly to the network side
+(common property of most our routing stuff), but also with the
+Cert security system (revoking membership after nodes become
+compromisedetc.).
+
+We use indestructible to indicate the absence or reduction of an
+"attack surface".  For example that ACP is defined to use clearly
+separated infra that would have only ReadOnly YANG models -
+no way to misconfigure.  Or just ~3 UDP ports you could attack 
+from the network (GRASP and IKEv2/IPsec). Aka: minimied atck
+surface from the network.
+
+Unattackable was a choice, but the biggest concern is friendly
+fire from erroneous peers, operators or SDN controllers without
+malicious intent. Therefore we concluded on indestructible.
+
+------------------
+> FIXED:
+> Section 6.1.1:
+> s/Such methods are subject to future work though./No such methods have been
+> defined at the time of publication of this document./
+
+I fixed this text also in response to a discus from you below to
+make it clear when the acp-address is optional (for peers, not
+for ourselves).
+
+| <t>Nodes complying with this specification MUST receive their ACP address
+| through the domain certificate, so their own ACP domain certificate MUST
+| contain the "acp-address" field. Nodes complying with this specification
+| MUST also be able to authentice nodes as ACP peers that have determined
+| their ACP address differently and whose ACP domain certificate may therefore
+| NOT have the "acp-address" field. See <xref target="reuse-acp"/> for further discussions.</t>
+
+------------------
+> s/to build ACP channel/to build ACP channels/
+
+ACK
+
+------------------
+> s/that intends to be equally unique/that it intends to be equally unique/
+
+ACK
+
+------------------
+>FIX/CHANGED TEXT:
+> ""rsub" is optional; its syntax is defined in this document,
+>    but its semantics are for further study.  Understanding the benefits
+>    of using rsub may depend on the results of future work on enhancing
+>    routing for the ACP."
+> 
+> What is the point of defining this now when it is unclear if or how it will be
+> used? There are already means for nodes to do error handling, so it seems like
+> defining a new field in the future if/when it is needed would work fine and be
+> cleaner. Appendix A.7 seems to assume some semantics for this field, which
+> makes the way it is specified here even more confusing IMO.
+
+Yes, that text was unnecessarily alluding to unresolved future
+issues when there is no need to do so because there are perfectly
+good use-case reasons to have rsub now and how to benefit from them
+now - without extensions. 
+
+Texts fixed to:
+
+| <t>"routing-subdomain" is the autonomic subdomain composed of "rsub"
+| and "acp-domain-name".  "rsub" is optional. When not present,
+| "routing-subdomain" is the same as "acp-domain-name". "routing-subdomain"
+| determines the /48 ULA prefix for ACP addresses. "rsub" therefore allows
+| to use multiple /48 ULA prefixes in an ACP domain.
+| See <xref target="domain-usage"> for example use-cases.</t>
+
+And that A.7 example is improved to:
+
+| <t>The rsub element in the domain information field permits the use of addresses
+| from different ULA prefixes.  One use case is to create multiple physical
+| networks that initially may be separated with one ACP domain but different
+| routing subdomains, so that all nodes can mutual trust their ACP domain 
+| certificates (not depending on rsub) and so that they could connect later
+| together into a contiguous ACP networks.</t<
+
+| <t>One instance of such a use case is an ACP for regions interconnected
+| via a non-ACP enabled core, for example due to the absence of product
+| support for ACP on the core nodes. ACP connect configurations as defined
+| in this document can be used to extend and interconnect those ACP islands
+| to the NOC and merge them into a single ACP when later that product
+| support gap is closed.</t>
+
+Auto-aggregation is now only discussed in new section A.10.8.2
+
+------------------
+> FIXED/CHANGED-TEXT:
+> "In this specification, the "acp-address" field is REQUIRED, but
+>    future variations (see Appendix A.8) may use local information to
+>    derive the ACP address.  In this case, "acp-address" could be empty.
+>    Such a variation would be indicated by an appropriate "extension".
+>    If "acp-address" is empty, and "rsub" is empty too, the "local-part"
+>    will have the format "rfcSELF + + extension(s)".  The two plus
+>    characters are necessary so the node can unambiguously parse that
+>    both "acp-address" and "rsub" are empty."
+> 
+> This seems contradictory. Either "acp-address" is REQUIRED in which case there
+> are no exceptions, or it's not; if it's not, then the expected syntax for cases
+> when it's not present should be specified.
+
+Thanks. Took me a while to understand i was talking about semantics and
+you about syntax. Fixed text accordingly. NOdes in this spec MUST
+have acp-address in their own cert, but must also recognize
+peer certs as valid without acp-address in the peers cert:
+
+| <t>Nodes complying with this specification MUST be able to receive
+| their ACP address through the domain certificate, in which case
+| their own ACP domain certificate MUST contain the "acp-address" field.
+| Nodes complying with this specification MUST also be able to authenticate 
+| nodes as ACP peers that have determined their ACP address differently
+| and whose ACP domain certificate MAY NOT have the "acp-address" field. 
+| See <xref target="reuse-acp"/> for further discussions.</t>   
+
+------------------
+> Section 6.1.2:
+> 
+> s/If the node certificates indicates/If the node certificate indicates/
+
+ACK
+
+------------------
+> FIXED/ADDED TEXT:
+> Section 6.3:
+> 
+> It seems odd to provide a citation/discussion for IKEv2 here but not for DTLS.
+
+Yes. The reason is that for once IPsec/IKE is important and proven and
+intended to be the primary protocol, and for non-security folks the naming
+might be somewhat confusing (IKE vs IPsec), and the whole options with without
+GRE and IKE able to autoselect this etc. Hence the explanations.
+
+But i added a boring sence about DTLS for equal treatment:
+
+<t>"DTLS" indicates datagram Transport Layer Security version 1.2. There is no default UDP port, it must always be locally assigned by  the node. See <xref target="DTLS"/>.
+
+Note that there is already "6.7.2.  ACP via DTLS".
+
+------------------
+> FIXED:
+> Section 6.4:
+> 
+> This is a good example of a section where the blurring between the specified
+> behavior and expectations for the future is unhelpful IMO. Why specify the
+> current default and then spend a lot of words (including Appendix A.7) talking
+> about how it will be different in the future?
+
+I have moved all the 6.4 Intent stufff into new section A.8 and also moved the
+Intent stuff in A.7 into A.8 to clean up.
+
+We did spend a lot of time in the WG to discuss the Intent issues, and
+i think that the little whats now left in A.8 is relevant documentation
+for possible future work that would otherwise get easily lost, so do not
+want to delete it completely.
+
+------------------
+> Section 6.10.3.1:
+> 
+> s/We do not think this is required at this point/This is not currently required/
+
+ACK
+
+------------------
+> Section 6.12.2:
+> 
+> s/may specify additional layer 2 or layer encapsulations/may specify additional
+> layer 2 or layer 3 encapsulations/ (I think?)
+
+ACK
+
+------------------
+> Section 8.2.1:
+> 
+> This seems extraneous: "Future work could transform this into a YANG
+> ([RFC7950]) data
+>    model."
+
+ACK.
+
+------------------
+> Appendix A.8:
+> 
+> "Secure channels may
+>    even be replaced by simple neighbor authentication to create
+>    simplified ACP variations for environments where no real security is
+>    required but just protection against non-malicious misconfiguration."
+> 
+> I think experience has shown that even environments where it is assumed that
+> security is not required prove to need it. I would suggest removing this text
+> or changing this implication.
+
+Yes, and again this was badly written text, the future option in mind
+wasn't meant to be insecure anyhow *sigh*:
+
+Sentence left for that suggestion is:
+
+| ACP hop-by-hop network layer secure channels could also be replaced
+| by end-to-end security plus other means for infrastructure protection. 
+
+Note again, that we have been trying to make sure that all the text in this
+section A is not unsolicited but really the result of repeated questions/
+requests in the WG to do things like this (or explains reasons for decisions in ACP).
+
+That one sentence for example goes back to the fact that the hop-by-hop 
+encryption has been the biggest challenge to product adoption of ACP.
+
+------------------
+
+Impressed that you got all the way down to A.8.
+
+Thanks a lot!
+
+
