@@ -1,0 +1,145 @@
+REad:
+
+RFC6020 - 7920: Yang 1.1
+
+rfc7223 - basic interface yang model, everybody is ugmenting 
+
+NMDA - different model.
+
+---------
+Questions:
+  persistency of datastore elements ? Eg: are they assumed to be persistent ?
+---------
+
+A YANG data model for the Autnomic Networking Infrastructure (ANI)
+
+This document defines a YANG data model that can be used to configure
+and manage the Autonomic Networking Infrastructure (ANI). The model
+covers the configuration of ANI components, operational state, and event
+notifications data.
+
+TBD
+
+When a BRSKI pledge tries to enroll, the registrar needs to decide whether
+to accept it or not - and what parameters it should provide to the pledges
+request for certificate parameters: ACP address, (sub-)domain name
+(if there are multiple subdomains). 
+
+The most simple approach for a registrar to decide these parameters is to
+let someone else, such as a controller, decide it. IN YANG this means that
+the registrar would initiate a YANG RPC to the controller in which it provides
+the information it has about the pledge and gets those parameters back.
+
+Experimental features
+
+regist
+Registrar-ID and Next-Node-Number are configurable to support seamless repair
+of a broken registar without impacting the assigned numbering: If a registrar
+fails, the replacement registrar could be configured to use the same Registrar-ID
+as the original and next-node-number that the original had before it failed.
+
+The experimental part of these elements is the ability to configure them. If they
+
+
+
+
+
+// How about specifying semantics in the yang model...
+// if not, then how to make sure that folks understand how each element
+// maps to an otherwise RFC defined functionality... ?
+
+module: ietf-ani-base
+augment: ??? - what to put here ?
+   +--rw ani
+   |  +--rw enabled?  boolean // can i have same name with 'ro' section ?
+   |  |                       // if i can not change from true->false without addition
+   |  |                       // hurdles, how do i express that ?
+   |  +--
+   |
+   +--ro ani                  // not generated from config only.
+      // WRONG: +--ro enabled?  boolean // enabled only if cert exists AND 'rw' section field is true
+      +--ro domain-certificate    |  +--1
+
+
+module: ietf-acp-base
+augment: .../ani-base:???:
+   +--rw acp
+   |  +--rw enabled?  boolean // see above for ani
+   |  |
+   |  +- 
+   |  |
+   |  +--rw registrar         // how can i make this whole block non-existant if not enabled ?
+   |     +- rw enabled        // how to specify if parameters can only be changed if registrar is disabled ?
+   |     +--rw routing-subdomain
+   |     |  +-- rsub string
+   |     |  +-- domain string
+   |     |
+   |     +--rw local-ca     boolean
+   |     +--rw ca                // external CA to use
+   |     |  +---rw url string    // URL to connect to the CA
+   |     |  +---rw vrf string    // VRF in which to resolve reachability for URL
+   |     |  +---rw protocol  XXX // Do we need a protocol, or would that be self-defined because of URL ?
+   |     |  |                    // if empty, defaults to EST 
+   |     |  +---rw 
+   |     |
+   |     +--rw masa* [masa]
+   |     |
+   |     +--rw grasp-parameter
+   |     |  +--rw priority uint8
+   |     |  +--rw weight uint16
+   |     |  +--rw range uint16
+   |     |
+   |     +--rw registrar-id     bit48  // ID of registrar used when assigning zone address
+   |     +--rw next-node-number bit15  // Next Node-Number that will be assigned by registrar
+   |
+   +--ro acp
+      +--ro enabled?  boolean // see above for ani
+      +--ro features
+      |  +--ro registrar 
+      |     +--ro support  boolean
+      |     +--ro local-ca boolean // if local CA supported
+      |
+      +--ro adjacency-table [neighbor]
+      |  +--ro interface   if:interface-ref   // interface on which neighbor was discovered
+      |     +--
+      |
+      +--ro registrar
+         |
+         +--ro status
+            +--ro default-registrar-id 48bit
+            +--ro operational boolean
+            +--ro problems
+               +--ro not-enabled         boolean
+               +--ro needs-registrar-id  boolean  // device without unique
+               +--ro exhausted-node-ids  boolean  //
+               +--ro ca 
+                  +-- local-ca-failing    boolean
+                  +-- no-ca-configured    boolean
+                  +-- no-ca-auth-configured boolean
+                  +-- ca-unreachable      boolean
+                  +-- auth-to-ca-failing  boolean
+                  +-- ca-failing-to-auth  boolean
+
+// when do i need to create a separate module ?
+// or can i just inline it into the outer module ?
+
+
+feature acp-registrar {
+  description "ACP supports registrar.";
+}
+
+leaf enabled {
+  type boolean;
+  description
+    "
+
+leaf registrar-id {
+  type 48bits;
+  description
+    "Set by default to acp:registrar:status:default-registrar-id,
+     changeable 
+     status:registrar: a globally unique 48 bit node identifier such as
+     a MAC address. It must be choosen so that it will not change 
+     node
+
+
