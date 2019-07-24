@@ -1,0 +1,96 @@
+Gits:
+BOOTSTRAP, ACP, .. https://github.com/anima-wg/anima-bootstrap
+GRASP:             https://github.com/becarpenter/animaproto
+
+----------------------------------------------------------------------------
+How to set up local tree for existing remote repository:
+ git clone git@github.com:becarpenter/animaproto.git
+
+----------------------------------------------------------------------------
+
+Creating a pull request
+- edit the file
+
+git add -p
+ stage this hunk ? : yes
+
+git branch - check
+git branch mcr_gratuitous_review - created a branch
+git branch - check
+
+git checkout mcr_gratuitous_review - checkout on that branch
+
+git checkout -b mcr_gratuitoous_review - switches to the branch
+
+git status - shows untracked files in directory
+
+git add <file> - just track the files , not committed to any branch. Just in a local tracked state.
+git commit -m'comment' <file> - add to curent branch
+
+git whatchanged - shows changes
+git branch - show current branch
+git remote -v
+  -> showing multiple remote
+git push origin <name> - pushes all branches that the origin knows about. 
+git push origin <name> [ <branch> ] - also creates new <branch> on origin.
+
+Pull request via GUI:
+
+git rebase -i origin/master - didn't work
+git stash - put the changes away to the side
+
+git pull =  fetch + merge
+
+git fetch 
+git merge -n = dry run
+git merge
+
+git rebase -i origin/master
+----
+
+rebase - execute your step by step changes at a different branch/commit point.
+
+git diff - show uncommitted changes on local disk
+git commit -m'comment' - moved locally changed file into current branch
+git whatchanged - shows commited local changes.
+git diff <hash> - show diffs against different versions.
+
+----
+do many small commits, but create a pull request 
+
+xelerance
+
+-----
+
+ Committer: Toerless Eckert ...
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+------------------------------------------------------------------------------
+echo "# autonomic-control-plane" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+
+# Better not use HTTP:
+git remote add origin https://github.com/anima-wg/autonomic-control-plane.git
+# SSH allows you to share public key to login without password:
+git remote add origin git@github.com:anima-wg/autonomic-control-plane.git
+
+# Do this later:
+git remote set-url origin git@github.com:anima-wg/autonomic-control-plane.git
+
+# Set up public key login:
+# https://help.github.com/articles/connecting-to-github-with-ssh/
+ssh-keygen -t rsa -b 4096 -C "tte@cs.fau.de"
+cat ~/.ssh/id_rsa.pub
+
+git push -u origin master
