@@ -1,0 +1,230 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Warren Kumari <warren@kumari.net>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Warren Kumari's Discuss on
+ draft-ietf-anima-autonomic-control-plane-13: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <152830654814.6366.4951842776897034198.idtracker@ietfa.amsl.com>
+
+Thanks a lot Warren, great suggestions.
+
+Replies inline
+
+Changes for feedback from Mirja, Kumar and Joel committed to -16,
+didn't create separate diff for individual reviewers as diff is not large. 
+(Just ignore whole section 11 moved to appendix in diff.)
+
+https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+http://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-15.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+Cheers
+    Toerless
+
+On Wed, Jun 06, 2018 at 10:35:48AM -0700, Warren Kumari wrote:
+> Warren Kumari has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-13: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> I'm balloting DISCUSS, but I think that this should be relatively simple to
+> address: The document says things like:"Today, the management and control plane
+> of networks typically runs in the global routing table, which is dependent on
+> correct configuration and routing." and "Context separation improves security,
+> because the ACP is not
+>    reachable from the global routing table. "
+> 
+> The term "global routing table" is widely used and understood to mean the
+> global BGP routing table, or Internet global routing table. I understand that
+> you are using it in the "default VRF" meaning, but I think that it is really
+> important to clarify / disambiguate this the first time you use it.
+
+Good catch. The use of "global routing table" seems to be almost a day 1
+text issue of the doc ;-(
+
+We can't use VRF to explain it, because we are not referring to
+VRFs in the data-plane anymore for those devices that do not have VRFs.
+(reviewer request) Only ACP VRF is defined and used as a term.
+
+I removed all uses of "global routing" (table), and just refer to
+"Data-Plane routing (and forwarding, where appropriate) tables":
+
+| Today, the management and control plane of networks typically uses a routing and forwarding table which is dependent on correct configuration and routing
+
+| For management plane protocols, the ACP provides the functionality of a Virtual out of Band (VooB) channel, by providing connectivity to all nodes regardless of their Data-Plane configuration, routing and forwarding tables.
+
+| Context separation improves security, because the ACP is not reachable from the Data Plane routing or forwarding table(s).
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> Thank you very much for writing this document -- it is comprehensive...
+> 
+> A rich text version of my review is here:
+> https://mozphab-ietf.devsvcdev.mozaws.net/D3801#inline-4146 , and pasted below
+> for tooling, email, etc.
+> 
+> ---
+> draft-ietf-anima-autonomic-control-plane.txt:212
+>    network nodes that is not the ACP, and therefore considered to be
+>    dependent on (mis-)configuration.  This data-plen includes both the
+>    traditional forwarding-plane, as well as any pre-existing control-
+> Nit: data-plane
+
+Done.
+
+
+> draft-ietf-anima-autonomic-control-plane.txt:508
+>    certificate.  This does not require any configuration on intermediate
+>    nodes, because they can communicate zero-touch and securely through
+>    the ACP.
+> I understand what you are trying to say, but "zero-touch" is not an adverb.
+
+Took the opportunity fix also some semantics of the paragraph.
+
+ <t>With the ACP, secure bootstrap of new devices and whole new networks can happen without requiring any configuration of unconfigured device along the path: As long as all devices along the path support ACP and a zero-touch bootstrap mechanism like BRSKI, the ACP across a whole network of unconfigured devices can be brought up without operator/provisioning intervention. The ACP also provides additional security for any bootstrap mechanism, because it encrypts the traffic along the path hop-by-hop.</t>
+
+> 
+> draft-ietf-anima-autonomic-control-plane.txt:518
+>    the data-plane is operational, will the other planes work as
+>    expected.
+> This is *sometimes* an undesirable dependency, but is usually viewed as a
+> feature (by operational people) -- having the control plane share fate with the
+> dataplane is something that is usually a feature - this drives at least part of
+> the reason that many organizations run OSPF and OSPFv3 - having V4 OSPF relying
+> on v4 dataplane avoids blackholes if the v4 dataplane stops working. (This is
+> sometimes, but less often used as an argument against ISIS).
+> 
+> I understand why it is useful in this context, but it would be useful to
+> clarify/make it clear that you understand the subtleties.
+
+Added paragraph:
+
+<t>Note that specific control plane functions for the Data-Plane often want to depend on forwarding of their packets via the Data-Plane: Aliveness and routing protocol signaling packets across the Data-Plane to verify reachability across the Data-Plane, using IPv4 signaling packets for IPv4 routing vs. IPv6 signaling packets for IPv6 routing.</t>
+
+> Also, nit: "is operational, will the" -- the comma feel weird here.
+
+Removed
+
+> draft-ietf-anima-autonomic-control-plane.txt:526
+>    management session is running can lock an admin irreversibly out of
+>    the device.  Traditionally only console access can help recover from
+>    such issues.
+> "only console access or OOB".
+> 
+> You may be using "console access" to mean OOB, but much (most?) OOB is now not
+> console based.
+
+Changed to:
+
+> Traditionally only out-of-band access can help recover from such issues (such as serial console or ethernet management port)
+
+Mileage for ethernet based OOB does vary i think. Probably on DC and 
+core/distribution SP gear. Not the typical enterprise gear yet, i think.
+
+> draft-ietf-anima-autonomic-control-plane.txt:531
+>    Operations Center") such as SDN controller applications: Certain
+>    network changes are today hard to operate, because the change itself
+>    may affect reachability of the devices.  Examples are address or mask
+> I think that this was an editing issue -- you don't "operate" changes. Perhaps
+> "implement"?
+
+Good suggestion. Fixed.
+
+> draft-ietf-anima-autonomic-control-plane.txt:858
+>    o  If the node certificates indicate a CDP (or OCSP) then the peer's
+>       certificate must be valid according to those criteria. e.g.: OCSP
+> You expand CDP further in the document, but this is the first time it is used.
+
+Expansion of terms was introduced in -14.
+
+> draft-ietf-anima-autonomic-control-plane.txt:994
+>    ACP neighbors.  Native interfaces (e.g.: physical interfaces on
+>    physical nodes) SHOULD be brought up automatically enough so that ACP
+>    discovery can be performed and any native interfaces with ACP
+> I don't have a suggestion, but "automatically enough" doesn't sound right -
+> "automatically configured enough" ?
+
+Fixed to:
+SHOULD be initialized automatically to a state in which ACP discovery can be performed
+
+> draft-ietf-anima-autonomic-control-plane.txt:1067
+>    In the above (recommended) example the period of sending of the
+>    objective could be 60 seconds the indicated ttl of 180000 msec means
+>    that the objective would be cached by ACP nodes even when two out of
+> Editing fail -- missing some punctuation or words.
+
+Fixed in -14.
+
+> draft-ietf-anima-autonomic-control-plane.txt:1933
+>    for reachability.  The use of the autonomic control plane specific
+>    context eliminates the probable clash with the global routing table
+>    and also secures the ACP from interference from the configuration
+> IMPORTANT: The term "global routing table" has a well known meaning in
+> operations -- it is the global BGP table. I strongly suggest using a different
+> term, or having a very clear statement in the terminology section, AND the
+> first time you use it in the document. This will help minimize confusion.
+
+Done. See Discuss section.
+
+> draft-ietf-anima-autonomic-control-plane.txt:3081
+> 10.2.  ACP (and BRSKI) Diagnostics
+> Just a note that I like / appreciate this section - having guidance on how to
+> troubleshoot is very helpful.
+
+Thanks. 
+
+> draft-ietf-anima-autonomic-control-plane.txt:3416
+> 10.3.2.2.  Fast state propagation and Diagnostics
+> 
+>    "Physical down" state propagates on many interface types (e.g.:
+> When I saw the "physically brought down" I started composing a long soapbox
+> rant on the fact that this will slow down state propagation -- I like that that
+> document anticipates and addresses this. It might be useful to have a pointer
+> in the previous section (like "(see below)" or similar.)
+
+First paragraph of previous chapter (admin-down) had (see below),
+now addd xref: (see below, <xref target="down-fast-state-propagation"/>)
+
+> draft-ietf-anima-autonomic-control-plane.txt:3482
+>    for 5 seconds to probe if there is an ACP neighbor on the remote end
+>    every 500 seconds = 1% power consumption.
+> I believe that this is sufficiently incorrect that you should remove the 1%
+> result (or, better yet the whole last sentence).
+> 
+> Various interfaces (especially long reach) take a significant amount of time
+> (and additional power) when bringing up interfaces -- things like DWDM optics
+> and amplifiers sometimes need significant power for heating elements to lock
+> the frequency / wavelength, and so the power consumption is not linear with
+> interface uptime.
+
+fixed to:
+
+<t>Power consumption of "physical down" interfaces may be significantly lower than those in "admin down" state, for example on long range fiber interfaces. Bringing up interfaces, for example to probe reachabiliy, may also consume additional power. This can make these type of interfaces inappropriate to operate purely for the ACP when  
+they are not currently needed for the Data-Plane.</t>
+
+Joel Halpern also asked about DWDM. I'll refrain from trying to add more
+details here how this situation could othrewise be mitigated, i just
+wanted to highlight understood key aspects, not necessarily all solutions.
+

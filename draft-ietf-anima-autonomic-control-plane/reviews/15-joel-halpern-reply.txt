@@ -1,0 +1,145 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: "Joel M. Halpern" <jmh@joelhalpern.com>
+Cc: rtg-dir@ietf.org, anima@ietf.org, ietf@ietf.org,
+	draft-ietf-anima-autonomic-control-plane.all@ietf.org
+Bcc: 
+Subject: Re: [Anima] Rtgdir telechat review of?
+ draft-ietf-anima-autonomic-control-plane-13
+Reply-To: 
+In-Reply-To: <0878db84-ab65-6262-ed8c-cd982760a89f@joelhalpern.com>
+
+Thanks, Joel
+
+Replies Inline
+
+Changes for feedback from Mirja, Kumar and Joel committed to -16,
+didn't create separate diff for individual reviewers as diff is not large. 
+(Just ignore whole section 11 moved to appendix in diff.)
+
+https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+http://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-15.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+Cheers
+    Toerless
+
+On Thu, Jun 07, 2018 at 05:09:37PM -0400, Joel M. Halpern wrote:
+> Thank you for all your work on this.
+> 
+> While I still find the presence of the address allocation mechanism strange
+> to find in this document, I can live with it.
+> So with this complaint done, I will shut up about it already.
+
+Thanks. Lets take it offline. I am still interested to understand that
+point, especially after the text i added in the hope to clear this concern.
+
+Answers inline.
+
+Thanks
+    Toerless
+
+> Aside from some items noted below, this seems to be in good shape.
+> 
+> Moderate:
+> 
+>     Section 10.3.4 has a helpful discussion of some of the complexities of
+> determining where to auto-enable the ACP.  I am a bit surprised not to see
+> some discussion of which VLANs to enable for ACP in an Ethernet environment.
+
+Thats a topic better to be discussed in followup work. Cisco IOS ACP
+implementation does support automatic VLAN discovery & selection.
+Lot of experience/insight from that.  Trust me, it would be scope creep
+for the ACP document itself.
+
+> For WDM< since wavelength usage is configured, I presume that ACP would
+> never try to auto-enable a frequency band?
+
+Right. Given the experience with VLANs, the clean cut we could make
+for this basic ACP specification is to logically sit on top of
+IPv6 subnet interfaces, ignore all L2/L1 complexities 
+and live with the dependency against IPv6 being able to bring up
+link-local-scope reachability to neighbors. [ And then write followup
+docs if/when we ever get this first doc out as an RFC ;-) ]
+
+The way i would imagine WDM is a bit more like ethernet switches in section 7
+though: You'd want to get ACP connectivity across your optical equipment
+and also be able to reach through the ACP your optical equipment, but
+that would not use special colors, but more likely should be added
+to / leverage the existing in-band management channels of the optical
+equipment. Long discussion. Let me rather stop.
+
+> Minor comments:
+>    In section 6.1.1 the text and the ABNF says that an rsub is a full domain
+> (using the same domain-name construct as the "domain" which is an FQDN.
+> However, the example shows a partial domain string which is concatenated
+> with the "domain" to produce an FQDN.  And the syntqx of "routing-subdomain"
+> shows that concatenation.  This suggests that the text needs to be clear as
+> to what the syntactic content of the rsub field is.
+
+Hmm... RFC1034 does not even mention the term "fully qualified (domain name)" / FQDN,
+You seem to read RFC1034 3.5 to mean that all domain are FQDN, but that is
+not clear to me. In the RR examples of RFC1034, FQDNs are identified by ending
+with a ".", which AFAIK is the standard for FQDN,but the 3.5 syntax doesn't
+even allow you to create such an FQDN, so i was thinking that 3.5 "domain"
+do not have to be FQDNs, and therefore i am assuming that is is also perfectly
+legal to use a syntax of domain3 = domain2 . domain1,
+as in routing-subdomain = rsub . domain-domain-name.
+
+> Might it be better not
+> to define it as a "domain-name" but to define it as FFS, with a caveat that
+> whatever usage is later defined needs to be suitable for combining with the
+> "domain" for generating the hash for the ULA Global ID? 
+
+Well, it does have to be some RFC822-local-part-FFS, but i think its a
+lot better if its constrained to the domain name syntax, because it is
+quite normal operations to have for every actual routing subdomain in the
+network also some associated domain name, and that is what "routing-subdomain"
+is.
+
+So if i build a parser for configuring my segmented routing with the ACP,
+its a lot more logical to allow only longer domain names for
+routing-subdomain that all have the same parent domain (domain).
+
+> Just to be clear, as written the text seems to end up with <domain<.<domain>
+> where <domain> is from RFC 1034.
+
+Right. See above.
+
+I tried to figure out how to unconfuse this.
+
+I changed "domain" to "acp-domain-name", so that its not confused
+with RFC1034 "domain", eliminated "domain-name", and also changed
+the definition of rsub to use RFC1034 "subdomain" instead of "domain",
+even though i can for the heck of it not figure out what the difference
+between domain and subdomain is, except that a domain can be " ", 
+which seems to be the domain root, but its not really defined. 
+But at least it should hopefully eliminate the misconception that rsub
+has to be an FQDN.
+
+>     Section 6.1.2 bullet one states that "The peer certificate is valid as
+> proven by the security association protocol exchange."  I may be
+> overstepping my knowledge, but I think there are two different things. First
+> is the certificate validity, which is an internal property of the
+> certificate.  The second is the certficate applicability which may be
+> informed by the protocol exchange.
+
+Good catch. Fixed as follows:
+
+The following points constitute the ACP domain membership check of a possible peer certificate, independent of the protocol used:
+ The peer certificate is valid (lifetime).
+ The peer has proved ownership of the private key associated with the certifictes public key.
+
+>     Related to that, please put in a reference to which protocol exchange
+> you mean?
+
+No, the goal is to define this independent of protocol.
+
+
+>     Either there is a document inconsistency, or there is a typo in the
+> first paragraph of section 6.10.7.3, in that the address prefix length for
+> the zone address sub-scheme is /127, not /126.
+> 
+> 
+> Yours,
+> Joel
+

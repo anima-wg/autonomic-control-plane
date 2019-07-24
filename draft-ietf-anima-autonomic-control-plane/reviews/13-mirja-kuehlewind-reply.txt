@@ -1,0 +1,137 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Mirja K?hlewind <ietf@kuehlewind.net>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>, anima-chairs@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: Mirja K?hlewind's No Objection on
+ draft-ietf-anima-autonomic-control-plane-13: (with COMMENT)
+Reply-To: 
+In-Reply-To: <152665944850.1663.17974282102092824462.idtracker@ietfa.amsl.com>
+
+Thanks, Mirja
+
+Answers inline
+
+Changes for feedback from Mirja, Kumar and Joel committed to -16,
+didn't create separate diff for individual reviewers as diff is not large.
+(Just ignore whole section 11 moved to appendix in diff.)
+
+https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+http://tools.ietf.org//rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-15.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-16.txt
+
+Cheers
+    Toerless
+
+On Fri, May 18, 2018 at 09:04:08AM -0700, Mirja K?hlewind wrote:
+> Mirja Kühlewind has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-13: No Objection
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> 1) I would like to see a slightly stronger statement here in section 6.1.3:
+> "The M_FLOOD message MUST be sent periodically.  The default SHOULD be
+>    60 seconds, the value SHOULD be operator configurable."
+> Maybe the following instead:
+> "The M_FLOOD message MUST be sent periodically.  The default MUST be
+>    60 seconds, the value SHOULD be operator configurable but SHOULD be
+>    not smaller than 60 seconds."
+
+Done.
+
+> Or even a MUST for the minimum value is that acceptable for the desired use cases.
+
+Depends on network. 60 seconds is goo enough for most networks and
+should not create too much traffic for all current in-scope networks.
+May probably need to be higher when we look more into IoT network.
+
+But when i have some DC operator plugging in some spare switch into the
+DC fabric and it needs to renew its cert before being able to operate,
+and this guy has to wait in front of the switch until it runs before
+he can move on , 60 seconds is eternity, and DC fabric would be happy
+with 5 seconds too.
+
+Aka: can't say a good minimum for all use-cases. SHOULD is ok.
+
+(i hate periodic, but making this non-periodic is more work than fit this
+ first round).
+
+> 2) Also in section 6.5, I would like to seem some rate limiting/pacing:
+> "An ACP node may choose to attempt initiate the different feasible ACP
+>    secure channel protocols it supports according to its local policies
+>    sequentially or in parallel,..."
+
+Right now we've defined only 2 channel mechanisms, IPsec and dTLS, so
+i don't think we can reasonably worry about rate limiting when attempting
+to do them in parallel. Especially because because the performance requirement
+is not when you initiate, but when you respond.
+
+Once there is more interest in other channel protocols, and we feel
+there are important situations where you can't try them in parallel
+(performance or othre reasons), i'd rather start standardizing
+whats currently only written informationally: 
+"Extending ACP channel negotiation (via GRASP)"
+aka: you do only one secure GRASP connection, in it yo negotiate
+IPSec, dTLS, MacSec, AvianCarriers, and then you follow with the one
+choice mutually selected as the best from that list.
+
+Aka: there is already an exit strategy from too many parallel options
+should they happen to come into existance.
+
+> 3) Sec 6.7.3: How are baseline ACP and constrained ACP nodes defined?
+
+Elaborated text more to make it hopefully more self-explanatory:
+
+<t>As explained in the beginning of <xref target="channel-selection"/>, there is no single secure channel mechanism mandated for all ACP nodes. Instead, this section defines two ACP profiles for ACP nodes that do introduce such requirements.</t>
+<t>A baseline ACP node MUST support IPsec natively and MAY support IPsec via GRE.  A constrained ACP node that can not support IPsec MUST support DTLS.  An ACP node connecting an area of constrained ACP nodes with an area of baseline ACP nodes MUST therefore support IPsec and DTLS and supports threefore the baseline and constrained profile.</t>
+
+
+> 4) sec 6.10.6:
+> "With the current allocations, only 2 more schemes are
+>    possible, so the last addressing scheme should consider to be
+>    extensible in itself (e.g.: by reserving bits from it for further
+>    extensions."
+> Maybe use a normative MUST here:
+> "With the current allocations, only 2 more schemes are
+>    possible, so the last addressing scheme MUST be
+>    extensible in itself (e.g.: by reserving bits from it for further
+>    extensions."
+
+fixed to:
+
+...scheme MUST provide further extensions.
+
+> 5) I guess section 10 could be moved to the appendix.
+
+I did reorder section 10 subsection, so now section 10 is only what i consider
+to be the important operational aspects of ACP, aka what hopefully will become
+YANG model (config, diagnostics etc.) in the future. Section 11 is then
+explanations and futures.
+
+I am obnoxiously NOT a fan of appendices because there is good reason to
+believe that text in an appendix will be more often ignored by readers. So
+thats why i do not want 10. to be an appendix. But i now moved 11 into 
+Appendix.
+
+Hope this is goo dcompromise.
+
+Cheers
+    Toerless
