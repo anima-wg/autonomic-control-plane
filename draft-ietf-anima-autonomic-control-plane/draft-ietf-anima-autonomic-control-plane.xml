@@ -17,7 +17,7 @@
 <?rfc compact="yes"?>
 <!-- REMOVED in version 12: updates="4291,4193" -->
 <rfc ipr="trust200902"
-     docName="draft-ietf-anima-autonomic-control-plane-20" category="std">
+     docName="draft-ietf-anima-autonomic-control-plane-21" category="std">
         <front>
                 <title abbrev="An Autonomic Control Plane (ACP)">An Autonomic Control Plane (ACP)</title>
                 <author role="editor" fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
@@ -51,7 +51,7 @@
                         </address>
                 </author>
 
-                <date day="11" month="March" year="2019"/>
+                <date month="November" year="2019"/>
 
                 <area>Operations and Management</area>
                 <workgroup>ANIMA WG</workgroup>
@@ -436,7 +436,7 @@ The TA is used to authenticate the ACP domain membership of other nodes (see <xr
 
 <t>The LDevID is called the ACP domain certificate, the TA is the Certificate Authority (CA) of the ACP domain.</t>
 
-<t>The ACP does not mandate specific mechanisms by which this keying material is provisioned into the ACP node. It only requires the Domain information field as specified in <xref target="domcert-acpinfo"/> in its domain certificate as well as those of candidate ACP peers.  See <xref target="bootstrap"/> for more information about enrollment or provisioning options.</t>
+<t>The ACP does not mandate specific mechanisms by which this keying material is provisioned into the ACP node. It only requires the certificate to comply with <xref target="acp-certificates"/>, specifically the Domain information field as specified in <xref target="domcert-acpinfo"/> in its domain certificate as well as those of candidate ACP peers.  See <xref target="bootstrap"/> for more information about enrollment or provisioning options.</t>
 
 <t>This document uses the term ACP in many places where the Autonomic Networking reference documents <xref target="RFC7575"/> and <xref target="I-D.ietf-anima-reference-model"/> use the word autonomic.  This is done because those reference documents consider (only) fully autonomic networks and nodes, but support of ACP does not require support for other components of autonomic networks except for relying on GRASP and providing security and transport for GRASP.  Therefore the word autonomic might be misleading to operators interested in only the ACP.</t>
 
@@ -445,13 +445,20 @@ The TA is used to authenticate the ACP domain membership of other nodes (see <xr
 
     <section anchor="acp-certificates" title="ACP Certificates">
 
-<t>ACP domain certificates are <xref target="RFC5280"/> compliant X.509 certificates.</t>
+<t>ACP domain certificates MUST be <xref target="RFC5280"/> compliant X.509 certificates.</t>
 
-<t>An ACP domain certificate MUST have an Elliptic Curve Diffie-Hellman (ECDH) public key. It SHOULD be signed with an ECDH public key. Otherwise it MUST be signed with an RSA key. Any secure channel protocols used for the ACP as specified in this document or extensions MUST therefore support authentication (e.g.:signing) starting with these type of certificates. See <xref target="RFC4492"/> for more information.</t>
+<t>ACP nodes MUST support RSA and Elliptic Curve Diffie-Hellman (ECDH) public keys in ACP certificates.
+ACP nodes MUST support RSA and Elliptic Curve Diffie-Hellman (ECDH) signatures for ACP certificates.
+ The ACP certificate SHOULD use an RSA key and an RSA signature when the ACP certificate is intended to be used not only for ACP authentication but also for other purposes. The ACP certificate MAY use an ECDH key and an ECDH signature if the ACP certificate is only used for ACP and ANI authentication and authorization. ACP nodes MUST support 2048-bit RSA using SHA-256, SHA-384 or SHA-512 or Elliptic Curve using NIST P-256, P-384, or P-521 as key lengths in ACP certificates/signatures.</t>
+
+<t>Any secure channel protocols used for the ACP as specified in this document or extensions of this document MUST therefore support authentication (e.g.:signing) starting with these type of certificates. See <xref target="RFC4492"/> for more information.</t>
+
+<t>The reason for these choices are as follows: As of 2019, RSA is more widely used than ECDH, therefore the MUST for RSA. ECDH offers equivalent security at shorter key lengths (see <xref target="RFC4492"/>). This can be beneficial especially in the presence of constrained bandwidth or constrained nodes in an ACP/ANI network. Some ACP functions such as GRASP peer-2-peer across the ACP require end-to-end/any-to-any authenticatio/authorization, therefore ECDH can only reliably be used in the ACP when it MUST be supported on all ACP nodes.</t>
+
+<t>For further certificate details, ACP certificates may follow the recommendations from <xref target="CABFORUM"/>.</t>
 
 <t>The ACP domain certificate SHOULD be used for any authentication between nodes with ACP
-domain certificates (ACP nodes and NOC nodes) where the required authorization condition is ACP domain membership,
-such as ACP node to NOC/OAM end-to-end security and ASA to ASA end-to-end security.
+domain certificates (ACP nodes and NOC nodes) where the required authorization condition is ACP domain membership, such as ACP node to NOC/OAM end-to-end security and ASA to ASA end-to-end security.
 <xref target="certcheck"/> defines this "ACP domain membership check".
 The uses of this check that are standardized in this document are for the establishment of
 hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for ACP GRASP (<xref target="GRASP-substrate"/>) end-to-end via TLS (<xref target="RFC5246"/>).
@@ -1168,16 +1175,18 @@ will be distributed with the flooded objective.  An example of the message is in
 
                 </section>
 
-                <section anchor="associations" title="Security Association protocols">
+                <section anchor="associations" title="Security Association (Secure Channel) protocols">
 
 <t>Due to <xref target="channel-selection">Channel Selection</xref>, ACP can support an evolving set of security association protocols. These protocols only need to be used to establish secure channels with L2 adjacent ACP neighbors and only optionally (where needed) across non-ACP capable L3 network (see <xref target="remote-acp-neighbors"/>).  Therefore, there is architecturally no need for any network wide mandatory to implement (MTI) security association protocols. Instead, ACP nodes only need to implement those protocols required to be supported by their neighbors. See <xref target="Profiles"/> for an example of this.</t>
 
 <t>The authentication of peers in any security association protocol MUST use the ACP domain certificate according to <xref target="certcheck"/>.  Because auto-discovery of candidate ACP neighbors via GRASP (see <xref target="discovery-grasp"/>) as specified in this document does not communicate the neighbors ACP domain certificate, and ACP nodes may not (yet) have any other network connectivity to retrieve certificates, any security association protocol MUST use a mechanism to communicate the certificate directly instead of relying on a referential mechanism such as communicating only a hash and/or URL for the certificate.</t>
 
+<t>Any security association protocol MUST use PFS (such as profiles providing PFS).</t>
+
 <t>The degree of security required on every hop of an ACP network needs to be consistent across the network so that there is no designated "weakest link" because it is that "weakest link" that would otherwise become the designated point of attack. When the secure channel protection on one link is compromised, it can be used to send/receive packets across the whole ACP network. This principle does not imply that the requirements against ACP security association protocols have to be the same across all subnets in an ACP network:
 <list style="symbols">
 
-<t>Underlying L2 mechanisms such as strong encrypted radio technologies or <xref target="MACSEC"/> may offer equivalent encryption and the ACP security association protocol may only be required to authenticate ACP domain membership of a peer. Mechanisms to auto-discover and associate ACP peers leveraging such underlying L2 security are possible and desirable to avoid duplication of encryption, but none are specified in this document.</t>
+<t>Underlying L2 mechanisms such as strong encrypted radio technologies or <xref target="MACSEC"/> may offer equivalent encryption and the ACP security association protocol may only be required to authenticate ACP domain membership of a peer and/or derive a key for the L2 mechanism. Mechanisms to auto-discover and associate ACP peers leveraging such underlying L2 security are possible and desirable to avoid duplication of encryption, but none are specified in this document.</t>
 
 <t>Strong physical security of a link may stand in where cryptographic security is infeasible. As there is no secure mechanism to automatically discover strong physical security solely between two peers, it can only be used with explicit configuration and that configuration too could become an attack vector. This document therefore only specifies with <xref target="acp-connect">ACP connect</xref> one explicitly configured mechanism without any secure channel association protocol - for the case where both the link and the nodes attached to it have strong physical security.</t>
 
@@ -1199,7 +1208,7 @@ will be distributed with the flooded objective.  An example of the message is in
 
 <t>IPsec tunnel mode is required because the ACP will route/forward packets received from any other ACP node across the ACP secure channels, and not only its own generated ACP packets.  With IPsec transport mode, it would only be possible to send packets originated by the ACP node itself.</t>
 
-<t>IPsec MUST use ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carrying legacy management protocol traffics as well as hop-by-hop GRASP).</t>
+<t>IPsec MUST support ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carrying legacy management protocol traffics as well as hop-by-hop GRASP).</t>
 
 <t>These IPsec requirements are based on <xref target="RFC8221"/> but limited to the minimum necessary options because ACP is not a general purpose use case today with a wide range of interoperability requirements against legacy devices originally developed against older profile recommendations. Once there are updates to <xref target="RFC8221"/>, these should accordingly be reflected in updates to these ACP requirements (for example if ENCR_AES_GCM_16 was to be superceeded in the future).</t>
 
@@ -1357,8 +1366,7 @@ adhere to the DTLS implementation recommendations and security considerations of
 
         <t>GRASP unicast messages inside the ACP always use the ACP address.  Link-local
         addresses from the ACP VRF must not be used inside objectives.  GRASP unicast messages  inside the ACP
-        are transported via TLS according to <xref target="RFC7525"/> execept that only TLS version 1.2 (<xref target="RFC5246"/>) or higher MUST be used - because there is no need for backward compatibility in the new use-case of ACP. 
-        Mutual authentication MUST use the ACP domain membership check 
+        are transported via TLS according to <xref target="RFC7525"/> execept that only TLS version 1.2 (<xref target="RFC5246"/>) or higher MUST be used - because there is no need for backward compatibility in the new use-case of ACP.  Mutual authentication MUST use the ACP domain membership check 
         defined in (<xref target="certcheck"/>).</t>
 
         <t>GRASP link-local multicast messages are targeted for a specific ACP virtual interface 
@@ -1367,6 +1375,8 @@ adhere to the DTLS implementation recommendations and security considerations of
         connection(s) to the IPv6 link-local neighbor address(es) on the underlying
         ACP virtual interface.  If the ACP GRASP virtual interface has two or more neighbors,
         the GRASP link-local multicast messages are replicated to all neighbor TCP connections.</t>
+
+        <t>TLS for GRASP MUST offer TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and MUST NOT offer options with less than 256bit AES or less than SHA384.  TLS for GRASP MUST also include the "Supported Elliptic Curves" extension, it MUST support support the NIST P-256 (secp256r1) and P-384 (secp384r1(24)) curves <xref target="RFC4492"/>.  In addition, GRASP TLS clients SHOULD send an ec_point_formats extension with a single element, "uncompressed". For further interoperability recommendations, GRASP TLS implementations SHOULD follow <xref target="RFC7525"/>.</t>
         
         <t>TCP and TLS connections for GRASP in the ACP use the IANA assigned TCP port for GRASP (7107).
         Effectively the transport stack is expected to be TLS for connections from/to the ACP
@@ -3897,6 +3907,14 @@ destination address (not in ACP connect section, but because of it).</t>
       <t>Other:</t>
       <t>Change author association: Toerless Eckert, Huawei -> Futurewei USA.</t>
       </section>
+
+      <section title="draft-ietf-anima-autonomic-control-plane-21">
+      <t>In reply to review of -19 by Ben Kaduk (also for Eric Rescorla) that where not fixed in -20:</t>
+      <t>6.1.1 Added missing detail about ACP domain certificate requirements and explanations.</t>
+      <t>Also added pointer to CABFORUM cert recommendations as suggested by MichaelR (changing pointer, external non-IETF document, so can not be a real MUST/SHOULD).</t>
+      <t>6.7 Added requirement for PFS in secure channel protocols.</t>
+      <t>6.8.2 Added TLS security profile based on 'intersection' of Bens recommended profiles and RFC7525.</t>
+      </section>
 </section>
 
         </middle>
@@ -4060,6 +4078,18 @@ destination address (not in ACP connect section, but because of it).</t>
                             <organization>IEEE SA-Standards Board</organization>
                             </author>
                             <date month="June" year="2016"/>
+                        </front>
+                        </reference>
+
+                        <reference anchor="CABFORUM" target="https://cabforum.org/baseline-requirements-certificate-contents/">
+                        <front>
+                            <title>
+                                Certificate Contents for Baseline SSL
+                            </title>
+                            <author>
+                                <organization>CA/Browser Forum</organization>
+                            </author>
+                            <date month="Nov" year="2019"/>
                         </front>
                         </reference>
 
