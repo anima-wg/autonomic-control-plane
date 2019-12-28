@@ -1185,7 +1185,7 @@ will be distributed with the flooded objective.  An example of the message is in
 
 <t>The authentication of peers in any security association protocol MUST use the ACP domain certificate according to <xref target="certcheck"/>.  Because auto-discovery of candidate ACP neighbors via GRASP (see <xref target="discovery-grasp"/>) as specified in this document does not communicate the neighbors ACP domain certificate, and ACP nodes may not (yet) have any other network connectivity to retrieve certificates, any security association protocol MUST use a mechanism to communicate the certificate directly instead of relying on a referential mechanism such as communicating only a hash and/or URL for the certificate.</t>
 
-<t>Any security association protocol MUST use PFS (such as profiles providing PFS).</t>
+<t>Any security association protocol MUST provide Forward Secrecy (whether inherently or as part of a profile of the security association protocol).</t>
 
 <t>The degree of security required on every hop of an ACP network needs to be consistent across the network so that there is no designated "weakest link" because it is that "weakest link" that would otherwise become the designated point of attack. When the secure channel protection on one link is compromised, it can be used to send/receive packets across the whole ACP network. This principle does not imply that the requirements against ACP security association protocols have to be the same across all subnets in an ACP network:
 <list style="symbols">
