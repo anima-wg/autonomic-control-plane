@@ -1257,12 +1257,16 @@ will be distributed with the flooded objective.  An example of the message is in
 
                                 <t>We define the use of ACP via DTLS in the assumption that it is likely the first transport encryption supported in some classes of constrained devices.</t>
 
+                                <t>An ACP node announces its ability to support DTLS as the ACP secure channel protocol in GRASP as the "DTLS" method for the "AN_ACP" objective.</t>
+
                                 <t>To run ACP via UDP and DTLS v1.2 <xref target="RFC6347"/> a locally assigned UDP port is used that is announced as a parameter in the GRASP AN_ACP objective to candidate neighbors.</t>
 
 <t>All ACP nodes supporting DTLS as a secure channel protocol MUST 
 adhere to the DTLS implementation recommendations and security considerations of <xref target="RFC7525">BCP 195</xref> except with respect to the DTLS version. ACP nodes supporting DTLS MUST implement only DTLS 1.2 or later.  For example, implementing DTLS-1.3 (<xref target="I-D.ietf-tls-dtls13"/>) is also an option.</t>
 
                                 <t>There is no additional session setup or other security association besides this simple DTLS setup.  As soon as the DTLS session is functional, the ACP peers will exchange ACP IPv6 packets as the payload of the DTLS transport connection.  Any DTLS defined security association mechanisms such as re-keying are used as they would be for any transport application relying solely on DTLS.</t>
+
+<!-- RFC 6125 is a common reference for TLS server-identification/verification procedures, but it covers only names, and only server identities; as such, it's not really a good fit here.  In fact, we can't really do much name validation since the connection is over link-local IPv6 addresses anyway. -->
 
                         </section>
                         <!-- DTLS -->
