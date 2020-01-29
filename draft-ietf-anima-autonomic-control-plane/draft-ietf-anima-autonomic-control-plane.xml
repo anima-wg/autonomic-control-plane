@@ -488,7 +488,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
 <figure anchor="acp-dominfo-abnf" title="ACP Domain Information Field ABNF">
     <artwork><![CDATA[
   domain-information = local-part "@" acp-domain-name
-  local-part = key [ "." local-info ]
+  local-part = key [ "+" local-info ]
   key = "rfcSELF"
   local-info = [ acp-address ] [ "+" rsub extensions ]
   acp-address = 32HEXDIG | 0 ; HEXDIG as of RFC5234 section B.1
@@ -523,16 +523,12 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
 
 <t>To keep the encoding simple, there is no consideration for internationalized acp-domain-names. The ACP domain information is not intended for enduser consumption, and there is no protection against someone not owning a domain name to simpy choose it. Instead, it only serves as a hash seed for the ULA and for diagnostics to the operator. Therefore, any operator owning only an internationalized domain name should be able to pick an equivalently unique 7-bit ASCII acp-domain-name string representing the internationalized domain name.</t>
 
-                                <t>
-                                  "routing-subdomain" is a heuristic that
-                                  allows a Registrar to consistently generate a
-                                  unique 48-bit ULA prefix for ACP addresses.
-                                  The presence of the "rsub" component allows
-                                  to a single ACP domain to employ multiple /48
-                                  ULA prefixes.
-                                  See <xref target="domain-usage"/> for example
-                                  use-cases.
-                                </t>
+<t>
+"routing-subdomain" is a heuristic that allows a Registrar to consistently generate a
+unique 48-bit ULA prefix for ACP addresses.  The presence of the "rsub" component allows
+to a single ACP domain to employ multiple /48 ULA prefixes.
+See <xref target="domain-usage"/> for example use-cases.
+</t>
 
                                 <t>The optional "extensions" field is used for future standardized extensions to this specification.  It MUST be ignored if present and not understood.</t>
 
@@ -546,21 +542,35 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
      </list></t>
 
 <t>The subjectAltName / rfc822Name encoding of the ACP domain name and ACP address is used for the following reasons: </t>
-<t>
 
-    <list style="symbols">
-        <t>It should be possible to use the ACP domain certificate as an LDevID on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses.</t>
-        <t>The information for the ACP should not cause incompatibilities with any pre-existing ASN.1 software.  This eliminates the introduction of a novel information element because that could require extensions to such pre-existing ASN.1 parsers.</t>
-        <t>subjectAltName / rfc822Name is a pre-existing element that must be supported by all existing ASN.1 parsers for LDevID.</t>
-        <t>The element required for the ACP should not be misinterpreted by any other uses of the LDevID.  If the element used for the ACP is interpreted by other uses, the impact should be benign.</t>
-        <t>The element should not require additional ASN.1 en/decoding, because it is unclear if all, especially embedded devices certificate libraries would support extensible ASN.1 functionality.</t>
-        <t>Using an IP address format encoding could result in non-benign misinterpretation of the domain information field; other uses unaware of the ACP could try to do something with the ACP address that would fail to work correctly.  For example, the address could be interpreted to be an address of the node which does not belong to the ACP VRF.</t>
-        <t>At minimum, both the AN domain name and the non-domain name derived part of the ACP address need to be encoded in one or more appropriate fields of the certificate, so there are not many alternatives with pre-existing fields where the only possible conflicts would likely be beneficial.</t>
-        <t>rfc822Name encoding is very flexible. It allows to encode all the different fields of information required for the ACP.</t>
-        <t>The format of the rfc822Name is chosen so that an operator can set up a mailbox called
-            &nbsp;&nbsp;rfcSELF@&lt;domain> that would receive emails sent towards the rfc822Name of any node inside a domain.  This is possible because in many modern mail systems, components behind a "+" character are considered part of a single mailbox.  In other words, it is not necessary to set up a separate mailbox for every ACP node, but only one for the whole domain.</t>
+    <t>Rfc822name encoding for the ACP domain information was choosen for the following reasons.</t>
 
-        <t>In result, if any unexpected use of the ACP addressing information in a certificate happens, it is benign and detectable: it would be mail to that mailbox.</t>
+    <t><list style="symbols">
+        <t>The ACP domain information field is the identifier of a node's ACP. It includes the the necessary components to identify a nodes ACP both from within the ACP as well as from the outside of the ACP.</t>
+
+        <t>For manual and/or automated diagnostics and backend management of devices and ACPs, it is necessary to have an easily human readible and software parsed standard, single string representation of the ACP domain information. For example, inventory or other backend systems can always identify an entity by one unique string field but not by a combination of multiple fields, which would be necessary if there was no single string representation.</t>
+
+        <t>If the encoding of the ACP domain information into the ACP domains certificate was not that of such a string, it would be necessary to define a second standard encoding to provide this format (standard string encoding).</t>
+
+        <t>Rfc822 addresses have become standard identifiers of entities in many systems, including the majority of user identification in web or mobile applications, where in many cases, e-mail is not even part of the service for which an rfc822 address is used as an entities identifier. In single-sign-on systems for example, &lt;local-part>@&lt;domain> is instead used to indicate a &lt;domain> with which authentication and authorization of &lt;local-part> is performend without any other use of RFC822 than its address format (e.g.: no rfc822 formatted message exchanges).</t>
+
+        <t>Encoding the ACP nodes identity/name in the format of an rfc822address is therefore following common practices for how rfc822 addresses are used in other contexts. It also very well matches the format of rfc822 address structure &lt;local-part>@&lt;domain> because the ACP domain information does logically also consist of a &lt;domain> identifying the ACP, and a &lt;local-part> identifying a nodes ACP.</t>
+
+        <t>subjectAltName / rfc822Name is the standard, mandatory to implement certificate attribute to encode the certificate subjects rfc822 address and can be the only subjects name.</t>
+
+    </list></t>
+
+    <t>Compatibilities:</t>
+
+    <t><list style="symbols">
+        <t>It should be possible to use the ACP domain certificate as an LDevID on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses. The subjectName for example is for example often used as an entity identifier in non-ACP uses.</t>
+
+        <t>The element should not require additional ASN.1 en/decoding, because libraries to access certificate information especially for embedded devices may not support extended ASN.1 decoding beyond predefined, manadatory fields. subjectAltName / rfc822Name is such a mandatory predefined field. subjectAlName / otherName for example is not.</t>
+
+        <t>Encoding of the ACP domain information as a human readable string in a manadatory certificate field also has the benefit that it can be diagnosed/decoded in any pre-existing certificate diagnostic software.</t>
+
+        <t>The element required for the ACP should not be misinterpreted by any other uses of the LDevID.  If the element used for the ACP is interpreted by other components than the ACP, the impact should be benign. By using fully rfc822address compliant encoding, the benign side effect of non-ACP software using the ACP rfc822address would be emails sent to the mailbox identified by the rfc822address. If it is desired to receive such emails, suitable email software may also support assigning all rfc822addresses for an ACP domain to a single mailbox rfcSELF@&lt;domain>. This is possible when "+" (which follows rfcSELF) is supported by the Mail User Agent as a separator between mail subscriber and sub-mailbox.</t>
+
     </list>
  </t>
     <t>See section 4.2.1.6 of <xref target="RFC5280"/> for details on the subjectAltName field.</t>
@@ -3376,6 +3386,10 @@ currently one registry table - the "ACP Address Type" table.</t>
 </section>
 
     <section title="draft-ietf-anima-autonomic-control-plane-22">
+       <t>Ben Kaduk review of -21:</t>
+       <t>6.1.2 rewrote text for explaining / justifying use of rfc822name as identifier for node CP in certificate (was discussed in thread, but badly written in prior versions).</t>
+       <t>6.1.2  Changed EBNF syntax to use "+" after rfcSELF because that is the known primary name to extensions separator in many email systems ("." was wrong in prior versions).</t>
+       <t> Other:</t>
        <t>Forgot to update example of ACP domain information to use capitalized hex-digits as required by HEXDIGIT used.</t>
        <t>Added reference to RFC8316 (AN use-cases) to beginning of section 3 (ACP use cases).</t>
        <t>Enhanced IPsec parameters description / requirements (from Michael Richardson).</t>

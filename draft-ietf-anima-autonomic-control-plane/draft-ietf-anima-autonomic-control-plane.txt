@@ -5,10 +5,10 @@
 ANIMA WG                                                  T. Eckert, Ed.
 Internet-Draft                                             Futurewei USA
 Intended status: Standards Track                       M. Behringer, Ed.
-Expires: June 15, 2020
+Expires: June 3, 2020
                                                             S. Bjarnason
                                                           Arbor Networks
-                                                       December 13, 2019
+                                                        December 1, 2019
 
 
                     An Autonomic Control Plane (ACP)
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 15, 2020.
+   This Internet-Draft will expire on June 3, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 1]
+Eckert, et al.            Expires June 3, 2020                  [Page 1]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -85,16 +85,16 @@ Table of Contents
        6.1.2.  ACP Certificate ACP Domain Information Field  . . . .  22
        6.1.3.  ACP domain membership check . . . . . . . . . . . . .  26
        6.1.4.  Trust Points and Trust Anchors  . . . . . . . . . . .  28
-       6.1.5.  Certificate and Trust Point Maintenance . . . . . . .  29
+       6.1.5.  Certificate and Trust Point Maintenance . . . . . . .  30
          6.1.5.1.  GRASP objective for EST server  . . . . . . . . .  30
-         6.1.5.2.  Renewal . . . . . . . . . . . . . . . . . . . . .  31
+         6.1.5.2.  Renewal . . . . . . . . . . . . . . . . . . . . .  32
          6.1.5.3.  Certificate Revocation Lists (CRLs) . . . . . . .  32
-         6.1.5.4.  Lifetimes . . . . . . . . . . . . . . . . . . . .  32
+         6.1.5.4.  Lifetimes . . . . . . . . . . . . . . . . . . . .  33
          6.1.5.5.  Re-enrollment . . . . . . . . . . . . . . . . . .  33
          6.1.5.6.  Failing Certificates  . . . . . . . . . . . . . .  34
      6.2.  ACP Adjacency Table . . . . . . . . . . . . . . . . . . .  35
-     6.3.  Neighbor Discovery with DULL GRASP  . . . . . . . . . . .  35
-     6.4.  Candidate ACP Neighbor Selection  . . . . . . . . . . . .  38
+     6.3.  Neighbor Discovery with DULL GRASP  . . . . . . . . . . .  36
+     6.4.  Candidate ACP Neighbor Selection  . . . . . . . . . . . .  39
      6.5.  Channel Selection . . . . . . . . . . . . . . . . . . . .  39
      6.6.  Candidate ACP Neighbor verification . . . . . . . . . . .  42
      6.7.  Security Association (Secure Channel) protocols . . . . .  42
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 2]
+Eckert, et al.            Expires June 3, 2020                  [Page 2]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -165,7 +165,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 3]
+Eckert, et al.            Expires June 3, 2020                  [Page 3]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -221,7 +221,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 4]
+Eckert, et al.            Expires June 3, 2020                  [Page 4]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -277,7 +277,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 5]
+Eckert, et al.            Expires June 3, 2020                  [Page 5]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -333,7 +333,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 6]
+Eckert, et al.            Expires June 3, 2020                  [Page 6]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -389,7 +389,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 7]
+Eckert, et al.            Expires June 3, 2020                  [Page 7]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -445,7 +445,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 8]
+Eckert, et al.            Expires June 3, 2020                  [Page 8]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -501,7 +501,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                 [Page 9]
+Eckert, et al.            Expires June 3, 2020                  [Page 9]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -557,7 +557,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 10]
+Eckert, et al.            Expires June 3, 2020                 [Page 10]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -613,7 +613,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 11]
+Eckert, et al.            Expires June 3, 2020                 [Page 11]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -669,7 +669,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 12]
+Eckert, et al.            Expires June 3, 2020                 [Page 12]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -725,7 +725,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 13]
+Eckert, et al.            Expires June 3, 2020                 [Page 13]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -781,7 +781,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 14]
+Eckert, et al.            Expires June 3, 2020                 [Page 14]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -837,7 +837,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 15]
+Eckert, et al.            Expires June 3, 2020                 [Page 15]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -893,7 +893,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 16]
+Eckert, et al.            Expires June 3, 2020                 [Page 16]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -949,7 +949,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 17]
+Eckert, et al.            Expires June 3, 2020                 [Page 17]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1005,7 +1005,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 18]
+Eckert, et al.            Expires June 3, 2020                 [Page 18]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1061,7 +1061,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 19]
+Eckert, et al.            Expires June 3, 2020                 [Page 19]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1117,7 +1117,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 20]
+Eckert, et al.            Expires June 3, 2020                 [Page 20]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1173,7 +1173,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 21]
+Eckert, et al.            Expires June 3, 2020                 [Page 21]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1229,7 +1229,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 22]
+Eckert, et al.            Expires June 3, 2020                 [Page 22]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1239,7 +1239,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    remove this comment line]
 
      domain-information = local-part "@" acp-domain-name
-     local-part = key [ "." local-info ]
+     local-part = key [ "+" local-info ]
      key = "rfcSELF"
      local-info = [ acp-address ] [ "+" rsub extensions ]
      acp-address = 32HEXDIG | 0 ; HEXDIG as of RFC5234 section B.1
@@ -1285,7 +1285,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 23]
+Eckert, et al.            Expires June 3, 2020                 [Page 23]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1341,7 +1341,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 24]
+Eckert, et al.            Expires June 3, 2020                 [Page 24]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -1349,65 +1349,89 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    The subjectAltName / rfc822Name encoding of the ACP domain name and
    ACP address is used for the following reasons:
 
-   o  It should be possible to use the ACP domain certificate as an
-      LDevID on the system for other uses beside the ACP.  Therefore,
-      the information element required for the ACP should be encoded so
-      that it minimizes the possibility of creating incompatibilities
-      with such other uses.
+   Rfc822name encoding for the ACP domain information was choosen for
+   the following reasons.
 
-   o  The information for the ACP should not cause incompatibilities
-      with any pre-existing ASN.1 software.  This eliminates the
-      introduction of a novel information element because that could
-      require extensions to such pre-existing ASN.1 parsers.
+   o  The ACP domain information field is the identifier of a node's
+      ACP.  It includes the the necessary components to identify a nodes
+      ACP both from within the ACP as well as from the outside of the
+      ACP.
 
-   o  subjectAltName / rfc822Name is a pre-existing element that must be
-      supported by all existing ASN.1 parsers for LDevID.
+   o  For manual and/or automated diagnostics and backend management of
+      devices and ACPs, it is necessary to have an easily human readible
+      and software parsed standard, single string representation of the
+      ACP domain information.  For example, inventory or other backend
+      systems can always identify an entity by one unique string field
+      but not by a combination of multiple fields, which would be
+      necessary if there was no single string representation.
 
-   o  The element required for the ACP should not be misinterpreted by
-      any other uses of the LDevID.  If the element used for the ACP is
-      interpreted by other uses, the impact should be benign.
+   o  If the encoding of the ACP domain information into the ACP domains
+      certificate was not that of such a string, it would be necessary
+      to define a second standard encoding to provide this format
+      (standard string encoding).
 
-   o  The element should not require additional ASN.1 en/decoding,
-      because it is unclear if all, especially embedded devices
-      certificate libraries would support extensible ASN.1
-      functionality.
+   o  Rfc822 addresses have become standard identifiers of entities in
+      many systems, including the majority of user identification in web
+      or mobile applications, where in many cases, e-mail is not even
+      part of the service for which an rfc822 address is used as an
+      entities identifier.  In single-sign-on systems for example,
+      <local-part>@<domain> is instead used to indicate a <domain> with
+      which authentication and authorization of <local-part> is
+      performend without any other use of RFC822 than its address format
+      (e.g.: no rfc822 formatted message exchanges).
 
-   o  Using an IP address format encoding could result in non-benign
-      misinterpretation of the domain information field; other uses
-      unaware of the ACP could try to do something with the ACP address
-      that would fail to work correctly.  For example, the address could
-      be interpreted to be an address of the node which does not belong
-      to the ACP VRF.
+   o  Encoding the ACP nodes identity/name in the format of an
+      rfc822address is therefore following common practices for how
+      rfc822 addresses are used in other contexts.  It also very well
+      matches the format of rfc822 address structure <local-
+      part>@<domain> because the ACP domain information does logically
+      also consist of a <domain> identifying the ACP, and a <local-part>
+      identifying a nodes ACP.
 
-   o  At minimum, both the AN domain name and the non-domain name
-      derived part of the ACP address need to be encoded in one or more
-      appropriate fields of the certificate, so there are not many
-      alternatives with pre-existing fields where the only possible
-      conflicts would likely be beneficial.
+   o  subjectAltName / rfc822Name is the standard, mandatory to
+      implement certificate attribute to encode the certificate subjects
+      rfc822 address and can be the only subjects name.
 
-   o  rfc822Name encoding is very flexible.  It allows to encode all the
-      different fields of information required for the ACP.
-
-   o  The format of the rfc822Name is chosen so that an operator can set
-      up a mailbox called   rfcSELF@<domain> that would receive emails
-      sent towards the rfc822Name of any node inside a domain.  This is
-      possible because in many modern mail systems, components behind a
-      "+" character are considered part of a single mailbox.  In other
-
-
+   Compatibilities:
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 25]
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 25]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
-      words, it is not necessary to set up a separate mailbox for every
-      ACP node, but only one for the whole domain.
+   o  It should be possible to use the ACP domain certificate as an
+      LDevID on the system for other uses beside the ACP.  Therefore,
+      the information element required for the ACP should be encoded so
+      that it minimizes the possibility of creating incompatibilities
+      with such other uses.  The subjectName for example is for example
+      often used as an entity identifier in non-ACP uses.
 
-   o  In result, if any unexpected use of the ACP addressing information
-      in a certificate happens, it is benign and detectable: it would be
-      mail to that mailbox.
+   o  The element should not require additional ASN.1 en/decoding,
+      because libraries to access certificate information especially for
+      embedded devices may not support extended ASN.1 decoding beyond
+      predefined, manadatory fields. subjectAltName / rfc822Name is such
+      a mandatory predefined field. subjectAlName / otherName for
+      example is not.
+
+   o  Encoding of the ACP domain information as a human readable string
+      in a manadatory certificate field also has the benefit that it can
+      be diagnosed/decoded in any pre-existing certificate diagnostic
+      software.
+
+   o  The element required for the ACP should not be misinterpreted by
+      any other uses of the LDevID.  If the element used for the ACP is
+      interpreted by other components than the ACP, the impact should be
+      benign.  By using fully rfc822address compliant encoding, the
+      benign side effect of non-ACP software using the ACP rfc822address
+      would be emails sent to the mailbox identified by the
+      rfc822address.  If it is desired to receive such emails, suitable
+      email software may also support assigning all rfc822addresses for
+      an ACP domain to a single mailbox rfcSELF@<domain>.  This is
+      possible when "+" (which follows rfcSELF) is supported by the Mail
+      User Agent as a separator between mail subscriber and sub-mailbox.
 
    See section 4.2.1.6 of [RFC5280] for details on the subjectAltName
    field.
@@ -1426,6 +1450,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
    3:   The peer's certificate passes certificate path validation as
       defined in [RFC5280], section 6 against one of the Trust Anchors
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 26]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
       associated with the ACP node's ACP domain certificate (see
       Section 6.1.4 below).
 
@@ -1450,14 +1482,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    certificate for which rule 4 had to be skipped during ACP secure
    channel establishment is invalid, then the ACP secure channel to that
    peer SHOULD be closed even if this peer is the only connectivity to
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 26]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    access CRL/OCSP.  The ACP secure channel connection MUST be retried
    periodically to support the case that the neighbor aquires a new,
    valid certificate.
@@ -1482,6 +1506,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    The special value 0 in an ACP certificates acp-address field is used
    for nodes that can and should determine their ACP address through
    other mechanisms than learning it through the acp-address field in
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 27]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    their ACP domain certificate.  These ACP nodes are permitted to
    establish ACP secure channels.  Mechanisms for those nodes to
    determine their ACP address are outside the scope of this
@@ -1506,14 +1538,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
       Step 5 Checks for the presence of an ACP identity for the peer.
 
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 27]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
       Steps 1...5 authorize to build any secure connection between
       members of the same ACP domain except for ACP secure channels.
 
@@ -1537,6 +1561,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
    Trust Point is the term used in this document for a certificate
    authority (CA) and its associated set of certificates.  Multiple
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 28]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    certificates are required for a CA to deal with CA certificate
    renewals as explained in Section 4.4 of CMP ([RFC4210]).
 
@@ -1563,13 +1596,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    They SHOULD support 2 intermediate Trust Points and two Trust Anchors
    (to permit migration to different root-CAs).
 
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 28]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    Trust Points for ACP domain certificates must be trusted to sign
    certificates with valid ACP domain information fields only for
    trusted ACP registrars of that domain.  This can be achieved by using
@@ -1587,6 +1613,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    ACP Registrars are not to be trusted, the correctness of the ACP
    domain information field for the candidate ACP node has to be
    verified by the CA signing the ACP domain certificate.
+
+
+
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 29]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
 
 6.1.5.  Certificate and Trust Point Maintenance
 
@@ -1618,14 +1656,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    extension field ensures that clients do not fall prey to an illicit
    EST server.  While such illicit EST servers should not be able to
    support certificate signing requests (as they are not able to elicit
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 29]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    a signing response from a valid CA), such an illicit EST server would
    be able to provide faked CA certificates to EST clients that need to
    renew their CA certificates when they expire.
@@ -1642,6 +1672,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    ACP nodes that are EST servers MUST announce their service via GRASP
    in the ACP through M_FLOOD messages.  See [I-D.ietf-anima-grasp],
    section 2.8.11 for the definition of this message type:
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 30]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
 
         Example:
 
@@ -1673,15 +1712,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
                     Figure 4: GRASP SRV.est definition
 
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 30]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    The objective name "SRV.est" indicates that the objective is an
    [RFC7030] compliant EST server because "est" is an [RFC6335]
    registered service name for [RFC7030].  Objective-value MUST be
@@ -1700,6 +1730,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    three consecutive messages can be dropped before considering an
    announcement expired.  In the example above, the ttl is 210000 msec,
    3.5 times 60 seconds.  When a service announcer using these
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 31]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    parameters unexpectedly dies immediately after sending the M_FLOOD,
    receivers would consider it expired 210 seconds later.  When a
    receiver tries to connect to this dead service before this timeout,
@@ -1726,18 +1764,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    renew its domain certificate in time - and to allow prolonged periods
    of running parts of a network disconnected from any CA.
 
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 31]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
 6.1.5.3.  Certificate Revocation Lists (CRLs)
 
    The ACP node SHOULD support Certificate Revocation Lists (CRL) via
@@ -1760,6 +1786,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    with ACP or by connecting its node via an ACP connect interface (see
    Section 8.1).  The CDP SHOULD use an ACP domain certificate for its
    HTTPs connections.  The connecting ACP node SHOULD verify that the
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 32]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    CDP certificate used during the HTTPs connection has the same ACP
    address as indicated in the CDP URL of the node's ACP domain
    certificate if the CDP URL uses an IPv6 address.
@@ -1782,17 +1816,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    See Appendix A.2 for further optimizations of certificate maintenance
    when BRSKI can be used ("Bootstrapping Remote Secure Key
    Infrastructures", see [I-D.ietf-anima-bootstrapping-keyinfra]).
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 32]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
 6.1.5.5.  Re-enrollment
 
@@ -1819,6 +1842,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    ACP node (BRSKI pledge), but instead of using the ACP nodes IDevID,
    it SHOULD first attempt to use its ACP domain certificate in the
    BRSKI TLS authentication.  The BRSKI registrar MAY honor this
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 33]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    certificate beyond its expiration date purely for the purpose of re-
    enrollment.  Using the ACP node's domain certificate allows the BRSKI
    registrar to learn that node's ACP domain information field, so that
@@ -1842,14 +1873,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    enrollment, the principles of the re-enrolling candidate ACP node are
    the same.  The re-enrolling candidate ACP node attempts to
    authenticate any ACP registrar peers during re-enrollment protocol/
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 33]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    mechanisms via its existing certificate chain/trust anchor and
    provides its existing ACP domain certificate and other identification
    (such as the IDevID) as necessary to the registrar.
@@ -1875,6 +1898,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    explicit local diagnostics, when the ACP node fails to connect to
    other ACP nodes in the same ACP domain using its ACP certificate.
    For connection failures to determine the ACP domain certificate as
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 34]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    the culprit, the peer should pass the domain membership check
    (Section 6.1.3) and other reasons for the connection failure can be
    excluded because of the connection error diagnostics.
@@ -1896,15 +1927,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    certificate is failing, and when it does, put itself into the role of
    a re-enrolling candidate ACP node as explained above
    (Section 6.1.5.5).
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 34]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
 6.2.  ACP Adjacency Table
 
@@ -1933,6 +1955,13 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    step determines to which of those ACP nodes an ACP connection should
    be established.
 
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 35]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
 6.3.  Neighbor Discovery with DULL GRASP
 
    [RFC Editor: GRASP draft is in RFC editor queue, waiting for
@@ -1954,14 +1983,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    configured.  Reception of packets on such otherwise not configured
    interfaces MUST be limited so that at first only IPv6 StateLess
    Address Auto Configuration (SLAAC - [RFC4862]) and DULL GRASP work
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 35]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    and then only the following ACP secure channel setup packets - but
    not any other unnecessary traffic (e.g., no other link-local IPv6
    transport stack responders for example).
@@ -1989,6 +2010,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    instance of GRASP set up for ACP is then also used for the discovery
    of a bootstrap proxy via BRSKI when the node does not have a domain
    certificate.  Discovery of ACP neighbors happens only when the node
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 36]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    does have the certificate.  The node therefore never needs to
    discover both a bootstrap proxy and ACP neighbor at the same time.
 
@@ -2010,13 +2039,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
          ]
 
                       Figure 5: GRASP AN_ACP example
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 36]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    The formal CDDL definition is:
 
@@ -2043,6 +2065,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    the objective would be cached by ACP nodes even when two out of three
    messages are dropped in transit.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 37]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    The session-id is a random number used for loop prevention
    (distinguishing a message from a prior instance of the same message).
    In DULL this field is irrelevant but must still be set according to
@@ -2065,14 +2096,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    well-defined port number 500, but in the above example, the candidate
    ACP neighbor is offering ACP secure channel negotiation via IKEv2 on
    port 15000 (for the sake of creating a non-standard example).
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 37]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    "DTLS" indicates datagram Transport Layer Security version 1.2.
    There is no default UDP port, it must always be locally assigned by
@@ -2097,6 +2120,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    in the same M_FLOOD message, since GRASP allows multiple objectives
    in one message.  This may be impractical though if ACP and BRSKI
    operations are implemented via separate software modules / ASAs.
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 38]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
 
    The result of the discovery is the IPv6 link-local address of the
    neighbor as well as its supported secure channel protocols (and non-
@@ -2123,13 +2155,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    This includes all routing subdomains.  Appendix A.7 explains how ACP
    connections across multiple routing subdomains are special.
 
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 38]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    The result of the candidate ACP neighbor selection process is a list
    of adjacent or configured autonomic neighbors to which an ACP channel
    should be established.  The next step begins that channel
@@ -2153,6 +2178,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    802.1AE ([MACSEC]) because that is also supported in their chips.
    Only a flexible gateway device may need to support both of these
    mechanisms and potentially more.  Note that MacSec is not required by
+
+
+
+Eckert, et al.            Expires June 3, 2020                 [Page 39]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    any profiles of the ACP in this specification but just mentioned as a
    likely next interesting secure channel protocol.
 
@@ -2178,14 +2211,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
       the lower Node-ID in the ACP address of its ACP domain certificate
       becomes Bob, the one with the higher Node-ID in the certificate
       Alice.  A peer with an empty ACP address field in its ACP domain
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 39]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
       certificate becomes Bob (this specification does not define such
       peers, only the interoperability with them).
 
@@ -2212,32 +2237,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020                [Page 40]
+Eckert, et al.            Expires June 3, 2020                 [Page 40]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2293,7 +2293,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 41]
+Eckert, et al.            Expires June 3, 2020                 [Page 41]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2349,7 +2349,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 42]
+Eckert, et al.            Expires June 3, 2020                 [Page 42]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2405,7 +2405,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 43]
+Eckert, et al.            Expires June 3, 2020                 [Page 43]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2461,7 +2461,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 44]
+Eckert, et al.            Expires June 3, 2020                 [Page 44]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2517,7 +2517,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 45]
+Eckert, et al.            Expires June 3, 2020                 [Page 45]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2573,7 +2573,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 46]
+Eckert, et al.            Expires June 3, 2020                 [Page 46]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2629,7 +2629,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 47]
+Eckert, et al.            Expires June 3, 2020                 [Page 47]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2685,7 +2685,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 48]
+Eckert, et al.            Expires June 3, 2020                 [Page 48]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2741,7 +2741,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 49]
+Eckert, et al.            Expires June 3, 2020                 [Page 49]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2797,7 +2797,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 50]
+Eckert, et al.            Expires June 3, 2020                 [Page 50]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2853,7 +2853,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 51]
+Eckert, et al.            Expires June 3, 2020                 [Page 51]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2909,7 +2909,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 52]
+Eckert, et al.            Expires June 3, 2020                 [Page 52]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -2965,7 +2965,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 53]
+Eckert, et al.            Expires June 3, 2020                 [Page 53]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3021,7 +3021,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 54]
+Eckert, et al.            Expires June 3, 2020                 [Page 54]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3077,7 +3077,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 55]
+Eckert, et al.            Expires June 3, 2020                 [Page 55]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3133,7 +3133,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 56]
+Eckert, et al.            Expires June 3, 2020                 [Page 56]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3189,7 +3189,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 57]
+Eckert, et al.            Expires June 3, 2020                 [Page 57]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3245,7 +3245,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 58]
+Eckert, et al.            Expires June 3, 2020                 [Page 58]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3301,7 +3301,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 59]
+Eckert, et al.            Expires June 3, 2020                 [Page 59]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3357,7 +3357,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 60]
+Eckert, et al.            Expires June 3, 2020                 [Page 60]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3413,7 +3413,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 61]
+Eckert, et al.            Expires June 3, 2020                 [Page 61]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3469,7 +3469,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 62]
+Eckert, et al.            Expires June 3, 2020                 [Page 62]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3525,7 +3525,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 63]
+Eckert, et al.            Expires June 3, 2020                 [Page 63]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3581,7 +3581,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 64]
+Eckert, et al.            Expires June 3, 2020                 [Page 64]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3637,7 +3637,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 65]
+Eckert, et al.            Expires June 3, 2020                 [Page 65]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3693,7 +3693,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 66]
+Eckert, et al.            Expires June 3, 2020                 [Page 66]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3749,7 +3749,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 67]
+Eckert, et al.            Expires June 3, 2020                 [Page 67]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3805,7 +3805,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 68]
+Eckert, et al.            Expires June 3, 2020                 [Page 68]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3861,7 +3861,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 69]
+Eckert, et al.            Expires June 3, 2020                 [Page 69]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3917,7 +3917,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 70]
+Eckert, et al.            Expires June 3, 2020                 [Page 70]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -3973,7 +3973,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 71]
+Eckert, et al.            Expires June 3, 2020                 [Page 71]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4029,7 +4029,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 72]
+Eckert, et al.            Expires June 3, 2020                 [Page 72]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4085,7 +4085,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 73]
+Eckert, et al.            Expires June 3, 2020                 [Page 73]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4141,7 +4141,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 74]
+Eckert, et al.            Expires June 3, 2020                 [Page 74]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4197,7 +4197,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 75]
+Eckert, et al.            Expires June 3, 2020                 [Page 75]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4253,7 +4253,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 76]
+Eckert, et al.            Expires June 3, 2020                 [Page 76]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4309,7 +4309,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 77]
+Eckert, et al.            Expires June 3, 2020                 [Page 77]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4365,7 +4365,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 78]
+Eckert, et al.            Expires June 3, 2020                 [Page 78]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4421,7 +4421,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 79]
+Eckert, et al.            Expires June 3, 2020                 [Page 79]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4477,7 +4477,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 80]
+Eckert, et al.            Expires June 3, 2020                 [Page 80]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4533,7 +4533,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 81]
+Eckert, et al.            Expires June 3, 2020                 [Page 81]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4589,7 +4589,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 82]
+Eckert, et al.            Expires June 3, 2020                 [Page 82]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4645,7 +4645,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 83]
+Eckert, et al.            Expires June 3, 2020                 [Page 83]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4701,7 +4701,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 84]
+Eckert, et al.            Expires June 3, 2020                 [Page 84]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4757,7 +4757,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 85]
+Eckert, et al.            Expires June 3, 2020                 [Page 85]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4813,7 +4813,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 86]
+Eckert, et al.            Expires June 3, 2020                 [Page 86]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4869,7 +4869,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 87]
+Eckert, et al.            Expires June 3, 2020                 [Page 87]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4925,7 +4925,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 88]
+Eckert, et al.            Expires June 3, 2020                 [Page 88]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -4981,7 +4981,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 89]
+Eckert, et al.            Expires June 3, 2020                 [Page 89]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5037,7 +5037,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 90]
+Eckert, et al.            Expires June 3, 2020                 [Page 90]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5093,7 +5093,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 91]
+Eckert, et al.            Expires June 3, 2020                 [Page 91]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5149,7 +5149,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 92]
+Eckert, et al.            Expires June 3, 2020                 [Page 92]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5205,7 +5205,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 93]
+Eckert, et al.            Expires June 3, 2020                 [Page 93]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5261,7 +5261,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 94]
+Eckert, et al.            Expires June 3, 2020                 [Page 94]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5317,7 +5317,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 95]
+Eckert, et al.            Expires June 3, 2020                 [Page 95]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5373,7 +5373,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 96]
+Eckert, et al.            Expires June 3, 2020                 [Page 96]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5429,7 +5429,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 97]
+Eckert, et al.            Expires June 3, 2020                 [Page 97]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5485,7 +5485,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 98]
+Eckert, et al.            Expires June 3, 2020                 [Page 98]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5541,7 +5541,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020                [Page 99]
+Eckert, et al.            Expires June 3, 2020                 [Page 99]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5597,7 +5597,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 100]
+Eckert, et al.            Expires June 3, 2020                [Page 100]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5653,7 +5653,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 101]
+Eckert, et al.            Expires June 3, 2020                [Page 101]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5709,7 +5709,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 102]
+Eckert, et al.            Expires June 3, 2020                [Page 102]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5765,7 +5765,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 103]
+Eckert, et al.            Expires June 3, 2020                [Page 103]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5821,7 +5821,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 104]
+Eckert, et al.            Expires June 3, 2020                [Page 104]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5877,7 +5877,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 105]
+Eckert, et al.            Expires June 3, 2020                [Page 105]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5933,7 +5933,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 106]
+Eckert, et al.            Expires June 3, 2020                [Page 106]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -5989,7 +5989,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 107]
+Eckert, et al.            Expires June 3, 2020                [Page 107]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -6045,7 +6045,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 108]
+Eckert, et al.            Expires June 3, 2020                [Page 108]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -6101,7 +6101,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 109]
+Eckert, et al.            Expires June 3, 2020                [Page 109]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -6157,7 +6157,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 110]
+Eckert, et al.            Expires June 3, 2020                [Page 110]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -6213,7 +6213,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 111]
+Eckert, et al.            Expires June 3, 2020                [Page 111]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
@@ -6229,6 +6229,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    implementing (section 6) and operating (section 10) the ACP.
 
 14.2.  draft-ietf-anima-autonomic-control-plane-22
+
+   Ben Kaduk review of -21:
+
+   6.1.2 rewrote text for explaining / justifying use of rfc822name as
+   identifier for node CP in certificate (was discussed in thread, but
+   badly written in prior versions).
+
+   6.1.2 Changed EBNF syntax to use "+" after rfcSELF because that is
+   the known primary name to extensions separator in many email systems
+   ("." was wrong in prior versions).
+
+   Other:
 
    Forgot to update example of ACP domain information to use capitalized
    hex-digits as required by HEXDIGIT used.
@@ -6254,6 +6266,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               express CBOR and JSON data structures", draft-ietf-cbor-
               cddl-08 (work in progress), March 2019.
 
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 112]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [IKEV2IANA]
               IANA, "Internet Key Exchange Version 2 (IKEv2)
               Parameters", <https://www.iana.org/assignments/ikev2-
@@ -6262,17 +6282,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
               <https://www.rfc-editor.org/info/rfc1034>.
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 112]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC3810]  Vida, R., Ed. and L. Costa, Ed., "Multicast Listener
               Discovery Version 2 (MLDv2) for IPv6", RFC 3810,
@@ -6310,6 +6319,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               DOI 10.17487/RFC4862, September 2007,
               <https://www.rfc-editor.org/info/rfc4862>.
 
+
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 113]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234,
               DOI 10.17487/RFC5234, January 2008,
@@ -6319,16 +6339,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               (TLS) Protocol Version 1.2", RFC 5246,
               DOI 10.17487/RFC5246, August 2008,
               <https://www.rfc-editor.org/info/rfc5246>.
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 113]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -6367,6 +6377,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               DOI 10.17487/RFC7030, October 2013,
               <https://www.rfc-editor.org/info/rfc7030>.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 114]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC7296]  Kaufman, C., Hoffman, P., Nir, Y., Eronen, P., and T.
               Kivinen, "Internet Key Exchange Protocol Version 2
               (IKEv2)", STD 79, RFC 7296, DOI 10.17487/RFC7296, October
@@ -6377,14 +6396,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Security (TLS) and Datagram Transport Layer Security
               (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
               2015, <https://www.rfc-editor.org/info/rfc7525>.
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 114]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC7676]  Pignataro, C., Bonica, R., and S. Krishnan, "IPv6 Support
               for Generic Routing Encapsulation (GRE)", RFC 7676,
@@ -6420,6 +6431,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Nov 2019, <https://cabforum.org/baseline-requirements-
               certificate-contents/>.
 
+
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 115]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [I-D.eckert-anima-noc-autoconfig]
               Eckert, T., "Autoconfiguration of NOC services in ACP
               networks via GRASP", draft-eckert-anima-noc-autoconfig-00
@@ -6432,21 +6454,11 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Environment (ACME)", draft-ietf-acme-star-11 (work in
               progress), October 2019.
 
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 115]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    [I-D.ietf-anima-bootstrapping-keyinfra]
               Pritikin, M., Richardson, M., Eckert, T., Behringer, M.,
               and K. Watsen, "Bootstrapping Remote Secure Key
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
-              keyinfra-30 (work in progress), November 2019.
+              keyinfra-34 (work in progress), January 2020.
 
    [I-D.ietf-anima-prefix-management]
               Jiang, S., Du, Z., Carpenter, B., and Q. Sun, "Autonomic
@@ -6474,7 +6486,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Robles, I., Richardson, M., and P. Thubert, "Using RPI
               Option Type, Routing Header for Source Routes and IPv6-in-
               IPv6 encapsulation in the RPL Data Plane", draft-ietf-
-              roll-useofrplinfo-33 (work in progress), December 2019.
+              roll-useofrplinfo-34 (work in progress), January 2020.
+
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 116]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
 
    [I-D.ietf-tls-dtls13]
               Rescorla, E., Tschofenig, H., and N. Modadugu, "The
@@ -6487,16 +6509,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Protocol for Networked Measurement and Control Systems",
               December 2008, <http://standards.ieee.org/findstds/
               standard/1588-2008.html>.
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 116]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [IEEE-802.1X]
               Group, W. -. H. L. L. P. W., "IEEE Standard for Local and
@@ -6534,6 +6546,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               BCP 5, RFC 1918, DOI 10.17487/RFC1918, February 1996,
               <https://www.rfc-editor.org/info/rfc1918>.
 
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 117]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC2315]  Kaliski, B., "PKCS #7: Cryptographic Message Syntax
               Version 1.5", RFC 2315, DOI 10.17487/RFC2315, March 1998,
               <https://www.rfc-editor.org/info/rfc2315>.
@@ -6546,13 +6566,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               "Remote Authentication Dial In User Service (RADIUS)",
               RFC 2865, DOI 10.17487/RFC2865, June 2000,
               <https://www.rfc-editor.org/info/rfc2865>.
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 117]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC3164]  Lonvick, C., "The BSD Syslog Protocol", RFC 3164,
               DOI 10.17487/RFC3164, August 2001,
@@ -6588,6 +6601,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               Networks (VPNs)", RFC 4364, DOI 10.17487/RFC4364, February
               2006, <https://www.rfc-editor.org/info/rfc4364>.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 118]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC4429]  Moore, N., "Optimistic Duplicate Address Detection (DAD)
               for IPv6", RFC 4429, DOI 10.17487/RFC4429, April 2006,
               <https://www.rfc-editor.org/info/rfc4429>.
@@ -6597,18 +6619,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               for Transport Layer Security (TLS)", RFC 4492,
               DOI 10.17487/RFC4492, May 2006,
               <https://www.rfc-editor.org/info/rfc4492>.
-
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 118]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC4541]  Christensen, M., Kimball, K., and F. Solensky,
               "Considerations for Internet Group Management Protocol
@@ -6646,6 +6656,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               DOI 10.17487/RFC5790, February 2010,
               <https://www.rfc-editor.org/info/rfc5790>.
 
+
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 119]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <https://www.rfc-editor.org/info/rfc5880>.
@@ -6654,17 +6674,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               "Network Time Protocol Version 4: Protocol and Algorithms
               Specification", RFC 5905, DOI 10.17487/RFC5905, June 2010,
               <https://www.rfc-editor.org/info/rfc5905>.
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 119]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC6241]  Enns, R., Ed., Bjorklund, M., Ed., Schoenwaelder, J., Ed.,
               and A. Bierman, Ed., "Network Configuration Protocol
@@ -6705,22 +6714,19 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               DOI 10.17487/RFC6830, January 2013,
               <https://www.rfc-editor.org/info/rfc6830>.
 
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 120]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC7011]  Claise, B., Ed., Trammell, B., Ed., and P. Aitken,
               "Specification of the IP Flow Information Export (IPFIX)
               Protocol for the Exchange of Flow Information", STD 77,
               RFC 7011, DOI 10.17487/RFC7011, September 2013,
               <https://www.rfc-editor.org/info/rfc7011>.
-
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 120]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC7404]  Behringer, M. and E. Vyncke, "Using Only Link-Local
               Addressing inside an IPv6 Network", RFC 7404,
@@ -6764,19 +6770,18 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
               DOI 10.17487/RFC8028, November 2016,
               <https://www.rfc-editor.org/info/rfc8028>.
 
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 121]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
               <https://www.rfc-editor.org/info/rfc8126>.
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 121]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    [RFC8316]  Nobre, J., Granville, L., Clemm, A., and A. Gonzalez
               Prieto, "Autonomic Networking Use Case for Distributed
@@ -6820,20 +6825,21 @@ A.1.  ACP Address Space Schemes
    does not leave enough bits to simultaneously support a large number
    of nodes (Node-ID) plus a large prefix of local addresses for every
    node plus a large enough set of bits to identify a routing Zone.  In
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 122]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    result, Zone, Vlong 8/16 attempt to support all features, but in via
    separate prefixes.
 
    In networks that always expect to rely on a centralized PMS as
    described above (Section 10.2.5), the 48/46-bits for the Registrar-ID
    could be saved.  Such variations of the ACP addressing mechanisms
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 122]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    could be introduced through future work in different ways.  If the
    prefix rfcSELF in the ACP information field was changed, incompatible
    ACP variations could be created where every design aspect of the ACP
@@ -6875,6 +6881,15 @@ A.2.  BRSKI Bootstrap (ANI)
    domain name to the enrolling node (called pledge) via its response to
    the pledges EST CSR Attribute request that is mandatory in BRSKI.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 123]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    The Certificate Authority in an ACP network must not change the
    subjectAltName / rfc822Name in the certificate.  The ACP nodes can
    therefore find their ACP address and domain using this field in the
@@ -6882,14 +6897,6 @@ A.2.  BRSKI Bootstrap (ANI)
 
    The use of BRSKI in conjunction with the ACP can also help to further
    simplify maintenance and renewal of domain certificates.  Instead of
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 123]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    relying on CRL, the lifetime of certificates can be made extremely
    small, for example in the order of hours.  When a node fails to
    connect to the ACP within its certificate lifetime, it cannot connect
@@ -6931,20 +6938,18 @@ A.3.1.  LLDP
    would prevent ACP construction over non-ACP capable but LLDP or CDP
    enabled L2 switches.  LLDP has extensions using different MAC
    addresses and this could have been an option for ACP discovery as
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 124]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    well, but the additional required IEEE standardization and definition
    of a profile for such a modified instance of LLDP seemed to be more
    work than the benefit of "reusing the existing protocol" LLDP for
    this very simple purpose.
-
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 124]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
 A.3.2.  mDNS and L2 support
 
@@ -6989,19 +6994,18 @@ A.4.  Choice of routing protocol (RPL)
 
    Requirements for routing in the ACP are:
 
-   o  Self-management: The ACP must build automatically, without human
-      intervention.  Therefore routing protocol must also work
-      completely automatically.  RPL is a simple, self-managing
-      protocol, which does not require zones or areas; it is also self-
 
 
 
-
-Eckert, et al.            Expires June 15, 2020               [Page 125]
+Eckert, et al.            Expires June 3, 2020                [Page 125]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
 
+   o  Self-management: The ACP must build automatically, without human
+      intervention.  Therefore routing protocol must also work
+      completely automatically.  RPL is a simple, self-managing
+      protocol, which does not require zones or areas; it is also self-
       configuring, since configuration is carried as part of the
       protocol (see Section 6.7.6 of [RFC6550]).
 
@@ -7045,18 +7049,20 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
       be introduced later, which allow changes to the way the routing
       protocol creates the DAGs.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 126]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    o  Multi-topology support: It may become necessary in the future to
       support more than one DODAG for different purposes, using
       different objective functions.  RPL allow for the creation of
       several parallel DODAGs, should this be required.  This could be
       used to create different topologies to reach different roots.
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 126]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    o  No need for path optimization: RPL does not necessarily compute
       the optimal path between any two nodes.  However, the ACP does not
@@ -7100,20 +7106,20 @@ A.5.  ACP Information Distribution and multicast
    mechanism would not work easily for GRASP M_DISCOVERY messages which
    are intelligently (constrained) flooded not across the whole ACP, but
    only up to a node where a responder is found.  We do expect that many
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 127]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    future services in ASA will have only few consuming ASA, and for
    those cases, M_DISCOVERY is the more efficient method than flooding
    across the whole domain.
 
    Because the ACP uses RPL, one desirable future extension is to use
    RPLs existing notion of loop-free distribution trees (DODAG) to make
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 127]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    GRASPs flooding more efficient both for M_FLOOD and M_DISCOVERY) See
    Section 6.12.5 how this will be specifically beneficial when using
    NBMA interfaces.  This is not currently specified in this document
@@ -7155,20 +7161,20 @@ A.6.  Extending ACP channel negotiation (via GRASP)
    whether it would be feasible to extend IKEv2 to support possible
    future requirements for ACP secure channel negotiation:
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 128]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    Consider the simple case where the use of native IPsec vs. IPsec via
    GRE is to be negotiated and the objective is the maximum throughput.
    Both sides would indicate some agreed upon performance metric and the
    preferred encapsulation is the one with the higher performance of the
    slower side.  IKEv2 does not support negotiation with this objective.
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 128]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    Consider DTLS and some form of MacSec are to be added as negotiation
    options - and the performance objective should work across all IPsec,
@@ -7211,20 +7217,20 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    o  Negotiation of a channel type may require IANA assignments of code
       points.
 
+
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 129]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    o  TLS is subject to reset attacks, which IKEv2 is not.  Normally,
       ACP connections (as specified in this document) will be over link-
       local addresses so the attack surface for this one issue in TCP
       should be reduced (note that this may not be true when ACP is
       tunneled as described in Section 8.2.2.
-
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 129]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    o  GRASP packets received inside a TLS connection established for
       GRASP/TLS ACP negotiation are assigned to a separate GRASP domain
@@ -7268,20 +7274,19 @@ A.7.  CAs, domains and routing subdomains
    have different domain elements in the domain information field.
    These domain elements can be arbitrary, including subdomains of one
    another: Domains "example.com" and "research.example.com" are
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 130]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    separate domains if both are domain elements in the domain
    information element of certificates.
 
    It is not necessary to have a separate CA for different ACP domains:
    an operator can use a single CA to sign certificates for multiple ACP
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 130]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    domains that are not allowed to connect to each other because the
    checks for ACP adjacencies includes comparison of the domain part.
 
@@ -7325,18 +7330,19 @@ A.8.  Intent for the ACP
 
    If the domains use the same CA one could change the ACP setup to
    permit for the ACP to be established between two ACP nodes with
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 131]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    different acp-domain-names, but only for the purpose of disseminating
    limited information, such as Intent, but not to set up full ACP
    connectivity, specifically not RPL routing and passing of arbitrary
    GRASP information.  Unless the Intent policies permit this to happen
    across domain boundaries.
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 131]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
 
    This type of approach where the ACP first allows Intent to operate
    and only then sets up the rest of ACP connectivity based on Intent
@@ -7380,20 +7386,20 @@ A.9.  Adopting ACP concepts for other environments
    The ACP is defined as a separate VRF because it intends to support
    well managed networks with a wide variety of configurations.
    Therefore, reliable, configuration-indestructible connectivity cannot
+
+
+
+Eckert, et al.            Expires June 3, 2020                [Page 132]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
+
+
    be achieved from the Data-Plane itself.  In solutions where all
    transit connectivity impacting functions are fully automated
    (including security), indestructible and resilient, it would be
    possible to eliminate the need for the ACP to be a separate VRF.
    Consider the most simple example system in which there is no separate
    Data-Plane, but the ACP is the Data-Plane.  Add BRSKI, and it becomes
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 132]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
-
-
    a fully autonomic network - except that it does not support automatic
    addressing for user equipment.  This gap can then be closed for
    example by adding a solution derived from
@@ -7436,19 +7442,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
    network layer secure channels could also be replaced by end-to-end
    security plus other means for infrastructure protection.  Any future
    network OAM should always use end-to-end security anyhow and can
-   leverage the domain certificates and is therefore not dependent on
-   security to be provided for by ACP secure channels.
 
 
 
-
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 133]
+Eckert, et al.            Expires June 3, 2020                [Page 133]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
+
+   leverage the domain certificates and is therefore not dependent on
+   security to be provided for by ACP secure channels.
 
 A.10.  Further (future) options
 
@@ -7495,16 +7498,17 @@ A.10.2.  More options for avoiding IPv6 Data-Plane dependency
    Authentication Protocol over Local Area Network (EAPoL) ethertype
    (0x88A2).
 
-   Note that in the case of ANI nodes, all the above considerations
-   equally apply to the encapsulation of BRSKI packets including GRASP
-   used for BRSKI.
 
 
 
-Eckert, et al.            Expires June 15, 2020               [Page 134]
+Eckert, et al.            Expires June 3, 2020                [Page 134]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
+
+   Note that in the case of ANI nodes, all the above considerations
+   equally apply to the encapsulation of BRSKI packets including GRASP
+   used for BRSKI.
 
 A.10.3.  ACP APIs and operational models (YANG)
 
@@ -7549,18 +7553,18 @@ A.10.4.  RPL enhancements
    routers and processing of IPv6 RPI headers.  Alternatively, (Src,Dst)
    routing table entries could be used.
 
-   Flooding of ACP GRASP messages can be further constrained and
-   therefore optimized by flooding only via links that are part of the
-   RPL DODAG.
 
 
 
 
-
-Eckert, et al.            Expires June 15, 2020               [Page 135]
+Eckert, et al.            Expires June 3, 2020                [Page 135]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
+
+   Flooding of ACP GRASP messages can be further constrained and
+   therefore optimized by flooding only via links that are part of the
+   RPL DODAG.
 
 A.10.5.  Role assignments
 
@@ -7607,16 +7611,15 @@ A.10.7.  Diagnostics
        conveyed in an insecure manner).  Includes potentially new
        information elements.
 
-   2.  In alternative to LLDP, A DULL GRASP diagnostics objective could
-       be defined to carry these information elements.
 
 
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 136]
+Eckert, et al.            Expires June 3, 2020                [Page 136]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
+
+   2.  In alternative to LLDP, A DULL GRASP diagnostics objective could
+       be defined to carry these information elements.
 
    3.  The IDevID of BRSKI pledges should be included in the selected
        insecure diagnostics option.  This may be undesirable when
@@ -7663,16 +7666,16 @@ A.10.8.  Avoiding and dealing with compromised ACP nodes
 
    With such means, the valid administration has the best chances to
    maintain access to ACP nodes, discover malicious configuration though
-   ongoing configuration tracking from central locations for example,
-   and to react accordingly.
 
 
 
-
-Eckert, et al.            Expires June 15, 2020               [Page 137]
+Eckert, et al.            Expires June 3, 2020                [Page 137]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       December 2019
 
+
+   ongoing configuration tracking from central locations for example,
+   and to react accordingly.
 
    The primary reaction is withdrawal/change of credentials, terminate
    malicious existing management sessions and fixing the configuration.
@@ -7722,7 +7725,4 @@ Authors' Addresses
 
 
 
-
-
-
-Eckert, et al.            Expires June 15, 2020               [Page 138]
+Eckert, et al.            Expires June 3, 2020                [Page 138]
