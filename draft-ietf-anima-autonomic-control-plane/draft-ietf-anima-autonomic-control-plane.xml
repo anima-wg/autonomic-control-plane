@@ -1195,7 +1195,7 @@ will be distributed with the flooded objective.  An example of the message is in
 
 <t>The authentication of peers in any security association protocol MUST use the ACP domain certificate according to <xref target="certcheck"/>.  Because auto-discovery of candidate ACP neighbors via GRASP (see <xref target="discovery-grasp"/>) as specified in this document does not communicate the neighbors ACP domain certificate, and ACP nodes may not (yet) have any other network connectivity to retrieve certificates, any security association protocol MUST use a mechanism to communicate the certificate directly instead of relying on a referential mechanism such as communicating only a hash and/or URL for the certificate.</t>
 
-<t>Any security association protocol MUST use PFS (such as profiles providing PFS).</t>
+<t>Any security association protocol MUST provide Forward Secrecy (whether inherently or as part of a profile of the security association protocol).</t>
 
 <t>The degree of security required on every hop of an ACP network needs to be consistent across the network so that there is no designated "weakest link" because it is that "weakest link" that would otherwise become the designated point of attack. When the secure channel protection on one link is compromised, it can be used to send/receive packets across the whole ACP network. This principle does not imply that the requirements against ACP security association protocols have to be the same across all subnets in an ACP network:
 <list style="symbols">
@@ -1208,31 +1208,44 @@ will be distributed with the flooded objective.  An example of the message is in
 
                                 <t>The following sub-sections define the security association protocols that are considered to be important and feasible to specify in this document.</t>
 
-                        <section anchor="IPsec-group" title="ACP via IKEv2">
+                        <section anchor="IPsec-group" title="ACP via IPsec">
 
-                        <t>An ACP node announces its ability to support IKEv2 as the ACP secure channel protocol in GRASP as "IKEv2".</t>
+<!--kaduk I did not propose to change the GRASP method name here, since I do not know how disruptive that would be.  But the ACP data channel is carried over IPsec, not IKEv2, so from that POV changing the method name would be recommended.-->
+                        <t>An ACP node announces its ability to support IPsec, negotiated via IKEv2, as the ACP secure channel protocol in GRASP as the "IKEv2" method for the "AN_ACP" objective.</t>
 
                             <section anchor="IPsec" toc="include" title="Native IPsec">
 
                                 <t>To run ACP via IPsec natively, no further IANA assignments/definitions are required.</t>
 
-<t> An ACP node that is supporting native IPsec MUST use IPsec security setup via IKEv2 for tunnel mode and IPsec/IKE signaling accordingly for IPv6 payload (e.g.: ESP next header of 41). It  MUST use local and peer link-local IPv6 addresses for encapsulation.</t>
+<t>The ACP usage of IPsec and IKEv2 mandates a narrow profile of the current standards-track usage guidance for IPsec <xref target="RFC8221"/> and IKEv2 <xref target="RFC8247"/>.  This profile provides for stringent security properties and can exclude deprecated/legacy algorithms because there is no need for interoperability with legacy equipment for ACP channels.  Any such backward compatibility would lead only to increased attack surface and implementation complexity, for no benefit.</t>
 
-<t>Authentication MUST use the ACP domain certificates. Certificate Encoding MUST support "PKCS #7 wrapped X.509 certificate" (0) (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text). If certificate chains are used, all intermediate certificates up to, but not including the locally provisioned trust anchor certificate must be signaled.</t>
+<t> An ACP node that is supporting native IPsec MUST use IPsec in tunnel mode, negotiated via IKEv2, and with IPv6 payload (e.g., ESP Next Header of 41). It MUST use local and peer link-local IPv6 addresses for encapsulation.  Manual keying MUST NOT be used (independent of the security weaknesses of manual keying, it is incompatible with an autonomic platform).</t>
 
 <t>IPsec tunnel mode is required because the ACP will route/forward packets received from any other ACP node across the ACP secure channels, and not only its own generated ACP packets.  With IPsec transport mode, it would only be possible to send packets originated by the ACP node itself.</t>
 
-<t>IKEv2 authentication MUST use authentication method=1 ("RSA Digital Signature") for ACP certificates with RSA key and methods 9,10,11 for ACP certificates with ECC key according to the keys size/curve.</t>
-
-<t>A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the ACP domain membership as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates. ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).</t>
-
-<t>IPsec MUST support ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carrying legacy management protocol traffics as well as hop-by-hop GRASP). These requirements are based on <xref target="RFC8221"/> but limited to the minimum necessary options because there is no need for interoperability with legacy equipment for ACP channels, instead any such backward compatibility would reduce the minimum security or performance required for ACP channels or increase the implementation complexity of the ACP.</t>
+<t>ACP IPsec implementations MUST support ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carrying legacy management protocol traffics as well as hop-by-hop GRASP).  When using AES encryption, 256-bit keys MUST be used. <!--kaduk chacha20/poly1305 is well-liked in other IETF circles but was not previously mentioned for ACP usage.  This text makes no comment about chacha/poly, implicitly allowing it per RFC 8221 but with no specific recommendation for ACP. --> AES-GCM is an AEAD cipher mode, so no ESP authentication algorithm requirement is needed.</t>
 
 <t>Once there are updates to <xref target="RFC8221"/>, these should accordingly be reflected in updates to these ACP requirements, for example if ENCR_AES_GCM_16 was to be superceeded in the future.</t>
 
 <t>Additional requirements from <xref target="RFC8221"/> MAY be used for ACP channels as long as they do not result in a reduction of security over the above MTI requirements. For example, ESP compression MAY be used.</t>
 
-<t>IKEv2 MUST follow <xref target="RFC8247"/> as necessary to support the above listed IPsec requirements.</t>
+<t>As for ESP (above), for IKEv2, the ENCR_AES_GCM_16 encryption algorithm (with 256-bit keys) MUST be supported.  The IKEv2 PRF_HMAC_SHA2_512 pseudorandom function MUST be supported.</t>
+
+<t>IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP) MUST be supported (in addition to 2048-bit MODP).  ECC provides a similar security level to finite-field (MODP) key exchange with a shorter key length, so is generally preferred absent other considerations. <!--kaduk Curve448 key exchange (RFC 8031) could also be considered here, but perhaps that is too cutting-edge for some deployments --></t>
+
+<t>IKEv2 authentication MUST use the ACP domain certificates. The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text). If certificate chains are used, all intermediate certificates up to, but not including the locally provisioned trust anchor certificate must be signaled.</t>
+
+<t>A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates. ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).</t>
+
+<t>ACP nodes are identified by their ACP address, so the ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.  If the peer's ACP domain certificate includes an ACP address in the domain information, the address in the identification payload must match the address in the certificate (allowing for the presence of virtualization bits in the ACP addressing scheme used).</t>
+
+<t>IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, as indicated by a PKIX-style OID.<!--kaduk note that auth methods 1 (RSA) and 9/10/11 (NIST curves) are superseded by method 14--></t>
+
+<t>The Digital Signature hash SHA2-512 MUST be supported (in addition to SHA2-256).</t>
+
+<t>Once there are updates to <xref target="RFC8247"/>, these should accordingly be reflected in updates to these ACP requirements, for example if ENCR_AES_GCM_16 was to be superceeded in the future or the key-exchange group recommendations are changed.</t>
+
+<t>Additional requirements from <xref target="RFC8247"/> MAY be used for ACP channels as long as they do not result in a reduction of security over the above MTI requirements.</t>
 
                             </section>
                             <section anchor="IPsec-GRE" toc="include" title="IPsec with GRE encapsulation">
@@ -1254,12 +1267,16 @@ will be distributed with the flooded objective.  An example of the message is in
 
                                 <t>We define the use of ACP via DTLS in the assumption that it is likely the first transport encryption supported in some classes of constrained devices.</t>
 
+                                <t>An ACP node announces its ability to support DTLS as the ACP secure channel protocol in GRASP as the "DTLS" method for the "AN_ACP" objective.</t>
+
                                 <t>To run ACP via UDP and DTLS v1.2 <xref target="RFC6347"/> a locally assigned UDP port is used that is announced as a parameter in the GRASP AN_ACP objective to candidate neighbors.</t>
 
 <t>All ACP nodes supporting DTLS as a secure channel protocol MUST 
 adhere to the DTLS implementation recommendations and security considerations of <xref target="RFC7525">BCP 195</xref> except with respect to the DTLS version. ACP nodes supporting DTLS MUST implement only DTLS 1.2 or later.  For example, implementing DTLS-1.3 (<xref target="I-D.ietf-tls-dtls13"/>) is also an option.</t>
 
                                 <t>There is no additional session setup or other security association besides this simple DTLS setup.  As soon as the DTLS session is functional, the ACP peers will exchange ACP IPv6 packets as the payload of the DTLS transport connection.  Any DTLS defined security association mechanisms such as re-keying are used as they would be for any transport application relying solely on DTLS.</t>
+
+<!-- RFC 6125 is a common reference for TLS server-identification/verification procedures, but it covers only names, and only server identities; as such, it's not really a good fit here.  In fact, we can't really do much name validation since the connection is over link-local IPv6 addresses anyway. -->
 
                         </section>
                         <!-- DTLS -->
@@ -3302,6 +3319,7 @@ currently one registry table - the "ACP Address Type" table.</t>
                 <section anchor="ack" title="Acknowledgements">
                         <t>This work originated from an Autonomic Networking project at Cisco Systems, which started in early 2010.  Many people contributed to this project and the idea of the Autonomic Control Plane, amongst which (in alphabetical order): Ignas Bagdonas, Parag Bhide, Balaji BL, Alex Clemm, Yves Hertoghs, Bruno Klauser, Max Pritikin, Michael Richardson, Ravi Kumar Vadapalli.</t>
                         <t>Special thanks to Brian Carpenter, Elwyn Davies, Joel Halpern and Sheng Jiang for their thorough reviews and to Pascal Thubert and Michael Richardson to provide the details for the recommendations of the use of RPL in the ACP.</t>
+                        <t>Thanks to Valery Smyslov for review of the IPsec and IKEv2 configuration parameters.</t>
 
                         <t>Further input, review or suggestions were received from: Rene Struik, Brian Carpenter, Benoit Claise, William Atwood and Yongkang Zhang.</t>
                 </section>
