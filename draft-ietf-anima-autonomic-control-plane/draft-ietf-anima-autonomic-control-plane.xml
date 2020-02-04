@@ -51,7 +51,7 @@
                         </address>
                 </author>
 
-                <date month="December" year="2019"/>
+                <date month="February" year="2020"/>
 
                 <area>Operations and Management</area>
                 <workgroup>ANIMA WG</workgroup>
@@ -429,12 +429,15 @@ channel:  +-----------+  :   channel     :  +-----------+  : channel
     <section anchor="domcert" title="ACP Domain, Certificate and Network">
 
 <t>The ACP relies on group security.  An ACP domain is a group of nodes that trust
-each other to participate in ACP operations.  To establish trust, each ACP member 
-requires keying material: An ACP node MUST have a certificate (LDevID)
+each other to participate in ACP operations such as creating ACP secure channels
+in an autonomous peer-to-peer fashion between ACP domain members via protocols such as IPsec. 
+To establish trust, each ACP member requires keying material: An ACP node MUST have a certificate (LDevID)
 and a Trust Anchor (TA) consisting of a certificate (chain) used to sign the
 LDevID of all ACP domain members. The LDevID is used to cryptographically authenticate 
 the membership of its owner node in the ACP domain to other ACP domain members.
 The TA is used to authenticate the ACP domain membership of other nodes (see <xref target="certcheck"/>).</t>
+
+<t>Manual keying via shared secrets is not usable for an ACP domain because it would require a single shared secret across all current and future ACP domain members to meet the expectation of autonomous, peer-to-peer establishment of ACP secure channels between any ACP domain members. Such a single shared secret would be an inacceptable security weakness. Asymmetric keying material (public keys) without certificates does not provide the mechanisms to authenticate ACP domain membership in an autonomous, peer-to-peer fashion for current and future ACP domain members.</t>
 
 <t>The LDevID is called the ACP domain certificate, the TA is the Certificate Authority (CA) of the ACP domain.</t>
 
@@ -516,8 +519,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
 <t>domain-information is the encoded information that is put into the ACP domain certificates subjectAltName / rfc822Name field. routing-subdomain is a string that can be constructed from the domain-information, and it is used in the hash-creation of the ULA (see below). The requirements and sementics of the parts of this information are explained in the following paragraphs:</t>
 
 
-<t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP domain certificate MUST have the 32HEXDIG "acp-address" field. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members / ACP secure channel peers when they have an empty or 0-value acp-address field.  See <xref target="certcheck"/>.</t> 
-
+<t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP domain certificate MUST have the 32HEXDIG "acp-address" field. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members or ACP secure channel peers when they have a 0-value acp-address field and as ACP domain members (but not as ACP secure channel peers) when they have an empty acp-address field.  See <xref target="certcheck"/>.</t> 
 
 <t>"acp-domain-name" is used to indicate the ACP Domain across which all ACP nodes trust each other and are willing to build ACP channels to each other.  See <xref target="certcheck"/>.  Acp-domain-name SHOULD be the FQDN of a DNS domain owned by the operator assigning the certificate.  This is a simple method to ensure that the domain is globally unique and collision of ACP addresses would therefore only happen due to ULA hash collisions (see <xref target="scheme"/>).  If the operator does not own any FQDN, it should choose a string (in FQDN format) that it intends to be equally unique.</t>
 
@@ -1075,7 +1077,7 @@ will be distributed with the flooded objective.  An example of the message is in
     <t>The session-id is a random number used for loop prevention (distinguishing a message from a prior instance of the same message).  In DULL this field is irrelevant but must still be set according to the GRASP specification.</t>
     <t>The originator MUST be the IPv6 link local address of the originating ACP node on the sending interface.</t>
 
-    <t>The 'objective-value' parameter is a string indicating the secure channel protocol available at the specified or implied locator.</t>
+    <t>The 'objective-value' parameter is a string indicating the protocol available at the specified or implied locator. It must be a protocol supported by the node to negotiate a secure channel. IKEv2 as shown above is the protocol used to negotiate an IPsec secure channel.</t>
 
     <t>The locator-option is optional and only required when the secure channel protocol is not offered at a well-defined port number, or if there is no well-defined port number.</t>
 
@@ -1210,42 +1212,74 @@ will be distributed with the flooded objective.  An example of the message is in
 
                         <section anchor="IPsec-group" title="ACP via IPsec">
 
-<!--kaduk I did not propose to change the GRASP method name here, since I do not know how disruptive that would be.  But the ACP data channel is carried over IPsec, not IKEv2, so from that POV changing the method name would be recommended.-->
-                        <t>An ACP node announces its ability to support IPsec, negotiated via IKEv2, as the ACP secure channel protocol in GRASP as the "IKEv2" method for the "AN_ACP" objective.</t>
+                        <t>An ACP node announces its ability to support IPsec, negotiated via IKEv2, as the ACP secure channel protocol using the "IKEv2" objective-value in the "AN_ACP" GRASP objective.</t>
+
+<t>The ACP usage of IPsec and IKEv2 mandates a narrow profile of the current standards-track usage guidance for IPsec <xref target="RFC8221"/> and IKEv2 <xref target="RFC8247"/>.  This profile provides for stringent security properties and can exclude deprecated/legacy algorithms because there is no need for interoperability with legacy equipment for ACP secure channels.  Any such backward compatibility would lead only to increased attack surface and implementation complexity, for no benefit.</t>
 
                             <section anchor="IPsec" toc="include" title="Native IPsec">
 
                                 <t>To run ACP via IPsec natively, no further IANA assignments/definitions are required.</t>
 
-<t>The ACP usage of IPsec and IKEv2 mandates a narrow profile of the current standards-track usage guidance for IPsec <xref target="RFC8221"/> and IKEv2 <xref target="RFC8247"/>.  This profile provides for stringent security properties and can exclude deprecated/legacy algorithms because there is no need for interoperability with legacy equipment for ACP channels.  Any such backward compatibility would lead only to increased attack surface and implementation complexity, for no benefit.</t>
-
-<t> An ACP node that is supporting native IPsec MUST use IPsec in tunnel mode, negotiated via IKEv2, and with IPv6 payload (e.g., ESP Next Header of 41). It MUST use local and peer link-local IPv6 addresses for encapsulation.  Manual keying MUST NOT be used (independent of the security weaknesses of manual keying, it is incompatible with an autonomic platform).</t>
+<t> An ACP node that is supporting native IPsec MUST use IPsec in tunnel mode, negotiated via IKEv2, and with IPv6 payload (e.g., ESP Next Header of 41). It MUST use local and peer link-local IPv6 addresses for encapsulation.  Manual keying MUST NOT be used, see <xref target="domcert"/>.</t>
 
 <t>IPsec tunnel mode is required because the ACP will route/forward packets received from any other ACP node across the ACP secure channels, and not only its own generated ACP packets.  With IPsec transport mode, it would only be possible to send packets originated by the ACP node itself.</t>
 
-<t>ACP IPsec implementations MUST support ESP with ENCR_AES_GCM_16 (<xref target="RFC4106"/>) due to its higher performance over ENCR_AES_CBC. ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself (when carrying legacy management protocol traffics as well as hop-by-hop GRASP).  When using AES encryption, 256-bit keys MUST be used. <!--kaduk chacha20/poly1305 is well-liked in other IETF circles but was not previously mentioned for ACP usage.  This text makes no comment about chacha/poly, implicitly allowing it per RFC 8221 but with no specific recommendation for ACP. --> AES-GCM is an AEAD cipher mode, so no ESP authentication algorithm requirement is needed.</t>
+                            <section anchor="rfc8221req" toc="include" title="RFC8221 (IPsec/ESP)">
+
+<t>ACP IPsec implementations MUST comply with <xref target="RFC8221"/> (and its updates), with the following modifications to simplify hardware accelerated ACP IPsec implementation requirements by eliminating requirements for legacy or cryptographically weak options.</t>
+
+<t>ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself when carrying legacy management protocol traffics as well as hop-by-hop GRASP, which is designed to rely on the ACP for confidentiality of hop-by-hop distributed information. Therefore, IPsec MUST support ESP and MUST NOT use AH. For ESP, ENCR_NULL MUST NOT be used for ACP secure channels.</t>
+
+<t>Only ENCR_AES_GCM_16 is REQUIRED as an encryption algorithm for ACP secure channels with ESP.</t>
+
+<t>If an ACP node can perform ENCR_AES_CBC, ENCR_AES_CCM_8 at higher performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305 at equal or higher performance than ENCR_AES_GCM_16 then that ACP node SHOULD support such an encryption algorithm and prefer it in the IKEv2 negotiation if its performance is higher than that of ENCR_AES_GCM_16. Otherwise there are no normative requirements against either of these options. These requirements are overriding the MUST/SHOULD/SHOULD requirements of <xref target="RFC8221"/> for these three algorithms for the following reasons:
+<list style="symbols">
+    <t>There is no unconditional requirement against ENCR_AES_CBC because
+    <list>
+      <t>ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher higher performance in modern devices hardware accelerated implementations compared to ENCR-AES_CBC.</t>
+      <t>AES-GCM is an authenticated encryption with associated data (AEAD) cipher mode, so no ESP authentication algorithm requirement is needed (unless further encryption algorithms are supported), further simplifying ACP IPsec implementations.</t>
+      <t>there is no requirement to interoperate with legacy equipment in ACP secure channels, so a single MTI encryption algorithm for IPsec in ACP secure channels is sufficient for interoperability.</t>
+    </list> </t>
+    <t>There is no unconditional requirement against ENCR_AES_CCM_8 because it is currently not likely that it would be preferrable in ACP secure channels for more constrained IoT devices over options such as DTLS. In <xref target="RFC8221"/> this algorithm is more desirable, because of solutions relying only on IPsec without such non-IPsec alternatives.</t>
+    <t>There is no unconditional requirement against ENCR_CHACHA20_POLY1305 because there is currently no mechanism in the ACP to migrate all secure channels in an ACP domain to a different preferred encryption algorithm in the case of future discovered crypto weaknesses of AES. Once such mechanisms are defined, ENCR_CHACHA20_POLY1305 would be a good encryption algorithm, but due to the transitive traffic through ACP secure channels only when this does not result in an unexpected drop in performance.</t>
+</list></t>
+
+<t>When using AES for encryption, keys less than 256 bits MUST NOT be used, and 256-bit keys MUST be supported.</t>
+
+ <!--kaduk chacha20/poly1305 is well-liked in other IETF circles but was not previously mentioned for ACP usage.  This text makes no comment about chacha/poly, implicitly allowing it per RFC 8221 but with no specific recommendation for ACP. -->
+ <!-- tte fixed hopefully well with new above text. -->
 
 <t>Once there are updates to <xref target="RFC8221"/>, these should accordingly be reflected in updates to these ACP requirements, for example if ENCR_AES_GCM_16 was to be superceeded in the future.</t>
 
-<t>Additional requirements from <xref target="RFC8221"/> MAY be used for ACP channels as long as they do not result in a reduction of security over the above MTI requirements. For example, ESP compression MAY be used.</t>
+                            </section>
 
-<t>As for ESP (above), for IKEv2, the ENCR_AES_GCM_16 encryption algorithm (with 256-bit keys) MUST be supported.  The IKEv2 PRF_HMAC_SHA2_512 pseudorandom function MUST be supported.</t>
+                            <section anchor="rfc4247req" toc="include" title="RFC847 (IKEv2)">
 
-<t>IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP) MUST be supported (in addition to 2048-bit MODP).  ECC provides a similar security level to finite-field (MODP) key exchange with a shorter key length, so is generally preferred absent other considerations. <!--kaduk Curve448 key exchange (RFC 8031) could also be considered here, but perhaps that is too cutting-edge for some deployments --></t>
+<!-- tte PRF_HMAC_SHA2_512 requirement superceeded by requirement for RFC8247, which includes this PRF requirement:
+
+<t>The IKEv2 PRF_HMAC_SHA2_512 pseudorandom function MUST be supported (<xref target="rfc4868"/>).</t>
+
+ -->
+
+<t>IKEv2 for ACP secure channels MUST support the requirements of <xref target="RFC8247"/> (as necessary to support the above described modified <xref target="RFC8221"/> requirements for IPsec via ESP). Because IKEv2 for ACP secure channels is sufficient to be implemented in control plane software as opposed to ESP (which may need to be implemented in accelerated forwarding plane for sufficient performance), there are no restrictions on the requirements of <xref target="RFC8247"/> for ACP secure channels. Instead, the following paragraphs describe additional or stricter requirements necessary for the authentication of ACP secure channels in IKEv2 via ACP domain certificates.</t>
+
+<t>IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP) MUST be supported (in addition to 2048-bit MODP).  ECC provides a similar security level to finite-field (MODP) key exchange with a shorter key length, so is generally preferred absent other considerations.</t>
+
+ <!--kaduk Curve448 key exchange (RFC 8031) could also be considered here, but perhaps that is too cutting-edge for some deployments -->
 
 <t>IKEv2 authentication MUST use the ACP domain certificates. The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text). If certificate chains are used, all intermediate certificates up to, but not including the locally provisioned trust anchor certificate must be signaled.</t>
 
 <t>A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates. ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).</t>
 
-<t>ACP nodes are identified by their ACP address, so the ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.  If the peer's ACP domain certificate includes an ACP address in the domain information, the address in the identification payload must match the address in the certificate (allowing for the presence of virtualization bits in the ACP addressing scheme used).</t>
+<t>In IKEv2, ACP nodes are identified by their ACP address. The ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.  If the peer's ACP domain certificate includes an ACP address in the ACP domain information field (not "0" or empty), the address in the IKEv2 identification payload must match it. See <xref target="certcheck"/> for more information about "0" or empty ACP address fields in the ACP domain information field.</t>
 
-<t>IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, as indicated by a PKIX-style OID.<!--kaduk note that auth methods 1 (RSA) and 9/10/11 (NIST curves) are superseded by method 14--></t>
+<t>IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, as indicated by a PKIX-style OID.</t>
+
+<!--kaduk note that auth methods 1 (RSA) and 9/10/11 (NIST curves) are superseded by method 14-->
 
 <t>The Digital Signature hash SHA2-512 MUST be supported (in addition to SHA2-256).</t>
 
-<t>Once there are updates to <xref target="RFC8247"/>, these should accordingly be reflected in updates to these ACP requirements, for example if ENCR_AES_GCM_16 was to be superceeded in the future or the key-exchange group recommendations are changed.</t>
-
-<t>Additional requirements from <xref target="RFC8247"/> MAY be used for ACP channels as long as they do not result in a reduction of security over the above MTI requirements.</t>
+                            </section>
 
                             </section>
                             <section anchor="IPsec-GRE" toc="include" title="IPsec with GRE encapsulation">
@@ -1267,7 +1301,7 @@ will be distributed with the flooded objective.  An example of the message is in
 
                                 <t>We define the use of ACP via DTLS in the assumption that it is likely the first transport encryption supported in some classes of constrained devices.</t>
 
-                                <t>An ACP node announces its ability to support DTLS as the ACP secure channel protocol in GRASP as the "DTLS" method for the "AN_ACP" objective.</t>
+                                <t>An ACP node announces its ability to support DTLS (as described here) as an ACP secure channel protocol in GRASP through the "DTLS" objective-value in the "AN_ACP" objective.</t>
 
                                 <t>To run ACP via UDP and DTLS v1.2 <xref target="RFC6347"/> a locally assigned UDP port is used that is announced as a parameter in the GRASP AN_ACP objective to candidate neighbors.</t>
 
@@ -3368,7 +3402,7 @@ currently one registry table - the "ACP Address Type" table.</t>
 
 <t>6.1.5.6 Added explanations of behavior under failing certificates.</t>
 
-<t>6.1.2 Allow ACP adddress '0' in ACP domain information field: presence of address indicates permission to build ACP secure channel to node, 0 indicates that the address of the node is assigned by (future) othrer means than certificate.  Non-autonomic nodes have no address at all (that was in -13), and can only connect via ACP connect interfaces to ACP.</t>
+<t>6.1.2 Allow ACP adddress '0' in ACP domain information field: presence of address indicates permission to build ACP secure channel to node, 0 indicates that the address of the node is assigned by (future) other means than certificate.  Non-autonomic nodes have no address at all (that was in -13), and can only connect via ACP connect interfaces to ACP.</t>
 
 <t>6.1.3 Distinction of real ACP nodes (with address) and those with domain certificate without address added as a new rule to ACP domain membership check.</t>
 
@@ -3405,12 +3439,32 @@ currently one registry table - the "ACP Address Type" table.</t>
 
     <section title="draft-ietf-anima-autonomic-control-plane-22">
        <t>Ben Kaduk review of -21:</t>
+       <t>RFC822 encoding of ACP domain information:</t>
        <t>6.1.2 rewrote text for explaining / justifying use of rfc822name as identifier for node CP in certificate (was discussed in thread, but badly written in prior versions).</t>
-       <t>6.1.2  Changed EBNF syntax to use "+" after rfcSELF because that is the known primary name to extensions separator in many email systems ("." was wrong in prior versions).</t>
-       <t> Other:</t>
-       <t>Forgot to update example of ACP domain information to use capitalized hex-digits as required by HEXDIGIT used.</t>
-       <t>Added reference to RFC8316 (AN use-cases) to beginning of section 3 (ACP use cases).</t>
-       <t>Enhanced IPsec parameters description / requirements (from Michael Richardson).</t>
+       <t>6.1.2 Changed EBNF syntax to use "+" after rfcSELF because that is the known primary name to extensions separator in many email systems ("." was wrong in prior versions).</t>
+       <t>6.1.2 Rewrote/improved explanations for use of rfc822name field to explain better why it is PKIX compliant and the right thing to do.</t>
+       <t>Crypto parameters for IPsec:</t>
+       <t>6.1 - Added explanation of why manual keying for ACP is not feasible for ACP. Surprisingly, that text did not exist. Referred to by IPsec text (6.7.1), but here is the right place to describe the reasoning.</t>
+       <t>6.1.2 - Small textual refinement referring to requirements to authenticate peers (for the special cases of empty or '0' ACP address in ACP domain information field.</t>
+       <t>6.3 - To better justify Bens proposed change of secure channel protocol being IPsec vs. GRASP objective being IKEv2, better explained how protocol indicated in GRASP objective-value is name of protocol used to negotiate secure channel, use example of IKEv2 to negotiate IPsec.</t>
+       <t>6.7.1 - refinemenet similar to 6.3.</t>
+       <t> - moved new paragraph from Bens pull request up from 6.7.1.1 to 6.7.1 as it equally applies to GRE encapped IPsec (looks nicer one level up).</t>
+      <t>- created subsections 6.7.1.1 (IPsec/ESP) / 6.7.1.2 (IKEv2) to clearer distinguish between these two requirements blocks.</t>
+      <t>- Refined the text in these two sections to hopefully be a good answer to Valery's concern of not randomnly mocking with existing requirements docs (rfc8247 / rfc8221).</t>
+      <t>6.7.1.1.1 - IPsec/ESP requirements section:</t>
+      <t>- MUST support rfc8221 mandatory EXCEPT for the superceeding requirements in this section. Previously, this was not quite clear from the text.</t>
+      <t>- Hopefully persuasive explanations about the requirements levels for ENCR_AES_GCM_16, ENCR_AES_CBC, ENCR_AES_CCM_8 and ENCR_CHACHA20_POLY1305: Restructured text for why not ENCR_AES_CBC (was in prior version, just not well structured), added new expanations for ENCR_AES_CCM_8 and ENCR_CHACHA20_POLY130.</t>
+      <t>- In simple terms, requirements for ENCR_AES_CBC, ENCR_AES_CCM_8, ENCR_CHACHACHA are SHOULD when they are implementable with rqual or faster performancce than ENCR_AES_GCM_16.</t>
+      <t>- Removed text about "additional rfc8221" reqiurements MAY be used. Now the logic is that all other requirements apply. Hopefully we have written enough so that we prohibited downgrades.</t>
+      <t>6.7.1.1.2 - RFC8247 requirements:</t>
+      <t>- Added mandate to support rfc8247, added explanation that there is no "stripping down" requirement, just additional stronger requirements to mandate correct use of ACP certificartes during authentication.</t>
+      <t>- refined text on identifying ACP by IPv6 address to be clearer: Identifying in the context of IKEv2 and cases for '0' in ACP domain information.</t>
+      <t>- removed last two paragraphs about relationship to rfc8247, as his is now written in first paragraph of the section.</t>
+      <t>End of Ben Kaduk review related fixes.</t>
+      <t> Other:</t>
+      <t>Forgot to update example of ACP domain information to use capitalized hex-digits as required by HEXDIGIT used.</t>
+      <t>Added reference to RFC8316 (AN use-cases) to beginning of section 3 (ACP use cases).</t>
+      <t>Small Enhanced IPsec parameters description / requirements fixes (from Michael Richardson).</t>
     </section>
 </section>
 
