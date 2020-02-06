@@ -1210,7 +1210,7 @@ will be distributed with the flooded objective.  An example of the message is in
 
                                 <t>The following sub-sections define the security association protocols that are considered to be important and feasible to specify in this document.</t>
 
-                        <section anchor="IPsec-group" title="ACP via IPsec">
+                        <section anchor="IPsec-group" title="ACP via IKEv2 (IPsec)">
 
                         <t>An ACP node announces its ability to support IPsec, negotiated via IKEv2, as the ACP secure channel protocol using the "IKEv2" objective-value in the "AN_ACP" GRASP objective.</t>
 
