@@ -1304,21 +1304,47 @@ good job of taking that into account in its recommendations.
 
  -->
 
-<t>IKEv2 for ACP secure channels MUST support the requirements of <xref target="RFC8247"/> (as necessary to support the above described modified <xref target="RFC8221"/> requirements for IPsec via ESP). Because IKEv2 for ACP secure channels is sufficient to be implemented in control plane software as opposed to ESP (which may need to be implemented in accelerated forwarding plane for sufficient performance), there are no restrictions on the requirements of <xref target="RFC8247"/> for ACP secure channels. Instead, the following paragraphs describe additional or stricter requirements necessary for the authentication of ACP secure channels in IKEv2 via ACP domain certificates.</t>
+<t>
+<xref target="RFC8247"/> provides a baseline recommendation for mandatory to implement ciphers, integrity checks, pseudo-random-functions and Diffie-Hellman mechanisms.
+Those recommendations, and the recommendations of subsequent documents apply well to the ACP.
+Because IKEv2 for ACP secure channels is sufficient to be implemented in control plane software, rather than in ASIC hardware, this documents makes no changes to the recommendations.
+</t>
+<t>
+This document does establish a policy statement as permitted by <xref target="RFC8247"/> for the
+specific case of ACP traffic.
+</t>t>
 
-<t>IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP) MUST be supported (in addition to 2048-bit MODP).  ECC provides a similar security level to finite-field (MODP) key exchange with a shorter key length, so is generally preferred absent other considerations.</t>
+<t>
+The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP), listed as a SHOULD, is to be configured,
+as long as with the 2048-bit MODP (group 14).
+The ECC provides a similar security level to finite-field (MODP) key exchange with a shorter key length, so is generally preferred absent other considerations.
+</t>
 
- <!--kaduk Curve448 key exchange (RFC 8031) could also be considered here, but perhaps that is too cutting-edge for some deployments -->
+<t>
+IKEv2 authentication MUST use the ACP domain certificates.
+The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text).
+If certificate chains are used, all intermediate certificates up to, and including the locally provisioned
+trust anchor certificate must be signaled.
+While the top-trust anchor will never be used by a properly configured peer, it can provide a significant amount of useful information to debug an ACP network.
+There is some small concern that it might provide useful information to an attacker about who the network is, the other certificates that are sent already clearly indicate this information.
+</t>
 
-<t>IKEv2 authentication MUST use the ACP domain certificates. The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text). If certificate chains are used, all intermediate certificates up to, but not including the locally provisioned trust anchor certificate must be signaled.</t>
+<t>
+A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the
+ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates.
+ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).
+</t>
 
-<t>A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates. ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).</t>
+<t>
+In IKEv2, ACP nodes are identified by their ACP address.
+The ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.
+If the peer's ACP domain certificate includes an ACP address in the ACP domain information field (not "0" or empty), the address in the IKEv2 identification payload must match it.
+See <xref target="certcheck"/> for more information about "0" or empty ACP address fields in the ACP domain information field.
+</t>
 
-<t>In IKEv2, ACP nodes are identified by their ACP address. The ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.  If the peer's ACP domain certificate includes an ACP address in the ACP domain information field (not "0" or empty), the address in the IKEv2 identification payload must match it. See <xref target="certcheck"/> for more information about "0" or empty ACP address fields in the ACP domain information field.</t>
-
-<t>IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, as indicated by a PKIX-style OID.</t>
-
-<!--kaduk note that auth methods 1 (RSA) and 9/10/11 (NIST curves) are superseded by method 14-->
+<t>
+IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, as indicated by a PKIX-style OID.
+</t>
 
 <t>The Digital Signature hash SHA2-512 MUST be supported (in addition to SHA2-256).</t>
 
