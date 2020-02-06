@@ -452,7 +452,7 @@ The TA is used to authenticate the ACP domain membership of other nodes (see <xr
 
 <t>ACP domain certificates MUST be <xref target="RFC5280"/> compliant X.509 certificates.</t>
 
-<t>ACP nodes MUST support RSA and Elliptic Curve (ECC) public keys in ACP certificates. ACP certificates wth ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and extendedKeyUsage are included in the certificate.</t>
+<t>ACP nodes MUST support RSA and Elliptic Curve (ECC) public keys in ACP certificates. ACP certificates with ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and extendedKeyUsage are included in the certificate.</t>
 
 <t>ACP nodes MUST support Certificates RSA keys with no less than 2048 bit key length and ECC keys with NIST P-256, P-384 and P-521 key length (and curve) or better. ACP nodes MUST support SHA-256, SHA-384, SHA-512 or better signatures for ACP certificates with RSA key and the same RSA signatures plus ECDSA signatures for ACP certificates with ECC key.</t>
 
