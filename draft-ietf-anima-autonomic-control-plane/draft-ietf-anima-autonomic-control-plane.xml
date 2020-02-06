@@ -1218,38 +1218,81 @@ will be distributed with the flooded objective.  An example of the message is in
 
                             <section anchor="IPsec" toc="include" title="Native IPsec">
 
-                                <t>To run ACP via IPsec natively, no further IANA assignments/definitions are required.</t>
+                              <t>To run ACP via IPsec natively, no further IANA assignments/definitions are required.</t>
 
-<t> An ACP node that is supporting native IPsec MUST use IPsec in tunnel mode, negotiated via IKEv2, and with IPv6 payload (e.g., ESP Next Header of 41). It MUST use local and peer link-local IPv6 addresses for encapsulation.  Manual keying MUST NOT be used, see <xref target="domcert"/>.</t>
+<t>
+An ACP node that is supporting native IPsec MUST use IPsec in tunnel mode,
+negotiated via IKEv2, and with IPv6 payload (e.g., ESP Next Header of 41). It
+MUST use local and peer link-local IPv6 addresses for encapsulation.  Manual
+keying MUST NOT be used, see <xref target="domcert"/>.
+</t>
 
 <t>IPsec tunnel mode is required because the ACP will route/forward packets received from any other ACP node across the ACP secure channels, and not only its own generated ACP packets.  With IPsec transport mode, it would only be possible to send packets originated by the ACP node itself.</t>
 
                             <section anchor="rfc8221req" toc="include" title="RFC8221 (IPsec/ESP)">
 
-<t>ACP IPsec implementations MUST comply with <xref target="RFC8221"/> (and its updates), with the following modifications to simplify hardware accelerated ACP IPsec implementation requirements by eliminating requirements for legacy or cryptographically weak options.</t>
+<t>ACP IPsec implementations MUST comply with <xref target="RFC8221"/> (and its updates).  The following additional guidance is provided  </t>
 
-<t>ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload that may not be encrypted by itself when carrying legacy management protocol traffics as well as hop-by-hop GRASP, which is designed to rely on the ACP for confidentiality of hop-by-hop distributed information. Therefore, IPsec MUST support ESP and MUST NOT use AH. For ESP, ENCR_NULL MUST NOT be used for ACP secure channels.</t>
+<t>
+The ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload.
+All other MUST and SHOULD algorithms specified by <xref target="RFC8221" />
+(and replacement documents) are to be supported.
+The order of the proposals is not specified by <xref target="RFC8221" />.
+The first protocol offered which is supported by both ends is generally
+chosen, and so this document recommends listing the higher performance
+protocols first.
+</t>
 
-<t>Only ENCR_AES_GCM_16 is REQUIRED as an encryption algorithm for ACP secure channels with ESP.</t>
+<t>The ENCR_AES_GCM_16 is listed as a MUST in <xref target="RFC8221" /> and
+is often the faster protocol, so it is to be listed first.</t>
 
-<t>If an ACP node can perform ENCR_AES_CBC, ENCR_AES_CCM_8 at higher performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305 at equal or higher performance than ENCR_AES_GCM_16 then that ACP node SHOULD support such an encryption algorithm and prefer it in the IKEv2 negotiation if its performance is higher than that of ENCR_AES_GCM_16. Otherwise there are no normative requirements against either of these options. These requirements are overriding the MUST/SHOULD/SHOULD requirements of <xref target="RFC8221"/> for these three algorithms for the following reasons:
+<t>
+If an ACP node can perform ENCR_AES_CBC, or ENCR_AES_CCM_8 at higher
+performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305, then those should
+be listed first in the policy.
+</t>
+
+<t> ENCR_AES_GCM_16 is preferred, but:
 <list style="symbols">
-    <t>There is no unconditional requirement against ENCR_AES_CBC because
-    <list>
-      <t>ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher higher performance in modern devices hardware accelerated implementations compared to ENCR-AES_CBC.</t>
-      <t>AES-GCM is an authenticated encryption with associated data (AEAD) cipher mode, so no ESP authentication algorithm requirement is needed (unless further encryption algorithms are supported), further simplifying ACP IPsec implementations.</t>
-      <t>there is no requirement to interoperate with legacy equipment in ACP secure channels, so a single MTI encryption algorithm for IPsec in ACP secure channels is sufficient for interoperability.</t>
+    <t>There is no unconditional requirement against ENCR_AES_CBC use.
+    <t>
+      ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher higher
+      performance in modern devices hardware accelerated implementations
+      compared to ENCR-AES_CBC.
+    </t>
+    <t>
+      AES-GCM is an authenticated encryption with associated data (AEAD) cipher
+      mode, so no ESP authentication algorithm requirement is needed (unless
+      further encryption algorithms are supported), further simplifying ACP
+      IPsec implementations.
+    </t>
+    <t>
+      there is no requirement to interoperate with legacy equipment in ACP
+      secure channels, so a single MTI encryption algorithm for IPsec in ACP
+      secure channels is sufficient for interoperability.
+    </t>
     </list> </t>
-    <t>There is no unconditional requirement against ENCR_AES_CCM_8 because it is currently not likely that it would be preferrable in ACP secure channels for more constrained IoT devices over options such as DTLS. In <xref target="RFC8221"/> this algorithm is more desirable, because of solutions relying only on IPsec without such non-IPsec alternatives.</t>
-    <t>There is no unconditional requirement against ENCR_CHACHA20_POLY1305 because there is currently no mechanism in the ACP to migrate all secure channels in an ACP domain to a different preferred encryption algorithm in the case of future discovered crypto weaknesses of AES. Once such mechanisms are defined, ENCR_CHACHA20_POLY1305 would be a good encryption algorithm, but due to the transitive traffic through ACP secure channels only when this does not result in an unexpected drop in performance.</t>
+    <t>
+    There is no unconditional requirement against ENCR_CHACHA20_POLY1305
+    because there is currently no mechanism in the ACP to migrate all secure
+    channels in an ACP domain to a different preferred encryption algorithm
+    in the case of future discovered crypto weaknesses of AES. Once such
+    mechanisms are defined, ENCR_CHACHA20_POLY1305 would be a good encryption
+    algorithm, but due to the transitive traffic through ACP secure channels
+    only when this does not result in an unexpected drop in performance.
+    </t>
 </list></t>
 
-<t>When using AES for encryption, keys less than 256 bits MUST NOT be used, and 256-bit keys MUST be supported.</t>
+<t>
+  <xref target="RFC8221" /> allows for 128-bit or 256-bit AES keys.
+  This document mandates that only 256-bit AES keys MUST be supported.
+</t>
 
- <!--kaduk chacha20/poly1305 is well-liked in other IETF circles but was not previously mentioned for ACP usage.  This text makes no comment about chacha/poly, implicitly allowing it per RFC 8221 but with no specific recommendation for ACP. -->
- <!-- tte fixed hopefully well with new above text. -->
-
-<t>Once there are updates to <xref target="RFC8221"/>, these should accordingly be reflected in updates to these ACP requirements, for example if ENCR_AES_GCM_16 was to be superceeded in the future.</t>
+<t>
+When <xref target="RFC8221" /> is updated, ACP implementations will need to
+consider legacy interoperability, and the IPsec WG has generally done a very
+good job of taking that into account in its recommendations.
+</t>
 
                             </section>
 
