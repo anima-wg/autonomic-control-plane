@@ -5,10 +5,10 @@
 ANIMA WG                                                  T. Eckert, Ed.
 Internet-Draft                                             Futurewei USA
 Intended status: Standards Track                       M. Behringer, Ed.
-Expires: August 6, 2020
+Expires: August 23, 2020
                                                             S. Bjarnason
                                                           Arbor Networks
-                                                        February 3, 2020
+                                                       February 20, 2020
 
 
                     An Autonomic Control Plane (ACP)
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 6, 2020.
+   This Internet-Draft will expire on August 23, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 1]
+Eckert, et al.           Expires August 23, 2020                [Page 1]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -98,7 +98,7 @@ Table of Contents
      6.5.  Channel Selection . . . . . . . . . . . . . . . . . . . .  39
      6.6.  Candidate ACP Neighbor verification . . . . . . . . . . .  43
      6.7.  Security Association (Secure Channel) protocols . . . . .  43
-       6.7.1.  ACP via IPsec . . . . . . . . . . . . . . . . . . . .  44
+       6.7.1.  ACP via IKEv2 (IPsec) . . . . . . . . . . . . . . . .  44
          6.7.1.1.  Native IPsec  . . . . . . . . . . . . . . . . . .  44
          6.7.1.2.  IPsec with GRE encapsulation  . . . . . . . . . .  47
        6.7.2.  ACP via DTLS  . . . . . . . . . . . . . . . . . . . .  48
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 2]
+Eckert, et al.           Expires August 23, 2020                [Page 2]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -165,7 +165,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 3]
+Eckert, et al.           Expires August 23, 2020                [Page 3]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -221,7 +221,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 4]
+Eckert, et al.           Expires August 23, 2020                [Page 4]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -277,7 +277,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 5]
+Eckert, et al.           Expires August 23, 2020                [Page 5]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -333,7 +333,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 6]
+Eckert, et al.           Expires August 23, 2020                [Page 6]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -389,7 +389,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 7]
+Eckert, et al.           Expires August 23, 2020                [Page 7]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -445,7 +445,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 8]
+Eckert, et al.           Expires August 23, 2020                [Page 8]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -501,7 +501,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                 [Page 9]
+Eckert, et al.           Expires August 23, 2020                [Page 9]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -557,7 +557,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 10]
+Eckert, et al.           Expires August 23, 2020               [Page 10]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -613,7 +613,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 11]
+Eckert, et al.           Expires August 23, 2020               [Page 11]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -669,7 +669,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 12]
+Eckert, et al.           Expires August 23, 2020               [Page 12]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -725,7 +725,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 13]
+Eckert, et al.           Expires August 23, 2020               [Page 13]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -781,7 +781,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 14]
+Eckert, et al.           Expires August 23, 2020               [Page 14]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -837,7 +837,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 15]
+Eckert, et al.           Expires August 23, 2020               [Page 15]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -893,7 +893,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 16]
+Eckert, et al.           Expires August 23, 2020               [Page 16]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -949,7 +949,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 17]
+Eckert, et al.           Expires August 23, 2020               [Page 17]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 18]
+Eckert, et al.           Expires August 23, 2020               [Page 18]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 19]
+Eckert, et al.           Expires August 23, 2020               [Page 19]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 20]
+Eckert, et al.           Expires August 23, 2020               [Page 20]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1149,7 +1149,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    certificates.
 
    ACP nodes MUST support RSA and Elliptic Curve (ECC) public keys in
-   ACP certificates.  ACP certificates wth ECC keys MUST indicate to be
+   ACP certificates.  ACP certificates with ECC keys MUST indicate to be
    Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and
    extendedKeyUsage are included in the certificate.
 
@@ -1173,7 +1173,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 21]
+Eckert, et al.           Expires August 23, 2020               [Page 21]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1229,7 +1229,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 22]
+Eckert, et al.           Expires August 23, 2020               [Page 22]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1285,7 +1285,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 23]
+Eckert, et al.           Expires August 23, 2020               [Page 23]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1341,7 +1341,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 24]
+Eckert, et al.           Expires August 23, 2020               [Page 24]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 25]
+Eckert, et al.           Expires August 23, 2020               [Page 25]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1453,7 +1453,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 26]
+Eckert, et al.           Expires August 23, 2020               [Page 26]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1509,7 +1509,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 27]
+Eckert, et al.           Expires August 23, 2020               [Page 27]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1565,7 +1565,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 28]
+Eckert, et al.           Expires August 23, 2020               [Page 28]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1621,7 +1621,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 29]
+Eckert, et al.           Expires August 23, 2020               [Page 29]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1677,7 +1677,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 30]
+Eckert, et al.           Expires August 23, 2020               [Page 30]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1733,7 +1733,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 31]
+Eckert, et al.           Expires August 23, 2020               [Page 31]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1789,7 +1789,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 32]
+Eckert, et al.           Expires August 23, 2020               [Page 32]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1845,7 +1845,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 33]
+Eckert, et al.           Expires August 23, 2020               [Page 33]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1901,7 +1901,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 34]
+Eckert, et al.           Expires August 23, 2020               [Page 34]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -1957,7 +1957,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 35]
+Eckert, et al.           Expires August 23, 2020               [Page 35]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2013,7 +2013,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 36]
+Eckert, et al.           Expires August 23, 2020               [Page 36]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2069,7 +2069,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 37]
+Eckert, et al.           Expires August 23, 2020               [Page 37]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2125,7 +2125,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 38]
+Eckert, et al.           Expires August 23, 2020               [Page 38]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2181,7 +2181,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 39]
+Eckert, et al.           Expires August 23, 2020               [Page 39]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2237,7 +2237,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 40]
+Eckert, et al.           Expires August 23, 2020               [Page 40]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2293,7 +2293,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 41]
+Eckert, et al.           Expires August 23, 2020               [Page 41]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2349,7 +2349,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 42]
+Eckert, et al.           Expires August 23, 2020               [Page 42]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2405,7 +2405,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 43]
+Eckert, et al.           Expires August 23, 2020               [Page 43]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2438,7 +2438,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    that are considered to be important and feasible to specify in this
    document.
 
-6.7.1.  ACP via IPsec
+6.7.1.  ACP via IKEv2 (IPsec)
 
    An ACP node announces its ability to support IPsec, negotiated via
    IKEv2, as the ACP secure channel protocol using the "IKEv2"
@@ -2461,7 +2461,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 44]
+Eckert, et al.           Expires August 23, 2020               [Page 44]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2480,121 +2480,128 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 6.7.1.1.1.  RFC8221 (IPsec/ESP)
 
    ACP IPsec implementations MUST comply with [RFC8221] (and its
-   updates), with the following modifications to simplify hardware
-   accelerated ACP IPsec implementation requirements by eliminating
-   requirements for legacy or cryptographically weak options.
+   updates).  The requirements from above and this section amend and
+   superceed its requirements.
 
-   ACP MUST NOT use any NULL encryption option due to the
-   confidentiality of ACP payload that may not be encrypted by itself
-   when carrying legacy management protocol traffics as well as hop-by-
-   hop GRASP, which is designed to rely on the ACP for confidentiality
-   of hop-by-hop distributed information.  Therefore, IPsec MUST support
-   ESP and MUST NOT use AH.  For ESP, ENCR_NULL MUST NOT be used for ACP
-   secure channels.
+   AH MUST NOT be used (because it does not provide confidentiality).
 
-   Only ENCR_AES_GCM_16 is REQUIRED as an encryption algorithm for ACP
-   secure channels with ESP.
+   For the required ESP encryption algorithms in section 5 of [RFC8221]
+   the following guidance applies:
 
-   If an ACP node can perform ENCR_AES_CBC, ENCR_AES_CCM_8 at higher
-   performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305 at equal
-   or higher performance than ENCR_AES_GCM_16 then that ACP node SHOULD
-   support such an encryption algorithm and prefer it in the IKEv2
-   negotiation if its performance is higher than that of
-   ENCR_AES_GCM_16.  Otherwise there are no normative requirements
-   against either of these options.  These requirements are overriding
-   the MUST/SHOULD/SHOULD requirements of [RFC8221] for these three
-   algorithms for the following reasons:
+      ENCR_NULL AH MUST NOT be used (because it does not provide
+      confidentiality).
 
-   o  There is no unconditional requirement against ENCR_AES_CBC because
+      ENCR_AES_GCM_16 is the only MTI ESP encryption algorithm for ACP
+      via IPsec/ESP (it is already listed as MUST in [RFC8221]).
 
-      *  ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher
-         higher performance in modern devices hardware accelerated
-         implementations compared to ENCR-AES_CBC.
+      ENCR_AES_CBC and ENCR_AES_CCM_8 MAY be supported.  If either
+      provides higher performance than ENCR_AES_GCM_16 it SHOULD be
+      supported.
 
-      *  AES-GCM is an authenticated encryption with associated data
-         (AEAD) cipher mode, so no ESP authentication algorithm
+      ENCR_CHACHA20_POLY1305 SHOULD be supported at equal or higher
+      performance than ENCR_AES_GCM_16.  If that performance is not
+      feasible, it MAY be supported.
 
+   IKEv2 indicates an order for the offered algorithms.  The algorithms
+   SHOULD be ordered by performance.  The first algorithm supported by
+   both sides is generally choosen.
+
+   Explanations:
+
+   o  There is no requirement to interoperate with legacy equipment in
+      ACP secure channels, so a single MTI encryption algorithm for
+      IPsec in ACP secure channels is sufficient for interoperability
+      and allows for the most lightweight implementations.
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 45]
+
+
+Eckert, et al.           Expires August 23, 2020               [Page 45]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
-         requirement is needed (unless further encryption algorithms are
-         supported), further simplifying ACP IPsec implementations.
+   o  ENCR_AES_GCM_16 is an authenticated encryption with associated
+      data (AEAD) cipher mode, so no additional ESP authentication
+      algorithm is needed, simplifying the MTI requirements of IPsec for
+      the ACP.
 
-      *  there is no requirement to interoperate with legacy equipment
-         in ACP secure channels, so a single MTI encryption algorithm
-         for IPsec in ACP secure channels is sufficient for
-         interoperability.
+   o  There is no MTI requirement against support of ENCR_AES_CBC
+      because ENCR_AES_GCM_16 is assumed to be feasible with less cost/
+      higher higher performance in modern devices hardware accelerated
+      implementations compared to ENCR-AES_CBC.
 
-   o  There is no unconditional requirement against ENCR_AES_CCM_8
-      because it is currently not likely that it would be preferrable in
-      ACP secure channels for more constrained IoT devices over options
-      such as DTLS.  In [RFC8221] this algorithm is more desirable,
-      because of solutions relying only on IPsec without such non-IPsec
-      alternatives.
+   o  ENCR_CHACHA20_POLY1305 is mandatory in [RFC8221] because of its
+      target use as a fallback algorithm in case weaknesses in AES are
+      uncoverered.  Unfortunately, there is currently no way to
+      automatically propagate across an ACP a policy to disallow use of
+      AES based algorithms, so this target benefit of
+      ENCR_CHACHA20_POLY1305 can not fully be adopted yet for the ACP.
+      Therefore this algorithm is only recommended.  Changing from AES
+      to this algorithm at potentially big drop in performance could
+      also render the ACP inoperable.  Therefore the performance
+      requirement against this algorithm so that it could become an
+      effective security backup to AES for the ACP.
 
-   o  There is no unconditional requirement against
-      ENCR_CHACHA20_POLY1305 because there is currently no mechanism in
-      the ACP to migrate all secure channels in an ACP domain to a
-      different preferred encryption algorithm in the case of future
-      discovered crypto weaknesses of AES.  Once such mechanisms are
-      defined, ENCR_CHACHA20_POLY1305 would be a good encryption
-      algorithm, but due to the transitive traffic through ACP secure
-      channels only when this does not result in an unexpected drop in
-      performance.
+   [RFC8221] allows for 128-bit or 256-bit AES keys.  This document
+   mandates that only 256-bit AES keys MUST be supported.
 
-   When using AES for encryption, keys less than 256 bits MUST NOT be
-   used, and 256-bit keys MUST be supported.
-
-   Once there are updates to [RFC8221], these should accordingly be
-   reflected in updates to these ACP requirements, for example if
-   ENCR_AES_GCM_16 was to be superceeded in the future.
+   When [RFC8221] is updated, ACP implementations will need to consider
+   legacy interoperability, and the IPsec WG has generally done a very
+   good job of taking that into account in its recommendations.
 
 6.7.1.1.2.  RFC847 (IKEv2)
 
-   IKEv2 for ACP secure channels MUST support the requirements of
-   [RFC8247] (as necessary to support the above described modified
-   [RFC8221] requirements for IPsec via ESP).  Because IKEv2 for ACP
-   secure channels is sufficient to be implemented in control plane
-   software as opposed to ESP (which may need to be implemented in
-   accelerated forwarding plane for sufficient performance), there are
-   no restrictions on the requirements of [RFC8247] for ACP secure
-   channels.  Instead, the following paragraphs describe additional or
-   stricter requirements necessary for the authentication of ACP secure
-   channels in IKEv2 via ACP domain certificates.
+   [RFC8247] provides a baseline recommendation for mandatory to
+   implement ciphers, integrity checks, pseudo-random-functions and
+   Diffie-Hellman mechanisms.  Those recommendations, and the
+   recommendations of subsequent documents apply well to the ACP.
+   Because IKEv2 for ACP secure channels is sufficient to be implemented
+   in control plane software, rather than in ASIC hardware, and ACP
+   nodes supporting IKEv2 are not assumed to be code-space constrained,
+   and because existing IKEv2 implementations are expected to support
+   [RFC8247] recommendations, this documents makes no attempt to
+   simplify its recommendations for use with the ACP.
 
-   IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP) MUST
-   be supported (in addition to 2048-bit MODP).  ECC provides a similar
+   This document does establish a policy statement as permitted by
+   [RFC8247] for the specific case of ACP traffic.
+
+   The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP),
+   listed as a SHOULD, is to be configured, as long as with the 2048-bit
+   MODP (group 14).  The ECC provides a similar security level to
 
 
 
-
-Eckert, et al.           Expires August 6, 2020                [Page 46]
+Eckert, et al.           Expires August 23, 2020               [Page 46]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
-   security level to finite-field (MODP) key exchange with a shorter key
-   length, so is generally preferred absent other considerations.
+   finite-field (MODP) key exchange with a shorter key length, so is
+   generally preferred absent other considerations.
 
    IKEv2 authentication MUST use the ACP domain certificates.  The
    Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be
-   supported (see [IKEV2IANA] for this and other IANA IKEv2 parameter
-   names used in this text).  If certificate chains are used, all
-   intermediate certificates up to, but not including the locally
-   provisioned trust anchor certificate must be signaled.
+   supported.  See [IKEV2IANA] for this and other IANA IKEv2 parameter
+   names used in this text.
 
    A certificate payload with the ACP certificate MUST be included
    during IKEv2 authentication to support the ACP domain membership
    check as described in Section 6.1.3, because it is using additional
-   elements of the ACP certificates.  ACP peers are expected to have the
-   same set of Trust Anchors (TA), so a certificate path MUST only be
-   included in the signaled payload when the path contains intermediate
-   certificates not in the TA set, such as sub-CAs (see Section 6.10.7).
+   elements of the ACP certificates.
+
+   If certificate chains are used, all intermediate certificates up to,
+   and including the locally provisioned trust anchor certificate MUST
+   be signaled.  See Section 6.10.7 for the sub-CA example in which
+   certificate chains are used.
+
+   While the top-trust anchor will never be used by an ACP peer with
+   proper provisioned ACP TAs, it can provide a significant amount of
+   useful information to debug an ACP network.  There is some small
+   concern that this might provide useful information to an attacker
+   about who the network is, but the other certificates that are sent
+   already clearly indicate this information.
 
    In IKEv2, ACP nodes are identified by their ACP address.  The
    ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST
@@ -2618,6 +2625,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    performance virtual interfaces on top of GRE encapsulation than on
    top of a "native" IPsec association (without any other encapsulation
    than those defined by IPsec).  On those devices it may be beneficial
+
+
+
+
+Eckert, et al.           Expires August 23, 2020               [Page 47]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
+
+
    to run the ACP secure channel on top of GRE protected by the IPsec
    association.
 
@@ -2626,14 +2642,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
    The requirements for ESP/IPsec/IKEv2 are the same as for native IPsec
    (see Section 6.7.1.1) except that IPsec transport mode and next
-
-
-
-Eckert, et al.           Expires August 6, 2020                [Page 47]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
-
-
    protocol GRE (47) are to be negotiated.  Tunnel mode is not required
    because of GRE.
 
@@ -2673,6 +2681,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
    As explained in the beginning of Section 6.5, there is no single
    secure channel mechanism mandated for all ACP nodes.  Instead, this
+
+
+
+
+Eckert, et al.           Expires August 23, 2020               [Page 48]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
+
+
    section defines two ACP profiles (baseline and constrained) for ACP
    nodes that do introduce such requirements.
 
@@ -2681,14 +2698,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    support DTLS.  An ACP node connecting an area of constrained ACP
    nodes with an area of baseline ACP nodes must therefore support IPsec
    and DTLS and supports therefore the baseline and constrained profile.
-
-
-
-
-Eckert, et al.           Expires August 6, 2020                [Page 48]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
-
 
    Explanation: Not all type of ACP nodes can or need to connect
    directly to each other or are able to support or prefer all possible
@@ -2729,6 +2738,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    ACP provides IP unicast routing via the RPL routing protocol (see
    Section 6.11).
 
+
+
+
+Eckert, et al.           Expires August 23, 2020               [Page 49]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
+
+
    The ACP does not use IP multicast routing nor does it provide generic
    IP multicast services (the handling of GRASP link-local multicast
    messages is explained in Section 6.8.2).  Instead, the ACP provides
@@ -2737,14 +2754,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
    of objectives).  These mechanisms use hop-by-hop reliable flooding of
    GRASP messages for both service discovery (GRASP M_DISCOVERY
    messages) and service announcement (GRASP M_FLOOD messages).
-
-
-
-
-Eckert, et al.           Expires August 6, 2020                [Page 49]
-
-Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
-
 
    See Appendix A.5 for discussion about this design choice of the ACP.
 
@@ -2788,16 +2797,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-
-
-
-
-
-
-
-
-
-Eckert, et al.           Expires August 6, 2020                [Page 50]
+Eckert, et al.           Expires August 23, 2020               [Page 50]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2853,7 +2853,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 51]
+Eckert, et al.           Expires August 23, 2020               [Page 51]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2909,7 +2909,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 52]
+Eckert, et al.           Expires August 23, 2020               [Page 52]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -2965,7 +2965,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 53]
+Eckert, et al.           Expires August 23, 2020               [Page 53]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3021,7 +3021,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 54]
+Eckert, et al.           Expires August 23, 2020               [Page 54]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3077,7 +3077,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 55]
+Eckert, et al.           Expires August 23, 2020               [Page 55]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3133,7 +3133,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 56]
+Eckert, et al.           Expires August 23, 2020               [Page 56]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3189,7 +3189,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 57]
+Eckert, et al.           Expires August 23, 2020               [Page 57]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3245,7 +3245,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 58]
+Eckert, et al.           Expires August 23, 2020               [Page 58]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3301,7 +3301,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 59]
+Eckert, et al.           Expires August 23, 2020               [Page 59]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3357,7 +3357,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 60]
+Eckert, et al.           Expires August 23, 2020               [Page 60]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3413,7 +3413,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 61]
+Eckert, et al.           Expires August 23, 2020               [Page 61]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3469,7 +3469,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 62]
+Eckert, et al.           Expires August 23, 2020               [Page 62]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3525,7 +3525,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 63]
+Eckert, et al.           Expires August 23, 2020               [Page 63]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3581,7 +3581,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 64]
+Eckert, et al.           Expires August 23, 2020               [Page 64]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3637,7 +3637,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 65]
+Eckert, et al.           Expires August 23, 2020               [Page 65]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3693,7 +3693,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 66]
+Eckert, et al.           Expires August 23, 2020               [Page 66]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3749,7 +3749,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 67]
+Eckert, et al.           Expires August 23, 2020               [Page 67]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3805,7 +3805,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 68]
+Eckert, et al.           Expires August 23, 2020               [Page 68]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3861,7 +3861,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 69]
+Eckert, et al.           Expires August 23, 2020               [Page 69]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3917,7 +3917,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 70]
+Eckert, et al.           Expires August 23, 2020               [Page 70]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -3973,7 +3973,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 71]
+Eckert, et al.           Expires August 23, 2020               [Page 71]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4029,7 +4029,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 72]
+Eckert, et al.           Expires August 23, 2020               [Page 72]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4085,7 +4085,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 73]
+Eckert, et al.           Expires August 23, 2020               [Page 73]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4141,7 +4141,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 74]
+Eckert, et al.           Expires August 23, 2020               [Page 74]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4197,7 +4197,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 75]
+Eckert, et al.           Expires August 23, 2020               [Page 75]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4253,7 +4253,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 76]
+Eckert, et al.           Expires August 23, 2020               [Page 76]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4309,7 +4309,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 77]
+Eckert, et al.           Expires August 23, 2020               [Page 77]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4365,7 +4365,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 78]
+Eckert, et al.           Expires August 23, 2020               [Page 78]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4421,7 +4421,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 79]
+Eckert, et al.           Expires August 23, 2020               [Page 79]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4477,7 +4477,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 80]
+Eckert, et al.           Expires August 23, 2020               [Page 80]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4533,7 +4533,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 81]
+Eckert, et al.           Expires August 23, 2020               [Page 81]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4589,7 +4589,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 82]
+Eckert, et al.           Expires August 23, 2020               [Page 82]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4645,7 +4645,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 83]
+Eckert, et al.           Expires August 23, 2020               [Page 83]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4701,7 +4701,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 84]
+Eckert, et al.           Expires August 23, 2020               [Page 84]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4757,7 +4757,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 85]
+Eckert, et al.           Expires August 23, 2020               [Page 85]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4813,7 +4813,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 86]
+Eckert, et al.           Expires August 23, 2020               [Page 86]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4869,7 +4869,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 87]
+Eckert, et al.           Expires August 23, 2020               [Page 87]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4925,7 +4925,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 88]
+Eckert, et al.           Expires August 23, 2020               [Page 88]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -4981,7 +4981,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 89]
+Eckert, et al.           Expires August 23, 2020               [Page 89]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5037,7 +5037,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 90]
+Eckert, et al.           Expires August 23, 2020               [Page 90]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5093,7 +5093,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 91]
+Eckert, et al.           Expires August 23, 2020               [Page 91]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5149,7 +5149,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 92]
+Eckert, et al.           Expires August 23, 2020               [Page 92]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5205,7 +5205,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 93]
+Eckert, et al.           Expires August 23, 2020               [Page 93]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5261,7 +5261,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 94]
+Eckert, et al.           Expires August 23, 2020               [Page 94]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5317,7 +5317,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 95]
+Eckert, et al.           Expires August 23, 2020               [Page 95]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5373,7 +5373,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 96]
+Eckert, et al.           Expires August 23, 2020               [Page 96]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5429,7 +5429,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 97]
+Eckert, et al.           Expires August 23, 2020               [Page 97]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5485,7 +5485,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 98]
+Eckert, et al.           Expires August 23, 2020               [Page 98]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5541,7 +5541,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020                [Page 99]
+Eckert, et al.           Expires August 23, 2020               [Page 99]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5597,7 +5597,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 100]
+Eckert, et al.           Expires August 23, 2020              [Page 100]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5653,7 +5653,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 101]
+Eckert, et al.           Expires August 23, 2020              [Page 101]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5709,7 +5709,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 102]
+Eckert, et al.           Expires August 23, 2020              [Page 102]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5765,7 +5765,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 103]
+Eckert, et al.           Expires August 23, 2020              [Page 103]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5821,7 +5821,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 104]
+Eckert, et al.           Expires August 23, 2020              [Page 104]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5877,7 +5877,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 105]
+Eckert, et al.           Expires August 23, 2020              [Page 105]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5933,7 +5933,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 106]
+Eckert, et al.           Expires August 23, 2020              [Page 106]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -5989,7 +5989,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 107]
+Eckert, et al.           Expires August 23, 2020              [Page 107]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6045,7 +6045,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 108]
+Eckert, et al.           Expires August 23, 2020              [Page 108]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6101,7 +6101,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 109]
+Eckert, et al.           Expires August 23, 2020              [Page 109]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6157,7 +6157,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 110]
+Eckert, et al.           Expires August 23, 2020              [Page 110]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6213,7 +6213,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 111]
+Eckert, et al.           Expires August 23, 2020              [Page 111]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6269,7 +6269,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 112]
+Eckert, et al.           Expires August 23, 2020              [Page 112]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6325,7 +6325,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 113]
+Eckert, et al.           Expires August 23, 2020              [Page 113]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6381,7 +6381,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 114]
+Eckert, et al.           Expires August 23, 2020              [Page 114]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6437,7 +6437,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 115]
+Eckert, et al.           Expires August 23, 2020              [Page 115]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6493,7 +6493,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 116]
+Eckert, et al.           Expires August 23, 2020              [Page 116]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6549,7 +6549,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 117]
+Eckert, et al.           Expires August 23, 2020              [Page 117]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6605,7 +6605,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 118]
+Eckert, et al.           Expires August 23, 2020              [Page 118]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6661,7 +6661,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 119]
+Eckert, et al.           Expires August 23, 2020              [Page 119]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6707,7 +6707,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
               Pritikin, M., Richardson, M., Eckert, T., Behringer, M.,
               and K. Watsen, "Bootstrapping Remote Secure Key
               Infrastructures (BRSKI)", draft-ietf-anima-bootstrapping-
-              keyinfra-34 (work in progress), January 2020.
+              keyinfra-35 (work in progress), February 2020.
 
    [I-D.ietf-anima-prefix-management]
               Jiang, S., Du, Z., Carpenter, B., and Q. Sun, "Autonomic
@@ -6717,7 +6717,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 120]
+Eckert, et al.           Expires August 23, 2020              [Page 120]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6742,7 +6742,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
               Robles, I., Richardson, M., and P. Thubert, "Using RPI
               Option Type, Routing Header for Source Routes and IPv6-in-
               IPv6 encapsulation in the RPL Data Plane", draft-ietf-
-              roll-useofrplinfo-34 (work in progress), January 2020.
+              roll-useofrplinfo-35 (work in progress), February 2020.
 
    [I-D.ietf-tls-dtls13]
               Rescorla, E., Tschofenig, H., and N. Modadugu, "The
@@ -6773,7 +6773,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 121]
+Eckert, et al.           Expires August 23, 2020              [Page 121]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6829,7 +6829,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 122]
+Eckert, et al.           Expires August 23, 2020              [Page 122]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6885,7 +6885,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 123]
+Eckert, et al.           Expires August 23, 2020              [Page 123]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6941,7 +6941,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 124]
+Eckert, et al.           Expires August 23, 2020              [Page 124]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -6997,7 +6997,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 125]
+Eckert, et al.           Expires August 23, 2020              [Page 125]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7053,7 +7053,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 126]
+Eckert, et al.           Expires August 23, 2020              [Page 126]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7109,7 +7109,7 @@ A.1.  ACP Address Space Schemes
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 127]
+Eckert, et al.           Expires August 23, 2020              [Page 127]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7165,7 +7165,7 @@ A.2.  BRSKI Bootstrap (ANI)
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 128]
+Eckert, et al.           Expires August 23, 2020              [Page 128]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7221,7 +7221,7 @@ A.3.2.  mDNS and L2 support
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 129]
+Eckert, et al.           Expires August 23, 2020              [Page 129]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7277,7 +7277,7 @@ A.4.  Choice of routing protocol (RPL)
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 130]
+Eckert, et al.           Expires August 23, 2020              [Page 130]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7333,7 +7333,7 @@ A.5.  ACP Information Distribution and multicast
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 131]
+Eckert, et al.           Expires August 23, 2020              [Page 131]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7389,7 +7389,7 @@ A.6.  Extending ACP channel negotiation (via GRASP)
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 132]
+Eckert, et al.           Expires August 23, 2020              [Page 132]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7445,7 +7445,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 133]
+Eckert, et al.           Expires August 23, 2020              [Page 133]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7501,7 +7501,7 @@ A.7.  CAs, domains and routing subdomains
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 134]
+Eckert, et al.           Expires August 23, 2020              [Page 134]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7557,7 +7557,7 @@ A.8.  Intent for the ACP
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 135]
+Eckert, et al.           Expires August 23, 2020              [Page 135]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7613,7 +7613,7 @@ A.9.  Adopting ACP concepts for other environments
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 136]
+Eckert, et al.           Expires August 23, 2020              [Page 136]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7669,7 +7669,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 137]
+Eckert, et al.           Expires August 23, 2020              [Page 137]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7725,7 +7725,7 @@ A.10.2.  More options for avoiding IPv6 Data-Plane dependency
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 138]
+Eckert, et al.           Expires August 23, 2020              [Page 138]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7781,7 +7781,7 @@ A.10.4.  RPL enhancements
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 139]
+Eckert, et al.           Expires August 23, 2020              [Page 139]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7837,7 +7837,7 @@ A.10.5.  Role assignments
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 140]
+Eckert, et al.           Expires August 23, 2020              [Page 140]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7893,7 +7893,7 @@ A.10.7.  Diagnostics
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 141]
+Eckert, et al.           Expires August 23, 2020              [Page 141]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -7949,7 +7949,7 @@ A.10.8.  Avoiding and dealing with compromised ACP nodes
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 142]
+Eckert, et al.           Expires August 23, 2020              [Page 142]
 
 Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
 
@@ -8005,4 +8005,4 @@ Authors' Addresses
 
 
 
-Eckert, et al.           Expires August 6, 2020               [Page 143]
+Eckert, et al.           Expires August 23, 2020              [Page 143]

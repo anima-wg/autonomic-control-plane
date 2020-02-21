@@ -1231,55 +1231,53 @@ keying MUST NOT be used, see <xref target="domcert"/>.
 
                             <section anchor="rfc8221req" toc="include" title="RFC8221 (IPsec/ESP)">
 
-<t>ACP IPsec implementations MUST comply with <xref target="RFC8221"/> (and its updates).  The following additional guidance is provided  </t>
+<t>ACP IPsec implementations MUST comply with <xref target="RFC8221"/> (and its updates). The requirements from above and this section amend and superceed its requirements.</t>
 
-<t>
-The ACP MUST NOT use any NULL encryption option due to the confidentiality of ACP payload.
-All other MUST and SHOULD algorithms specified by <xref target="RFC8221" />
-(and replacement documents) are to be supported.
-The order of the proposals is not specified by <xref target="RFC8221" />.
-The first protocol offered which is supported by both ends is generally
-chosen, and so this document recommends listing the higher performance
-protocols first.
-</t>
+<t>AH MUST NOT be used (because it does not provide confidentiality).</t>
 
-<t>The ENCR_AES_GCM_16 is listed as a MUST in <xref target="RFC8221" /> and
-is often the faster protocol, so it is to be listed first.</t>
+<t>For the required ESP encryption algorithms in section 5 of <xref target="RFC8221"/> the following guidance applies:
+<list>
+  <t>ENCR_NULL AH MUST NOT be used (because it does not provide confidentiality).</t>
 
-<t>
-If an ACP node can perform ENCR_AES_CBC, or ENCR_AES_CCM_8 at higher
-performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305, then those should
-be listed first in the policy.
-</t>
+  <t>ENCR_AES_GCM_16 is the only MTI ESP encryption algorithm for ACP via IPsec/ESP (it is already listed as MUST in <xref target="RFC8221" />).</t>
 
-<t> ENCR_AES_GCM_16 is preferred, but:
+  <t>ENCR_AES_CBC and ENCR_AES_CCM_8 MAY be supported. If either provides higher performance than ENCR_AES_GCM_16 it SHOULD be supported.</t>
+
+  <t>ENCR_CHACHA20_POLY1305 SHOULD be supported at equal or higher performance than ENCR_AES_GCM_16. If that performance is not feasible, it MAY be supported.</t>
+</list></t>
+
+<t>IKEv2 indicates an order for the offered algorithms.  The algorithms SHOULD be ordered by performance.  The first algorithm supported by both sides is generally choosen.</t>
+
+
+<t> Explanations:
 <list style="symbols">
-    <t>There is no unconditional requirement against ENCR_AES_CBC use.
     <t>
+      There is no requirement to interoperate with legacy equipment in ACP
+      secure channels, so a single MTI encryption algorithm for IPsec in ACP
+      secure channels is sufficient for interoperability and allows for
+      the most lightweight implementations.
+    </t>
+    <t>
+      ENCR_AES_GCM_16 is an authenticated encryption with associated data (AEAD) cipher
+      mode, so no additional ESP authentication algorithm is needed, simplifying
+      the MTI requirements of IPsec for the ACP.
+    </t>
+    <t>There is no MTI requirement against support of ENCR_AES_CBC because
       ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher higher
       performance in modern devices hardware accelerated implementations
       compared to ENCR-AES_CBC.
     </t>
     <t>
-      AES-GCM is an authenticated encryption with associated data (AEAD) cipher
-      mode, so no ESP authentication algorithm requirement is needed (unless
-      further encryption algorithms are supported), further simplifying ACP
-      IPsec implementations.
-    </t>
-    <t>
-      there is no requirement to interoperate with legacy equipment in ACP
-      secure channels, so a single MTI encryption algorithm for IPsec in ACP
-      secure channels is sufficient for interoperability.
-    </t>
-    </list> </t>
-    <t>
-    There is no unconditional requirement against ENCR_CHACHA20_POLY1305
-    because there is currently no mechanism in the ACP to migrate all secure
-    channels in an ACP domain to a different preferred encryption algorithm
-    in the case of future discovered crypto weaknesses of AES. Once such
-    mechanisms are defined, ENCR_CHACHA20_POLY1305 would be a good encryption
-    algorithm, but due to the transitive traffic through ACP secure channels
-    only when this does not result in an unexpected drop in performance.
+      ENCR_CHACHA20_POLY1305 is mandatory in <xref target="RFC8221" /> because
+      of its target use as a fallback algorithm in case weaknesses in AES are
+      uncoverered. Unfortunately, there is currently no way to automatically
+      propagate across an ACP a policy to disallow use of AES based algorithms,
+      so this target benefit of ENCR_CHACHA20_POLY1305 can not fully be adopted
+      yet for the ACP.  Therefore this algorithm is only recommended. Changing 
+      from AES to this algorithm at potentially big drop in performance could
+      also render the ACP inoperable. Therefore the performance requirement against
+      this algorithm so that it could become an effective security backup to AES
+      for the ACP.
     </t>
 </list></t>
 
@@ -1307,12 +1305,12 @@ good job of taking that into account in its recommendations.
 <t>
 <xref target="RFC8247"/> provides a baseline recommendation for mandatory to implement ciphers, integrity checks, pseudo-random-functions and Diffie-Hellman mechanisms.
 Those recommendations, and the recommendations of subsequent documents apply well to the ACP.
-Because IKEv2 for ACP secure channels is sufficient to be implemented in control plane software, rather than in ASIC hardware, this documents makes no changes to the recommendations.
+Because IKEv2 for ACP secure channels is sufficient to be implemented in control plane software, rather than in ASIC hardware, and ACP nodes supporting IKEv2 are not assumed to be code-space constrained, and because existing IKEv2 implementations are expected to support <xref target="RFC8247"/> recommendations, this documents makes no attempt to simplify its recommendations for use with the ACP.
 </t>
+
 <t>
-This document does establish a policy statement as permitted by <xref target="RFC8247"/> for the
-specific case of ACP traffic.
-</t>t>
+This document does establish a policy statement as permitted by <xref target="RFC8247"/> for the specific case of ACP traffic.
+</t>
 
 <t>
 The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP), listed as a SHOULD, is to be configured,
@@ -1322,17 +1320,20 @@ The ECC provides a similar security level to finite-field (MODP) key exchange wi
 
 <t>
 IKEv2 authentication MUST use the ACP domain certificates.
-The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported (see <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text).
-If certificate chains are used, all intermediate certificates up to, and including the locally provisioned
-trust anchor certificate must be signaled.
-While the top-trust anchor will never be used by a properly configured peer, it can provide a significant amount of useful information to debug an ACP network.
-There is some small concern that it might provide useful information to an attacker about who the network is, the other certificates that are sent already clearly indicate this information.
+The Certificate Encoding "PKCS #7 wrapped X.509 certificate" (1) MUST be supported. See <xref target="IKEV2IANA"/> for this and other IANA IKEv2 parameter names used in this text.</t>
+
+<t>A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the
+ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates.
 </t>
 
 <t>
-A certificate payload with the ACP certificate MUST be included during IKEv2 authentication to support the
-ACP domain membership check as described in <xref target="certcheck"/>, because it is using additional elements of the ACP certificates.
-ACP peers are expected to have the same set of Trust Anchors (TA), so a certificate path MUST only be included in the signaled payload when the path contains intermediate certificates not in the TA set, such as sub-CAs (see <xref target="acp-registrars"/>).
+If certificate chains are used, all intermediate certificates up to, and including the locally provisioned
+trust anchor certificate MUST be signaled.  See <xref target="acp-registrars"/> for the sub-CA example in which certificate chains are used.
+</t>
+
+<t>
+While the top-trust anchor will never be used by an ACP peer with proper provisioned ACP TAs, it can provide a significant amount of useful information to debug an ACP network.
+There is some small concern that this might provide useful information to an attacker about who the network is, but the other certificates that are sent already clearly indicate this information.
 </t>
 
 <t>
