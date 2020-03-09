@@ -1,0 +1,117 @@
+From: Michael Richardson <mcr@sandelman.ca>
+To: ipsec@ietf.org
+Subject: ANIMA -- Autonomic Control Plane IPsec recommendations -- advice sought
+
+An Autonomic Control Plane (ACP)
+draft-ietf-anima-autonomic-control-plane-22
+
+specifies the use of autonomically created IP-over-IPv6-Link-Layer tunnels
+(in the "VTI" style) to create an in-band control plane.  (Replacing
+out-of-band serial consoles reached by dial-up modems in some ancient cases)
+
+https://tools.ietf.org/html/draft-ietf-anima-autonomic-control-plane-22#section-6.7.1.1
+section 6.7.1.1.1 has a lot of words about requirements.
+
+We are having a lot of back and forth within the WG and with ADs.
+I think that we just say too much, and that RFC8221 really says it all.
+Others say that RFC8221 mandates too much, and we don't need so much.
+I am here to ask the IPsec WG what you'd want this document to say.
+
+But, I say, RFC8221bis will say something different and then our text will be
+wrong, so we just should say, "see RFC8221 and documents which update it"
+(if there was a BCP# or STD# for RFC8221, we'd reference that instead)
+
+An important thing is that RFC8221 is a Mandatory to Implement, but not
+Mandatory to Use.  But, in an autonomic network, the idea is that there never
+has to be configuration.  Implementers can and should consider which
+algorithms they implement faster or in lower latency hardware, and prefer
+those.
+
+That could result in one end using hardware while the other end does
+software, and that could even flip depending upon which end initiates, but
+that's life.
+
+The ACP does not need to move gigabits/s of traffic, it's for reliable
+management traffic, and even on a multi-terabit routing platform, it's okay
+if the management interface is limited by the speed of the control plane CPU
+running IPsec in software.
+
+----
+
+6.7.1.1.1.  RFC8221 (IPsec/ESP)
+
+   ACP IPsec implementations MUST comply with [RFC8221] (and its
+   updates), with the following modifications to simplify hardware
+   accelerated ACP IPsec implementation requirements by eliminating
+   requirements for legacy or cryptographically weak options.
+
+   ACP MUST NOT use any NULL encryption option due to the
+   confidentiality of ACP payload that may not be encrypted by itself
+   when carrying legacy management protocol traffics as well as hop-by-
+   hop GRASP, which is designed to rely on the ACP for confidentiality
+   of hop-by-hop distributed information.  Therefore, IPsec MUST support
+   ESP and MUST NOT use AH.  For ESP, ENCR_NULL MUST NOT be used for ACP
+   secure channels.
+
+   Only ENCR_AES_GCM_16 is REQUIRED as an encryption algorithm for ACP
+   secure channels with ESP.
+
+   If an ACP node can perform ENCR_AES_CBC, ENCR_AES_CCM_8 at higher
+   performance than ENCR_AES_GCM_16 or ENCR_CHACHA20_POLY1305 at equal
+   or higher performance than ENCR_AES_GCM_16 then that ACP node SHOULD
+   support such an encryption algorithm and prefer it in the IKEv2
+   negotiation if its performance is higher than that of
+   ENCR_AES_GCM_16.  Otherwise there are no normative requirements
+   against either of these options.  These requirements are overriding
+   the MUST/SHOULD/SHOULD requirements of [RFC8221] for these three
+   algorithms for the following reasons:
+
+   o  There is no unconditional requirement against ENCR_AES_CBC because
+
+      *  ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher
+         higher performance in modern devices hardware accelerated
+         implementations compared to ENCR-AES_CBC.
+
+      *  AES-GCM is an authenticated encryption with associated data
+         (AEAD) cipher mode, so no ESP authentication algorithm
+
+
+
+
+Eckert, et al.           Expires August 6, 2020                [Page 45]
+
+Internet-Draft      An Autonomic Control Plane (ACP)       February 2020
+
+
+         requirement is needed (unless further encryption algorithms are
+         supported), further simplifying ACP IPsec implementations.
+
+      *  there is no requirement to interoperate with legacy equipment
+         in ACP secure channels, so a single MTI encryption algorithm
+         for IPsec in ACP secure channels is sufficient for
+         interoperability.
+
+   o  There is no unconditional requirement against ENCR_AES_CCM_8
+      because it is currently not likely that it would be preferrable in
+      ACP secure channels for more constrained IoT devices over options
+      such as DTLS.  In [RFC8221] this algorithm is more desirable,
+      because of solutions relying only on IPsec without such non-IPsec
+      alternatives.
+
+   o  There is no unconditional requirement against
+      ENCR_CHACHA20_POLY1305 because there is currently no mechanism in
+      the ACP to migrate all secure channels in an ACP domain to a
+      different preferred encryption algorithm in the case of future
+      discovered crypto weaknesses of AES.  Once such mechanisms are
+      defined, ENCR_CHACHA20_POLY1305 would be a good encryption
+      algorithm, but due to the transitive traffic through ACP secure
+      channels only when this does not result in an unexpected drop in
+      performance.
+
+   When using AES for encryption, keys less than 256 bits MUST NOT be
+   used, and 256-bit keys MUST be supported.
+
+   Once there are updates to [RFC8221], these should accordingly be
+   reflected in updates to these ACP requirements, for example if
+   ENCR_AES_GCM_16 was to be superceeded in the future.
+
