@@ -757,8 +757,8 @@ connection SHOULD be remembered and used for the next renewal via
 EST if that registrar also announces itself as an EST server
 via GRASP (see next section) on its ACP address.</t>
 
-<t>The EST server MUST present a certificate that is passing ACP domain
-membership check in its TLS connection setup (<xref target="certcheck"/>, 
+<t>The EST server MUST present a certificate that passes ACP domain
+membership check in its TLS connection setup (<xref target="certcheck"/>,
 rules 1..5, not rule 6 as this is not for an ACP secure channel setup).
 The EST server certificate MUST also contain the id-kp-cmcRA <xref target="RFC6402"/>
 extended key usage extension and the EST client MUST check its presence.</t>
