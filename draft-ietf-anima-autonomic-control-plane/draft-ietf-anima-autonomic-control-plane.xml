@@ -2110,7 +2110,7 @@ registrars and centralized policy control.</t>
 </t>
 
 <t>
-  This RPL profile avoids the use of Data-Plane artefacts
+  This RPL profile avoids the use of Data-Plane artifacts
   (RPL data packet headers, see <xref target="rpl-Data-Plane"/>), because
   hardware accelerated forwarding planes most likely can not support them today.
   To achieve this, the profile uses a simple destination prefix
@@ -2242,7 +2242,7 @@ registrars and centralized policy control.</t>
     </section>
     <section anchor="rpl-Data-Plane" title= "RPL Data-Plane artifacts">
         <t>RPL Packet Information (RPI) defined in <xref target="RFC6550"/>, section 11.2 defines the
-           data packet artefacts required or beneficial in forwarding of those data packets when
+           data packet artifacts required or beneficial in forwarding of those data packets when
            their routing information is derived from RPL. This profile does not use RPI for better
            compatibility with accelerated hardeware forwarding planes and achieves this for the following
            reasons.</t>
@@ -3650,8 +3650,8 @@ currently one registry table - the "ACP Address Type" table.</t>
        <t>6.7 - New text in this main section explaing relationship of ACP secure channels and ACP virtual interfaces - with forward references to virtual interface section.</t>
        <t>6.8.2 - reordered text and picture, no text change.</t>
        <t>6.10.7.2 - describe first how Registrar-ID can be allocted for all type of registrars, then refined text for how to potentially use MAC addresses on physical registrars.</t>
-       <t>6.11.1.1 - Added text how this profile does not use data-plane artefacts (RPI) because hadware forwarding. This was previously hidden only later in the text.</t>
-       <t>6.11.1.13. - Rewrote RPL data-plane artefact text. Provide decoder ring for abbreviations and all relevant RFCs.</t>
+       <t>6.11.1.1 - Added text how this profile does not use data-plane artifacts (RPI) because hadware forwarding. This was previously hidden only later in the text.</t>
+       <t>6.11.1.13. - Rewrote RPL data-plane artifact text. Provide decoder ring for abbreviations and all relevant RFCs.</t>
        <t>6.12.5.2. - Added more explicit text that secure channels are mapped into virtual interfaces, moved different type of interfaces used by ACP into seperate subsections to be able to refer to them.</t>
        <t>7.2 - Rewrote/refined text for ACP on L2, prior text was confusing and did not well explain why ACP for L2/L3 switches can be implemented without any L2 (HW) changes. Also missing explanation of only running GRASP untagged when VLANs are used.</t>
        <t>8.1.1 - Added requirement for ACP Edge nodes to allow configurable filtering of  IPv6 RPI headers.</t>
