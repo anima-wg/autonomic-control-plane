@@ -321,7 +321,7 @@ ACP according to this document.</t>
             </t>
             <t hangText="sUDI:">"secured Unique Device Identifier".  This is another word to describe an IDevID in referenced material.  This term is not used in this document.
             </t>
-            <t hangText="TA" anchor="ta-def">"Trust Anchor(s)". A list of one or more certificates that are trusted signers of other certificates. Authenticating a certificate consists of verifying the chain of signing certificates until a TA is encountered. In the most simple case, the TA is a single certificate of the single root CAThe most simple form of a TA is a root certificate.
+            <t hangText="TA" anchor="ta-def">"Trust Anchor(s)". A list of one or more certificates that are trusted signers of other certificates. Authenticating a certificate consists of verifying the chain of signing certificates until a TA is encountered. In the most simple case, the TA is a single certificate of the single root CA. The most simple form of a TA is a root certificate.
             </t>
             <t hangText="UDI:">"Unique Device Identifier".  In the context of this document unsecured
             identity information of a node typically consisting of at least device model/type and
