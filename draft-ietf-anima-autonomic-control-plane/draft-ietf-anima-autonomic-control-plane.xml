@@ -680,7 +680,7 @@ See <xref target="domain-usage"/> for example use-cases.
 
             <t>Beside ACP domain membership check, the ACP itself has no
             dependency against knowledge of the current time, but protocols
-            and services using the ACP will likley have the need to know
+            and services using the ACP will likely have the need to know
             the current time. For example event logging.</t>
         </section>
     </section>
