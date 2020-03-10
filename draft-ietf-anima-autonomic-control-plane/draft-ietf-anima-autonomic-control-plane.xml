@@ -2649,7 +2649,7 @@ to be deployed with it (those in physically secure locations such as a NOC).  Fo
 the registrar could disable the ability to enable ACP connect on devices during enrollment
 and that property could only be changed through re-enrollment.  See also <xref target="role-assignments"/>.</t>
 
-<t>ACP Edge nodes SHOULD have a configurable option to filter packets with RPI headers (xsee <xref target="rpl-Data-Plane"/> across an ACP connect interface. These headers are outside the scope of the RPL profile in this specification but may be used in future extensions of this specification.</t>
+<t>ACP Edge nodes SHOULD have a configurable option to filter packets with RPI headers (see <xref target="rpl-Data-Plane"/> across an ACP connect interface. These headers are outside the scope of the RPL profile in this specification but may be used in future extensions of this specification.</t>
 
                         </section>
                         <!-- NMS -->
