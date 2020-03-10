@@ -2744,7 +2744,7 @@ interface. Node integrity too is expected to be easier because the ACP connect
 node, the ACP connect link and the nodes connecting to it must be in a contiguous
 secure environment, hence assuming there can be no physical attack against the devices.</t>
 
-<t>When using "Combined ACP and Data-Plane Interfaces", care hasa to be taken that
+<t>When using "Combined ACP and Data-Plane Interfaces", care has to be taken that
 only GRASP messages intended for the ACP GRASP domain received from Software or
 NMS Hosts are forwarded by ACP edge nodes.  Currently there is no definition for
 a GRASP security and transport substrate beside the ACP, so there is no definition
