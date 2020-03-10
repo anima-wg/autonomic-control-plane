@@ -1348,7 +1348,7 @@ good job of taking that into account in its recommendations.
 
                             </section>
 
-                            <section anchor="rfc4247req" toc="include" title="RFC847 (IKEv2)">
+                            <section anchor="rfc4247req" toc="include" title="RFC8247 (IKEv2)">
 
 <!-- tte PRF_HMAC_SHA2_512 requirement superceeded by requirement for RFC8247, which includes this PRF requirement:
 
