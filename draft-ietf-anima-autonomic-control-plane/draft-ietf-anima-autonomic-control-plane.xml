@@ -17,7 +17,7 @@
 <?rfc compact="yes"?>
 <!-- REMOVED in version 12: updates="4291,4193" -->
 <rfc ipr="trust200902"
-     docName="draft-ietf-anima-autonomic-control-plane-23" category="std">
+     docName="draft-ietf-anima-autonomic-control-plane-24" category="std">
         <front>
                 <title abbrev="An Autonomic Control Plane (ACP)">An Autonomic Control Plane (ACP)</title>
                 <author role="editor" fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
@@ -321,7 +321,7 @@ ACP according to this document.</t>
             </t>
             <t hangText="sUDI:">"secured Unique Device Identifier".  This is another word to describe an IDevID in referenced material.  This term is not used in this document.
             </t>
-            <t hangText="TA" anchor="ta-def">"Trust Anchor(s)". A list of one or more certificates that are trusted signers of other certificates. Authenticating a certificate consists of verifying the chain of signing certificates until a TA is encountered. In the most simple case, the TA is a single certificate of the single root CA. The most simple form of a TA is a root certificate.
+            <t hangText="TA" anchor="ta-def">"Trust Anchor(s)". A list of one or more certificates that are trusted signers of other certificates. Authenticating a certificate consists of verifying the chain of signing certificates until a TA is encountered. In the most simple case, the TA is a single certificate of the single root CAThe most simple form of a TA is a root certificate.
             </t>
             <t hangText="UDI:">"Unique Device Identifier".  In the context of this document unsecured
             identity information of a node typically consisting of at least device model/type and
@@ -2841,75 +2841,6 @@ discovery and secure channel creation are as follows:</t>
                 </section>
                 <!-- workarounds -->
 
-        <section anchor="benefit" title="Benefits (Informative)">
-                <section anchor="self-healing" title="Self-Healing Properties">
-                        <t>The ACP is self-healing:</t>
-                        <t>
-                                <list style="symbols">
-                                        <t>New neighbors will automatically join the ACP after successful validation and will become reachable using their unique ULA address across the ACP.</t>
-                                        <t>When any changes happen in the topology, the routing protocol used in the ACP will automatically adapt to the changes and will continue to provide reachability to all nodes.</t>
-
-                                        <t>The ACP tracks the validity of peer certificates and tears down ACP secure channels when a peer certificate has expired. When short-lived certificates with lifetimes in the order of OCSP/CRL refresh times are used, then this allows for removal of invalid peers (whose certificate was not renewed) at similar speeds as when using OCSP/CRL. The same benefit can be achieved when using CRL/OCSP,  periodically refreshing the revocation information and also tearing down ACP secure channels when the peer's (long-lived) certificate is revoked. There is no requirement against ACP implementations to require this enhancement though to keep the mandatory implementations simpler.</t>
-
-                                </list>
-                        </t>
-                        <t>The ACP can also sustain network partitions and mergers.  Practically all ACP operations are link local, where a network partition has no impact.  Nodes authenticate each other using the domain certificates to establish the ACP locally.  Addressing inside the ACP remains unchanged, and the routing protocol inside both parts of the ACP will lead to two working (although partitioned) ACPs.</t>
-                        <t>There are few central dependencies: A CRL may not be available during a network partition; a suitable policy to not immediately disconnect neighbors when no CRL is available can address this issue.  Also, an ACP registrar or Certificate Authority might not be available during a partition.  This may delay renewal of certificates that are to expire in the future, and it may prevent the enrollment of new nodes during the partition.</t>
-                        <t>Highly resilient ACP designs can be built by using ACP registrars with embedded sub-CA, as outlined in <xref target="sub-ca"/>. As long as a partition is left with one or more of such ACP registrars, it can continue to enroll new candidate ACP nodes as long as the ACP registrar's sub-CA certificate does not expire. Because the ACP addressing relies on unique Registrar-IDs, a later re-merge of partitions will also not cause problems with ACP addresses assigned during partitioning.</t>
-                        <t>After a network partition, a re-merge will just establish the previous status, certificates can be renewed, the CRL is available, and new nodes can be enrolled everywhere.  Since all nodes use the same trust anchor(s), a re-merge will be smooth.</t>
-                        <t>Merging two networks with different trust anchors requires the ACP nodes to trust the union of Trust Anchors.  As long as the routing-subdomain hashes are different, the addressing will not overlap,
-which only happens in the unlikely event of a 40-bit hash collision in SHA256 (see <xref target="addressing"/>).
-Note that the complete mechanisms to merge networks is out of scope of this specification.</t>
-
-<t>It is also highly desirable for implementation of the ACP to be able to run it over interfaces that are administratively down.  If this is not feasible, then it might instead be possible to request explicit operator override upon administrative actions that would administratively bring down an interface across which the ACP is running.  Especially if bringing down the ACP is known to disconnect the operator from the node.  For example any such down administrative action could perform a dependency check to see if the transport connection across which this action is performed is affected by the down action (with default RPL routing used, packet forwarding will be symmetric, so this is actually possible to check).</t>
-
-                </section>
-                <!-- self-healing -->
-
-                <section anchor="self-protecting" title="Self-Protection Properties">
-                    <section anchor="self-protecting-outside" title="From the outside">
-                        <t>As explained in <xref target="self-creation"/>, the ACP is based on secure channels built between nodes that have mutually authenticated each other with their domain certificates.  The channels themselves are protected using standard encryption technologies such as DTLS or IPsec which provide additional authentication during channel establishment, data integrity and data confidentiality protection of data inside the ACP and in addition, provide replay protection.</t>
-                        <t>An attacker will not be able to join the ACP unless having a valid domain certificate, also packet injection and sniffing traffic will not be possible due to the security provided by the encryption protocol.</t>
-                        <t>The ACP also serves as protection (through authentication and encryption) for protocols relevant to OAM that may not have secured protocol stack options or where implementation or deployment of those options fail on some vendor/product/customer limitations.  This includes protocols such as SNMP (<xref target="RFC3411"/>), NTP (<xref target="RFC5905"/>), PTP (<xref target="IEEE-1588-2008"/>), DNS (<xref target="RFC3596"/>), DHCPv6 (<xref target="RFC3315"/>), syslog (<xref target="RFC3164"/>), Radius (<xref target="RFC2865"/>), Diameter (<xref target="RFC6733"/>), TACACS (<xref target="RFC1492"/>), IPFIX (<xref target="RFC7011"/>), Netflow (<xref target="RFC3954"/>) - just to name a few.  Protection via the ACP secure hop-by-hop channels for these protocols is meant to be only a stopgap though: The ultimate goal is for these and other protocols to use end-to-end encryption utilizing the domain certificate and rely on the ACP secure channels primarily for zero-touch reliable connectivity, but not primarily for security.</t>
-                        <t>The remaining attack vector would be to attack the underlying ACP protocols themselves, either via directed attacks or by denial-of-service attacks.  However, as the ACP is built using link-local IPv6 addresses, remote attacks from the data-plane are impossible as long as the data-plane has no facilities to remotely sent IPv6 link-local packets.  The only exception are ACP connected interfaces which require higher physical protection.  The ULA addresses are only reachable inside the ACP context, therefore, unreachable from the Data-Plane.  Also, the ACP protocols should be implemented to be attack resistant and not consume unnecessary resources even while under attack.</t>
-                    </section>
-                    <section anchor="self-protecting-inside" title="From the inside">
-
-<t>The security model of the ACP is based on trusting all members of the group of nodes
- that receive an ACP domain certificate for the same domain.  Attacks from the inside by
-a compromised group member are therefore the biggest challenge.</t>
-
-<t>Group members must be protected against attackers so that there is no easy way to compromise them,
-or use them as a proxy for attacking other devices across the ACP. For example, management plane
-functions (transport ports) should only be reachable from the ACP but not the Data-Plane.
-Especially for those management plane functions that have no good protection by themselves because they
-do not have secure end-to-end transport and to whom ACP not only provides automatic reliable
- connectivity but also protection against attacks.  Protection across all potential
-attack vectors is typically easier to do in devices whose software is designed from the ground up with
- security in mind than with legacy software based systems where the ACP is added on as another feature.</t>
-
-<t>As explained above, traffic across the ACP SHOULD still be end-to-end encrypted whenever
-possible.  This includes traffic such as GRASP, EST and BRSKI inside the ACP.  This minimizes
-man in the middle attacks by compromised ACP group members.  Such attackers cannot eavesdrop
-or modify communications, they can just filter them (which is unavoidable by any means).</t>
-
-<t>See <xref target="compromised"/> for further considerations how to avoid and deal with
-compromised nodes.</t>
-
-                    </section>
-                </section>
-                <!-- self-protecting -->
-
-                <section anchor="admin-view" title="The Administrator View">
-                        <t>An ACP is self-forming, self-managing and self-protecting, therefore has minimal dependencies on the administrator of the network.  Specifically, since it is (intended to be) independent of configuration, there is only limited scope for configuration errors on the ACP itself.  The administrator may have the option to enable or disable the entire approach, but detailed configuration is not possible.  This means that the ACP must not be reflected in the running configuration of nodes, except a possible on/off switch (and even that is undesirable).</t>
-                        <t>While configuration (except for <xref target="workarounds"/> and  <xref target="registrar-considerations"/>)
- is not possible, an administrator must have full visibility of the ACP and all its parameters, to be able to do trouble-shooting.  Therefore, an ACP must support all show and debug options, as for any other network function.  Specifically, a network management system or controller must be able to discover the ACP, and monitor its health.  This visibility of ACP operations must clearly be separated from visibility of Data-Plane so automated systems will never have to deal with ACP aspects unless they explicitly desire to do so.</t>
-                        <t>Since an ACP is self-protecting, a node not supporting the ACP, or without a valid domain certificate cannot connect to it.  This means that by default a traditional controller or network management system cannot connect to an ACP.  See <xref target="NMS"/> for more details on how to connect an NMS host into the ACP.</t>
-                </section>
-                <!-- admin-view -->
-        </section>
-        <!-- benefits -->
-
         <section anchor="operational" title="ACP Operations (Informative)">
 
 <t>The following sections document important operational aspects of the ACP. They are not normative because they do not impact the interoperability between components of the ACP, but they include recommendations/requirements for the internal operational model beneficial or necessary to achieve the desired use-case benefits of the ACP (see <xref target="usage"/>).</t>
@@ -3460,6 +3391,75 @@ One very controlled option would be to not permit these commands unless the doma
 </section>
 
 </section>
+        <section anchor="benefit" title="Summary: Benefits (Informative)">
+                <section anchor="self-healing" title="Self-Healing Properties">
+                        <t>The ACP is self-healing:</t>
+                        <t>
+                                <list style="symbols">
+                                        <t>New neighbors will automatically join the ACP after successful validation and will become reachable using their unique ULA address across the ACP.</t>
+                                        <t>When any changes happen in the topology, the routing protocol used in the ACP will automatically adapt to the changes and will continue to provide reachability to all nodes.</t>
+
+                                        <t>The ACP tracks the validity of peer certificates and tears down ACP secure channels when a peer certificate has expired. When short-lived certificates with lifetimes in the order of OCSP/CRL refresh times are used, then this allows for removal of invalid peers (whose certificate was not renewed) at similar speeds as when using OCSP/CRL. The same benefit can be achieved when using CRL/OCSP,  periodically refreshing the revocation information and also tearing down ACP secure channels when the peer's (long-lived) certificate is revoked. There is no requirement against ACP implementations to require this enhancement though to keep the mandatory implementations simpler.</t>
+
+                                </list>
+                        </t>
+                        <t>The ACP can also sustain network partitions and mergers.  Practically all ACP operations are link local, where a network partition has no impact.  Nodes authenticate each other using the domain certificates to establish the ACP locally.  Addressing inside the ACP remains unchanged, and the routing protocol inside both parts of the ACP will lead to two working (although partitioned) ACPs.</t>
+                        <t>There are few central dependencies: A CRL may not be available during a network partition; a suitable policy to not immediately disconnect neighbors when no CRL is available can address this issue.  Also, an ACP registrar or Certificate Authority might not be available during a partition.  This may delay renewal of certificates that are to expire in the future, and it may prevent the enrollment of new nodes during the partition.</t>
+                        <t>Highly resilient ACP designs can be built by using ACP registrars with embedded sub-CA, as outlined in <xref target="sub-ca"/>. As long as a partition is left with one or more of such ACP registrars, it can continue to enroll new candidate ACP nodes as long as the ACP registrar's sub-CA certificate does not expire. Because the ACP addressing relies on unique Registrar-IDs, a later re-merge of partitions will also not cause problems with ACP addresses assigned during partitioning.</t>
+                        <t>After a network partition, a re-merge will just establish the previous status, certificates can be renewed, the CRL is available, and new nodes can be enrolled everywhere.  Since all nodes use the same trust anchor(s), a re-merge will be smooth.</t>
+                        <t>Merging two networks with different trust anchors requires the ACP nodes to trust the union of Trust Anchors.  As long as the routing-subdomain hashes are different, the addressing will not overlap,
+which only happens in the unlikely event of a 40-bit hash collision in SHA256 (see <xref target="addressing"/>).
+Note that the complete mechanisms to merge networks is out of scope of this specification.</t>
+
+<t>It is also highly desirable for implementation of the ACP to be able to run it over interfaces that are administratively down.  If this is not feasible, then it might instead be possible to request explicit operator override upon administrative actions that would administratively bring down an interface across which the ACP is running.  Especially if bringing down the ACP is known to disconnect the operator from the node.  For example any such down administrative action could perform a dependency check to see if the transport connection across which this action is performed is affected by the down action (with default RPL routing used, packet forwarding will be symmetric, so this is actually possible to check).</t>
+
+                </section>
+                <!-- self-healing -->
+
+                <section anchor="self-protecting" title="Self-Protection Properties">
+                    <section anchor="self-protecting-outside" title="From the outside">
+                        <t>As explained in <xref target="self-creation"/>, the ACP is based on secure channels built between nodes that have mutually authenticated each other with their domain certificates.  The channels themselves are protected using standard encryption technologies such as DTLS or IPsec which provide additional authentication during channel establishment, data integrity and data confidentiality protection of data inside the ACP and in addition, provide replay protection.</t>
+                        <t>An attacker will not be able to join the ACP unless having a valid domain certificate, also packet injection and sniffing traffic will not be possible due to the security provided by the encryption protocol.</t>
+                        <t>The ACP also serves as protection (through authentication and encryption) for protocols relevant to OAM that may not have secured protocol stack options or where implementation or deployment of those options fail on some vendor/product/customer limitations.  This includes protocols such as SNMP (<xref target="RFC3411"/>), NTP (<xref target="RFC5905"/>), PTP (<xref target="IEEE-1588-2008"/>), DNS (<xref target="RFC3596"/>), DHCPv6 (<xref target="RFC3315"/>), syslog (<xref target="RFC3164"/>), Radius (<xref target="RFC2865"/>), Diameter (<xref target="RFC6733"/>), TACACS (<xref target="RFC1492"/>), IPFIX (<xref target="RFC7011"/>), Netflow (<xref target="RFC3954"/>) - just to name a few.  Protection via the ACP secure hop-by-hop channels for these protocols is meant to be only a stopgap though: The ultimate goal is for these and other protocols to use end-to-end encryption utilizing the domain certificate and rely on the ACP secure channels primarily for zero-touch reliable connectivity, but not primarily for security.</t>
+                        <t>The remaining attack vector would be to attack the underlying ACP protocols themselves, either via directed attacks or by denial-of-service attacks.  However, as the ACP is built using link-local IPv6 addresses, remote attacks from the data-plane are impossible as long as the data-plane has no facilities to remotely sent IPv6 link-local packets.  The only exception are ACP connected interfaces which require higher physical protection.  The ULA addresses are only reachable inside the ACP context, therefore, unreachable from the Data-Plane.  Also, the ACP protocols should be implemented to be attack resistant and not consume unnecessary resources even while under attack.</t>
+                    </section>
+                    <section anchor="self-protecting-inside" title="From the inside">
+
+<t>The security model of the ACP is based on trusting all members of the group of nodes
+ that receive an ACP domain certificate for the same domain.  Attacks from the inside by
+a compromised group member are therefore the biggest challenge.</t>
+
+<t>Group members must be protected against attackers so that there is no easy way to compromise them,
+or use them as a proxy for attacking other devices across the ACP. For example, management plane
+functions (transport ports) should only be reachable from the ACP but not the Data-Plane.
+Especially for those management plane functions that have no good protection by themselves because they
+do not have secure end-to-end transport and to whom ACP not only provides automatic reliable
+ connectivity but also protection against attacks.  Protection across all potential
+attack vectors is typically easier to do in devices whose software is designed from the ground up with
+ security in mind than with legacy software based systems where the ACP is added on as another feature.</t>
+
+<t>As explained above, traffic across the ACP SHOULD still be end-to-end encrypted whenever
+possible.  This includes traffic such as GRASP, EST and BRSKI inside the ACP.  This minimizes
+man in the middle attacks by compromised ACP group members.  Such attackers cannot eavesdrop
+or modify communications, they can just filter them (which is unavoidable by any means).</t>
+
+<t>See <xref target="compromised"/> for further considerations how to avoid and deal with
+compromised nodes.</t>
+
+                    </section>
+                </section>
+                <!-- self-protecting -->
+
+                <section anchor="admin-view" title="The Administrator View">
+                        <t>An ACP is self-forming, self-managing and self-protecting, therefore has minimal dependencies on the administrator of the network.  Specifically, since it is (intended to be) independent of configuration, there is only limited scope for configuration errors on the ACP itself.  The administrator may have the option to enable or disable the entire approach, but detailed configuration is not possible.  This means that the ACP must not be reflected in the running configuration of nodes, except a possible on/off switch (and even that is undesirable).</t>
+                        <t>While configuration (except for <xref target="workarounds"/> and  <xref target="registrar-considerations"/>)
+ is not possible, an administrator must have full visibility of the ACP and all its parameters, to be able to do trouble-shooting.  Therefore, an ACP must support all show and debug options, as for any other network function.  Specifically, a network management system or controller must be able to discover the ACP, and monitor its health.  This visibility of ACP operations must clearly be separated from visibility of Data-Plane so automated systems will never have to deal with ACP aspects unless they explicitly desire to do so.</t>
+                        <t>Since an ACP is self-protecting, a node not supporting the ACP, or without a valid domain certificate cannot connect to it.  This means that by default a traditional controller or network management system cannot connect to an ACP.  See <xref target="NMS"/> for more details on how to connect an NMS host into the ACP.</t>
+                </section>
+                <!-- admin-view -->
+        </section>
+        <!-- benefits -->
+
                 <section anchor="security" title="Security Considerations">
                         <t>After seeding an ACP by configuring at least one ACP registrar with routing-subdomain and a CA, an ACP is self-protecting and there is no need to apply configuration to make it secure (typically the ACP Registrar doubles as EST server for certificate renewal).  Its security therefore does not depend on configuration. This does not include workarounds for non-autonomic components as explained in <xref target="workarounds"/>. See <xref target="self-protecting"/> for details of how the ACP protects itself against attacks from the outside and to a more limited degree from the inside as well.</t>
                         <t>However, the security of the ACP depends on a number of other factors:
@@ -3631,6 +3631,11 @@ currently one registry table - the "ACP Address Type" table.</t>
 </section>      
 
 </section>
+
+    <section title="draft-ietf-anima-autonomic-control-plane-24">
+       <t>Leftover from -23 review by Eric Vyncke:</t>
+       <t>Swapping sections 9 and 10, section 9 was meant to be at end of document and summarize. Its not meant to be misinterpreted as introducing any new information. This did happen because section 10 was added after section 9.</t>
+    </section>
 
     <section title="draft-ietf-anima-autonomic-control-plane-23">
        <t>Note: big rfcdiff of TOC is an rfcdiff bug, changes really minimal.</t>
