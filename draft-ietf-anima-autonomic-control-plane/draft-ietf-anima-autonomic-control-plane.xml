@@ -794,9 +794,9 @@ section 2.8.11 for the definition of this message type:</t>
      Example:
 
      [M_FLOOD, 12340815, h'fd89b714f3db0000200000064000001', 210000,
-         ["SRV.est", 4, 255 ],
+         [["SRV.est", 4, 255 ],
          [O_IPv6_LOCATOR,
-              h'fd89b714f3db0000200000064000001', TCP, 443]
+              h'fd89b714f3db0000200000064000001', IPPROTO_TCP, 443]]
      ]
  ]]></artwork>
  </figure>
@@ -1094,12 +1094,12 @@ will be distributed with the flooded objective.  An example of the message is in
 <figure anchor="an-acp-example" title="GRASP AN_ACP example">
     <artwork><![CDATA[
        [M_FLOOD, 12340815, h'fe80000000000000c0011001feef0000', 210000,
-           ["AN_ACP", 4, 1, "IKEv2" ],
-           [O_IPv6_LOCATOR,
-                h'fe80000000000000c0011001feef0000', UDP, 15000]
-           ["AN_ACP", 4, 1, "DTLS" ],
-           [O_IPv6_LOCATOR,
-                h'fe80000000000000c0011001feef0000', UDP, 17000]
+         [["AN_ACP", 4, 1, "IKEv2" ],
+          [O_IPv6_LOCATOR,
+               h'fe80000000000000c0011001feef0000', IPPROTO_UDP, 15000]]
+         [["AN_ACP", 4, 1, "DTLS" ],
+          [O_IPv6_LOCATOR,
+               h'fe80000000000000c0011001feef0000', IPPROTO_UDP, 17000]]
        ]
  ]]></artwork>
  </figure>
@@ -3640,6 +3640,9 @@ currently one registry table - the "ACP Address Type" table.</t>
 </section>
 
     <section title="draft-ietf-anima-autonomic-control-plane-25">
+       <t>Michael Richardson/Brian Carpender:</t>
+       <t>6.1.5.1/6.3 Fixed GRASP examples.</t>
+       <t></t>
        <t>Russ Hously review:</t>
        <t>2. Fixed definition of "Enrollment", "Trust Anchor", "CA", and "root CA". Changed "Certificate Authority" to "Certification Authority" throughout the document (correct term according to X.509).</t>
        <t>6.1 Fixed explanation of mutual ACP trust.</t>
