@@ -1,0 +1,173 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Joel Halpern <jmh@joelhalpern.com>
+Cc: rtg-dir@ietf.org, last-call@ietf.org,
+	draft-ietf-anima-autonomic-control-plane.all@ietf.org,
+	anima@ietf.org
+Bcc: 
+Subject: Re: [Anima] Rtgdir last call review of
+ draft-ietf-anima-autonomic-control-plane-24
+Reply-To: 
+In-Reply-To: <158648497631.26678.9121665060210659827@ietfa.amsl.com>
+
+On Thu, Apr 09, 2020 at 07:16:16PM -0700, Joel Halpern via Datatracker wrote:
+> Reviewer: Joel Halpern
+> Review result: Not Ready
+> 
+> Hello,
+> 
+> I have been selected as the Routing Directorate reviewer for this draft. The
+> Routing Directorate seeks to review all routing or routing-related drafts as
+> they pass through IETF last call and IESG review, and sometimes on special
+> request. The purpose of the review is to provide assistance to the Routing ADs.
+> For more information about the Routing Directorate, please see
+> ???http://trac.tools.ietf.org/area/rtg/trac/wiki/RtgDir
+> 
+> Although these comments are primarily for the use of the Routing ADs, it would
+> be helpful if you could consider them along with any other IETF Last Call
+> comments that you receive, and strive to resolve them through discussion or by
+> updating the draft.
+> 
+> Document: draft-ietf-anima-autonomic-control-plane-24.txt
+> Reviewer: Joel Halpern
+> Review Date: 9-April-2020
+> IETF LC End Date: N/A
+> Intended Status: Proposed Standard
+> 
+> Summary:
+>     I have two major concern about this document that I think should be
+>     resolved before publication.  The are also a number of minor items that
+>     warrant attention.
+> 
+> Comments:
+> 
+> While quite long, the draft is significantly improved from earlier versions. 
+> It does provide significant explanation of its design choices, which is helpful
+> and appreciated.  Sometimes this seems to end up more as marketing or promotion
+> instead of explanation, but this is mostly harmless.
+> 
+> In particular, I would like to thank the authors and editors for the addition
+> of section 9.3 and its careful discussion of the many issues there.
+> 
+> Major Issues:
+> 
+>     Section 6.10.3.1 on the use of Zone-IDs seems, from the material in A.10.1,
+>     to be dependent upon either configuration (which ACP is supposed to avoid)
+>     or completely unspecified magic.  Having an addressing and routing scheme
+>     standardized that is impossible to use seems at variance with appropriate
+>     practice.  It would be fine to say that provision is made for non-zero
+>     Zone-IDs in the hope that future work can find ways to scale further using
+>     this.  But pretending it is well-defined, but not actually defining it,
+>     seems unacceptable.
+> 
+>     Section 6.12.5.1 on loopback interface is factually wrong.  It conflates
+>     one particular form of loopback interface with the definition of loopback
+>     interfaces.  This also leads to the error in the definition section (see
+>     minor comment below).  (Loopback Interfaces were used long before RFC 4291,
+>     and on routers were often used for external communication.  This was itself
+>     a repurposing of the original loopback interface, 127.0.0.1, which was
+>     indeed for internal use.)
+> 
+> Minor Issues:
+> 
+>    It seems distinctly unfortunate that the definition for Data Plane in
+>    section 2 explicitly states that this definition is different from that used
+>    in other work, including other routing work.  This seems a recipe for both
+>    confusion and mis-communication among technologists.
+> 
+>    In the definition of in-band management in section 2, please remove the
+>    commentary text on putative fragility.   (I actually agree it has some
+>    fragility.  The discussion does not belong here.  This is a definition.)  
+>    The promotional material may be warranted, if jarring, in other parts of the
+>    documents.  Not in the definitions please.
+> 
+>     The definition of a loopback interface in section 2 is wrong.  It claims
+>     that loopbacks transmit no external traffic.   They send and receive lots
+>     of external traffic.  They merely do so by forwarding the traffic
+>     internally to other interfaces.  The traffic is external.  The particular
+>     step of the transmission, if implemented naively, is internal.
+> 
+>     If we are going to define ACP as a virtual out of band network, I would
+>     suggest separating the terms into two definitions.  One for true out  of
+>     band networks (distinct physical links, switches, and ports), and then a
+>     definition for virtual out of band network which describes the ACP
+>     approximation which creates independence from configuration, but not
+>     independence from the physical links.
+> 
+>     Section 5, bullet 2, talks about a policy as to which peers ACP
+>     communication should be established.  It would be helpful if this gave a
+>     reference or indication as to where such policies would come from.  Given
+>     the emphasis on zero touch, I presume they are not configured on the node? 
+>     (This issues was in my review of -13.)
+> 
+>     Bullet 4 of section 6.1.3 on checking certificates against the CRL / OCSP
+>     would seem to be better reworded.  I believe the intended requirements i
+>     that IF there is ACP connectivity to the CRL / OCSP source, then it should
+>     be verified.  But that absence of such connectivity should not prevent
+>     association formation.  (As, if I have read it wright, otherwise we could
+>     deadlock the startup process.)
+> 
+>     In the example in section 6.5 on Channel selection, in steps 7:C1 and
+>     11:C2, Node 1 concludes that it is Bob.  However, in steps 12 and 13, the
+>     text refers to Node1 (Alice).  This seems inconsistent.
+> 
+>     Section 6.7.1 makes an assertion about the lack of need for MTI of security
+>     mechanisms.  The earlier explanation was well done and seems sound.  This
+>     shorter one seems wrong, since without MTI there is no good way to know
+>     what ones neighbors may implement.  I suggest simply removing this text and
+>     replacing it with a backwards reference to the earlier description.  (The
+>     rest of the section is useful and clear.)
+> 
+>     In 6.10.3,  ACP Zone Addressing Sub-Scheme, the text claims that when zone
+>     IDs of 0 are used, the addresses are identifiers, and when non-zero IDs
+>     aere used, they are locators.  Since in either case the addresses are used
+>     for packet forwarding, and the addressing information is propagated in the
+>     routing protocol (RPL), this seems to be a misuse of the locator /
+>     identifier distinction.  And a misuse for no purpose as the distinction is
+>     not relevant to the document.  (This odd use of "identifier continues in
+>     section 6.10.3.1.  Identifier is not a synonym of "flat".  Just say "flat".)
+> 
+>     The assertion about looping packets in the later portion of 6.11.1.1 is
+>     over-stated.  There are other routing protocols that avoid looping-till-ttl
+>     without changing the data plane header.  I suggest removing the gratuitous
+>     comparison with other routing protocols.
+> 
+>     6.12.5.1 refers to the ACP addresses as node addresses.  Technically, the
+>     IPv6 architecture requires that all addresses are associated with
+>     interfaces rather than nodes.  I would prefer that this draft not
+>     needlessly claim to violate that.
+> 
+>     Section 7.2 (L2 DULL GRASP) seems to be doing something quite useful.  I
+>     think I see how it would work.  The need for some configuration on some
+>     switches seems inevitable and acceptable.   I think there is one corner
+>     case that should be avoided, as it seems likely to create significant
+>     complexity for little or no benefit.  It seems to me that a switch that is
+>     capable of participating in the ACP should either participate in the ACP on
+>     all its physical ports, or should not participate in the ACP at all.  I
+>     would not be surprised if that was the WG intent.  But I could not find the
+>     text that says this.  (Apologies if it is there and I missed it.)
+> 
+>     Section 9 starts by saying it is informational.  But the first paragraph
+>     says that some of the content is "necessary" for correct operation.  Thus,
+>     it seems that some of the content is normative?   (I am not sure, but I
+>     think the "necessary" material relates to what is needed to be a registrar?)
+> 
+> Nits:
+>     The second and third paragraphs of section 6.11.1.1 on RPL start with
+>     duplicated text, and then go on to say different (complementary) things. 
+>     There is no need for the repetition.
+> 
+>     The rank factor in 6.11.1.6 of 100 megabits as the boundary seems a fairly
+>     arbitrary choice.  It may be that an arbitrary choice was needed.  Could
+>     something be said?  In particular, if someone looks at this 5 years from
+>     now, it may seem quite confusing.
+> 
+> 
+> 
+> _______________________________________________
+> Anima mailing list
+> Anima@ietf.org
+> https://www.ietf.org/mailman/listinfo/anima
+
+-- 
+---
+tte@cs.fau.de

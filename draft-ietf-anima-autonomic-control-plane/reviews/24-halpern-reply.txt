@@ -1,0 +1,497 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Joel Halpern <jmh@joelhalpern.com>
+Cc: rtg-dir@ietf.org, last-call@ietf.org,
+	draft-ietf-anima-autonomic-control-plane.all@ietf.org,
+	anima@ietf.org
+Bcc:
+Subject: Re: [Anima] Rtgdir last call review of
+ draft-ietf-anima-autonomic-control-plane-24
+Reply-To:
+In-Reply-To: <158648497631.26678.9121665060210659827@ietfa.amsl.com>
+
+On Thu, Apr 09, 2020 at 07:16:16PM -0700, Joel Halpern via Datatracker wrote:
+> Reviewer: Joel Halpern
+> Review result: Not Ready
+>
+> Hello,
+>
+> I have been selected as the Routing Directorate reviewer for this draft. The
+> Routing Directorate seeks to review all routing or routing-related drafts as
+> they pass through IETF last call and IESG review, and sometimes on special
+> request. The purpose of the review is to provide assistance to the Routing ADs.
+> For more information about the Routing Directorate, please see
+> ???http://trac.tools.ietf.org/area/rtg/trac/wiki/RtgDir
+>
+> Although these comments are primarily for the use of the Routing ADs, it would
+> be helpful if you could consider them along with any other IETF Last Call
+> comments that you receive, and strive to resolve them through discussion or by
+> updating the draft.
+>
+> Document: draft-ietf-anima-autonomic-control-plane-24.txt
+> Reviewer: Joel Halpern
+> Review Date: 9-April-2020
+> IETF LC End Date: N/A
+> Intended Status: Proposed Standard
+>
+> Summary:
+>     I have two major concern about this document that I think should be
+>     resolved before publication.  The are also a number of minor items that
+>     warrant attention.
+>
+> Comments:
+>
+> While quite long, the draft is significantly improved from earlier versions.
+> It does provide significant explanation of its design choices, which is helpful
+> and appreciated.  Sometimes this seems to end up more as marketing or promotion
+> instead of explanation, but this is mostly harmless.
+
+Any pointers to specific text that sounds to be too marketing wise
+always welcome. Happy to review that. I thought i had eliminated all
+the ones... i did see myself.
+
+> In particular, I would like to thank the authors and editors for the addition
+> of section 9.3 and its careful discussion of the many issues there.
+
+Thank you.
+
+> Major Issues:
+>
+>     Section 6.10.3.1 on the use of Zone-IDs seems, from the material in A.10.1,
+>     to be dependent upon either configuration (which ACP is supposed to avoid)
+>     or completely unspecified magic.  Having an addressing and routing scheme
+>     standardized that is impossible to use seems at variance with appropriate
+>     practice.  It would be fine to say that provision is made for non-zero
+>     Zone-IDs in the hope that future work can find ways to scale further using
+>     this.  But pretending it is well-defined, but not actually defining it,
+>     seems unacceptable.
+
+You brought up this issue in your -13 review and we had a longer thread about
+it which ended in i think this statement of yours:
+
+| <8d2d0b06-0982-53a3-0ce0-38a465f58bed@joelhalpern.com>
+| My perspective is that I would have preferred to see the system designed such
+| that when Zones are needed, they can be added in a way that does not assume
+| system-wide knowledge of the layout choices.
+| 
+| I think you could have achieved that.  I understand that the working group
+| didn't do that.  And beause it is the WG decision, I can live with it.  I wish
+| it were better.
+
+No protection against double jeopardy in IETF ? 
+Maybe its a good thing except for expediency of completion of the draft,
+because i had to rethink the issue again, and while it took a while i
+hope the result is especially good to help with initial ACP adoption
+challenges:
+
+The included text in the discussion up to -24 is now also in my opinion not very
+useful, it also had technical issues.
+The core issue that was combination of your ask for complete removal
+of the ACP zone address scheme and the (bad) solution of attempting to guess
+at a future way how to provide the final full benefits for the zone address
+scheme in 6.10.3.1. And that guesswork in 6.10.3.1 was not good, which is
+why 6.10.3.1 is now gone in -25.
+
+[Side note: I think i have the zone solution for a future RFC kinda worked out:
+we would have some manual or autonomic zone edges, grasp announcements within each
+zone announcing the Zone-ID and then nodes with ACP-Zone addresses that
+attach into a zone would update the Zone-ID of their ACP address accordingly.
+E-voila: zone-mobility by updating the zone-id field]
+
+However, the main disconnect was that this longer term goal alone is not
+ good reason to keep Zone-ID. Instead the main reason to keep it was and is
+the ability to support better partial and incremental adoption of ACP,
+and for that one we do actually have good pre-standard implementation
+experience. 
+
+But i didn't want this in the normative part of the spec, and i either
+didn't get the idea that it could go into the operational part (section 9),
+or i felt such text would be too difficult or too much subject to additional
+review attacks.
+
+But given how i think it is really an important option for initial
+deployments of ACP in large networks, i finally wrote that, it is
+now a new section 9.4. Pls check it out.
+
+>     Section 6.12.5.1 on loopback interface is factually wrong.
+>     It conflates one particular form of loopback interface with
+>     the definition of loopback interfaces.
+>
+>     This also leads to the error in the definition section (see
+>     minor comment below).
+
+Let me move this here so we can have a cohesive discussion about that section.
+
+>     6.12.5.1 refers to the ACP addresses as node addresses.  Technically, the
+>     IPv6 architecture requires that all addresses are associated with
+>     interfaces rather than nodes.  I would prefer that this draft not
+>     needlessly claim to violate that.
+
+In practice the term node address is often used, maybe less
+in RFC, but more in practice. And its often done
+interchangably with loopback addresses because without changing
+the actual IPv6 functionality, loopback interfaces are the
+main way to achieve the function operators typically associate
+with a node address.
+
+Be that as it may, i have tried to end the rewrite of the section
+with a paragraph that is trying to bring the use of the word "Node"
+in-line with the way RFC8402 does it.
+
+>    (Loopback Interfaces were used long before RFC 4291,
+
+Yepp, was just bad english to connect something that was meant to be
+read in he context of IPv4 with an example about IPv6.
+
+>     and on routers were often used for external communication.  This was itself
+>     a repurposing of the original loopback interface, 127.0.0.1, which was
+>     indeed for internal use.)
+
+Yepp.
+
+So, i ended up rewriting the whole section also because EricV asked
+in his review earlier this year if it would not be better to use a new
+term instead of loopback.
+
+Whe i reviewed existing normaive references it became clear to me that
+loopback is actually a very good logical name for the function we
+need for addresses we want to behave as what non-dogmatic people
+would call a node address. So i hope the explanation in the new
+text for loopback to well justify the naming choice.
+
+I have also added a bullet list for justifying the loopback address
+use. Really nothing new, but common operational practice, alas, i
+wasn't able to find a list like this in other docs and this
+is an ongoing reason for questions from readers of ACP that do not
+have a background in running IP router networks.
+
+So hopefully, while this point too took me a lot of time to
+rewrite, it is all for the better.
+
+> Minor Issues:
+>
+>    It seems distinctly unfortunate that the definition for Data Plane in
+>    section 2 explicitly states that this definition is different from that used
+>    in other work, including other routing work.  This seems a recipe for both
+>    confusion and mis-communication among technologists.
+
+Actually, IMHO the term data-plane has always been badly defined in the
+face of the inline-signaling model of IP networks. Are IGP/BGP signaling
+packets data-plane or control-plane ? How about routers connecting via
+L2 unbeknownst to them and their STP packets ? Even if you have an
+opininon, do you have a normative RFC to support your definition ?
+What is the difference between data and forwarding plane ?
+
+Don't answer... rethoric questions...
+
+I have replaced two existing paragraphs in the intro with the following
+text that explains the terminology better and shows how in the vision
+of autonomic networks the term is very logical, and that it is just
+existing non-autonomous networks in which there is more to the data-plane
+than what you might expect, but i think that is perfectly fine, especially
+when considering the layering example from above, where one layers (L2, ethernet)
+control and forwarding plane are just considered to be part of a higher layers
+data-plane.
+
+New text:
+<t>In a fully autonomic network node without legacy control or management functions/protocols, the Data-Plane would be for example just a forwarding plane for "Data" IPv6 packets, aka: packets that are not forwarded by the ACP itself because they are control or management plane packets. In such networks/nodes, there would be no non-autonomous control or non-autonomous management plane. Routing protocols for example would be built inside the ACP as so-called autonomous functions via autonomous service agents, leveraging the ACPs functions instead of implementing them seperately for each protocol: discovery, automaticically established authenticated and encrypted local and distant peer connectivity for control and managemenet traffic and common control/management protocol session and presentation functions.</t>
+<t>When the ACP is added to henceforth so-called non-autonomous nodes that have non-autonomous management plane and/or control plane functions, the ACP instead is best abstracted as a special Virtual Routing and Forwarding (VRF) instance (or virtual router) and the complete pre-existing non-autonomous management and/or control plane is considered to be part of the Data-Plane to avoid introduction of more complex, new terminology only for this case. Like the forwarding plane for "Data" packets, the non-autonomous control and management plane functions can then be managed/used via the ACP. This terminology is consistent with pre-existing documents such as <xref target="RFC8368">"/>.</t>
+
+<t>In both instances (autonomous and non-autonomous nodes), the ACP is built such that it is operating in the absene of the Data-Plane, and in the case of existing non-autonomous (management, control) components in the Data-Plane also in th
+e presence of any (mis-)configuration thereof.</t>
+/New text
+
+>    In the definition of in-band management in section 2, please remove the
+>    commentary text on putative fragility.   (I actually agree it has some
+>    fragility.  The discussion does not belong here.  This is a definition.)
+>    The promotional material may be warranted, if jarring, in other parts of the
+>    documents.  Not in the definitions please.
+
+Ok, i stripped down explanatory text for out-of-band network in terminology
+and instead pimped what you would call "marketing" about it in the introduction section. Easy to find in diff.
+
+Always happy to get explicit suggestions for how to reduce what you think
+is "jarring". The ability of ACP to even avoid a single case of sending
+out a tech person to a remote site due to misconfigurations is IMHO
+the bigest single use-case benefit in talks with customers, so i think it deserves
+good factual representation and i can not see where the text goes beyond
+that. I am happy if any positive pitching is called "marketing", but
+i definitely do not want anything to be "jarring".
+
+>     The definition of a loopback interface in section 2 is wrong.  It claims
+>     that loopbacks transmit no external traffic.   They send and receive lots
+>     of external traffic.  They merely do so by forwarding the traffic
+>     internally to other interfaces.  The traffic is external.  The particular
+>     step of the transmission, if implemented naively, is internal.
+
+Fixed.
+
+>     If we are going to define ACP as a virtual out of band network, I would
+>     suggest separating the terms into two definitions. One for true out  of
+>     band networks (distinct physical links, switches, and ports), and then a
+>     definition for virtual out of band network which describes the ACP
+>     approximation which creates independence from configuration, but not
+>     independence from the physical links.
+
+Done.
+
+[ Note: I am btw. not worried about the link-sharing as a career limiting move
+  for ACP, as soon as there is sufficient link redundancy (2 links eliminate 99% of issues).
+
+  The actual HW design of the nodes to maximize ACP value is more interesting.
+  I had slides about that in a research conference workshop some years back, e.g.: applying
+  concepts such as BMC so that you can use the common HW diag functions
+  you typically expect from OOB support. ]
+
+>     Section 5, bullet 2, talks about a policy as to which peers ACP
+>     communication should be established.  It would be helpful if this gave a
+>     reference or indication as to where such policies would come from.  Given
+>     the emphasis on zero touch, I presume they are not configured on the node?
+>     (This issues was in my review of -13.)
+
+Original -13 thread here:
+
+| >>      It is unclear how the flexible policy defined in section 5 bullet 2 (about
+| >>      which nodes are ACP peer candidates) is consistent with autonomic
+| >>      operation.  It seems that the flexibility is important, so there should be
+| >>      some explanation here about how this is consonant with the stated goals.  I
+| >>      understand that the bootstrap comes from BRSKI, but I do not think that is
+| >>      where the policy comes from?
+| >
+| > Would rather not like to add more suggestive text, and thats at best what
+| > i could add. The default policy is the best "autonomic" behavior we know how
+| > to make work: aka: try to connect ACP to all neighbors you can discover. And
+| > we have only defined with DULL GRASP how to find subnet adjacent neighbors.
+| >
+| > The main reason to mention policy is so that there is some leeway to do
+| > more or even (sigh) less than all direct neighbors.
+
+Double jeopardy ?
+
+I actually did not bother to fix up the intro section since taking the editor pen
+from Michael. I had kept the "policy" in there as a reminder of Intent to be
+done in the future, but given how we deprioritized
+intent in charter, i felt more happy now than during 13 to fix this.
+
+Alas, it turns out i also found other points in the overview lacking
+clarity and consistency with the normative sections, so the changes
+here got larger, but hopefully all for the better. Please check.
+
+>     Bullet 4 of section 6.1.3 on checking certificates against the CRL / OCSP
+>     would seem to be better reworded.  I believe the intended requirements i
+>     that IF there is ACP connectivity to the CRL / OCSP source, then it should
+>     be verified.  But that absence of such connectivity should not prevent
+>     association formation.  (As, if I have read it wright, otherwise we could
+>     deadlock the startup process.)
+
+Pls. check the full diff vs. -24 for this, because that fix is in the commit i did for
+Russ Housley before i worked on your review. If you don't like that text either, pls
+suggest better wording, its a bit of a tricky language problem i think, which a native
+speaker might master easier.
+
+>     In the example in section 6.5 on Channel selection, in steps 7:C1 and
+>     11:C2, Node 1 concludes that it is Bob.  However, in steps 12 and 13, the
+>     text refers to Node1 (Alice).  This seems inconsistent.
+
+Yikes. How could that have slipped me. Thanks a lot.
+>
+>     Section 6.7.1 makes an assertion about the lack of need for MTI of security
+>     mechanisms.  The earlier explanation was well done and seems sound.  This
+>     shorter one seems wrong, since without MTI there is no good way to know
+>     what ones neighbors may implement.  I suggest simply removing this text and
+>     replacing it with a backwards reference to the earlier description.  (The
+>     rest of the section is useful and clear.)
+
+Done.
+
+>     In 6.10.3,  ACP Zone Addressing Sub-Scheme, the text claims that when zone
+>     IDs of 0 are used, the addresses are identifiers, and when non-zero IDs
+>     aere used, they are locators.  Since in either case the addresses are used
+>     for packet forwarding, and the addressing information is propagated in the
+>     routing protocol (RPL), this seems to be a misuse of the locator /
+>     identifier distinction.  And a misuse for no purpose as the distinction is
+>     not relevant to the document.  (This odd use of "identifier continues in
+>     section 6.10.3.1.  Identifier is not a synonym of "flat".  Just say "flat".)
+
+Hey, i didn't come up with all this confusing an probably wrong understanding
+of locator or identifier, i just fell into the trap of trying to use these terms ;-))
+
+This is removed now. Hope i found all places. Only locartors left should be
+about GRASP.
+
+Is there even any agreed upon distinction ? To me, identifier/locator are just
+two roles an address can have based on who is using it for what purpose.
+They're not exclusive to each other IMHO.
+
+>     The assertion about looping packets in the later portion of 6.11.1.1 is
+>     over-stated.  There are other routing protocols that avoid looping-till-ttl
+>     without changing the data plane header. 
+
+>     I suggest removing the gratuitous     comparison with other routing protocols.
+
+Well... it was IMHO not gratuitous, it was just bad text.
+
+The intent was not to make the solution sound better than other routing protocols,
+but rather to explain how it is not far worse than other routing protocols given
+the absence of the RPI (RPL Packet Information).
+
+The text was not good because it only indirectly addressed what
+it intended to describe by just talking about TTL looping. I have replaced this
+paragraph by two paragraphs that hopefully better capture the intent:
+
+[snip]
+    <t>
+      In RPL profiles where RPL Packet Information (RPI, see <xref target="rpl-Data-Plane"/>)
+      is present, it is also used to trigger reconvergence when misrouted, for example looping, packets
+      are recognized because of their RPI data. This helps to minimize RPL signaling traffic
+      especially in networks without stable topology and slow links.
+    </t>
+      
+    <t>
+      The ACP RPL profile instead relies on quick reconverging the DODAG by
+      recognizing link state change (down/up) and triggering reconvergence signaling
+      as described in <xref target="rpl-dodag-repair"/>.  Since links in the ACP
+      are assumed to be mostly reliable (or have link layer protection against loss)
+      and because there is no stretch according to <xref target="rpl-dodag-repair"/>,
+      loops caused by loss of RPL routing protocol signaling packets should be exceedingly rare.</t>
+    </t>
+[/snip]
+
+Hope this is an adequate answer to close this point.
+
+I now have no text about TTL expiry because that is a difficult qualitative
+comparison for which there is IMHO not enough data on evidence: The
+reconvergence with RPL in the ACP profile may be somewhat slower than
+the most common sub-50 msec LFA in SP networks or subsecond SPF-IGP
+fast convergence common in most other networks in scope of ACP ("well manageg,
+aka: private enterprise etc. networks), but the total amount of traffic
+across the ACP will likely be orders of magnitude less than that on the
+Data Plane where the SPF-IGP runs. 
+
+I think convergence with the profile should be 50 msec (link change discovery
+plus O(max-pathlength) * per-node RPL processing latency, but i think
+this is too much analysis for a spec, so no text.
+
+>     Section 7.2 (L2 DULL GRASP) seems to be doing something quite useful.  I
+>     think I see how it would work.  The need for some configuration on some
+>     switches seems inevitable and acceptable.
+
+Hmm.. there is no intent to require configuration. What specifically
+do you think of ?
+
+The goal is really to support ACP in complete L2-only networks, except that
+the ACP itself is of course L3.
+
+One core part of the text is explaining how ACP can be supported
+on the most limited L2 hardware where it can work. Aka: withough changing
+the actual L2 HW forwarding, but just by punting GRASP packets so they
+are not flooded by L2.
+
+>     I think there is one corner
+>     case that should be avoided, as it seems likely to create significant
+>     complexity for little or no benefit.  It seems to me that a switch that is
+>     capable of participating in the ACP should either participate in the ACP on
+>     all its physical ports, or should not participate in the ACP at all.  I
+>     would not be surprised if that was the WG intent.  But I could not find the
+>     text that says this.  (Apologies if it is there and I missed it.)
+
+Not sure why you specifically think this is an issue for devices
+operating at L2.
+
+I have seen all type of weird problems. For example: How do you
+enable autodiscovery of ACP neighbors across the 10Gbps backbone
+interfaces of a router/switch for broadband if those interfaces
+are initially disabled by software because the user is expected
+to first enter an additional license key to use those interfaces....
+
+Sorry, randomn example. Maybe rephrase your point with an example
+why you think it deserve additional text ? Suggest additional text ?
+
+>
+>     Section 9 starts by saying it is informational.  But the first paragraph
+>     says that some of the content is "necessary" for correct operation.  Thus,
+>     it seems that some of the content is normative?   (I am not sure, but I
+>     think the "necessary" material relates to what is needed to be a registrar?)
+
+The first paragraph does not say "correct operation", and i think
+to remember that i word smithed that paragraph quite
+a bit to walk the thin line: you can not build an ACP without
+understanding this section and follow its advice to
+the extend you deem appropriate or feasible, but we can also not
+normatively standardize what is in this section.
+
+Some things will hopefully gt standardized via future
+yang model RFC. That stuff is just not standardized beause
+it does not meet the formal bar.
+
+Most of the stuff is talking about variety of options
+deemed to be necessary or beneficial in various
+situations. Doing even the Yang stuff for the subset
+people will agree to is a lot of work.
+
+protecting the ACP from operator
+misconfiguration is IMHO necessary. I wouldn't even dare
+to begin guessing what details could get standardized for
+that. Yang models for new interface states would certainly
+be another 5++ year discusion in IETF. better to start
+these things with vendor proprietary Yang models and learn.
+
+I know from personal experience that you can not successfully
+deploy without humunguous amount of diagnostic as long as
+you have buggy implementations, especially when fitting
+into exising router OS, incurring a lot of unforeseen
+limitations. Very difficult to standardize because its
+all about interaction with the non-autonomic stuff unless
+you can severely isolate ACP in your platform design.
+
+If you do not understand the discussions about registrars,
+you will have a hard time getting a working support
+backend system for the registars.
+
+Aka: necessary does not mean standardizable.
+
+> Nits:
+>     The second and third paragraphs of section 6.11.1.1 on RPL start with
+>     duplicated text, and then go on to say different (complementary) things.
+>     There is no need for the repetition.
+
+Right. I reworked the overview to remove duplicates, also structured
+into two subsections to highlight the two key themes of the profile
+(single instance and convergence).
+
+>     The rank factor in 6.11.1.6 of 100 megabits as the boundary seems a fairly
+>     arbitrary choice.  It may be that an arbitrary choice was needed.  Could
+>     something be said?  In particular, if someone looks at this 5 years from
+>     now, it may seem quite confusing.
+
+In german, rule of thumb is called "pi times thumb", obviously much more
+accurate than just thumb ;-)
+
+I added the following paragraph:
+
+        <t>This is a simple rank differentiation between typical "low speed"
+        or "IoT" links that commonly max out at 100 Mbps and typical 
+        infrastructure links with speeds of 1 Gbps or higher. Given how
+        the path selection for the ACP focusses only on reachability but
+        not on path cost optimization, no attempts at finer grained path
+        optimization are made. </t>
+
+Heard a nice summary about the new ieee work about the future of 10 Mbps
+ethernet over twisted pair, so i think the cut point at 100 Mbps
+may actually be quite a good one. aka: with just two values i don't
+know how we could do better.
+
+Thanks a lot for the review.
+
+Toerless
+
+>
+>
+>
+> _______________________________________________
+> Anima mailing list
+> Anima@ietf.org
+> https://www.ietf.org/mailman/listinfo/anima
+
+--
+---
+tte@cs.fau.de
