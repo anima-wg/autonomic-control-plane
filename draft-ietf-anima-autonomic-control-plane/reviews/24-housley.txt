@@ -1,0 +1,139 @@
+From kaduk@mit.edu  Tue Mar 24 04:56:23 2020
+Return-Path: <kaduk@mit.edu>
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=1.0 required=5.0 tests=RCVD_IN_DNSWL_NONE=-0.0001,
+	SPF_HELO_NONE=0.001,SPF_SOFTFAIL=0.972 autolearn=disabled version=3.4.2
+X-Original-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Delivered-To: eckert+ietf@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [IPv6:2001:638:a000:4134::ffff:45])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id 345DF54804A
+	for <eckert+ietf@i4.informatik.uni-erlangen.de>; Tue, 24 Mar 2020 04:56:23 +0100 (CET)
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id 1B870245FF
+	for <tte+ietf@cs.fau.de>; Tue, 24 Mar 2020 04:56:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Relay: mx-rz-2
+Authentication-Results: mx-rz-2.rrze.uni-erlangen.de; dmarc=none (p=none dis=none) header.from=mit.edu
+Authentication-Results: mx-rz-2.rrze.uni-erlangen.de; dkim=none;
+	dkim-atps=neutral
+Authentication-Results: mx-rz-2.rrze.uni-erlangen.de; spf=pass smtp.mailfrom=kaduk@mit.edu smtp.helo=outgoing.mit.edu
+X-RRZE-Origin: External
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix-IN) with ESMTPS id 48mcqm0PGKzPk3G
+	for <tte+ietf@cs.fau.de>; Tue, 24 Mar 2020 04:56:19 +0100 (CET)
+Received: from kduck.mit.edu ([24.16.140.251])
+	(authenticated bits=56)
+        (User authenticated as kaduk@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 02O3uF5D014130
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Mar 2020 23:56:17 -0400
+Date: Mon, 23 Mar 2020 20:56:14 -0700
+From: Benjamin Kaduk <kaduk@mit.edu>
+To: tte+ietf@cs.fau.de
+Cc: draft-ietf-anima-autonomic-control-plane.ad@ietf.org
+Subject: Russ Housley's review of draft-ietf-autonomic-control-plane-24
+Message-ID: <20200324035614.GX50174@kduck.mit.edu>
+References: <20200311154514.GB98042@kduck.mit.edu>
+ <0A838355-6FC4-4291-9FBA-43A6E7F53360@vigilsec.com>
+ <20200311185502.GE98042@kduck.mit.edu>
+ <E52BDD79-4E24-4DF2-817B-A050299610D4@vigilsec.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <E52BDD79-4E24-4DF2-817B-A050299610D4@vigilsec.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+Status: RO
+Content-Length: 4573
+Lines: 79
+
+Hi all,
+
+I had asked Russ to take a look at the rfc822Name usage.  I guess I did not
+do a good enough job of setting the background information for how the
+certificate containing it would be used, so he had to read some other bits
+of the document as well.
+
+FWIW I agree with his sentiment that "assigning another name type seems
+preferable, even if it has the same syntax" (and that something more
+efficient could be used if we had desire to do so).
+
+-Ben
+
+On Fri, Mar 20, 2020 at 05:12:52PM -0400, Russ Housley wrote:
+> 
+> The document defines Enrollment:
+> 
+>    Enrollment:  The process where a node presents identification (for
+>       example through keying material such as the private key of an
+>       IDevID) to a network and acquires a network specific identity such
+>       as an LDevID and trust anchors such as Certificate Authority (CA)
+>       certificates.
+> 
+> First, an annoyance.  CA = Certification Authority (not Certificate Authority).  This applies to an earlier definition and many other places as well.
+> 
+> IDevID and LDevID are certificates.  In this context, enrollment should be using an IDevID for authentication in order to get a LDevID.
+> 
+> The document defines Trust Anchor in a way that is not fully compatible with RFC 5280.  It ought to use the definition from RFC 5280.
+> 
+> Section 6.1:
+> 
+> - The text uses the word "trust" in a vague way.  It should say what they are trusted to do, and what they are trusted to not do.
+> 
+> - The test says:
+> 
+>    An ACP node MUST
+>    have a Local Device IDentity certificate (LDevID) and a Trust Anchor
+>    (TA) consisting of a certificate (chain) used to sign the LDevID of
+>    all ACP domain members.
+> 
+> This does not seem accurate to me in several ways.  Most importantly, a TA is not c certifications path or chain.
+> 
+> Section 6.1.1:
+> 
+> - s/X.509/X.509v3/
+> 
+> - What does "All elements are [RFC5280] compliant” mean?
+> 
+> - MUST do both RSA and ECC? I think this is too simplistic.  I do not expect devices to have both kinds of private key, but they need to handle both kinds of public key.  This seems to be where the transition paragraph is going, but it is not very clear.
+> 
+> - I do not understand the wording about ECC curves that MUST be supported.  Normally I see a single curve that MUST be supported for interoperability and and others that SHOULD be supported.  The "or better" wording is really unclear.  Also, each of the curves has a specific key length associated with it.
+> 
+> - I would really like to see some clarity about digital signature vs. key establishment.  The two are jumbled together is a way that is difficult to figure out.  One way to read it is that digital signature is required, but key establishment is optional.  I am not sure that is the intent.
+> 
+> - The TLS reference should point to TLS 1.3 (not TLS 1.2).
+> 
+> Section 6.1.2:
+> 
+> - Using rfc822name seems wrong to me.  Assigning another name type seems preferable, even if it has the same syntax.  The semantics are different.  This is the approach used in RFC 4556 for the Kerberos Principal Name.
+> 
+> - The document claims that "subjectAlName / otherName" will not be able to be supported because it uses a field that is not mandatory.  I do not think that this is a very big deal.  The otherName definition is:
+> 
+>    OtherName ::= SEQUENCE {
+>         type-id    OBJECT IDENTIFIER,
+>         value      [0] EXPLICIT ANY DEFINED BY type-id }
+> 
+> So, the "extra" processing is parse past the type and length for the SEQUENCE, perform an exact match to the constant value of the object identifier, parse past the type and length of the value.  For example, when using the python ASN.1 library for the certificate processing, the additional code is tiny.  After this, the parsing of the string is exactly the same.  In fact, it might be possible to define a format that is even easier to parse if it did not have to look like an email address.  Since this "extra" is so small, I think we should not use rfc822name in this context.
+> 
+> Section 6.1.3:
+> 
+> - validity period checking (in step 1) is part of path validation (in step 3).
+> 
+> - In step 4, revocation checking allowed to be initially skipped, but the wording is concerning since the check is in a MUST statement.  Then, the checking takes place when communications are established.  I assume some cache is used, otherwise the connection works for a short while, then shuts down, over and over and over.
+> 
+> Section 6.1.4:
+> 
+> - Please use the terms from RFC 5280.  That is, use "trust anchor" not "root-CA".
+> 
+> Russ
+
