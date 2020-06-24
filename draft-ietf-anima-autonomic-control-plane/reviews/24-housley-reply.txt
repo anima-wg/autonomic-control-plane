@@ -10,20 +10,57 @@ Hi Russ/Ben, *
 
 I had a writeup of this reply several weeks back, and then it got lost in some
 stupid crash, so i had to recreate it alltogether, and that conflicted
-with other priorities.
+with other priorities. And then i made the wrong choice trying to finish the
+IPsec and Joel halperns review before pushing out -25, so further delay to
+get this reply out. Oh well..
 
 Diff here
 
 http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/6f3151058bcbea7369cfe402203c22a920b54db4/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/0caa400fd1c554ece49fddc7dabe8140195aa5bf/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
 
-You are also free to compar the final -25 against -24, but that has
-additional changes in response to other input.
+You are also free to compare the final -25 against -24, but that has
+additional changes in response to bove mentioned input to -24, Joel and
+IPsec stuff.
 
-Please specifically start addressing the specific contentions made in the draft
-re the appropriateness of using rfc822address. So far the discussions
-is still at the technical level of "this seems wrong to me" and "other rfc's
-have choosen a different approach". To that end i have numbered the arguments
-in the document so they are easier to discuss. See also the compromise i offered.
+For the numbered list of arguments for use of rfc822name, please use latest -25
+version, it adds argument 3.5 about CA issues signing certs with non-standrd
+attributes.
+
+I will discuss the additional arguments/discussions re. rfc822name on the
+according threads on the mailing list. 
+
+I find the discussion about rfc822name to be somewhat of an outliar. All the
+rest of the SEC IESG review was really good and to the actual point of security.
+Sure, it caused me a lot of pain/work getting up to speed on a lot of security 
+protocol details, but IMHO hopefully good improvement for the doc. This rfc822name,
+ if you excuse me saying so is an outliar:
+
+- The decision for rfc822name was a long-time compromise by practical experience
+  and repeated discussions in the WG.
+
+- No contest beyond yours was maintained after reviewing the points explaining
+  the choice in 6.1.2. This list was improved several times to address questions
+  and resolved them. I have not seen any comment from you how the arguments
+  made in that list create a good framework to justify the choice.
+
+-  We also had what i felt to be a good discussion with Ben in person at IETF106
+   @ANIMA-WG, that i thought would have explained/persuaded him of our choice, but
+  the only followup i saw afterwards was only repeating the "this looks like not
+  the right thing" statement.
+
+- I don't think such an assessment is a good technical argument during WG
+  time or IETF review compared to the arguments in the document in the list
+  in 6.1.2, and even less so during IESG SEC review:
+
+- I have not heard any actual security issue raised against this choice. I
+  was under the impression that IESG SEC reviews primary role is to exactly
+  support that.
+
+- We have for all the years we revisited the decision a security advisor in
+  ANIMA and she too never raised a security issue about this.
+
+Specific replies to all the points inline below. And thanks a lot for the
+excellent_review - rfc822name ;-)
 
 Cheers
     Toerless
@@ -196,7 +233,7 @@ encodings, and i could not find anything that would prohibit to use the existing
 rfc822name for a name that is a valid rfc822name.
 
 It would also be good if you review and address the bullet points 2.1 ... 2.6 and
-3.1 ... 3.4 in section 6.1.2. These points explain and justify the choice
+3.1 ... 3.5 in section 6.1.2. These points explain and justify the choice
 of rfc822name.
 
 For example, points 2.1 , 2.4 and 2.5 would be closest in addressing your semantic concern.
@@ -213,28 +250,7 @@ This is addressed in for example point 3.2 in 6.1.2. The ASN.1 libraries availab
 embedded systems do not necessarily provide the ability to be extended. They may
 often come from embedded system OS vendors or third parties.
 
-Also see points 2.2 and 2.3 of 6.1.2: There is a whole backend and diagnostic infrastructure that needs to be extended when introducing new types to decode the new field. This is highly undesirable for easy initial operationalization.
-
-How about the following compromise:
-
-If you or someone else could write up the right text to define use of an ASN.1 extension to carry the 6.1.2 defined "domain-information" (including the IANA ask that that implies ... i guess...), then i would be happy to add text like this wrt. requirements level:
-
-"Support for rfc822name in ACP implementations is mandatory due to the points
-described in section 6.1.2, such as points 2.2, 3.2 and 3.3. Support for
-the new OtherName encoding above provides for an additional level of distinction
-from other rfc822names. In this document this encoding of ACP domain
-information is only highly desirable due to the issues in eco-system
-wide support as outlined by the bullet points in section 6.1.2. In 
-future updates to this document, the requirements levels of the two
-encoding options may change based on adoption experience."
-
-This is as far as i think we can go in this document unless we want to trade
-ease of adoption against IMHO (please excuse my choice of terms) dogmatic
-interpretations of what is permitted to be in an rfc822name.
-
-As said, i did not want to dare writing the encoding text because that would again
-require too many RTT before i would have figured out how to do it right -
-due to my complete absence of experience with ASN.1.
+Also see points 2.2 and 2.3 of 6.1.2: There is a whole backend and diagnostic infrastructure that needs to be extended when introducing new types to decode the new field. This is highly undesirable for easy operationalization.
 
 > Section 6.1.3:
 > 
@@ -298,7 +314,3 @@ Cheers
     Toerless
 > 
 > Russ
-
--- 
----
-tte@cs.fau.de
