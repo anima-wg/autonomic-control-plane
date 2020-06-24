@@ -9,6 +9,16 @@ Subject: Re: [Anima] Rtgdir last call review of
 Reply-To:
 In-Reply-To: <158648497631.26678.9121665060210659827@ietfa.amsl.com>
 
+Thanks a lot, Joel
+
+Personal diff with jsut the fixes for you, otherwise feel free to compare -25 against
+-25, it has more fixes for Russ Housley and IPsec proto detail enhancements/fixes.
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/0caa400fd1c554ece49fddc7dabe8140195aa5bf/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/ae9e6cd856ab2706e8b38cc2552f2e77f6b676a5/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Cheers
+    toerless
+
 On Thu, Apr 09, 2020 at 07:16:16PM -0700, Joel Halpern via Datatracker wrote:
 > Reviewer: Joel Halpern
 > Review result: Not Ready
@@ -194,6 +204,7 @@ data-plane.
 
 New text:
 <t>In a fully autonomic network node without legacy control or management functions/protocols, the Data-Plane would be for example just a forwarding plane for "Data" IPv6 packets, aka: packets that are not forwarded by the ACP itself because they are control or management plane packets. In such networks/nodes, there would be no non-autonomous control or non-autonomous management plane. Routing protocols for example would be built inside the ACP as so-called autonomous functions via autonomous service agents, leveraging the ACPs functions instead of implementing them seperately for each protocol: discovery, automaticically established authenticated and encrypted local and distant peer connectivity for control and managemenet traffic and common control/management protocol session and presentation functions.</t>
+
 <t>When the ACP is added to henceforth so-called non-autonomous nodes that have non-autonomous management plane and/or control plane functions, the ACP instead is best abstracted as a special Virtual Routing and Forwarding (VRF) instance (or virtual router) and the complete pre-existing non-autonomous management and/or control plane is considered to be part of the Data-Plane to avoid introduction of more complex, new terminology only for this case. Like the forwarding plane for "Data" packets, the non-autonomous control and management plane functions can then be managed/used via the ACP. This terminology is consistent with pre-existing documents such as <xref target="RFC8368">"/>.</t>
 
 <t>In both instances (autonomous and non-autonomous nodes), the ACP is built such that it is operating in the absene of the Data-Plane, and in the case of existing non-autonomous (management, control) components in the Data-Plane also in th
@@ -480,18 +491,7 @@ ethernet over twisted pair, so i think the cut point at 100 Mbps
 may actually be quite a good one. aka: with just two values i don't
 know how we could do better.
 
-Thanks a lot for the review.
+Aain, thanks a lot for the review.
 
 Toerless
 
->
->
->
-> _______________________________________________
-> Anima mailing list
-> Anima@ietf.org
-> https://www.ietf.org/mailman/listinfo/anima
-
---
----
-tte@cs.fau.de
