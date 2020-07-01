@@ -1,0 +1,453 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Russ Housley <housley@vigilsec.com>
+Cc: draft-ietf-anima-autonomic-control-plane.ad@ietf.org, anima@ietf.org,
+	Ben Kaduk <kaduk@mit.edu>, Eric Vyncke <evyncke@cisco.com>,
+	rwilton@cisco.com, barryleiba@computer.org
+Bcc: 
+Subject: Re: Russ/Ben: Re: Russ Housley's review of draft-ietf-autonomic-control-plane-25
+Reply-To: 
+In-Reply-To: <C71BDB46-A15A-48EC-BC4D-68CA9A7C1DFB@vigilsec.com>
+
+Thanks Russ
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-25.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-26.txt
+
+Hope this closes all open issues with you and Ben.
+
+Details below.
+
+Cheers
+    Toerless
+
+
+On Wed, Jun 24, 2020 at 02:17:08PM -0400, Russ Housley wrote:
+> Toerless:
+> 
+> > On Fri, Mar 20, 2020 at 05:12:52PM -0400, Russ Housley wrote:
+> >> 
+> >> The document defines Enrollment:
+> >> 
+> >>   Enrollment:  The process where a node presents identification (for
+> >>      example through keying material such as the private key of an
+> >>      IDevID) to a network and acquires a network specific identity such
+> >>      as an LDevID and trust anchors such as Certificate Authority (CA)
+> >>      certificates.
+> >> 
+> >> First, an annoyance.  CA = Certification Authority (not Certificate Authority).  This applies to an earlier definition and many other places as well.
+> > 
+> > [fun excourse]
+> > 
+> > In my defense, i grew up in a town with a dialect:
+> > 
+> > google: site:cisco.com "certificate   authority" -> 59,700
+> > google: site:cisco.com "certification authority" ->  8,580
+> > 
+> > Also: 
+> > 
+> > https://en.wikipedia.org/wiki/Certificate_authority
+> > 
+> > grep -il "ertification authorit" rfc*.txt    | wc -> 272 (#RFCs)
+> > grep -il "ertificate authorit" rfc*.txt      | wc -> 136 (#RFCs)
+> > 
+> > grep -il "ertification authorit" rfc8???.txt | wc -> 38 (#RFCs)
+> > grep -il "ertificate authorit" rfc8???.txt   | wc -> 13 (#RFCs)
+> > 
+> > ratio is getting better for your side... a bit.
+> > 
+> > Does RFC editor have a negative list of wrong words ?
+> > RFC editor abbreviation lists only the correct term.
+> > 
+> > [/fun excourse]
+> > 
+> > Fixed.
+> 
+> Thank you.  Many people get it wrong, but X.509 and RFC 5280 (as well as the earlier versions in RFC 2459 and RFC 3280) all use "certification authority".
+
+That should tell you something about how many people read the actual
+normative references.
+
+> >> IDevID and LDevID are certificates.  In this context, enrollment should be using an IDevID for authentication in order to get a LDevID.
+> > 
+> > That was the intention of the text.
+> > 
+> > Pls. check fixed text for CA, Enrollment, root CA, and TA, i hope they are better now.
+> 
+> CA: It says "A CA uses its own certificate to sign the certificates it issues."
+> 
+> This is not correct.  The CA signs with the private key, and the relying party used the public key in the CA certificate to check the signature.
+
+Hopefully ficed with thi:
+
+A CA uses its private key to sign the certificates it issues, relying parties use the public key in the CA certificate to validate the signature.
+
+> Enrollment: I think it would help the reader to say "IDevID certificate" and "LDevID certificate"
+
+I could never figure out authoritatively if IDevID/LDevID are equivalent to a certificate or,
+as i think is the case with TA/CA the entity holding the certificate. Given how i think
+you are suggesting the later meaning, i have changed not only the enrollment text but
+all the text to say LDevID/IDevID certificate to be consistent. Hope that is right.
+
+> Root CA: I do not understand the purpose of "()" in the old text or the new text.
+
+Limitation of XML creating useful links. There is a note to RFC editor at beginning of section 2
+to fix this in final text. Haven't fond another draft ever tried to have links between
+these hanging style definitions, but one oy ACP reviewers asked for such links.
+
+> TA: Please point to RFC 5280, Section 6.1.1, item (d).  It says:
+> 
+> """
+>       (d)  trust anchor information, describing a CA that serves as a
+>            trust anchor for the certification path.  The trust anchor
+>            information includes:
+> 
+>          (1)  the trusted issuer name,
+> 
+>          (2)  the trusted public key algorithm,
+> 
+>          (3)  the trusted public key, and
+> 
+>          (4)  optionally, the trusted public key parameters associated
+>               with the public key.
+> 
+>       The trust anchor information may be provided to the path
+>       processing procedure in the form of a self-signed certificate.
+>       When the trust anchor information is provided in the form of a
+>       certificate, the name in the subject field is used as the trusted
+>       issuer name and the contents of the subjectPublicKeyInfo field is
+>       used as the source of the trusted public key algorithm and the
+>       trusted public key.  The trust anchor information is trusted
+>       because it was delivered to the path processing procedure by some
+>       trustworthy out-of-band procedure.  If the trusted public key
+>       algorithm requires parameters, then the parameters are provided
+>       along with the trusted public key.
+> """
+
+Fixed to:
+
+<t hangText="TA:" anchor="ta-def">"Trust Anchor". A Trust Anchor is an entity that is trusted for the purpose of certificate validation. Trust Anchor Information such as self-signed certificate(s) of the Trust Anchor is configured into the ACP node as part of Enrollment. See <xref target="RFC5280"/>, Section 6.1.1.
+
+> > I apologize, but this is a bit of a riddle to me because i could not find text that looks like a definition of "trust anchor" in rfc5280 and your concern above also does not explain exactly how the ACP text does not comply with such an "definition".
+> > 
+> > Are you taking offense in conflating trust anchor and trust anchor information ?
+> > That seems to be a common issue in other documents, eg. in 5280:
+> > 
+> > "When the trust anchor is provided in the form of a self-signed certificate"
+> > 
+> > "When trust anchor information" ?
+> > 
+> > In any case, in lack of a better pointe to an RFC, the ACP text now uses the X.509 text to define trust anchor and i tried to go through the text and distinguish between TA and TA information as good as i could.
+> > 
+> > If there are still concern about this point, i would appreciate if you could be more specific as to what exactly is still wrong and provide suggested text fixes.
+> 
+> I made a suggestion above.  Certification path validation depends on the TA name, public key algorithm, and public key, and it may also depend on parameters associated with the algorithm.
+
+If the current text is not ok. please explicitly suggest replacement text.
+
+> >> Section 6.1:
+> >> 
+> >> - The text uses the word "trust" in a vague way.  It should say what they are trusted to do, and what they are trusted to not do.
+> >> 
+> >> - The test says:
+> >> 
+> >>   An ACP node MUST
+> >>   have a Local Device IDentity certificate (LDevID) and a Trust Anchor
+> >>   (TA) consisting of a certificate (chain) used to sign the LDevID of
+> >>   all ACP domain members.
+> >> 
+> >> This does not seem accurate to me in several ways.  Most importantly, a TA is not c certifications path or chain.
+> > 
+> > Fixed to: To trust another ACP member node with access to the ACP Domain, each ACP member requires
+> > keying material: An ACP node MUST have a Local Device IDentity certificate (LDevID),
+> > henceforth called the ACP Domain Certificate and information about one or more Trust Anchor (TA)
+> > as required for the ACP domain membership check (<xref target="certcheck"/>)
+> > 
+> > { Please suggest better text if this is still not good enough}.
+> 
+> Why not point to Section 6 of RFC 5280 for validation of the LDevID to the configured trust anchor?
+
+Hah!, because Bens hitting me over the head with the word "trust" is the better fix and o must have overlooked this instance.
+
+To /trust/ -> authenticate and authorize another ACP member node with...
+
+Aka: the text isn't only about trust. And rule 2 of the certcheck is then the one pointing to 5820 section 6.
+
+> >> Section 6.1.1:
+> >> 
+> >> - s/X.509/X.509v3/
+> > 
+> > fixed.
+> 
+> Thank you.
+> 
+> > 
+> >> - What does "All elements are [RFC5280] compliant??? mean?
+> > 
+> > removed.
+> > 
+> > It was just meant to be unnecessary duplicaction of initial sentence from same section:
+> > "ACP domain certificates MUST be [RFC5280] compliant X.509v3 certificates"
+> 
+> Okay.
+> 
+> > 
+> >> - MUST do both RSA and ECC? I think this is too simplistic.  I do not expect devices to have both kinds of private key, but they need to handle both kinds of public key.  This seems to be where the transition paragraph is going, but it is not very clear.
+> > 
+> > Changed:
+> > 
+> > "ACP nodes MUST support RSA and Elliptic Curve (ECC) public keys in ACP certificates"
+> > 
+> > to
+> > 
+> > "ACP nodes MUST support handling ACP certificates with RSA public keys and ACP certificates with Elliptic Curve (ECC) public keys"
+> > 
+> > Hope i was guessing right what you are aluding to, if now, then explicit text suggestions are always welcome.
+> 
+> Section 6.1.1 looks okay to me.
+> 
+> > 
+> >> - I do not understand the wording about ECC curves that MUST be supported.  Normally I see a single curve that MUST be supported for interoperability and and others that SHOULD be supported.  The "or better" wording is really unclear.  Also, each of the curves has a specific key length associated with it.
+> > 
+> > In the ACP we have any-to-any connectivity and hence any-any mutual cert authentication, so i felt it to be prudent to support some good range of cert key sizes to ensure interoperability across a wide range of equipment within a single ACP - but also exclude key sizes that we feel are unnecessarily weak, such as RSA with less than 2048 bits.
+> > 
+> > I changed the two paragraphs now to the following three:
+> > 
+> > ---
+> > <t>ACP nodes MUST support handling ACP certificates, TA certificates and certificate chain certificates (henceforth just called certificates in this section) with RSA public keys and certificates with Elliptic Curve (ECC) public keys. Certificates with ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and extendedKeyUsage are included in the certificate.</t>
+> > 
+> > <t>ACP nodes MUST NOT support certificates with RSA public keys of less than 2048 bits. They MUST support certificates with RSA public keys with 2048 bits and SHOULD support longer RSA keys. ACP nodes MUST support certificates with ECC public keys using NIST P-256, P-384 and P-521 curves.</t>
+> > 
+> > <t>ACP nodes MUST support SHA-256, SHA-384, SHA-512 signatures for certificates with RSA key and the same RSA signatures plus ECDSA signatures for certificates with ECC key.</t>
+> > ---
+> > 
+> > I don't understand whether your note about the key length of the curves is an indication of missing text. When i first reviewed with Ben, i had to enter the curves because thats as specific as necessary AFAIK, but given how the key length is implied, i wouldn't understand why i would need to write those down. I don't remember that i have seen that being done either in other RFCs i read through.
+> > 
+> > In any case, specific text suggestions always welcome in case this text is not sufficient.
+> 
+> I was expecting you to make one of the curves MUST and the others SHOULD. Making all three curves MUST is okay with me, but it will increase implementation size.
+
+<t>ACP nodes MUST NOT support certificates with RSA public keys of less than 2048 bit modulus or curves with group order of less than 256 bit. They MUST support certificates with RSA public keys with 2048 bit modulus and MAY support longer RSA keys. They MUST support certificates with ECC public keys using NIST P-256 curves and SHOULD support P-384 and P-521 curves.</t>
+
+Seems like 256 bit curve are somewhat better than 2048 bit modulus and cost in RSA goes up faster,
+so this text is reducing RSA requirement even more and therefore hopefully reducing implementation
+requirements by making higher ones MAY so as to encourage preferring ECC over RSA when going higher
+bit numbres  of security.
+
+> Likewise, I was expecting you to make one of the hash functions MUST and the others SHOULD.
+
+Fixed to:
+
+ACP nodes MUST support SHA-256 and SHOULD support SHA-384, SHA-512 signatures...
+
+> >> - I would really like to see some clarity about digital signature vs. key establishment.  The two are jumbled together is a way that is difficult to figure out.  One way to read it is that digital signature is required, but key establishment is optional.  I am not sure that is the intent.
+> > 
+> > I may not understand what you mean with "key establishment".
+> 
+> ECDH is used for key establishment, not digital signature.
+> 
+> RSA can be used for both key establishment and digital signature if the key usage bits allow.
+> 
+> > 
+> > The first two paragraphs talk about the requirements to handle public key in the certificate
+> > including permitted minimum key-length for RSA.  Is that what you call "key establishment" ?
+> > 
+> > The third paragraph talks about requirements against the signatures in the certificates.
+> > 
+> > The idea is to have the necessary and sufficient text for all ACP nodes to be
+> > able to authenticte each other wrt. to their certificate.
+> 
+> My comment was about the ECDH sentence.
+
+Ok, i hope i am interpreting what i hear from you correctly: I moved the
+ECDH sentence after all the text about digital signature aspects and authentication and beofre
+the "any other fields". Hope this structures it better. 
+
+> >> - The TLS reference should point to TLS 1.3 (not TLS 1.2).
+> > 
+> > The MTI for the ACP is TLS 1.2, TLS 1.3 is SHOULD because of the need for
+> > lowest common denominator in more embedded device space moving very slowly
+> > from TLS 1.2 to TLS 1.3.  See e.g.: 6.8.2. Also note that TLS profile
+> > for ACP is quite close to TLS 1.3 wrt. crypto requirements.
+> 
+> The please be specific:  ... TLS 1.2 [RFC5246].
+
+Done.
+
+> >> Section 6.1.2:
+> >> 
+> >> - Using rfc822name seems wrong to me.  Assigning another name type seems preferable, even if it has the same syntax.  The semantics are different.  This is the approach used in RFC 4556 for the Kerberos Principal Name.
+> > 
+> > Can you point me to any specifc RFC text that actually prohibits what we want to do ?
+> > 
+> > I was reading through the RFCs (forgot number now) that i think defined the
+> > encodings, and i could not find anything that would prohibit to use the existing
+> > rfc822name for a name that is a valid rfc822name.
+> > 
+> > It would also be good if you review and address the bullet points 2.1 ... 2.6 and
+> > 3.1 ... 3.5 in section 6.1.2. These points explain and justify the choice
+> > of rfc822name.
+> > 
+> > For example, points 2.1 , 2.4 and 2.5 would be closest in addressing your semantic concern.
+> 
+> I firmly believe that this use of rfc822name is harmful.  Please do not do it.
+
+Thanks a lot for having the discussion on the phone, that helped a lot to speed
+up the conclusion.  And thanks a lot to Barry to also swing by. I am budging over your
+combined opposition. Lets hope i have the time to bring the discuss back to the
+IETF after we are done with ACP, because i think there is a fundamental
+evolution of email addresses we should consider better. I do agree that what
+you and Barry represented is a very traditional and "ecossystem-safe" interpretation,
+ and i am sorry that i really did not get to understand that point through the email thread
+discussions up to this week.
+
+So, as discussed offline, all the changes for otherName rfc822Name -> otherName / AcpNodeName
+are now in this revision, all the 822Name benefit etc text (including public CA verification
+of ACP rfc822Name via ACME SMIME) are now removed (*sob* *sob* ;-).
+
+From our offline discussion, i changed the name to AcpNodeName after Michael Richardson
+said we should not make the name itself more extensible because we could always get additional
+otherName OIDs when we have aditional Names to support (thanks, Michael).
+
+I didn't include the idea to use URN because i think we can always define 
+in an add-on-document that backend systems could always map the otherName / AcpNodeName
+to e.g.: "urn:ietf:params:acp:node:<AcpNodeName>" if they primarily want
+to manage names that have URIs. The only reason why we would have wanted to
+discuss URN in this doc would be as an alternative in the certificate itself,
+and i think not enough people have thought about this alternative, so it
+would come with less past experience.
+
+> >> - The document claims that "subjectAlName / otherName" will not be able to be supported because it uses a field that is not mandatory.  I do not think that this is a very big deal.  The otherName definition is:
+> >> 
+> >>   OtherName ::= SEQUENCE {
+> >>        type-id    OBJECT IDENTIFIER,
+> >>        value      [0] EXPLICIT ANY DEFINED BY type-id }
+> > 
+> >> So, the "extra" processing is parse past the type and length for the SEQUENCE, perform an exact match to the constant value of the object identifier, parse past the type and length of the value.  For example, when using the python ASN.1 library for the certificate processing, the additional code is tiny.  After this, the parsing of the string is exactly the same.  In fact, it might be possible to define a format that is even easier to parse if it did not have to look like an email address.  Since this "extra" is so small, I think we should not use rfc822name in this context.
+> > 
+> > This is addressed in for example point 3.2 in 6.1.2. The ASN.1 libraries available in 
+> > embedded systems do not necessarily provide the ability to be extended. They may
+> > often come from embedded system OS vendors or third parties.
+> > 
+> > Also see points 2.2 and 2.3 of 6.1.2: There is a whole backend and diagnostic infrastructure that needs to be extended when introducing new types to decode the new field. This is highly undesirable for easy operationalization.
+> 
+> I believe that otherName would be better here.  You have made the syntax align with rfc822name, but the semantics are aligned.
+[semantics are _not_ aligned... ?]
+
+water under the bridge.
+
+> >> Section 6.1.3:
+> >> 
+> >> - validity period checking (in step 1) is part of path validation (in step 3).
+> > 
+> > Sigh... hope i fixed all the references to the rule numbers in the document
+> > after eliminating this step 1 and mentioning how it is included in what is
+> > now step 2.
+> 
+> Within Item 3:
+> 
+> s/CDP/CRLDP/ or /CRL Distribution Point (CRLDP)/
+> 
+> s/communicate CRL or OCSP check/communicate a CRL or perform an OCSP check/
+
+thanks
+replaced all CDP instances with CRLDP exept the ones where it means Cisco Discovery Protocol ;-)
+(Hadn't even notices that issue in before, other documents where using CDP abbreviation).
+
+> >> - In step 4, revocation checking allowed to be initially skipped, but the wording is concerning since the check is in a MUST statement.  Then, the checking takes place when communications are established.  I assume some cache is used, otherwise the connection works for a short while, then shuts down, over and over and over.
+> > 
+> > Hopefully fixed.
+> > 
+> > Pls. check the reworded text. I conditioned the MUST
+> > with a "when availalable" and changed the secondary MUST to lower case as they
+> > just explain the mechanism.
+> > 
+> > Wrt to the up/down issue you mention: It seems cleat that one must periodically
+> > re-try a connection to another peer because it could have received a new
+> > certificate.
+> > 
+> > If the connection is torn down at any point in time because of newly learned
+> > CRL/OCSP information, it also seems clear the connection needs to be torn down.
+> > 
+> > I do not understand all possible connection setup protocols, but from
+> > what i understand, a negative CRL or OCSP information will not change back
+> > to positive in the future, so a connection torn down once because of
+> > a particular certificate would need to be retried later up to the
+> > point that the signaling gets to the same certificate, at which point in
+> > time it would fail. 
+> > 
+> > Aka: with caching of OCSP/CRL results, the connection would still be probed
+> > periodically, but would not be brought up again until there is a new cert.
+> > 
+> > Is there anything of these explanations you would like to see written
+> > down ? Or that are wrong ?
+> 
+> The previous step allows the CRL check and OCSP check to be skipped if communication is not available.  When the communication is established, is a CRL check or OCSP check performed?  What happens if the check fails?
+
+Prepended explicit text for retrying CRL/OCSP check:
+
+<t>Retries to learn revocation via OCSP/CRL SHOULD be made using the same backoff as described in <xref target="neighbor_verification"/>. If and when the ACP node then learns ...
+
+When check fails, connection to that neighbor is closed even if that means disconnecting one's
+self from the network. But re-attempt to connect to support the case that neighbor
+gets better certificate in the meantime. That text was already there.
+
+> Of course, I strongly disagree with the use of rfc822name here, but that was not really the point of this comment.
+
+bridge now getting flooded by water under it ;-)
+
+> >> Section 6.1.4:
+> >> 
+> >> - Please use the terms from RFC 5280.  That is, use "trust anchor" not "root-CA".
+> > 
+> > a) While trying to do this, it seemed to me as if the word "trust point" that
+> > was also used in the text was also redundant. So i hopefully correctly
+> > eliminated it and replaced it with TA.
+> > 
+> > b) Given how rfc7030 in 4.1.3 also refers to Root CA, and equaly
+> > the BRSKI draft in several places, and also rfc8572, aka: all the
+> > documents that this ACP relates to, i wonder what the rule of thumb is when
+> > it is appropriate to use root CA as a term and when not... I don't want
+> > to be the first RFC of all the ones that the ACP builds on or relates
+> > to that is NOT using the term... without understanding why ACP should be
+> > the only one not using it...
+> > 
+> > There are similarily few occurrances of "root CA" as in those other documents...
+> 
+> I think your definitions now make it clear that a Root CA is a trust anchor.  That is essentially the approach taken in RFC 7030 as well.
+
+The way i read RFC7030, root CA is just a term you use for a TA
+when you want to renew the TA cert/public-key-pair without having to
+rely on another TA, e.g. RFC4210 procedures. Whether the TA
+only has self-signed certs or whether its certs are also signed
+by some even higher level up TA' is irrelevant in this case,
+ because for the purpose of the renewal procedure those TA' 
+certs are not assumed to be useable, but only mutual signatures between
+the different TA certificates of this "root CA" (OldWithOld,
+OldWithNew, NewWithOld, and NewWithNew, WhateverWithWhatever).
+
+I hope i got that right. The ACP text uses root CA only as one example
+for a TA ("TA is a root CA") in one place, and i changed the definition to this:
+
+<t hangText="root CA:">"root Certification Authority". A <xref target="ca-def" format="title">->"CA"</xref> for which the root CA Key update procedures of <xref target="RFC7030"/>, Section 4.4 can be applied.</xref>.  
+
+Should hopefully make sense given how RFC7030 renewal is mandatory for ACP.
+
+> Russ
+
+Thanks for all the review again, hope we're getting non-asymptotically closer to the finish line here ;-)
+
+Cheers
+    Toerless
+
+> > 
+> > Just wondering.
+> > 
+> > Thanks a lot for the review, and apoligies for my delay.
+> > 
+> > Cheers
+> >    Toerless
+> >> 
+> >> Russ
+
+-- 
+---
+tte@cs.fau.de

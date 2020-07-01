@@ -51,7 +51,7 @@
                         </address>
                 </author>
 
-                <date month="June" year="2020"/>
+                <date month="July" year="2020"/>
 
                 <area>Operations and Management</area>
                 <workgroup>ANIMA WG</workgroup>
@@ -172,7 +172,7 @@ ACP according to this document.</t>
             completely by itself.
             </t>
             <t hangText="ACP address:">An IPv6 address assigned to the ACP node.  It is stored
-            in the acp-member-name of the <xref target="domcert-def" format="title">->"ACP domain certificate"</xref>.
+            in the acp-node-name of the <xref target="domcert-def" format="title">->"ACP domain certificate"</xref>.
             </t>
             <t hangText="ACP address range/set:">The ACP address may imply a range or set of addresses that the node can assign for different purposes.  This address range/set is derived by the node from the format of the ACP address called the "addressing sub-scheme".
             </t>
@@ -181,12 +181,12 @@ ACP according to this document.</t>
             <t hangText="ACP domain:">The ACP domain is the set of nodes with <xref target="domcert-def" format="none">->"ACP domain certificates"</xref> that allow them to authenticate each other as members of the ACP domain.  See also <xref target="certcheck"/>.</t>
 
             <t hangText="ACP (ANI/AN) Domain Certificate:" anchor="domcert-def">A <xref target="RFC5280"/> certificate (LDevID) 
-            carrying the acp-member-name which is used by the ACP to learn its address
+            carrying the acp-node-name which is used by the ACP to learn its address
             in the ACP and to derive and cryptographically assert its membership in the ACP domain.
             </t>
-            <t hangText="ACP acp-member-name field:">An information field in the ACP Domain Certificate in
+            <t hangText="ACP acp-node-name field:">An information field in the ACP Domain Certificate in
             which the ACP relevant information is encoded: the ACP domain name, the ACP IPv6 address of the node
-            and optional additional policy attributes about the node.
+            and optional additional role attributes about the node.
             </t>
             <t anchor="acp-loopback-def" hangText="ACP Loopback interface:">The Loopback interface in the ACP Virtual Routing and Forwarding (VRF) that has the ACP address assigned to it. See <xref target="ACP-loopback"/>.
             </t>
@@ -207,7 +207,7 @@ ACP according to this document.</t>
             <t hangText="AN">"Autonomic Network": A network according to <xref target="I-D.ietf-anima-reference-model"/>.
             Its main components are ANI, Autonomic Functions and Intent.
             </t>
-            <t hangText="(AN) Domain Name:">An FQDN (Fully Qualified Domain Name) in the acp-member-name of the Domain Certificate.  See <xref target="domcert-acpinfo"/>.
+            <t hangText="(AN) Domain Name:">An FQDN (Fully Qualified Domain Name) in the acp-node-name of the Domain Certificate.  See <xref target="domcert-acpinfo"/>.
             </t>
             <t hangText="ANI (nodes/network):">"Autonomic Network Infrastructure". 
             The ANI is the infrastructure to enable Autonomic Networks.  It includes ACP, BRSKI and GRASP. 
@@ -227,7 +227,7 @@ ACP according to this document.</t>
             (<xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>.  A protocol extending EST to
             enable secure zero-touch bootstrap in conjunction with ACP.  ANI nodes use ACP, BRSKI and GRASP.
             </t>
-            <t hangText="CA:" anchor="ca-def">"Certification Authority". An entity that issues digital certificates. A CA uses its private key to sign the certificates it issues, relying parties use the public key in the CA certificate to check the signature. This signing certificate can be considered to be an identifier of the CA, so the term CA is also loosely used to refer to the certificate used by the CA for signing.</t>
+            <t hangText="CA:" anchor="ca-def">"Certification Authority". An entity that issues digital certificates. A CA uses its private key to sign the certificates it issues, relying parties use the public key in the CA certificate to validate the signature. This signing certificate can be considered to be an identifier of the CA, so the term CA is also loosely used to refer to the certificate used by the CA for signing.</t>
             <t hangText="CRL:">"Certificate Revocation List". A list of revoked certificates. Required to revoke certificates before their lifetime expires.
             </t>
             <t hangText="Data-Plane:">The counterpoint to the ACP VRF in an ACP node: forwarding of user traffic and
@@ -317,7 +317,7 @@ ACP according to this document.</t>
              See <xref target="intro" format="title">->"introduction"</xref>.
             </t>
 
-            <t hangText="root CA:">"root Certification Authority". A <xref target="ca-def" format="title">->"CA"</xref> that is used as a <xref target="ta-def" format="title">->"Trust Anchor (TA)"</xref>.  
+            <t hangText="root CA:">"root Certification Authority". A <xref target="ca-def" format="title">->"CA"</xref> for which the root CA Key update procedures of <xref target="RFC7030"/>, Section 4.4 can be applied.
             </t>
             <t hangText="RPL:">"IPv6 Routing Protocol for Low-Power and Lossy Networks".  The routing protocol used in the ACP. See <xref target="RFC6550"/>.
             </t>
@@ -422,7 +422,7 @@ ACP according to this document.</t>
 
                                 <t>The node creates a VRF instance, or a similar virtual context for the ACP.</t>
 
-                                <t>The node assigns its ULA IPv6 address (prefix) (see <xref target="addressing"/> which is learned from the acp-member-name (see (see <xref target="domcert-acpinfo"/>) of its ACP domain certificate (see <xref target="acp-certificates"/>) to an ACP loopback interface (see <xref target="addressing"/>) and connects this interface into the ACP VRF.</t>
+                                <t>The node assigns its ULA IPv6 address (prefix) (see <xref target="addressing"/> which is learned from the acp-node-name (see (see <xref target="domcert-acpinfo"/>) of its ACP domain certificate (see <xref target="acp-certificates"/>) to an ACP loopback interface (see <xref target="addressing"/>) and connects this interface into the ACP VRF.</t>
 
                                 <t>The node establishes a list of candidate peer adjacencies and candidate channel types to try for the adjacency. This is automatic for all candidate link-local adjacencies, see <xref target="discovery-grasp"/> across all native interfaces (see <xref target="if-enable-auto"/>). If a candidate peer is discovered via multiple interfaces, this will result in one adjacency per interface. If the ACP node has multiple interfaces connecting to the same subnet across which it is also operating as an L2 switch in the Data-Plane, it employs methods for ACP with L2 switching, see <xref target="acp-l2-switches"/>.</t>
 
@@ -489,7 +489,7 @@ as required for the ACP domain membership check (<xref target="certcheck"/>).</t
 
 <t>The LDevID certificate is called the ACP domain certificate, the TA is the Certification Authority (CA) root certificate of the ACP domain.</t>
 
-<t>The ACP does not mandate specific mechanisms by which this keying material is provisioned into the ACP node. It only requires the certificate to comply with <xref target="acp-certificates"/>, specifically to have the acp-member-name as specified in <xref target="domcert-acpinfo"/> in its domain certificate as well as those of candidate ACP peers.  See <xref target="bootstrap"/> for more information about enrollment or provisioning options.</t>
+<t>The ACP does not mandate specific mechanisms by which this keying material is provisioned into the ACP node. It only requires the certificate to comply with <xref target="acp-certificates"/>, specifically to have the acp-node-name as specified in <xref target="domcert-acpinfo"/> in its domain certificate as well as those of candidate ACP peers.  See <xref target="bootstrap"/> for more information about enrollment or provisioning options.</t>
 
 <t>This document uses the term ACP in many places where the Autonomic Networking reference documents <xref target="RFC7575"/> and <xref target="I-D.ietf-anima-reference-model"/> use the word autonomic.  This is done because those reference documents consider (only) fully autonomic networks and nodes, but support of ACP does not require support for other components of autonomic networks except for relying on GRASP and providing security and transport for GRASP.  Therefore the word autonomic might be misleading to operators interested in only the ACP.</t>
 
@@ -519,7 +519,7 @@ The uses of this check that are standardized in this document are for the establ
 hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for ACP GRASP (<xref target="GRASP-substrate"/>) end-to-end via TLS 1.2 (<xref target="RFC5246"/>).
 </t>  
 
-<t>The ACP domain membership check requires a minimum amount of elements in a certificate as described in <xref target="certcheck"/>. The identity of a node in the ACP is carried via the acp-member-name as defined in <xref target="domcert-acpinfo"/>.</t>
+<t>The ACP domain membership check requires a minimum amount of elements in a certificate as described in <xref target="certcheck"/>. The identity of a node in the ACP is carried via the acp-node-name as defined in <xref target="domcert-acpinfo"/>.</t>
 
 <t>In support of ECDH key establishment, ACP certificates with ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and extendedKeyUsage are included in the certificate.</t>
 
@@ -533,18 +533,13 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
 
     </section>
 
-    <section anchor="domcert-acpinfo" title="ACP Certificate ACP Member Name">
-
-
-                <t>[RFC Editor: Please substitute SELF in all occurrences of rfcSELF in this document with the RFC number assigned to this document and remove this comment line]</t>
+    <section anchor="domcert-acpinfo" title="ACP Certificate AcpNodeName">
 
 <?rfc needLines="20" ?>
-<figure anchor="acp-dominfo-abnf" title="ACP Member Name ABNF">
+<figure anchor="acp-dominfo-abnf" title="ACP Node Name ABNF">
     <artwork><![CDATA[
-  acp-member-name = local-part "@" acp-domain-name
-  local-part = key [ "+" local-info ]
-  key = "rfcSELF"
-  local-info = [ acp-address ] [ "+" rsub extensions ]
+  acp-node-name = local-part "@" acp-domain-name
+  local-part = [ acp-address ] [ "+" rsub extensions ]
   HEXLC = DIGIT / "a" / "b" / "c" / "d" / "e" / "f"
           ; DIGIT as of RFC5234 section B.1
   acp-address = 32HEXLC | "0"
@@ -562,40 +557,23 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
     and an rsub extenstion of area51.research
 
   then this results in:
-  acp-member-name    = rfcSELF+fd89b714F3db00000200000064000000
+  acp-node-name      = fd89b714F3db00000200000064000000
                        +area51.research@acp.example.com
   acp-domain-name    = acp.example.com
   routing-subdomain  = area51.research.acp.example.com
 ]]></artwork>
 </figure>
 
-<t>acp-member-name in above <xref target="acp-dominfo-abnf"/> is the ABNF (<xref target="RFC5234"/>) definition of the ACP Member Name. An ACP domain certificate MUST carry this information. Acp-member-name is syntactially an email address compliant with an <xref target="RFC5321"/>. It MUST be encoded in the domain certificate in a subjectAltName / rfc822Name field of the ACP domain certificate.</t>
 
-<t>acp-domain-name is used to indicate the ACP Domain across which all ACP nodes trust each other and are willing to build ACP channels to each other.  See <xref target="certcheck"/>.  This ensures that domains are distinguished by acp-domain-name.  Collision of ACP addresses across different ACP domains can only happen due to ULA hash collisions (see <xref target="scheme"/>). </t>
-
-<t>The acp-member-name is semantically a valid email address type subject alternate name according to <xref target="RFC5280"/>: It identifies the ACP node owning the public key pair indicated in the certificate.  To meet this RFC5280 requirement, the ACP registrars of the acp-domain-name MUST control the email addresses used by the ACP domain: rfcSELF*@acp-domain-name. See the bullet points below in this section for explanations why the email address space is used.</t>
-
-<t>Control means that the ACP registrars can ensure that email to these addresses must go to the ACP registrars. As this specification requires no support for actual email messages to these addresses, it is suffficient to own the address space and ensure that it is not allocated for other use. The RECOMMENDED option to achieve this is for acp-domain-name to be the FQDN of an Internet domain name owned by the ACP registrars (e.g.: the operator of the ACP domain) and reserve it for use by ACP.</t>
-
-<t> If ACP registrars want to leverage actual email messages to validate the acp-member-name, such as <xref target="I-D.ietf-acme-email-smime"/>, then the ACP registars would need to actually receive email messages for the acp-member-names.</t>
-
-<t>The requirement to control the acp-domain-name email address name space do not change if acp-domain-name is only a private, but not an Internet domain name.</t>
-
-<t>Violation of the control requirement does not create a security issue for the when the TA used for the ACP is private to the ACP, but it violates the <xref target="RFC5280"/> requirement for the value of the subjectAltName / rfc822Name to be a semantically valid email address. Violation of the control requirement can be used for attack vectors against the ACP when using TA that are validating the acp-member-name email address themselves instead of relying on the model of trusted registrar. This is true for example for public CA relying on <xref target="I-D.ietf-acme-email-smime"/>.</t>
-
-<t>"routing-subdomain" is a string that can be constructed from the acp-member-name, and it is used in the hash-creation of the ULA (see below). The requirements and sementics of the parts of this information are explained in the following paragraphs:</t>
+<t>acp-node-name in above <xref target="acp-dominfo-abnf"/> is the ABNF (<xref target="RFC5234"/>) definition of the ACP Node Name. An ACP domain certificate MUST carry this information. It MUST be encoded as an otherName / AcpNodeName as described in <xref target="asn1"/>.</t>
 
 <t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP domain certificate MUST have the 32HEXDIG "acp-address" field. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members or ACP secure channel peers when they have a 0-value acp-address field and as ACP domain members (but not as ACP secure channel peers) when they have an empty acp-address field.  See <xref target="certcheck"/>.</t> 
 
+<t>acp-domain-name is used to indicate the ACP Domain across which ACP nodes authenticate and authorize each other, for example to build ACP secure channels to each other, see <xref target="certcheck"/>.  acp-domain-name SHOULD be the FQDN of an Internet domain owned by the network administration of the ACP and ideally reserved to only be used for the ACP. In this specification it serves to be a name for the ACP that ideally is globally unique.  When acp-domain-name is a globally unique name, collision of ACP addresses across different ACP domains can only happen due to ULA hash collisions (see <xref target="scheme"/>). Using different acp-domain-names, operators can distinguish multiple ACP even when using the same TA.</t>
 
-<t>To keep the encoding simple, there is no consideration for internationalized acp-domain-names. The acp-member-name is not intended for enduser consumption, and there is no protection against someone not owning a domain name to simpy choose it. Instead, it only serves as a hash seed for the ULA and for diagnostics to the operator. Therefore, any operator owning only an internationalized domain name should be able to pick an equivalently unique 7-bit ASCII acp-domain-name string representing the internationalized domain name.</t>
+<t>To keep the encoding simple, there is no consideration for internationalized acp-domain-names. The acp-node-name is not intended for end user consumption, and there is no protection against someone not owning a domain name to simpy choose it. Instead, it serves as a hash seed for the ULA and for diagnostics to the operator. Therefore, any operator owning only an internationalized domain name should be able to pick an equivalently unique 7-bit ASCII acp-domain-name string representing the internationalized domain name.</t>
 
-<t>
-"routing-subdomain" is a heuristic that allows a Registrar to consistently generate a
-unique 48-bit ULA prefix for ACP addresses.  The presence of the "rsub" component allows
-to a single ACP domain to employ multiple /48 ULA prefixes.
-See <xref target="domain-usage"/> for example use-cases.
-</t>
+<t>"routing-subdomain" is a string that can be constructed from the acp-node-name, and it is used in the hash-creation of the ULA (see below).  The presence of the "rsub" component allows a single ACP domain to employ multiple /48 ULA prefixes.  See <xref target="domain-usage"/> for example use-cases.</t>
 
                                 <t>The optional "extensions" field is used for future standardized extensions to this specification.  It MUST be ignored if present and not understood.</t>
 
@@ -605,41 +583,31 @@ See <xref target="domain-usage"/> for example use-cases.
 
     <t>Formatting notes:
     <list style="format 1.%d">
-        <t>"rsub" needs to be in the "local-part": If the format just had routing-subdomain as the domain part of the acp-member-name, rsub and acp-domain-name could not be separated from each other. It also makes acp-member-name a valid e-mail target across all routing-subdomains.</t>
-        <t>"acp-address" cannot use standard IPv6 address formats because it has to match the simple dot-atom format of <xref target="RFC5322"/>.  The character ":" is not allowed in that format.</t>
-        <t>If "acp-address" is empty, and "rsub" is empty too, the "local-part" will have the format "rfcSELF++extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are empty.</t>
-       <t>The maximum size of "acp-member-name" is 254 characters and the maximum size of local-part is 64 characters according to <xref target="RFC5280"/> that is referring to <xref target="RFC2821"/> (superseded by <xref target="RFC5321"/>).</t>
+        <t>"rsub" needs to be in the "local-part": If the format just had routing-subdomain as the domain part of the acp-node-name, rsub and acp-domain-name could not be separated from each other to determine in the ACP domain membership check which part is the acp-domain-name and which is solely for creating a different ULA prefix.</t>
+        <t>If "acp-address" is empty, and "rsub" is empty too, the "local-part" will have the format ":++extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are empty.</t>
      </list></t>
 
 <t>The encoding of the ACP domain name and ACP address as described in this section is used for the following reasons: 
 
     <list style="format 2.%d">
-        <t>The acp-member-name is the identifier of a node's ACP. It includes the necessary components to identify a nodes ACP both from within the ACP as well as from the outside of the ACP.</t>
+        <t>The acp-node-name is the identifier of a node's ACP. It includes the necessary components to identify a nodes ACP both from within the ACP as well as from the outside of the ACP.</t>
 
-        <t>For manual and/or automated diagnostics and backend management of devices and ACPs, it is necessary to have an easily human readible and software parsed standard, single string representation of the information in the acp-member-name. For example, inventory or other backend systems can always identify an entity by one unique string field but not by a combination of multiple fields, which would be necessary if there was no single string representation.</t>
+        <t>For manual and/or automated diagnostics and backend management of devices and ACPs, it is necessary to have an easily human readible and software parsed standard, single string representation of the information in the acp-node-name. For example, inventory or other backend systems can always identify an entity by one unique string field but not by a combination of multiple fields, which would be necessary if there was no single string representation.</t>
 
-        <t>If the encoding of the was not that of such a string, it would be necessary to define a second standard encoding to provide this format (standard string encoding) for operator consumption.</t>
+        <t>If the encoding was not that of such a string, it would be necessary to define a second standard encoding to provide this format (standard string encoding) for operator consumption.</t>
 
-        <t>Rfc822 addresses have become standard identifiers of entities in many systems, including the majority of user identification in web or mobile applications, where in many cases, e-mail is not even part of the service for which an rfc822 address is used as an entities identifier. In single-sign-on systems for example, &lt;local-part>@&lt;domain> is instead used to indicate a &lt;domain> with which authentication and authorization of &lt;local-part> is performend without any other use of RFC822 than its address format (e.g.: no rfc822 formatted message exchanges).</t>
-
-        <t>Encoding the ACP nodes identity/name in the format of an rfc822address is therefore following common practices for how rfc822 addresses are used in other contexts. It also very well matches the format of rfc822 address structure &lt;local-part>@&lt;domain> because the acp-member-name does logically also consist of a &lt;domain> identifying the ACP, and a &lt;local-part> identifying a nodes ACP.</t>
-
-        <t>The field used to encode the acp-member-name is a standard, mandatory to implement certificate attribute to encode RFC822 compliant names of the certificates subject. It can also be the only subjects name.</t>
+        <t>Adresses of the form &lt;local>&lt;@domain> have become the preferred format for identifiers of entities in many systems, including the majority of user identification in web or mobile applications such as multi-domain single-sign-on systems.</t>
 
     </list></t>
 
     <t>Compatibilities:
 
     <list style="format 3.%d">
-        <t>It should be possible to use the ACP domain certificate as an LDevID certificate on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses. The subjectName for example is for example often used as an entity identifier in non-ACP uses.</t>
+        <t>It should be possible to use the ACP domain certificate as an LDevID certificate on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses. The subjectName is for example often used as an entity identifier in non-ACP uses of a the ACP Domain certificate.</t>
 
-        <t>The element should not require additional ASN.1 en/decoding, because libraries to access certificate information especially for embedded devices may not support extended ASN.1 decoding beyond predefined, manadatory fields. subjectAltName / rfc822Name is such a mandatory predefined field. subjectAlName / otherName for example is not.</t>
+        <t>The element should not require additional ASN.1 en/decoding, because libraries to access certificate information especially for embedded devices may not support extended ASN.1 decoding beyond predefined, manadatory fields. subjectAltName / otherName is already used with a single string parameter for several otherNames (see <xref target="RFC3920"/>, <xref target="RFC7585"/>, <xref target="RFC4985"/>, <xref target="RFC8398"/>).</t>
 
-        <t>Encoding of the acp-member-name as a human readable string in a manadatory certificate field also has the benefit that it can be diagnosed/decoded in any pre-existing certificate diagnostic software.</t>
-
-        <t>The element required for the ACP should minimize the risk of being misinterpreted by other uses of the LDevID certificate.  If the element used for the ACP is (mis-)interpreted by other components than the ACP, the impact should be benign. By using fully rfc822address compliant encoding, the benign side effect of non-ACP software using the ACP rfc822address would be emails sent to the mailbox identified by the rfc822address. If it is desired to receive such emails, suitable email software may also support assigning all rfc822addresses for an ACP domain to a single mailbox rfcSELF@&lt;domain>. This is possible when "+" (which follows rfcSELF) is supported by the Mail User Agent as a separator between mail subscriber and sub-mailbox.</t>
-
-        <t>CA implementations may not support to sign certificates with non-standard elements.</t>
+        <t>The element required for the ACP should minimize the risk of being misinterpreted by other uses of the LDevID certificate.  It also must not be misinterpreted to actually be an email address, hence the use of the otherName / rfc822Name option in the certificate would be inapproprite.</t>
 
     </list>
  </t>
@@ -647,6 +615,53 @@ See <xref target="domain-usage"/> for example use-cases.
 </t>
 
     <t>See section 4.2.1.6 of <xref target="RFC5280"/> for details on the subjectAltName field.</t>
+
+<section title="AcpNodeName ASN.1 Module" anchor="asn1">
+
+<t>The following ASN.1 module normatively specifies the AcpNodeName structure.
+This specification uses the ASN.1 definitions from <xref target='RFC5912'/>
+with the 2002 ASN.1 notation used in that document.  <xref target='RFC5912'/>
+updates normative documents using older ASN.1 notation.</t>
+
+<figure>
+<artwork>
+  ANIMA-ACP-2020
+    { iso(1) identified-organization(3) dod(6)
+      internet(1) security(5) mechanisms(5) pkix(7) id-mod(0)
+      id-mod-anima-acpnodename-2020(IANA1) }
+
+  DEFINITIONS IMPLICIT TAGS ::=
+  BEGIN
+
+  IMPORTS
+    OTHER-NAME
+    FROM PKIX1Implicit-2009
+      { iso(1) identified-organization(3) dod(6) internet(1) security(5)
+      mechanisms(5) pkix(7) id-mod(0) id-mod-pkix1-implicit-02(59) }
+
+    id-pkix
+    FROM PKIX1Explicit-2009
+      { iso(1) identified-organization(3) dod(6) internet(1) security(5)
+      mechanisms(5) pkix(7) id-mod(0) id-mod-pkix1-explicit-02(51) } ;
+
+    id-on OBJECT IDENTIFIER ::= { id-pkix 8 }
+
+    AcpNodeNameOtherNames OTHER-NAME ::= { on-AcpNodeName, ... }
+
+    on-AcpNodeName OTHER-NAME ::= {
+        AcpNodeName IDENTIFIED BY id-on-AcpNodeName
+    }
+
+    id-on-AcpNodeName OBJECT IDENTIFIER ::= { id-on IANA2 }
+
+    AcpNodeName ::= IA5String (SIZE (1..MAX))
+     -- AcpNodeName as specified in this document carries the
+     -- acp-node-name as specified in the ABNF in Section 6.1.2
+
+  END
+</artwork>
+</figure>
+</section>
 
                    </section>
                 <!-- domcert-acpinfo -->
@@ -665,8 +680,8 @@ See <xref target="domain-usage"/> for example use-cases.
              or access an OCSP responder and the security association protocol itself has also no way to communicate CRL or OCSP check.</t>
             <t hangText="   ">Retries to learn revocation via OCSP/CRL SHOULD be made using the same backoff as described in <xref target="neighbor_verification"/>. If and when the ACP node then learns that an ACP peer's certificate is invalid for which rule 3 had to be skipped during ACP secure channel establishment, then the ACP secure channel to that peer MUST be closed even if this peer is the only connectivity to access CRL/OCSP. This applies (of course) to all ACP secure channels to this peer if there are multiple.  The ACP secure channel connection MUST be retried periodically to support the case that the neighbor acquires a new, valid certificate.</t>
 
-            <t hangText="4: ">The peer's certificate has a syntactically valid acp-member-name field
-             and the acp-domain-name in that peer's acp-member-name is the same as in this ACP node's certificate (lowercase normalized).</t>
+            <t hangText="4: ">The peer's certificate has a syntactically valid acp-node-name field
+             and the acp-domain-name in that peer's acp-node-name is the same as in this ACP node's certificate (lowercase normalized).</t>
         </list></t>
 
 
@@ -674,7 +689,7 @@ See <xref target="domain-usage"/> for example use-cases.
          one additional check is performed:
 
        <list style="hanging">
-            <t hangText="5: ">The candidate peer certificate's acp-member-name has a non-empty acp-address field (either 32HEXDIG or 0, according to <xref target="acp-dominfo-abnf"/>).</t>
+            <t hangText="5: ">The candidate peer certificate's acp-node-name has a non-empty acp-address field (either 32HEXDIG or 0, according to <xref target="acp-dominfo-abnf"/>).</t>
         </list></t>
         
         <t>Technically, ACP secure channels can only be built with nodes that
@@ -757,8 +772,8 @@ CA.</t>
 
 <t>Note that different ACP nodes may have different intermediate CA 
 in their certificate path and even different TA. The set of TA for
-an ACP domain must be consistent across all ACP members so that any ACP member
-can authenticate any other ACP member.  The protocols through which
+an ACP domain must be consistent across all ACP members so that any ACP node
+can authenticate any other ACP node.  The protocols through which
 ACP domain membership check rules 1-3 are performed need to support
 the exchange not only of the ACP nodes certificates, but also exchange of
 the intermedia TA.</t>
@@ -769,19 +784,16 @@ and two TA (to permit migration to from one TA to another TA).</t>
 
 <t>Certificates for an ACP MUST only be given to nodes that are allowed
 to be members of that ACP. When the signing CA relies on an ACP
-Registrar, the CA  MUST only sign certificates with acp-member-name
+Registrar, the CA  MUST only sign certificates with acp-node-name
 through trusted ACP Registrars. In this setup, any existing CA, unaware of the formatting
-of acp-member-name, can be used. . Note that this requirement typically
-excludes public CA, because they do in general not support the notion of
-trusted registrars vouching for the correctness of th fields of a requested certificate.</t>
+of acp-node-name, can be used.</t>
 
 <t>These requirements can be achieved by using TA private to the owner of
 the ACP domain or potentially through appropriate contractual agreements between
-the involved parties.  Public CA without such obligations and guarantees can not be used
-as TA for ACP domains unless they validate ownership of the acp-member-name
-via email messages to the acp-member-name email address,
-for example using <xref target="I-D.ietf-acme-email-smime"/>.
-Public TA can always be used to obtain certificates for private TAs of an ACP domain.</t>
+the involved parties (Registrar and CA).  These requirements typically
+exclude public CA, because they in general do not support the notion of
+trusted registrars vouching for the correctness of the fields of a requested certificate or
+would by themselves not be capable to validate the correctness of otherName / AcpNodeName.</t>
 
 <t>A single owner can operate multiple independent ACP domains from the same
 set of TA. Registrars must then know which ACP a node needs to be enrolled into.</t>
@@ -1009,7 +1021,7 @@ but instead of using the ACP nodes IDevID certificate, it SHOULD first attempt t
 certificate in the BRSKI TLS authentication.  The BRSKI registrar MAY honor
 this certificate beyond its expiration date purely for the purpose of
 re-enrollment. Using the ACP node's domain certificate allows the BRSKI
-registrar to learn that node's acp-member-name,
+registrar to learn that node's acp-node-name,
 so that the BRSKI registrar can re-assign the same ACP address information 
 to the ACP node in the new ACP domain certificate.</t>
 
@@ -1083,7 +1095,7 @@ re-enrolling candidate ACP node as explained above (<xref target="domcert-re-enr
         <!-- domcert -->
 
                            <section anchor="adj-table" title="ACP Adjacency Table">
-                                <t>To know to which nodes to establish an ACP channel, every ACP node maintains an adjacency table.  The adjacency table contains information about adjacent ACP nodes, at a minimum: Node-ID (identifier of the node inside the ACP, see <xref target="zone-scheme"/> and <xref target="Vlong"/>), interface on which neighbor was discovered (by GRASP as explained below), link-local IPv6 address of neighbor on that interface, certificate (including acp-member-name).  An ACP node MUST maintain this adjacency table.  This table is used to determine to which neighbor an ACP connection is established.</t>
+                                <t>To know to which nodes to establish an ACP channel, every ACP node maintains an adjacency table.  The adjacency table contains information about adjacent ACP nodes, at a minimum: Node-ID (identifier of the node inside the ACP, see <xref target="zone-scheme"/> and <xref target="Vlong"/>), interface on which neighbor was discovered (by GRASP as explained below), link-local IPv6 address of neighbor on that interface, certificate (including acp-node-name).  An ACP node MUST maintain this adjacency table.  This table is used to determine to which neighbor an ACP connection is established.</t>
                                 <t>Where the next ACP node is not directly adjacent (i.e., not on a link
 connected to this node), the information in the adjacency table can be supplemented by configuration.  For example, the Node-ID and IP address could be configured. See <xref target="remote-acp-neighbors"/>.</t>
                                 <t>The adjacency table MAY contain information about the validity and trust of the adjacent ACP node's certificate.  However, subsequent steps MUST always start with the ACP domain membership check against the peer (see <xref target="certcheck"/>).</t>
@@ -1463,8 +1475,8 @@ allowing to obtain the diagnostic information about the neighbors certificate.</
 
 <t>In IKEv2, ACP nodes are identified by their ACP address.
 The ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.
-If the peer's ACP domain certificate includes an ACP address in the acp-member-name (not "0" or empty), the address in the IKEv2 identification payload MUST match it.
-See <xref target="certcheck"/> for more information about "0" or empty ACP address fields in the acp-member-name.
+If the peer's ACP domain certificate includes an ACP address in the acp-node-name (not "0" or empty), the address in the IKEv2 identification payload MUST match it.
+See <xref target="certcheck"/> for more information about "0" or empty ACP address fields in the acp-node-name.
 </t>
 
 <t>
@@ -1787,9 +1799,9 @@ booth peers support it.</t>
         <t>The first 48-bits follow the ULA scheme, as defined in <xref target="RFC4193"/>, to which a type field is added:
         <list style="symbols">
                 <t>"fd" identifies a locally defined ULA address.</t>
-                <t>The 40-bits ULA "global ID" (term from <xref target="RFC4193"/>) for ACP addresses carried in the acp-member-name in the ACP domain certificates are the first 40-bits of the SHA256 hash of the routing subdomain from the same acp-member-name.  In the example of <xref target="domcert-acpinfo"/>, the routing subdomain is "area51.research.acp.example.com" and the 40-bits ULA "global ID" 89b714f3db.</t>
+                <t>The 40-bits ULA "global ID" (term from <xref target="RFC4193"/>) for ACP addresses carried in the acp-node-name in the ACP domain certificates are the first 40-bits of the SHA256 hash of the routing subdomain from the same acp-node-name.  In the example of <xref target="domcert-acpinfo"/>, the routing subdomain is "area51.research.acp.example.com" and the 40-bits ULA "global ID" 89b714f3db.</t>
                 <t>When creating a new routing-subdomain for an existing autonomic network, it MUST be ensured, that rsub is selected so the resulting hash of the routing-subdomain does not collide with the hash of any pre-existing routing-subdomains of the autonomic network. This ensures that ACP addresses created by registrars for different routing subdomains do not collide with each others.</t>
-                <t>To allow for extensibility, the fact that the ULA "global ID" is a hash of the routing subdomain SHOULD NOT be assumed by any ACP node during normal operations.  The hash function is only executed during the creation of the certificate.  If BRSKI is used then the BRSKI registrar will create the acp-member-name in response to the EST Certificate Signing Request (CSR) Attribute Request message by the pledge.</t>
+                <t>To allow for extensibility, the fact that the ULA "global ID" is a hash of the routing subdomain SHOULD NOT be assumed by any ACP node during normal operations.  The hash function is only executed during the creation of the certificate.  If BRSKI is used then the BRSKI registrar will create the acp-node-name in response to the EST Certificate Signing Request (CSR) Attribute Request message by the pledge.</t>
                <t>Establishing connectivity between different ACP (different acp-domain-name) is outside the scope of this specification.
  If it is being done through future extensions, then the rsub of all routing-subdomains across those autonomic networks need to be selected so the resulting routing-subdomain hashes do not collide. For example a large cooperation with its own private TA may want to create different autonomic networks that initially should not be able to connect but where the option to do so should be kept open. When taking this future possibility into account, it is easy to always select rsub so that no collisions happen.</t>
                 <t>Type: This field allows different address sub-schemes.  This addresses the "upgradability" requirement.  Assignment of types for this field will be maintained by IANA.</t>
@@ -1981,7 +1993,7 @@ booth peers support it.</t>
 
 <t>ACP registrars are responsible to enroll candidate ACP nodes
 with ACP domain certificates and associated trust point(s). They are 
-also responsible that an acp-member-name field
+also responsible that an acp-node-name field
 is included in the ACP domain certificate carrying the ACP
 domain name and the ACP nodes ACP address prefix.  This address
 prefix is intended to persist unchanged through the lifetime of the
@@ -2010,7 +2022,7 @@ connection to the CA for ANI registrars.</t>
 as long as the resulting ACP certificate and TA certificate(s) allow
 to perform the ACP domain membership described in <xref target="certcheck"/>
 with other ACP domain members, and meet the ACP addressing
-requirements for its acp-member-name as described further below in this section.</t>
+requirements for its acp-node-name as described further below in this section.</t>
 
 <t>An ACP registrar could be a person deciding whether to
 enroll a candidate ACP node and then orchestrating the
@@ -2023,7 +2035,7 @@ and configure certificate and TA onto the node.</t>
 (<xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>). When BRSKI
 is used, the ACP nodes are called ANI nodes, and the ACP registrars
 are called BRSKI or ANI registrars.  The BRSKI specification does not define the
-handling of the acp-member-name field because the rules
+handling of the acp-node-name field because the rules
 do not depend on BRSKI but apply equally to any protocols/mechanisms an
 ACP registrar may use.</t>
 
@@ -2032,7 +2044,7 @@ ACP registrar may use.</t>
     <section anchor="registrars-unique" title="Unique Address/Prefix allocation">
 
 <t>ACP registrars MUST NOT allocate ACP address prefixes to ACP nodes
-via the acp-member-name that would collide
+via the acp-node-name that would collide
 with the ACP address prefixes of other ACP nodes in the same ACP domain.
 This includes both prefixes allocated by the same ACP registrar to
 different ACP nodes as well as prefixes allocated by other ACP registrars
@@ -2057,10 +2069,10 @@ guaranteed to use globally unique assigned EUI-48 MAC address(es).</t>
 <t>When the candidate ACP device (called Pledge in BRSKI) is to be
 enrolled into an ACP domain, the ACP registrar needs to allocate
 a unique ACP address to the node and ensure that the ACP certificate
-gets a acp-member-name field (<xref target="domcert-acpinfo"/>)
+gets a acp-node-name field (<xref target="domcert-acpinfo"/>)
 with the appropriate information - ACP domain-name, ACP-address,
 and so on. If the ACP registrar uses BRSKI, it signals the ACP
-acp-member-name field to the Pledge via the EST /csrattrs command
+acp-node-name field to the Pledge via the EST /csrattrs command
 (see <xref target="I-D.ietf-anima-bootstrapping-keyinfra"/>,
 section 5.9.2 - "EST CSR Attributes").</t>
 
@@ -2074,7 +2086,7 @@ section 5.9.2 - "EST CSR Attributes").</t>
 address prefix from an appropriate ACP addressing sub-scheme,
 either a zone addressing sub-scheme prefix (see <xref target="zone-scheme"/>),
 or a Vlong addressing sub-scheme prefix (see <xref target="Vlong"/>). The
-assigned ACP address prefix encoded in the acp-member-name field
+assigned ACP address prefix encoded in the acp-node-name field
 of the ACP domain certificate indicates to the ACP node its ACP
 address information. The sub-addressing scheme indicates the
 prefix length: /127 for zone address sub-scheme, /120 or /112
@@ -2114,7 +2126,7 @@ would not recycle ACP address prefixes from no longer used ACP nodes.</t>
     <section anchor="registrars-renewal" title="Address/Prefix Persistence">
 
 <t>When an ACP domain certificate is renewed or rekeyed via EST or other
-mechanisms, the ACP address/prefix in the acp-member-name field
+mechanisms, the ACP address/prefix in the acp-node-name field
 MUST be maintained unless security issues or violations of the unique
  address assignment requirements exist or are suspected by the ACP registrar.</t>
 
@@ -3070,7 +3082,7 @@ cause.  Or just log/highlight that item.  For example:</t>
     <t>Has it been revoked?</t>
     <t>Was the last scheduled attempt to retrieve a CRL successful (e.g., do we know that our CRL information is up to date).</t>
     <t>Is the certificate valid: validity start time in the past, expiration time in the future?</t>
-    <t>Does the certificate have a correctly formatted acp-member-name field?</t>
+    <t>Does the certificate have a correctly formatted acp-node-name field?</t>
 </list></t>
 <t>Was the ACP VRF successfully created?</t>
 <t>Is ACP enabled on one or more interfaces that are up and running?</t>
@@ -3210,8 +3222,7 @@ any appropriate mechanism/protocol, automated or not.</t>
 by an ACP registrar.</t>
 
 <t>In a simple instance of an ACP network, no central NOC component beside
-a TA is required. Typically, this is a root CA, but see
- One or more uncoordinated acting
+a TA is required. Typically, this is a root CA.  One or more uncoordinated acting
 ACP registrar can be set up, performing the following interactions:</t>
 
 <t>To orchestrate enrolling a candidate ACP node autonomically,
@@ -3263,7 +3274,7 @@ and other sources of CRL information.</t>
 <xref target="reg-interact"/> above depend on the following parameters:
 <list>
   <t>A URL to the TA and credentials so that the ACP
-   registrar can let the TA sign candidate ACP member certificates.</t>
+   registrar can let the TA sign candidate ACP node certificates.</t>
   <t>The ACP domain-name.</t>
   <t>The Registrar-ID to use. This could default to a MAC address of the ACP registrar.</t>
   <t>For recovery, the next-useable Node-IDs for zone (Zone-ID=0) sub-addressing scheme,
@@ -3289,7 +3300,7 @@ and other sources of CRL information.</t>
 a different registrar (e.g., EST server) than the one it originally received
 its ACP domain certificate from, for example because that original ACP registrar
 is gone. The ACP registrar through which the renewal/rekeying is performed
-would by default trust the acp-member-name from the ACP nodes current
+would by default trust the acp-node-name from the ACP nodes current
 ACP domain certificate and maintain this information so that the ACP node
 maintains its ACP address prefix. In EST renewal/rekeying, the ACP nodes current
 ACP domain certificate is signaled during the TLS handshake.</t>
@@ -3300,7 +3311,7 @@ ACP domain certificate is signaled during the TLS handshake.</t>
      therefore needs an "online" connection to the TA.</t>
   <t>Recovery from a compromised ACP registrar is difficult.
      When an ACP registrar is compromised, it can insert for example
-     a conflicting acp-member-name and create thereby an attack
+     a conflicting acp-node-name and create thereby an attack
      against other ACP nodes through the ACP routing protocol.</t>
 </list></t>
 
@@ -3545,7 +3556,7 @@ the ACP that the attacker then has access to.</t>
 <section anchor="disabling" title="Undoing ANI/ACP enable">
 
 <t>Disabling ANI/ACP by undoing "ACP/ANI enable" is a risk for the reliable operations of the ACP if it can be executed by mistake or unauthorized.  
-This behavior could be influenced through some additional (future) property in the certificate (e.g., in the acp-member-name extension field): In an ANI deployment intended for convenience, disabling it could be allowed without further constraints.  In an ANI deployment considered to be critical more checks would be required.
+This behavior could be influenced through some additional (future) property in the certificate (e.g., in the acp-node-name extension field): In an ANI deployment intended for convenience, disabling it could be allowed without further constraints.  In an ANI deployment considered to be critical more checks would be required.
 One very controlled option would be to not permit these commands unless the domain certificate has been revoked or is denied renewal.  Configuring this option would be a parameter on the BRSKI registrar(s).  As long as the node did not receive a domain certificate, undoing "ANI/ACP enable" should not have any additional constraints.</t>
 
 </section>
@@ -3766,6 +3777,14 @@ GRASP DULL instance needs to ensure that the IPv6 address in the locator-option 
                 <section anchor="iana" title="IANA Considerations">
 <t>This document defines the "Autonomic Control Plane".</t>
 
+<t>For the ANIMA-ACP-2020 ASN.1 module, IANA is asked to register
+value IANA1 for "id-mod-anima-acpnodename-2020" in the "SMI
+Security for PKIX Module Identifier" (1.3.6.1.5.5.7.0) registry.</t>
+
+<t>For the otherName / AcpNodeName, IANA is asked to register a value for IANA2 for
+id-on-AcpNodeName in the "SMI Security for PKIX Other Name
+Forms" (1.3.6.1.5.5.7.8) registry.</t>
+
 <t> The IANA is requested to register the value "AN_ACP" (without quotes)
 to the GRASP Objectives Names Table in the GRASP Parameter Registry.  The
 specification for this value is this document, <xref target="discovery-grasp"/>.</t>
@@ -3877,6 +3896,22 @@ currently one registry table - the "ACP Address Type" table.</t>
 
 </section>
 
+    <section title="draft-ietf-anima-autonomic-control-plane-26">
+      <t>Russ Housley review of -25.</t>
+      <t>1.1 Explicit reference for TLS 1.2 RFC.</t>
+      <t>2.  Changed term of "ACP Domain Information" to AcpNodeName (ASN.1) / acp-node-name (ABNF), also through rest of document.</t>
+      <t>2.  Improved CA behavior definition. changed IDevID/LDevID to IDevID/LDevID certificate to be more unambiguous.</t>
+      <t>2.  Changed definition of root CA to just refer to how its used in RFC7030 CA root key update, because thats the only thing relevant to ACP.</t>
+      <t>6.1.1 Moved ECDH requirement to end of text as it was not related to the subject of the initial paragraps. Likewise reference to CABFORUM.</t>
+      <t>6.1.1 Reduced cert key requirements to only be MUST for certs with 2048 RSA public key and P-256 curves. Reduced longer keys to SHOULD.</t>
+      <t>6.1.2 Changed text for conversion from rfc822Name to otherName / AcpNode, removed all the explanations of benefits coming with rfc822Name *sob* *sob* *sob*.</t>
+      <t>6.1.2.1 New ASN.1 definition for otherName / AcpNodeName.</t>
+      <t>6.1.3 Fixed up text. re the handling of missing connectivity for CRLDP / OCSP.</t>
+      <t>6.1.4 Fixed up text re. inability to use public CA to situation with otherName / AcpNodeName (no more ACME rfc822Name validation for us *sob* *sob* *sob*).</t>
+      <t>12. Added ASN.1 registration requests to IANA section.</t>
+      <t>Appenices. Minor changes for rfc822Name to otherName change.</t>
+      <t>Various minor verbal fixes/enhancements.</t>
+    </section>
     <section title="draft-ietf-anima-autonomic-control-plane-25">
        <t>Crypto parameter discuss from Valery Smyslov and Paul Wouters and resulting changes.</t>
        <t>6.7.2 Moved Michael Richardson suggested diagnostic of signaling TA from IPsec section to this general requirements section and added explanation how this may be inappropriate if TA payload is considered secret by TA owner.</t>
@@ -4049,7 +4084,6 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include="reference.I-D.ietf-anima-prefix-management"?>
                         <?rfc include="reference.I-D.ietf-acme-star"?>
                         <?rfc include="reference.I-D.ietf-tls-dtls13"?>
-                        <?rfc include="reference.I-D.ietf-acme-email-smime"?>
                         <?rfc include='reference.RFC.1112'?>
                         <?rfc include='reference.RFC.1492'?>
                         <?rfc include='reference.RFC.1654'?>
@@ -4063,6 +4097,7 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.3315'?>
                         <?rfc include='reference.RFC.3411'?>
                         <?rfc include='reference.RFC.3596'?>
+                        <?rfc include='reference.RFC.3920'?>
                         <?rfc include='reference.RFC.3954'?>
                         <?rfc include='reference.RFC.4007'?>
                         <?rfc include='reference.RFC.4210'?>
@@ -4074,9 +4109,11 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.4607'?>
                         <?rfc include='reference.RFC.4610'?>
                         <?rfc include='reference.RFC.4941'?>
+                        <?rfc include='reference.RFC.4985'?>
                         <?rfc include='reference.RFC.5790'?>
                         <?rfc include='reference.RFC.5880'?>
                         <?rfc include='reference.RFC.5905'?>
+                        <?rfc include='reference.RFC.5912'?>
                         <?rfc include="reference.RFC.6241"?>
                         <?rfc include='reference.RFC.6335'?>
                         <?rfc include='reference.RFC.6402'?>
@@ -4093,6 +4130,7 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.7426'?>
                         <?rfc include='reference.RFC.7575'?>
                         <?rfc include='reference.RFC.7576'?>
+                        <?rfc include='reference.RFC.7585'?>
                         <?rfc include='reference.RFC.7721'?>
                         <?rfc include='reference.RFC.7761'?>
                         <?rfc include='reference.RFC.7950'?>
@@ -4101,6 +4139,7 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.8366'?>
                         <?rfc include='reference.RFC.8316'?>
                         <?rfc include='reference.RFC.8368'?>
+                        <?rfc include='reference.RFC.8398'?>
                         <?rfc include='reference.RFC.8402'?>
                         <?rfc include="reference.RFC.8572'?>
                         <?rfc include="reference.I-D.ietf-anima-bootstrapping-keyinfra.xml"?>
@@ -4217,15 +4256,15 @@ separate prefixes.</t>
 as described above (<xref target="pms"/>), the 48/46-bits for
 the Registrar-ID could be saved. Such variations of the ACP
 addressing mechanisms could be introduced through future work
-in different ways. If the prefix rfcSELF in the ACP information
-field was changed, incompatible ACP variations could be created
+in different ways. If a new otherName was introduced, 
+incompatible ACP variations could be created
 where every design aspect of the ACP could be changed. Including
 all addressing choices. If instead a new addressing sub-type
 would be defined, it could be a backward compatible extension
 of this ACP specification. Information such as the size of a
 zone-prefix and the length of the prefix assigned to the ACP
 node itself could be encoded via the extension field of the
-acp-member-name.</t>
+acp-node-name.</t>
 
 <t>Note that an explicitly defined "Manual" addressing sub-scheme
 is always beneficial to provide an easy way for ACP nodes to prohibit
@@ -4241,9 +4280,9 @@ ACP domain certificates.</t>
 
         <t>BRSKI describes how nodes with an IDevID certificate can securely and zero-touch enroll with an LDevID certificate to support the ACP.  BRSKI also leverages the ACP to enable zero-touch bootstrap of new nodes across networks without any configuration requirements across the transit nodes (e.g., no DHCP/DNS forwarding/server setup).  This includes otherwise not configured networks as described in <xref target="secure-bootstrap"/>.  Therefore BRSKI in conjunction with ACP provides for a secure and zero-touch management solution for complete networks.  Nodes supporting such an infrastructure (BRSKI and ACP) are called ANI nodes (Autonomic Networking Infrastructure), see <xref target="I-D.ietf-anima-reference-model"/>.  Nodes that do not support an IDevID certiificate but only an (insecure) vendor specific Unique Device Identifier (UDI) or nodes whose manufacturer does not support a MASA could use some future security reduced version of BRSKI.</t>
 
-        <t>When BRSKI is used to provision a domain certificate (which is called enrollment), the BRSKI registrar (acting as an enhanced EST server) must include the subjectAltName / rfc822Name encoded ACP address and domain name to the enrolling node (called pledge) via its response to the pledges EST CSR Attribute request that is mandatory in BRSKI.</t>
+        <t>When BRSKI is used to provision a domain certificate (which is called enrollment), the BRSKI registrar (acting as an enhanced EST server) must include the otherName / AcpNode encoded ACP address and domain name to the enrolling node (called pledge) via its response to the pledges EST CSR Attribute request that is mandatory in BRSKI.</t>
 
-        <t>The Certification Authority in an ACP network must not change the subjectAltName / rfc822Name in the certificate.  The ACP nodes can therefore find their ACP address and domain using this field in the domain certificate, both for themselves, as well as for other nodes.</t>
+        <t>The Certification Authority in an ACP network must not change the otherName / AcpNode in the certificate.  The ACP nodes can therefore find their ACP address and domain using this field in the domain certificate, both for themselves, as well as for other nodes.</t>
 
         <t>The use of BRSKI in conjunction with the ACP can also help to further simplify maintenance and renewal of domain certificates.  Instead of relying on CRL, the lifetime of certificates can be made extremely small, for example in the order of hours.  When a node fails to connect to the ACP within its certificate lifetime, it cannot connect to the ACP to renew its certificate across it (using just EST), but it can still renew its certificate as an "enrolled/expired pledge" via the BRSKI bootstrap proxy.  This requires only that the BRSKI registrar honors expired domain certificates and that the pledge attempts to perform TLS authentication for BRSKI bootstrap using its expired domain certificate before falling back to attempting to use its IDevID certificate for BRSKI.  This mechanism could also render CRLs unnecessary because the BRSKI registrar in conjunction with the CA would not renew revoked certificates - only a "Do-not-renew" list would be necessary on BRSKI registrars/CA.</t>
 
@@ -4406,17 +4445,17 @@ such an approach.  A full specification is subject to a separate document:</t>
                 </section>
 
                     <section anchor="domain-usage" title="CAs, domains and routing subdomains">
-                        <t>There is a wide range of setting up different ACP solution by appropriately using CAs and the domain and rsub elements in the acp-member-name in the domain certificate.  We summarize these options here as they have been explained in different parts of the document in before and discuss possible and desirable extensions:</t>
+                        <t>There is a wide range of setting up different ACP solution by appropriately using CAs and the domain and rsub elements in the acp-node-name in the domain certificate.  We summarize these options here as they have been explained in different parts of the document in before and discuss possible and desirable extensions:</t>
 
                         <t>An ACP domain is the set of all ACP nodes that can authenticate each other as belonging to the same ACP network using the ACP domain membership check (<xref target="certcheck"/>).  GRASP inside the ACP is run across all transitively connected ACP nodes in a domain.</t>
 
-                        <t>The rsub element in the acp-member-name permits the use of addresses from different ULA prefixes.  One use case is to create multiple physical networks that initially may be separated with one ACP domain but different routing subdomains, so that all nodes can mutual trust their ACP domain certificates (not depending on rsub) and so that they could connect later together into a contiguous ACP network.</t>
+                        <t>The rsub element in the acp-node-name permits the use of addresses from different ULA prefixes.  One use case is to create multiple physical networks that initially may be separated with one ACP domain but different routing subdomains, so that all nodes can mutual trust their ACP domain certificates (not depending on rsub) and so that they could connect later together into a contiguous ACP network.</t>
 
                         <t>One instance of such a use case is an ACP for regions interconnected via a non-ACP enabled core, for example due to the absence of product support for ACP on the core nodes. ACP connect configurations as defined in this document can be used to extend and interconnect those ACP islands to the NOC and merge them into a single ACP when later that product support gap is closed.</t>
 
                         <t>Note that RPL scales very well.  It is not necessary to use multiple routing subdomains to scale ACP domains in a way it would be possible if other routing protocols where used.  They exist only as options for the above mentioned reasons.</t>
 
-                        <t>If different ACP domains are to be created that should not allow to connect to each other by default, these ACP domains simply need to have different domain elements in the acp-member-name.  These domain elements can be arbitrary, including subdomains of one another: Domains "example.com" and "research.example.com" are separate domains if both are domain elements in the acp-member-name of certificates.</t>
+                        <t>If different ACP domains are to be created that should not allow to connect to each other by default, these ACP domains simply need to have different domain elements in the acp-node-name.  These domain elements can be arbitrary, including subdomains of one another: Domains "example.com" and "research.example.com" are separate domains if both are domain elements in the acp-node-name of certificates.</t>
 
                         <t>It is not necessary to have a separate CA for different ACP domains: an operator can use a single CA to sign certificates for multiple ACP domains that are not allowed to connect to each other because the checks for ACP adjacencies includes comparison of the domain part.</t>
 
@@ -4541,7 +4580,7 @@ be provided for by ACP secure channels.</t>
 standard RPL mechanism of route optimization, e.g. keeping only routes that
 are not towards the RPL root. This is known to scale to networks with 20,000 or more nodes.
 There is no auto-aggregation of routes for /48 ULA prefixes (when using rsub
-in the acp-member-name) and/or Zone-ID based prefixes.</t>
+in the acp-node-name) and/or Zone-ID based prefixes.</t>
 
 <t>Automatic assignment of Zone-ID and auto-aggregation of routes could
 be achieved for example by configuring zone-boundaries, announcing via GRASP
