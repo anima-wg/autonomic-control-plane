@@ -17,7 +17,7 @@
 <?rfc compact="yes"?>
 <!-- REMOVED in version 12: updates="4291,4193" -->
 <rfc ipr="trust200902"
-     docName="draft-ietf-anima-autonomic-control-plane-26" category="std">
+     docName="draft-ietf-anima-autonomic-control-plane-27" category="std">
         <front>
                 <title abbrev="An Autonomic Control Plane (ACP)">An Autonomic Control Plane (ACP)</title>
                 <author role="editor" fullname="Toerless Eckert" initials="T.T.E." surname="Eckert">
@@ -565,7 +565,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification"/>) and for 
 </figure>
 
 
-<t>acp-node-name in above <xref target="acp-dominfo-abnf"/> is the ABNF (<xref target="RFC5234"/>) definition of the ACP Node Name. An ACP domain certificate MUST carry this information. It MUST be encoded as an otherName / AcpNodeName as described in <xref target="asn1"/>.</t>
+<t>acp-node-name in above <xref target="acp-dominfo-abnf"/> is the ABNF (<xref target="RFC5234"/>) definition of the ACP Node Name. An ACP domain certificate MUST carry this information. It MUST be encoded as a subjectAltName / otherName / AcpNodeName as described in <xref target="asn1"/>.</t>
 
 <t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP domain certificate MUST have the 32HEXDIG "acp-address" field. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members or ACP secure channel peers when they have a 0-value acp-address field and as ACP domain members (but not as ACP secure channel peers) when they have an empty acp-address field.  See <xref target="certcheck"/>.</t> 
 
@@ -3896,6 +3896,10 @@ currently one registry table - the "ACP Address Type" table.</t>
 
 </section>
 
+    <section title="draft-ietf-anima-autonomic-control-plane-27">
+      <t>Too many revisions with too many fixes. Lets do a one-word change revision for a change now if it helps to accelerate the review process.</t>
+      <t>Added "subjectAltName /" to make it unambiguous that AcpNodeName is indeed a SAN (from Russ).</t>
+    </section>
     <section title="draft-ietf-anima-autonomic-control-plane-26">
       <t>Russ Housley review of -25.</t>
       <t>1.1 Explicit reference for TLS 1.2 RFC.</t>
