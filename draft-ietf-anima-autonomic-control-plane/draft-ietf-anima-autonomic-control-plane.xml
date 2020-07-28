@@ -471,7 +471,11 @@ channel:  +-----------+  :   channel     :  +-----------+  : channel
 
                 <section anchor="self-creation" title="Self-Creation of an Autonomic Control Plane (ACP) (Normative)">
 
-                   <t>This section describes the components and steps to set up an ACP and highlights the key properties which make it "indestructible" against most changes to the Data-Plane, including misconfigurations of routing, addressing, NAT, firewall or any other traffic policy filters that inadvertently or otherwise unavoidably would also impact the management plane traffic, such as the actual operator CLI session or controller NetConf session through which the configuration changes to the data-plane are executed. Physical misconfiguration of wiring between ACP nodes will also not break the ACP as long as there is a transitive path between ACP nodes, the ACP should be able to recover given that it automatically operates across all interfaces of a ACP nodes. Attacks against the network via incorrect routing or addressing information for the data-plane will not impact the ACP. Even impaired ACP nodes will have a significantly reduced attack surface against malicious misconfiguration because only very limited ACP or interface up/down configuration can affect the ACP, and pending on their specific designs these type of attacks could also be eliminated. See more in <xref target="enabling-acp"/> and <xref target="security"/>.</t>
+                   <t>This section specifies the components and steps to set up an ACP. The ACP is automatically "self-creating", which makes it "indestructible" against most changes to the Data-Plane, including misconfigurations of routing, addressing, NAT, firewall or any other traffic policy filters that inadvertently or otherwise unavoidably would also impact the management plane traffic, such as the actual operator CLI session or controller NetConf session through which the configuration changes to the Data-Plane are executed.</t>
+
+<t>Physical misconfiguration of wiring between ACP nodes will also not break the ACP: As long as there is a transitive physical path between ACP nodes, the ACP should be able to recover given that it automatically operates across all interfaces of the ACP nodes and automatically determines paths between them.</t>
+
+<t>Attacks against the network via incorrect routing or addressing information for the Data-Plane will not impact the ACP. Even impaired ACP nodes will have a significantly reduced attack surface against malicious misconfiguration because only very limited ACP or interface up/down configuration can affect the ACP, and pending on their specific designs these type of attacks could also be eliminated. See more in <xref target="enabling-acp"/> and <xref target="security"/>.</t>
 
                <t>An ACP node can be a router, switch, controller, NMS host, or any other IPv6 capable node.  Initially, it MUST have its ACP certificate, as well as an (empty) ACP Adjacency Table (described in <xref target="adj-table"/>).  It then can start to discover ACP neighbors and build the ACP.  This is described step by step in the following sections:</t>
 
@@ -498,7 +502,7 @@ as required for the ACP domain membership check (<xref target="certcheck"/>).</t
 
     <section anchor="acp-certificates" title="ACP Certificates">
 
-<t>ACP certificates MUST be <xref target="RFC5280"/> compliant X.509v3 certificates.</t>
+<t>ACP certificates MUST be <xref target="RFC5280"/> compliant X.509 v3 (<xref target="X.509"/>) certificates.</t>
 
 <t>ACP nodes MUST support handling ACP certificates, TA certificates and certificate chain certificates (henceforth just called certificates in this section) with RSA public keys and certificates with Elliptic Curve (ECC) public keys.</t>
 
@@ -738,11 +742,11 @@ updates normative documents using older ASN.1 notation.</t>
             use a current time learned in an insecure fashion in the ACP domain membership
             check.</t>
 
-            <t>Current time MAY for example be learned via NTP (<xref target="RFC5905"/>)
+            <t>Current time MAY for example be learned unsecured via NTP (<xref target="RFC5905"/>)
             over the same link-local IPv6 addresses used for the ACP from neighboring ACP nodes.
-            ACP nodes that that do provide NTP insecure over their link-local addresses SHOULD
+            ACP nodes that do provide NTP insecure over their link-local addresses SHOULD
             primarily run NTP across the ACP and provide NTP time across the ACP only
-            when they have a secure time source. Details for such NTP procedures are beyond the
+            when they have a trusted time source. Details for such NTP procedures are beyond the
             scope of this specification.</t>
 
             <t>Beside ACP domain membership check, the ACP itself has no
@@ -1332,7 +1336,7 @@ secure channel setup collisions are resolved.</t>
 
 <t>L2 mechanisms such as strong encrypted radio technologies or <xref target="MACSEC"/> may offer equivalent encryption and the ACP security association protocol may only be required to authenticate ACP domain membership of a peer and/or derive a key for the L2 mechanism. Mechanisms to auto-discover and associate ACP peers leveraging such underlying L2 security are possible and desirable to avoid duplication of encryption, but none are specified in this document.</t>
 
-<t>Strong physical security of a link may stand in where cryptographic security is infeasible. As there is no secure mechanism to automatically discover strong physical security solely between two peers, it can only be used with explicit configuration and that configuration too could become an attack vector. This document therefore only specifies with <xref target="acp-connect">ACP connect</xref> one explicitly configured mechanism without any secure channel association protocol - for the case where both the link and the nodes attached to it have strong physical security.</t>
+<t>Strong physical security of a link may stand in where cryptographic security is infeasible. As there is no secure mechanism to automatically discover strong physical security solely between two peers, it can only be used with explicit configuration and that configuration too could become an attack vector. This document therefore only specifies with <xref target="ACPconnect">ACP connect</xref> one explicitly configured mechanism without any secure channel association protocol - for the case where both the link and the nodes attached to it have strong physical security.</t>
 
                 </section>
 
@@ -1361,7 +1365,7 @@ a specific secure channel protocol.</t>
 
                                 <t>An ACP secure channel MUST immediately be terminated when the lifetime of any certificate in the chain used to authenticate the neighbor expires or becomes revoked.  This may not be standard behavior in secure channel protocols because the certificate authentication may only influences the setup of the secure channel in these protocols, but may not be re-validated during the lifetime of the secure connection in the absence of this requirement.</t>
 
-<t>When specifying additional security association protocol for ACP secure channel use beyond those covered in this document, protocol options SHOULD be eliminated that are not necessary to support devices that are expected to be able to support the ACP. For example, definitions for security protocols often include old/inferior security options required only to interoperate with existing devices that will not be a able to update to the currently preferred security options. Such old/inferior security options do not need to be supported when a security association protocol is first specified for the ACP, strengthening the "weakest link" and simplifying ACP implementation overhead.</t>
+<t>When specifying an additional security association protocol for ACP secure channels beyond those covered in this document, protocol options SHOULD be eliminated that are not necessary to support devices that are expected to be able to support the ACP to minimize implementation complexity. For example, definitions for security protocols often include old/inferior security options required only to interoperate with existing devices that will not be a able to update to the currently preferred security options. Such old/inferior security options do not need to be supported when a security association protocol is first specified for the ACP, strengthening the "weakest link" and simplifying ACP implementation overhead.</t>
 
                 </section>
 
@@ -2119,8 +2123,8 @@ addresses with Zone-ID 0.</t>
 SHOULD be able to choose the zone vs. Vlong sub-address scheme for
 ACP nodes based on the "serialNumber" of the IDevID certificate, for example
 by the PID (Product Identifier) part which identifies the product type,
-or the complete "serialNumber". The PID for example could identify type of
-devices allowing for specialized ASA requiring multiple addresses or non-autonomic VMs for
+or the complete "serialNumber". The PID for example could identify 
+nodes that allow for specialized ASA requiring multiple addresses or non-autonomic VMs for
 services and those nodes could receive Vlong sub-address scheme ACP addresses.</t>
 
 <t>In a simple allocation scheme, an ACP registrar remembers persistently
@@ -2132,8 +2136,9 @@ would not recycle ACP address prefixes from no longer used ACP nodes.</t>
 
 <t>If allocated addresses can not be remembered by registrars, then
 it is necessary to either use a new value for the Register-ID field
-in the ACP addresses, or determine allocated ACP addresses from polling the
-ACP network nodes.  Non-tracked ACP addresses can be reclaimed by revoking
+in the ACP addresses, or determine allocated ACP addresses from determining the
+addresses of reachable ACP nodes, which is not necessarily the set of all ACP nodes.
+Non-tracked ACP addresses can be reclaimed by revoking
 or not renewing their certificates and instead handing out new certificate
 with new addresses (for example with a new Registrar-ID value). Note that
 such strategies may require coordination amongst registrars.</t>
@@ -2180,7 +2185,7 @@ registrars and centralized policy control.</t>
 
 <section anchor="rpl-profile" title= "ACP RPL Profile">
 
-<t>The following is a description of the RPL profile that ACP nodes need to support by default.  The format of this section is derived from draft-ietf-roll-applicability-template.</t>
+<t>The following is a description of the RPL profile that ACP nodes need to support by default.  The format of this section is derived from <xref target="I-D.ietf-roll-applicability-template" />.</t>
 
     <section anchor="rpl-summary" title= "Overview">
 
@@ -2291,7 +2296,8 @@ registrars and centralized policy control.</t>
         </list></t>
     </section>
     <section anchor="rpl-path-metric" title= "Path Metric">
-        <t>Use Hopcount according to xref target="RFC6551"/>.
+        <t>Use Hopcount according to <xref target="RFC6551"/>. Note that this is
+        solely for diagnostic purposes as it is not used by the objective function.</t>
     </section>
     <section anchor="rpl-objective-function" title= "Objective Function">
         <t>Objective Function (OF): Use OF0 <xref target="RFC6552"/>.
@@ -2317,6 +2323,10 @@ registrars and centralized policy control.</t>
         you a better parent.  If so, compute your new rank, and send new DIO
         that advertises your new rank.  Then send a DAO with a new path sequence
         about yourself.</t>
+
+        <t>When using ACP multi-access virtual interfaces, local repair can be
+        directly by peer breakage, see <xref target="ACP-ma-virtual-interfaces"/>.</t>
+
         <t>stretch_rank: none provided ("not stretched").</t>
         <t>Data Path Validation: Not used.</t>
         <t>Trickle: Not used.</t>
@@ -2536,6 +2546,10 @@ of the secure channel protocols (IPsec / DTLS).</t>
         this implementation approach will lead to a full mesh of ACP virtual 
         interfaces between them.</t>
 
+        <t>When the secure channel protocol determines a peer to be dead, this SHOULD
+        result in indicating link breakage to trigger RPL DODAG repair, see
+        <xref target="rpl-dodag-repair"/>.</t>
+
                 </section>
 
                 <section anchor="ACP-ma-virtual-interfaces" title="ACP multi-access virtual interfaces">
@@ -2550,6 +2564,11 @@ of the secure channel protocols (IPsec / DTLS).</t>
         interface are sent to the ACP secure channel that belongs to the
         ACP neighbor that is the next-hop in the ACP forwarding table entry
         used to reach the packets destination address.</t>
+
+        <t>When the secure channel protocol determines a peer to be dead for a
+        secure channel mapped into an ACP multi-access virtual interface,
+        this SHOULD result in signaling breakage of that peer to RPL, so it can trigger
+        RPL DODAG repair, see <xref target="rpl-dodag-repair"/>.</t>
 
         <t>There is no requirement for
         all ACP nodes on the same multi-access subnet to use the same
@@ -2811,7 +2830,7 @@ options are not sufficient to achieve this.</t>
 
                                 <t>ACP connect has security consequences: All systems and processes connected via ACP connect have access to all ACP nodes on the entire ACP, without further authentication.  Thus, the ACP connect interface and NOC systems connected to it needs to be physically controlled/secured.  For this reason the mechanisms described here do explicitly not include options to allow for a non-ACP router to be connected across an ACP connect interface and addresses behind such a router routed inside the ACP.</t>
 
-<t>Physical controlled/secured means that attackers can gain no access to the physical device hosting the ACP Edge Node, the physical interfaces and links providing the ACP connect link nor the physical devices hosting the NOC Device. In a simple case, ACP Edge node and NOC Device are co-located in an access controlled room, such as a NOC, to which attackers can not gain physical access to.</t>
+<t>Physical controlled/secured means that attackers can gain no access to the physical device hosting the ACP Edge Node, the physical interfaces and links providing the ACP connect link nor the physical devices hosting the NOC Device. In a simple case, ACP Edge node and NOC Device are co-located in an access controlled room, such as a NOC, to which attackers can not gain physical access.</t>
 
 <t>An ACP connect interface provides exclusively access to only the ACP.  This is likely insufficient for many NMS hosts.  Instead, they would require a second "Data-Plane" interface outside the ACP for connections between the NMS host and administrators, or Internet based services, or for direct access to the Data-Plane.  The document <xref target="RFC8368">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> explains in more detail how the ACP can be integrated in a mixed NOC environment.</t>
 
@@ -2915,14 +2934,14 @@ the architectural correct solution when it is used as a mechanism to connect Sof
 
 <t>Given how the ACP is the security and transport substrate for GRASP, the requirements
 for devices connected via ACP connect is that those are equivalently (if not better)
- secured against attacks and run only software that is equally (if not better)
- protected, known (or trusted) not to be malicious and accordingly designed to isolate
-access to the ACP against external equipment.</t>
+secured against attacks than ACP nodes that do not use ACP connect and run only
+software that is equally (if not better) protected, known (or trusted) not to be malicious
+and accordingly designed to isolate access to the ACP against external equipment.</t>
 
 <t>The difference in security is that cryptographic security of the
 ACP secure channel is replaced by required physical security/control of the network connection
 between an ACP edge node and the NMS or other host reachable via the ACP connect
-interface. See <xref target="acp-connect"/>.
+interface. See <xref target="NMS"/>.</t>
 
 <t>When using "Combined ACP and Data-Plane Interfaces", care hasa to be taken that
 only GRASP messages intended for the ACP GRASP domain received from Software or
@@ -3423,9 +3442,11 @@ was successfully enrolled onto a candidate ACP node.</t>
 <section anchor="admin-down" title="Admin Down State" >
 
 
-<t>Interfaces on most network equipment have at least two states: "up" and "down".  These may have product specific names.  "down" for example could be called "shutdown" and "up" could be called "no shutdown".  The "down" state disables all interface operations down to the physical level.  The "up" state enables the interface enough for all possible L2/L3 services to operate on top of it and it may also auto-enable some subset of them.  More commonly, the operations of various L2/L3 services is controlled via additional node-wide or interface level options, but they all become only active when the interface is not "down".  Therefore an easy way to ensure that all L2/L3 operations on an interface are inactive is to put the interface into "down" state.  The fact that this also physically shuts down the interface is in many cases just a side effect, but it may be important in other cases (see below, <xref target="down-fast-state-propagation"/>).</t>
+<t>Interfaces on m ost network equipment have at least two states: "up" and "down".  These may have product specific names.  "down" for example could be called "shutdown" and "up" could be called "no shutdown".  The "down" state disables all interface operations down to the physical level.  The "up" state enables the interface enough for all possible L2/L3 services to operate on top of it and it may also auto-enable some subset of them.  More commonly, the operations of various L2/L3 services is controlled via additional node-wide or interface level options, but they all become only active when the interface is not "down".  Therefore an easy way to ensure that all L2/L3 operations on an interface are inactive is to put the interface into "down" state.  The fact that this also physically shuts down the interface is in many cases just a side effect, but it may be important in other cases (see below, <xref target="down-fast-state-propagation"/>).</t>
 
-<t>One of the common problems of remote management is for the operator or SDN controller to cut its own connectivity to the remote node by a configuration impacting its own management connection into the node. The ACP itself should have no dedicated configuration other than aforementioned enablement of the ACP on brownfield ACP nodes. This leaves configuration that can not distinguish between ACP and Data-Plane as sources of configuration mistakes as these commands will impact the ACP even though they should only impact the Data-Plane. The one ubiquitous type of commands that do this on many type of routers are interface "down" commands/configurations. When such a command applied on the interface through which the ACP provides access for remote management it would cut the remote management connection through the ACP because (as outlined above), the "down" commands typically impact the physical layer too and not only the Data-Plane services.</t>
+<t>One of the common problems of remote management is for the operator or SDN controller to cut its own connectivity to the remote node by a configuration impacting its own management connection into the node. The ACP itself should have no dedicated configuration other than aforementioned enablement of the ACP on brownfield ACP nodes. This leaves configuration that can not distinguish between ACP and Data-Plane as sources of configuration mistakes as these commands will impact the ACP even though they should only impact the Data-Plane.</t>
+
+<t>The one ubiquitous type of commands that do this on many type of routers are interface "down" commands/configurations. When such a command is applied to the interface through which the ACP provides access for remote management it would cut the remote management connection through the ACP because, as outlined above, the "down" commands typically impact the physical layer too and not only the Data-Plane services.</t>
 
 <t>To provide ACP/ANI resilience against such operator misconfiguration, this document 
 recommends to separate the "down" state of interfaces into an "admin down" state where the physical layer is kept running and ACP/ANI can use the interface and a "physical down" state.  Any existing "down" configurations would map to "admin down".  In "admin down", any existing L2/L3 services of the Data-Plane should see no difference to "physical down" state.  To ensure that no Data-Plane packets could be sent/received, packet filtering could be established automatically as described above in <xref target="secure-enabling"/>.</t>
@@ -3693,9 +3714,9 @@ Note that the complete mechanisms to merge networks is out of scope of this spec
                 <section anchor="self-protecting" title="Self-Protection Properties">
                     <section anchor="self-protecting-outside" title="From the outside">
                         <t>As explained in <xref target="self-creation"/>, the ACP is based on secure channels built between nodes that have mutually authenticated each other with their domain certificates.  The channels themselves are protected using standard encryption technologies such as DTLS or IPsec which provide additional authentication during channel establishment, data integrity and data confidentiality protection of data inside the ACP and in addition, provide replay protection.</t>
-                        <t>Attacker will not be able to join the ACP unless they have a valid ACP certificate. On-path attackers without a valid ACP certificate can not inject packets into the ACP due to ACP secure channels. They can also not decrypt ACP traffic except if they can crack the encryptionthe. They can attempt behavioral traffic analysis on the encrypted ACP traffic.</t>
+                        <t>Attacker will not be able to join the ACP unless they have a valid ACP certificate. On-path attackers without a valid ACP certificate can not inject packets into the ACP due to ACP secure channels. They can also not decrypt ACP traffic except if they can crack the encryption. They can attempt behavioral traffic analysis on the encrypted ACP traffic.</t>
 
-<t>The degree to which compromised ACP nodes may impact the ACP depends on the type of node and its impairment. A typical ACP node where an attacker has gained both administrative privileges as well as physical access could for example be impaired by configuring ACP connect and connecting an attacking device to inject traffic into the ACP. In the absence of physical access or the ability to configure ACP connect, a similar attack might not be possible.</t>
+<t>The degree to which compromised ACP nodes can impact the ACP depends on the implementation of the ACP nodes and their impairment. When an attacker has only gained administrative privileges to configure ACP nodes remotely, the attacker can disrupt the ACP only through one of the few configuration options to disable it, see <xref target="enabling-acp"/>, or by configuring of non-autonomic ACP options if those are supported on the impaired ACP nodes, see <xref target="workarounds"/>. Injecting or ectracting traffic into/from an impaired ACP node is only possible when an impaired ACP node supports ACP connect (see <xref target="ACPconnect"/>) and the attacker can control traffic into/from one of the ACP nodes interfaces, such as by having physical access to the ACP node.</t>
 
                         <t>The ACP also serves as protection (through authentication and encryption) for protocols relevant to OAM that may not have secured protocol stack options or where implementation or deployment of those options fail on some vendor/product/customer limitations.  This includes protocols such as SNMP (<xref target="RFC3411"/>), NTP (<xref target="RFC5905"/>), PTP (<xref target="IEEE-1588-2008"/>), DNS (<xref target="RFC3596"/>), DHCPv6 (<xref target="RFC3315"/>), syslog (<xref target="RFC3164"/>), Radius (<xref target="RFC2865"/>), Diameter (<xref target="RFC6733"/>), TACACS (<xref target="RFC1492"/>), IPFIX (<xref target="RFC7011"/>), Netflow (<xref target="RFC3954"/>) - just to name a few. Not all of these protocol references are necessarily the latest version of protocols but versions that are still widely deployed.</t>
 
@@ -3740,7 +3761,8 @@ compromised nodes.</t>
         <!-- benefits -->
 
                 <section anchor="security" title="Security Considerations">
-                        <t>A set of ACP nodes with ACP certificates for the same ACP domain and ACP functionaliy enabled is automatically self-building and self-protecting: The ACP is automatically established between neighboring ACP nodes and self-protecting by building of ACP secure channels. No further configuration is required.</t>
+
+                        <t>A set of ACP nodes with ACP certificates for the same ACP domain and with ACP functionaliy enabled is automatically "self-building": The ACP is automatically established between neighboring ACP nodes. It is also "self-protecting": The ACP secure channels are authenticated and encrypted. No configuration is required for this.</t>
 
 <t>The self-protecting property does not include workarounds for non-autonomic components as explained in <xref target="workarounds"/>. See <xref target="self-protecting"/> for details of how the ACP protects itself against attacks from the outside and to a more limited degree from the inside as well.</t>
                         <t>However, the security of the ACP depends on a number of other factors:
@@ -3749,7 +3771,7 @@ compromised nodes.</t>
                                    <t>Every ACP registrar is criticial infrastructure that needs to be hardened against attacks, similar to a CA. A malicious registrar can enroll enemy plegdes to an ACP network or break ACP routing by duplicate ACP address assignment to pledges via their ACP certificates.</t>
                                    <t>Security can be compromised by implementation errors (bugs), as in all products.</t></list>
                         </t>
-                        <t>There is no prevention of source-address spoofing inside the ACP.  This implies that if an attacker gains access to the ACP, it can spoof all addresses inside the ACP and fake messages from any other node.</t>
+                        <t>There is no prevention of source-address spoofing inside the ACP.  This implies that if an attacker gains access to the ACP, it can spoof all addresses inside the ACP and fake messages from any other node. New protocol/services run across the ACP should therefore use end-to-end authentication inside the ACP. This is already done by GRASP as specified in this document.</t>
 
 
 <t>The ACP is designed to enable automation of current network management and future autonomic peer-to-peer/distributed network automation. Any ACP member can send ACP IPv6 packet to other ACP members and announce via ACP GRASP services to all ACP members without depenency against centralized components.</t>
@@ -3771,9 +3793,7 @@ compromised nodes.</t>
 -->
 
 
-<t>Operators and provisioning software developers need to be aware of how the provisioning/configuration of network devices impacts the ability of the operator / provisioning software to remotely access the network node configured or nodes transitiviely reached through it. By using the ACP, most of the issues  of configuration/provisioning caused loss of connectivity for remote provisioning/configuration should be eliminated. Only few exceptions such as explicit physical interface down configuration should be left <xref target="admin-down"/>.</t>
-
-remote overwhelming see of configuration issues that could impact reachability for such remote provisioning/configuration not only of the impact of provisioning/configuring network devices wrt. to the user experience, but also to 
+<t>Operators and provisioning software developers need to be aware of how the provisioning/configuration of network devices impacts the ability of the operator / provisioning software to remotely access the network nodes. By using the ACP, most of the issues  of configuration/provisioning caused loss of connectivity for remote provisioning/configuration will be eliminated, see <xref target="self-creation"/>. Only few exceptions such as explicit physical interface down configuration will be left <xref target="admin-down"/>.</t>
 
 <t>Many details of ACP are designed with security in mind and discussed elsewhere in the document:</t>
 
@@ -3931,11 +3951,33 @@ currently one registry table - the "ACP Address Type" table.</t>
 </section>
 
     <section title="draft-ietf-anima-autonomic-control-plane-28">
-      <t></t>
+      <t>IESG review Roman Danyliw:</t>
+      <t>6. Requested additional text elaborating misconfiguration plus attack vectors.</t>
+      <t>6.1.3.1 Added paragraph about unsecured NTP as basis for time in the absence of other options.</t>
+      <t>6.7.2 reworded text about additional secure channel protocol reqiurements.</t>
+      <t> 6.7.3.1.2. Added requirement for ACP nodes supporting IKEv2 to support RFC8247 (not sure how that got dropped from prior versions.</t>
+      <t>Replaced minimum crypto requirements definition via specific AES options with more generic "symmetric key/hash strength" requirements.</t>
+      <t>6.10.7.3. Added example how to derive addressing scheme from IDevID (PID). Added explanation how to deal with non-persistant registrar address database (hint: it sucks or is wasteful, what did you expect).</t>
+      <t>8.1.1. Added explanation for 'Physical controlled/secured'.</t>
+      <t>8.1.5. Removed 'Physical controlled/secured' text, refer back to 8.1.1.</t>
+      <t>8.2.1. Fixed ABNF 'or' syntax line.</t>
+      <t>9.3.2. Added explanation of remote management problem with interface "down" type commands.</t>
+      <t>10.2.1. Added explanations for attacks from impaired ACP nodes.</t>
+      <t>11. Rewrote intro paragraph. Removed text referring to enrollment/registrars as they are out of scope of ACP (dependencies only).</t>
+      <t>11. Added note about need for new protocols inside ACP to use end-to-end authentication.</t>
+      <t>11. Rewrote paragraph about operator mistakes so as to be actionably. Operators must not make mistakes - but ACP minimizes the mistakes they can make.</t>
+      <t>ACP domain certificate -> ACP certificate.</t>
+      <t>Various other cosmetic edits (thanks!) and typo fixes (sorry for not running full spell check for every version. Will definitely do before RFC editor).</t>
+      <t>Other:</t>
+      <t>6.12.5.2.1./6.12.5.2.2. Added text explaining link breakage wrt. RTL (came about re-analyzing behavior after question about hop count).</t>
+      <t>Removed now unnecessary references for earlier rrc822Name otherName choice.</t>
+    </section>
+
     <section title="draft-ietf-anima-autonomic-control-plane-27">
       <t>Too many revisions with too many fixes. Lets do a one-word change revision for a change now if it helps to accelerate the review process.</t>
       <t>Added "subjectAltName /" to make it unambiguous that AcpNodeName is indeed a SAN (from Russ).</t>
     </section>
+
     <section title="draft-ietf-anima-autonomic-control-plane-26">
       <t>Russ Housley review of -25.</t>
       <t>1.1 Explicit reference for TLS 1.2 RFC.</t>
@@ -4085,8 +4127,6 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.5234'?>
                         <?rfc include='reference.RFC.5246'?>
                         <?rfc include='reference.RFC.5280'?>
-                        <?rfc include='reference.RFC.5321'?>
-                        <?rfc include='reference.RFC.5322'?>
                         <?rfc include='reference.RFC.6347'?>
                         <?rfc include='reference.RFC.6550'?>
                         <?rfc include='reference.RFC.6551'?>
@@ -4122,7 +4162,6 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include="reference.I-D.carpenter-anima-ani-objectives"?>
                         <?rfc include="reference.I-D.richardson-anima-6join-discovery.xml"?>
                         -->
-                        <?rfc include="reference.I-D.ietf-roll-useofrplinfo"?>
                         <?rfc include="reference.I-D.ietf-anima-prefix-management"?>
                         <?rfc include="reference.I-D.ietf-acme-star"?>
                         <?rfc include="reference.I-D.ietf-tls-dtls13"?>
@@ -4133,7 +4172,6 @@ currently one registry table - the "ACP Address Type" table.</t>
                         <?rfc include='reference.RFC.2119'?>
                         <?rfc include='reference.RFC.2315'?>
                         <?rfc include='reference.RFC.2409'?>
-                        <?rfc include='reference.RFC.2821'?>
                         <?rfc include='reference.RFC.2865'?>
                         <?rfc include='reference.RFC.3164'?>
                         <?rfc include='reference.RFC.3315'?>

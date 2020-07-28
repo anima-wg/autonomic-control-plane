@@ -1,0 +1,368 @@
+From noreply@ietf.org  Wed Jul 15 05:03:08 2020
+Return-Path: <noreply@ietf.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+	faui40.informatik.uni-erlangen.de
+X-Spam-Level: 
+X-Spam-Status: No, score=0.9 required=5.0 tests=RCVD_IN_DNSWL_NONE=-0.0001,
+	SPF_FAIL=0.919,SPF_HELO_NONE=0.001,TO_EQ_FM_DOM_SPF_FAIL=0.001
+	autolearn=disabled version=3.4.2
+X-Original-To: eckert@i4.informatik.uni-erlangen.de
+Delivered-To: eckert@i4.informatik.uni-erlangen.de
+Received: from faui45.informatik.uni-erlangen.de (faui45.informatik.uni-erlangen.de [IPv6:2001:638:a000:4134::ffff:45])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPS id 88088548047
+	for <eckert@i4.informatik.uni-erlangen.de>; Wed, 15 Jul 2020 05:03:08 +0200 (CEST)
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by faui45.informatik.uni-erlangen.de (Postfix) with ESMTPS id 6B28721855
+	for <tte@cs.fau.de>; Wed, 15 Jul 2020 05:03:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Relay: mx-rz-1
+Authentication-Results: mx-rz-1.rrze.uni-erlangen.de; dmarc=pass (p=none dis=none) header.from=ietf.org
+Authentication-Results: mx-rz-1.rrze.uni-erlangen.de; dkim=none;
+	dkim-atps=neutral
+Authentication-Results: mx-rz-1.rrze.uni-erlangen.de; spf=pass smtp.mailfrom=noreply@ietf.org smtp.helo=mail.ietf.org
+X-RRZE-Origin: External
+Received: from mail.ietf.org (mail.ietf.org [4.31.198.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix-IN) with ESMTPS id 4B62J76TSwz8sfC
+	for <tte@cs.fau.de>; Wed, 15 Jul 2020 05:03:03 +0200 (CEST)
+Received: by ietfa.amsl.com (Postfix, from userid 65534)
+	id D75C23A0DD5; Tue, 14 Jul 2020 20:03:00 -0700 (PDT)
+X-Original-To: anima-chairs@ietf.org
+Delivered-To: xfilter-anima-chairs@ietfa.amsl.com
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 5FB513A0DD0;
+ Tue, 14 Jul 2020 20:03:00 -0700 (PDT)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+From: Roman Danyliw via Datatracker <noreply@ietf.org>
+To: "The IESG" <iesg@ietf.org>
+Cc: draft-ietf-anima-autonomic-control-plane@ietf.org, anima-chairs@ietf.org,
+ anima@ietf.org, Sheng Jiang <jiangsheng@huawei.com>, jiangsheng@huawei.com
+Subject: Roman Danyliw's Discuss on
+ draft-ietf-anima-autonomic-control-plane-27: (with DISCUSS and COMMENT)
+X-Test-IDTracker: no
+X-IETF-IDTracker: 7.8.0
+Auto-Submitted: auto-generated
+Precedence: bulk
+Reply-To: Roman Danyliw <rdd@cert.org>
+Message-ID: <159478218035.5567.5331512017107084574@ietfa.amsl.com>
+Date: Tue, 14 Jul 2020 20:03:00 -0700
+Resent-From: <alias-bounces@ietf.org>
+Resent-To: jiangsheng@huawei.com, tte@cs.fau.de
+Resent-Message-Id: <20200715030300.D75C23A0DD5@ietfa.amsl.com>
+Resent-Date: Tue, 14 Jul 2020 20:03:00 -0700 (PDT)
+Status: RO
+Content-Length: 13737
+Lines: 302
+
+Roman Danyliw has entered the following ballot position for
+draft-ietf-anima-autonomic-control-plane-27: Discuss
+
+When responding, please keep the subject line intact and reply to all
+email addresses included in the To and CC lines. (Feel free to cut this
+introductory paragraph, however.)
+
+
+Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+for more information about IESG DISCUSS and COMMENT positions.
+
+
+The document, along with other ballot positions, can be found here:
+https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+
+
+
+----------------------------------------------------------------------
+DISCUSS:
+----------------------------------------------------------------------
+
+** As normative behavior is specific for BRSKI (e.g., Section 6.1.5 and
+6.1.5.5), please make it a normative reference
+
+** Figure 2’s definition of acp-address is ‘acp-address = 32HEXLC | "0"’.  The
+following text references a 32HEXDIG but that isn’t in the definition of
+acp-address.
+
+-- Section 6.1.2.  ‘Nodes complying with this specification MUST be able to
+receive their ACP address through the domain certificate, in which case their
+own ACP domain certificate MUST have the 32HEXDIG "acp-address" field.’
+
+-- Section 6.1.3.  ‘The candidate peer certificate's acp-node-name has a
+non-empty acp-address field (either 32HEXDIG or 0, according to Figure 2).’
+
+** Precision in bounding the cipher selection.
+
+-- Section 6.7.2.  Per “Symmetric encryption for the transmission of secure
+channel data MUST use encryption schemes considered to be security wise equal
+to or better than AES256”, which property of AES-256 is being considered for
+this assessment?
+
+-- Section 6.8.2.  Per “TLS for GRASP MUST offer
+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and
+TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and MUST NOT offer options with less
+than 256bit AES or less than SHA384”, please state this more precisely.
+
+-- Is it that AES-128 shouldn’t be used or that that AES-256 has a certain key
+strength to which to adhere to?
+
+-- Is it that SHA-224 or SHA256 shouldn’t be used (staying in the SHA-2 family)
+or is it a certain number of bits of security ?
+
+** The text specifies the need for physical controls.  Please be more specific
+on the appropriate degree of that physical control or how that decision should
+be made; and explicitly explain threat of concern.
+
+-- Section 8.1.1.  “Thus, the ACP connect interface and NOC systems connected
+to it needs to be physically controlled/secured.”
+
+-- Section 8.1.5.  “… the ACP connect link and the nodes connecting to it must
+be in a contiguous secure   environment, hence assuming there can be no
+physical attack against the devices.”
+
+** (“discuss discuss”) Section 8.1.2.  What is the normative behavior being
+specified in this section?  Specifically, what is the additional or more
+restrictive behavior for the circumstance is where an ACP node is virtualized.
+
+** Section 8.2.1.  (I’m no ABNF expert …) Per the ABNF in Figure 17, the “//=”
+notation isn’t valid.  I think you want:
+
+OLD
+     method //= [ "DTLS",    port ]
+
+NEW
+     method =/ [ "DTLS",    port ]
+
+** Section 10.2.1.  Per “An attacker will not be able to join the ACP unless
+having a valid domain certificate, also packet injection and sniffing traffic
+will not be possible due to the security provided by the encryption protocol.”,
+please be clearer:
+
+-- on path attacker = no packet injection
+-- on path attacker = only traffic analysis when sniffing
+-- compromised node = can inject traffic
+
+** Section 11.  Per “an ACP is self-protecting and there is no need to apply
+configuration to make it secure”, if this assertion is going to be made:
+
+-- please specify the security services/properties in a normative section (not
+in the informative text in Section 10).
+
+-- please also be clear on what configuration is being referenced.
+
+** Section 11.  Per the list of factors on which ACP depends, it seems like the
+following are missing:
+
+-- the security properties of the enrollment protocol
+
+-- that the security considerations of EST and BRSKI apply (or if not, why not)
+
+
+----------------------------------------------------------------------
+COMMENT:
+----------------------------------------------------------------------
+
+(Preliminary ballot.  Need to double check that all of ekr's discusses were
+cleared)
+
+The style of explaining the design choice after describing an element of the
+protocol was informative and helpful.  Thanks.
+
+The this document has undergone a significant amount of security review.  Thank
+you for incorporating all of this feedback.
+
+** Section 6.  It doesn’t seem appropriate to call a protocol “indestructible”
+unless you are going to enumerate the resiliency properties more precisely –
+“many inadvertent changes” is vague.
+
+** Section 6.  Per “An ACP node can be … or any other IP a capable node”,
+should this be “IPv6 capable node”?
+
+** Section 6.1.1.  Per “… it is beneficial to copy the device identifying
+fields of the node's IDevID certificate into the ACP domain certificate …”, is
+there a ACP-recommended approach for that?
+
+** Section 6.1.3.1. Per “In the absence of implementing a secured mechanism,
+such an ACP node MAY use a current time learned in an insecured fashion in the
+ACP domain membership check.”, please be clearer on how this current time is
+learned in the domain membership check.
+
+** Section 6.1.5.  Per “ACP nodes SHOULD be able to remember the IPv6 locator
+parameters ...”, what happens if they don’t remember?
+
+** Section 6.1.5.3.  Per “The connecting ACP node SHOULD verify that the CRLDP
+certificate used during the HTTPs connection has the same ACP address as
+indicated in the CRLDP URL …”, why is this not a MUST?
+
+** Section 6.1.5.5.  Per “An ACP node may determine that its ACP domain
+certificate has expired … [i]n this case, the ACP node SHOULD convert to a role
+of a re-enrolling candidate ACP node”, what is the alternative if it wants to
+connect back to the network?  Shouldn’t this be a MUST?
+
+** Section 6.5.  It seems misplaced to describe MacSec as an option for channel
+security even when it is not a profiled in this document.
+
+** Section 6.7.2. Per “Signaling of TA certificates may not be appropriate when
+the deployment is relying on a security model when the TA certificate content
+is considered confidential”, where is the requirement to signal TA certificates
+discussed.  How would this selection of signaling a TA work?  The entire
+paragraph prior seemed to explicitly discuss that the TA doesn’t need to be
+shared.
+
+** Section 6.7.2.  Per “When introducing the profile for security association
+protocol …”, I recommend being clearer to whom you are providing this advice. 
+This seems to for operators of ACP infrastructure technology (not
+implementers/vendors of ACP technology)
+
+** Section 6.7.3.  Per “The ACP usage of IPsec and IKEv2 mandates a profile
+with a narrow set of options of the current standards-track usage guidance for
+IPsec    [RFC8221] and IKEv2 [RFC8247]”, should there be normative wording use
+(MUST) instead of a “mandates”?
+
+** Section 6.7.3.1.1.  Per ENCR_CHACHA20_POLY1305, “[t]herefore this algorithm
+is only recommended”, shouldn’t it read as RECOMMENDED?
+
+** Section 6.7.3.1.2.  Per “[RFC8247] provides a baseline recommendation for
+mandatory to   implement ciphers, integrity checks, pseudo-random-functions and
+Diffie-Hellman mechanisms.  Those recommendations, and the recommendations of
+subsequent documents apply well to the ACP.”, it seems like normative language
+should be used to adhered to.
+
+** Section 6.10.7.3.  The paragraph/sentence starting with “ACP registrars that
+are aware of can use …” doesn’t parse.  The guidance isn’t clear as a result.
+
+** Section 6.10.7.3.  Per “In a simple allocation scheme, an ACP registrar
+remembers persistently across reboots …”, what’s the recover step if it loses
+that state?
+
+** Section 6.11.1.1.2.  Not clear what “DODAG Information Objects (DIOs) SHOULD
+be sent 2 .. 3 times” means – can “2 .. 3” please be clarified.
+
+** Section 6.11.1.1.2.  A mechanism for failed ACP detected using a secure
+channel protocol is noted for IPSec (with IKEv2 Dead Peer Detection).  What is
+the equivalent for DTLS?
+
+** Section 9.  The section notes that Section 9.1 is “derived from diagnostic
+of a commercially available ACP implementation”.  The shepherd report from
+03/2019 notes that there are no implementations of ACP.  If this is documented
+somewhere, it would be very compelling to cite it.
+
+** Section 9.1. Per “The basic diagnostics [sic] is support of (yang) data
+models representing the complete (auto-)configuration and operational state of
+all components …”, are these YANG models defined?  Are there references?
+
+** Section 9.3.1.  Per “Whenever this document refers to enabling an interface
+for ACP … it only requires to permit [sic] the interface …”, this seems like
+normative behavior in an informative section.
+
+** Section 9.3.2.  That this is an information section is noted.  It would
+benefit from describing what precisely can and cannot be done in the three
+states proposed – up, down and admin down.
+
+** Section 9.3.2.1.  What is the proposed threat that using admin down is
+intended to mitigate?  Under what circumstance should it be invoked?
+
+** Section 9.3.2.1.  Per ‘"Admin down" state as described above provides also a
+high level of security because it only permits ACP/ANI operations which are
+both well secured”, to what is the “both” referring? I suspect this is
+editorial (but just in case, noting here).
+
+** Section 10.2.2.  Per “For example, management plane functions (transport
+ports) should only be reachable from the ACP but not the Data-Plane”, this
+seems like good guidance.  Is there a reason not to upgrade this informative
+statement and put it the Security Considerations as normative guidance?
+
+** Section 10.2.2.  Per “Protection across all potential attack vectors is
+typically easier to do in devices whose software is designed from the ground up
+with security in mind than with legacy software based systems where the ACP is
+added on as another feature”, no argument on the general principle.  However,
+as it relates to ACP:
+
+--what’s an example of the legacy software?
+
+-- as noted in the shepherd report from 03/2019, there are no implementations,
+so is there reason to believe that this is going to put on “legacy” platforms?
+
+** Section 10.2.2.  Per “As explained above, traffic across the ACP SHOULD
+still …”, is RFC2119 language really intended in this informative section?
+
+** Section 11.  Per “Security can be compromised by implementation errors
+(bugs), as in all products”, given the generic nature of this statement,
+couldn’t it also be a configuration error in the product too?
+
+** Section 11.  Per “Higher layer service built using ACP domain certificates
+should not rely on undifferentiated group security …” is there a reason not to
+make this a normative SHOULD?
+
+** Editorial
+
+-- Recommend being consistent on either “ACP domain certificates” or “ACP
+certificates”
+
+-- Section 1.  Editorially.  The two sentences “Section 7 defines normative how
+to …” and “Section 8 explain normative how …” don’t parse as the adjective
+normative needs a noun to modify.
+
+-- Section 6.1.4.  Editorial.  s/These requirements can be achieved by using TA
+private/These requirements can be achieved by using a TA private/
+
+-- Section 6.2.  Editorial. s/does intentionally not/intentionally does not/
+
+-- Section 6.5.  Editorial.  Per “Note that MacSec is not required by any
+profiles of the ACP in this specification but just mentioned as a likely next
+interesting secure channel protocol.”, does not parse.
+
+-- Section 6.10.7.  Per “ACP registrars are responsible to enroll candidate ACP
+nodes with ACP domain certificates and associated trust point(s)”, is a trust
+point the same thing as a trust anchor?    If so, I recommend being consistent.
+ If not, then please define it.
+
+-- Section 6.11.1.  Please make draft-ietf-roll-applicability-template a
+reference.
+
+-- Section 6.11.1.5.  Editorially.  It might be worth framing the path metric
+in the form of sentence.
+
+-- Section 11. s/enemy plegdes/rogue pledges/
+
+-- Section 11. Per “Fundamentally, security depends on avoid operator and
+network automation mistakes …”, this paragraph is not actionable.  Recommend
+removal.
+
+** Typos
+Section 1.  Typo. s/parth/path/
+Section 1.  Typo. s/seperately/separately/
+Section 1.  Typo. s/automaticically/ automatically/
+Section 1.  Typo. s/managemenet/ management/
+Section 1.  Typo. s/absene/absence/
+Section 1.1.  Typo. s/solution:/solution/
+Section 2.  Typo. s/netork/network/
+Section 2.  Typo. s/physcially/physically/
+Section 5.  Typo. s/(see (see/(see/
+Section 5. Typo. s/loopack/loopback/
+Section 6.1.1.  Typo. s/e.g.:signing/e.g., signing/
+Section 6.1.1.  Typo. s/signalled/signaled/g
+Section 6.1.1.  Typo. s/bei/by/
+Section 6.1.2.  Typo. s/simpy/simply/
+Section 6.1.2.  Typo. s/readible/readable/
+Section 6.1.2.  Typo. s/Adresses/Addresses/
+Section 6.1.2.  Typo. s/manadatory/mandatory/
+Section 6.1.2. Typo. s/inapproprite/inappropriate/
+Section 6.1.3.1.  Typo. s/as as/as/
+Section 6.1.3.1.  Typo. /insecured/insecure/
+Section 6.1.3.1.  Typo. s/likley/likely/
+Section 6.2. Typo. s/IKEv2 has am/IKEv2 has an/
+Section 6.7.2.  Typo. s/successfull/successful/
+Section 6.7.3.1.1.  Typo.  s/superceed/superseded/
+(I stopped documenting spelling errors at Section 6.7.3.1.1.  Please run a
+spell checker before handing this off to the RFC Editor)
+
+
+
