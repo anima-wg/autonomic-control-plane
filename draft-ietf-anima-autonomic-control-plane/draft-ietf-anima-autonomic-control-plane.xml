@@ -62,7 +62,7 @@
         <email>sbjarnason@arbor.net</email>
       </address>
     </author>
-    <date month="Aug" day="24" year="2020"/>
+    <date month="Sep" day="3" year="2020"/>
     <area>Operations and Management</area>
     <workgroup>ANIMA WG</workgroup>
     <abstract>
@@ -78,8 +78,9 @@
       <t>Autonomic functions need an autonomically built communications infrastructure.  This infrastructure needs to be secure, resilient and re-usable by all autonomic functions.  Section 5 of <xref target="RFC7575" format="default"/> introduces that infrastructure and calls it the Autonomic Control Plane (ACP).  More descriptively it would be the "Autonomic communications infrastructure for OAM and Control".  For naming consistency with that prior document, this document continues to use the name ACP though.</t>
       <t>Today, the OAM and control plane of IP networks is what is typically called in-band management/signaling: Its management and control protocol traffic depends on the routing and forwarding tables, security, policy, QoS and potentially other configuration that first has to be established through the very same management and control protocols. Misconfigurations including unexpected side effects or mutual dependences can disrupt OAM and control operations and especially disrupt remote management access to the affected node itself and potentially a much larger number of nodes for whom the affected node is on the network path.  Traditionally, physically separate, so-called out-of-band (management) networks have been used to avoid these problems or at least to allow recovery from such problems. Worst case, personnel are sent on site to access devices through out-of-band management ports (also called craft ports, serial console, management ethernet port).  However, both options are expensive.</t>
       <t>In increasingly automated networks either centralized management systems or distributed autonomic service agents in the network require a control plane which is independent of the configuration of the network they manage, to avoid impacting their own operations through the configuration actions they take.</t>
-      <t>This document describes a modular design for a self-forming, self-managing and self-protecting ACP,  which is a virtual out-of-band network designed to be as independent as possible of configuration, addressing and routing and similar self-dependency problems in current IP networks, but which is still operating in-band on the same physical network that it is controlling and managing. The ACP design is therefore intended to combine as good as possible the resilience of out-of-band management networks with the low-cost of traditional IP in-band network management.  The details how this is achieved are described in <xref target="self-creation" format="default"/>.</t>
-      <t>In a fully autonomic network node without legacy control or management functions/protocols, the Data-Plane would be for example just a forwarding plane for "Data" IPv6 packets, aka: packets that are not forwarded by the ACP itself such  as control or management plane packets. In such networks/nodes, there would be no non-autonomous control or non-autonomous management plane.</t>
+
+      <t>This document describes a modular design for a self-forming, self-managing and self-protecting ACP,  which is a virtual out-of-band network designed to be as independent as possible of configuration, addressing and routing to avoid the self-dependency problems of current IP  networks while still operating in-band on the same physical network that it is controlling and managing. The ACP design is therefore intended to combine as good as possible the resilience of out-of-band management networks with the low-cost of traditional IP in-band network management.  The details how this is achieved are described in <xref target="self-creation" format="default"/>.</t>
+      <t>In a fully autonomic network node without legacy control or management functions/protocols, the Data-Plane would be for example just a forwarding plane for "Data" IPv6 packets, aka: packets other than the control and  management plane packets that are forwarded by the ACP itself.  In such networks/nodes, there would be no non-autonomous control or non-autonomous management plane.</t>
       <t>Routing protocols for example would be built inside the ACP as so-called autonomous functions via autonomous service agents, leveraging the ACPs functions instead of implementing them seperately for each protocol: discovery, automatically established authenticated and encrypted local and distant peer connectivity for control and management traffic and common control/management protocol session and presentation functions.</t>
       <t>When ACP functionality is added to nodes that have non-autonomous management plane and/or control plane functions (henceforth called non-autonomous nodes), the ACP instead is best abstracted as a special Virtual Routing and Forwarding (VRF) instance (or virtual router) and the complete pre-existing non-autonomous management and/or control plane is considered to be part of the Data-Plane to avoid introduction of more complex, new terminology only for this case.</t>
       <t>Like the forwarding plane for "Data" packets, the non-autonomous control and management plane functions can then be managed/used via the ACP. This terminology is consistent with pre-existing documents such as <xref target="RFC8368" format="default"/>.</t>
@@ -102,7 +103,7 @@ ACP according to this document.</t>
         <name>Applicability and Scope</name>
         <t>Please see the following Terminology section (<xref target="terminology" format="default"/>) for explanations of terms used in this section.</t>
         <t>The design of the ACP as defined in this document is considered to be applicable to all types of "professionally managed" networks: Service Provider, Local Area Network (LAN), Metro(politan networks), Wide Area Network (WAN), Enterprise Information Technology (IT) and <xref target="ot" format="none">-&gt;"Operational Technology"</xref> (OT) networks. The ACP can operate equally on layer 3 equipment and on layer 2 equipment such as bridges (see <xref target="acp-l2-switches" format="default"/>). The hop-by-hop authentication, integrity-protection and confidentiality mechanism used by the ACP is defined to be negotiable, therefore it can be extended  to environments with different protocol preferences. The minimum implementation requirements in this document attempt to achieve maximum interoperability by requiring support for multiple options depending on the type of device: IPsec, see <xref target="RFC4301" format="default"/>, and datagram Transport Layer Security (DTLS) version 1.2, see <xref target="RFC6347" format="default"/>).</t>
-        <t>The implementation footprint of the ACP consists of Public Key Infrastructure (PKI) code for the ACP certificate, the GRASP protocol, UDP, TCP and TLS 1.2 (<xref target="RFC5246" format="default"/>, for security and reliability of GRASP), the ACP secure channel protocol used (such as IPsec or DTLS), and an instance of IPv6 packet forwarding and routing via the Routing Protocol for Low-power and Lossy Networks (RPL), see <xref target="RFC6550" format="default"/>, that is separate from routing and forwarding for the Data-Plane (user traffic).</t>
+        <t>The implementation footprint of the ACP consists of Public Key Infrastructure (PKI) code for the ACP certificate, the GRASP protocol, UDP, TCP and TLS (<xref target="RFC5246" format="default"/> <xref target="RFC8446" format="default"/>, for security and reliability of GRASP), the ACP secure channel protocol used (such as IPsec or DTLS), and an instance of IPv6 packet forwarding and routing via the Routing Protocol for Low-power and Lossy Networks (RPL), see <xref target="RFC6550" format="default"/>, that is separate from routing and forwarding for the Data-Plane (user traffic).</t>
         <t>The ACP uses only IPv6 to avoid complexity of dual-stack ACP operations (IPv6/IPv4). Nevertheless, it can without any changes be integrated into even otherwise IPv4-only network devices. The Data-Plane itself would not need to change, it could continue to be IPv4 only. For such IPv4 only devices, the IPv6 protocol itself would be additional implementation footprint only used for the ACP.</t>
         <t>The protocol choices of the ACP are primarily based on wide use and support in networks and devices, well understood security properties and required scalability. The ACP design is an attempt to produce the lowest risk combination of existing technologies and protocols to build a widely applicable operational network management solution.</t>
         <t>RPL was chosen because it requires a smaller routing table footprint in large networks compared to other routing protocols with an autonomically configured single area. The deployment experience of large scale Internet of Things (IoT) networks serves as the basis for wide deployment experience with RPL. The profile chosen for RPL in the ACP does not leverage any RPL specific forwarding plane features (IPv6 extension headers), making its implementation a pure control plane software requirement.</t>
@@ -445,11 +446,19 @@ ACP according to this document.</t>
         <li>The node creates a VRF instance, or a similar virtual context for the ACP.</li>
         <li>The node assigns its ULA IPv6 address (prefix) (see <xref target="addressing" format="default"/> which is learned from the acp-node-name (see <xref target="domcert-acpinfo" format="default"/>) of its ACP certificate (see <xref target="acp-certificates" format="default"/>) to an ACP loopback interface (see <xref target="addressing" format="default"/>) and connects this interface into the ACP VRF.</li>
         <li>The node establishes a list of candidate peer adjacencies and candidate channel types to try for the adjacency. This is automatic for all candidate link-local adjacencies, see <xref target="discovery-grasp" format="default"/> across all native interfaces (see <xref target="if-enable-auto" format="default"/>). If a candidate peer is discovered via multiple interfaces, this will result in one adjacency per interface. If the ACP node has multiple interfaces connecting to the same subnet across which it is also operating as an L2 switch in the Data-Plane, it employs methods for ACP with L2 switching, see <xref target="acp-l2-switches" format="default"/>.</li>
+
         <li>For each entry in the candidate adjacency list, the node negotiates a secure tunnel using the candidate channel types.  See <xref target="channel-selection" format="default"/>.</li>
+
         <li>The node authenticates the peer node during secure channel setup and authorizes it to become part of the ACP according to <xref target="certcheck" format="default"/>.</li>
+
+        <li>Unsuccessful authentication of a candidate peer results in throttled connection retries for as long as the candidate peer is discoverable. See <xref target="neighbor_verification" format="default"/>.</li>
+
         <li>Each successfully established secure channel is mapped into an ACP virtual interface, which is placed into the ACP VRF.  See <xref target="ACP-virtual-interfaces" format="default"/>.</li>
+
         <li>Each node runs a lightweight routing protocol, see <xref target="routing" format="default"/>, to announce reachability of the ACP loopback address (or prefix) across the ACP.</li>
+
         <li>This completes the creation of the ACP with hop-by-hop secure tunnels, auto-addressing and auto-routing. The node is now an ACP node with a running ACP.</li>
+
       </ol>
       <t>Note:
                         </t>
@@ -505,23 +514,47 @@ as required for the ACP domain membership check (<xref target="certcheck" format
           <name>ACP Certificates</name>
           <t>ACP certificates MUST be <xref target="RFC5280" format="default"/> compliant X.509 v3 (<xref target="X.509" format="default"/>) certificates.</t>
           <t>ACP nodes MUST support handling ACP certificates, TA certificates and certificate chain certificates (henceforth just called certificates in this section) with RSA public keys and certificates with Elliptic Curve (ECC) public keys.</t>
+
           <t>ACP nodes MUST NOT support certificates with RSA public keys of less than 2048 bit modulus or curves with group order of less than 256 bit. They MUST support certificates with RSA public keys with 2048 bit modulus and MAY support longer RSA keys. They MUST support certificates with ECC public keys using NIST P-256 curves and SHOULD support P-384 and P-521 curves.</t>
-          <t>ACP nodes MUST support SHA-256 and SHOULD support SHA-384, SHA-512 signatures for certificates with RSA key and the same RSA signatures plus ECDSA signatures for certificates with ECC key.</t>
+
+          <t>ACP nodes MUST NOT support certificates with RSA public keys whose
+          modulus is less than 2048 bits, or certificates whose ECC public keys
+          are in groups whose order is less than 256 bits.  RSA signing
+          certificates with 2048-bit public keys MUST be supported, and such
+          certificates with longer public keys MAY be supported.  ECDSA
+          certificates using the NIST P-256 curve MUST be supported, and such
+          certificates using the P-384 and P-521 curves SHOULD be supported.</t>
+
+          <t>ACP nodes MUST support RSA certificates that are signed by RSA
+          signatures over the SHA-256 digest of the contents, and SHOULD
+          additionally support SHA-384 and SHA-512 digests in such signatures.
+          The same requirements for certificate signatures apply to ECDSA
+          certificates, and additionally, ACP nodes MUST support ECDSA
+          signatures on ECDSA certificates.</t>
+
           <t>The ACP certificate SHOULD use an RSA key and an RSA signature when the ACP certificate is intended to be used not only for ACP authentication but also for other purposes. The ACP certificate MAY use an ECC key and an ECDSA signature if the ACP certificate is only used for ACP and ANI authentication and authorization.</t>
+
           <t>Any secure channel protocols used for the ACP as specified in this document or extensions of this document MUST therefore support authentication (e.g.:signing) starting with these type of certificates. See <xref target="RFC4492" format="default"/> for more information.</t>
+
           <t>The reason for these choices are as follows: As of 2020, RSA is still more widely used than ECC, therefore the MUST for RSA. ECC offers equivalent security at (logarithmically) shorter key lengths (see <xref target="RFC4492" format="default"/>). This can be beneficial especially in the presence of constrained bandwidth or constrained nodes in an ACP/ANI network. Some ACP functions such as GRASP peer-2-peer across the ACP require end-to-end/any-to-any authentication/authorization, therefore ECC can only reliably be used in the ACP when it MUST be supported on all ACP nodes. RSA signatures are mandatory to be supported also for ECC certificates because CAs themselves may not support ECC yet.</t>
+
           <t>The ACP certificate SHOULD be used for any authentication between nodes with ACP
-domain certificates (ACP nodes and NOC nodes) where the required authorization condition is ACP domain membership, such as ACP node to NOC/OAM end-to-end security and ASA to ASA end-to-end security.
+domain certificates (ACP nodes and NOC nodes) where a required authorization condition is ACP domain membership, such as ACP node to NOC/OAM end-to-end security and ASA to ASA end-to-end security.
 <xref target="certcheck" format="default"/> defines this "ACP domain membership check".
 The uses of this check that are standardized in this document are for the establishment of
-hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="default"/>) and for ACP GRASP (<xref target="GRASP-substrate" format="default"/>) end-to-end via TLS 1.2 (<xref target="RFC5246" format="default"/>).
-</t>
+hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="default"/>) and for ACP GRASP (<xref target="GRASP-substrate" format="default"/>) end-to-end via TLS 1.2 (<xref target="RFC5246" format="default"/>).</t>
+
           <t>The ACP domain membership check requires a minimum amount of elements in a certificate as described in <xref target="certcheck" format="default"/>. The identity of a node in the ACP is carried via the acp-node-name as defined in <xref target="domcert-acpinfo" format="default"/>.</t>
-          <t>In support of ECDH key establishment, ACP certificates with ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH) if X.509 v3 keyUsage and extendedKeyUsage are included in the certificate.</t>
-          <t>Any other field of the ACP certificate is to be populated as required by <xref target="RFC5280" format="default"/> or desired by the operator of the ACP domain ACP registrars/CA and required by other purposes that the ACP certificate is intended to be used for.</t>
+          <t>In support of ECDH key establishment, ACP certificates with ECC keys MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH): If the X.509v3 keyUsage extension is present, the keyAgreement bit MUST be set.</t>
+
+          <t>Any other fields of the ACP certificate are to be populated as required by <xref target="RFC5280" format="default"/>: As long as they are compliant with <xref target="RFC5280" format="default"/>, any other field of an ACP certificate can be set as desired by the operator of the ACP domain through appropriate ACP registrar/ACP CA procedures. For example, other fields may be required for other purposes that the ACP certificate is intended to be used for (such as elements of a SubjectName).</t>
+
           <t>For further certificate details, ACP certificates may follow the recommendations from <xref target="CABFORUM" format="default"/>.</t>
-          <t>For diagnostic and other operational purposes, it is beneficial to copy the device identifying fields of the node's IDevID certificate into the ACP certificate, such as the "serialNumber" (see <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/> section 2.3.1). This can be done for example if it would be acceptable for the devices "serialNumber" to be signalled via the Link Layer Discovery Protocol (LLDP, <xref target="LLDP" format="default"/>) because like LLDP signalled information, the ACP certificate information can be retrieved by neighboring nodes without further authentication and be used either for beneficial diagnostics or for malicious attacks. Retrieval of the ACP certificate is possible via a (failing) attempt to set up an ACP secure channel, and the "serialNumber" contains usually device type information that may help to faster determine working exploits/attacks against the device.</t>
-          <t>Note that there is no intention to constrain authorization within the ACP or autonomic networks using the ACP to just the ACP domain membership check as defined in this document. It can be extended or modified with future requirements. Such future authorizations can use and require additional elements in certificates or policies or even additional certificates. For an example, see <xref target="role-assignments" format="default"/>.</t>
+
+          <t>For diagnostic and other operational purposes, it is beneficial to copy the device identifying fields of the node's IDevID certificate into the ACP certificate, such as the <xref target="X.520" format="default"/>, section 6.2.9 "serialNumber" attribute in the subjects field distinguished name encoding. Note that this is not the certificate serial number.  See also <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/> section 2.3.1. This can be done for example if it would be acceptable for the devices "serialNumber" to be signalled via the Link Layer Discovery Protocol (LLDP, <xref target="LLDP" format="default"/>) because like LLDP signalled information, the ACP certificate information can be retrieved by neighboring nodes without further authentication and be used either for beneficial diagnostics or for malicious attacks. Retrieval of the ACP certificate is possible via a (failing) attempt to set up an ACP secure channel, and the "serialNumber" contains usually device type information that may help to faster determine working exploits/attacks against the device.</t>
+
+          <t>Note that there is no intention to constrain authorization within the ACP or autonomic networks using the ACP to just the ACP domain membership check as defined in this document. It can be extended or modified with additional requirements. Such future authorizations can use and require additional elements in certificates or policies or even additional certificates. See the additional check agagainst the id-kp-cmcRA <xref target="RFC6402" format="default"/> extended key usage attribute (<xref target="domcert-maint" format="default"/>) and for possible future extensions, see <xref target="role-assignments" format="default"/>.</t>
+
         </section>
         <section anchor="domcert-acpinfo" numbered="true" toc="default">
           <name>ACP Certificate AcpNodeName</name>
@@ -531,14 +564,15 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
             <artwork name="" type="" align="left" alt=""><![CDATA[
   acp-node-name = local-part "@" acp-domain-name
   local-part = [ acp-address ] [ "+" rsub extensions ]
-  HEXLC = DIGIT / "a" / "b" / "c" / "d" / "e" / "f"
-          ; DIGIT as of RFC5234 section B.1
-  acp-address = 32HEXLC | "0"
+  acp-address = 32HEXDIG | "0" ; HEXDIG as of RFC5234 section B.1
   rsub = [ <subdomain> ] ; <subdomain> as of RFC1034, section 3.5
   acp-domain-name = ; <domain> ; as of RFC 1034, section 3.5
   extensions = *( "+" extension )
-  extension = ; future standard definition.
-              ; Must fit RFC5322 simple dot-atom format.
+  extension  = 1*etext  ; future standard definition.
+  etext      = ALPHA / DIGIT /  ; Printable US-ASCII
+               "!" / "#" / "$" / "%" / "&" / "'" /
+               "*" / "-" / "/" / "=" / "?" / "^" /
+               "_" / "`" / "{" / "|" / "}" / "~"
                   
   routing-subdomain = [ rsub "." ] acp-domain-name
 
@@ -548,14 +582,14 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
     and an rsub extenstion of area51.research
 
   then this results in:
-  acp-node-name      = fd89b714F3db00000200000064000000
+  acp-node-name      = fd89b714f3db00000200000064000000
                        +area51.research@acp.example.com
   acp-domain-name    = acp.example.com
   routing-subdomain  = area51.research.acp.example.com
 ]]></artwork>
           </figure>
           <t>acp-node-name in above <xref target="acp-dominfo-abnf" format="default"/> is the ABNF (<xref target="RFC5234" format="default"/>) definition of the ACP Node Name. An ACP certificate MUST carry this information. It MUST be encoded as a subjectAltName / otherName / AcpNodeName as described in <xref target="asn1" format="default"/>.</t>
-          <t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP certificate MUST have a 32HEXLC "acp-address" field. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members or ACP secure channel peers when they have a 0-value acp-address field and as ACP domain members (but not as ACP secure channel peers) when they have an empty acp-address field.  See <xref target="certcheck" format="default"/>.</t>
+          <t>Nodes complying with this specification MUST be able to receive their ACP address through the domain certificate, in which case their own ACP certificate MUST have a 32HEXDIG acp-address field. Acp-address is case insensitive because ABNF HEXDIG is. It is recommended to encode acp-address with lower case letters. Nodes complying with this specification MUST also be able to authenticate nodes as ACP domain members or ACP secure channel peers when they have a 0-value acp-address field and as ACP domain members (but not as ACP secure channel peers) when the acp-address field is omitted from their AcpNodeName.  See <xref target="certcheck" format="default"/>.</t>
           <t>acp-domain-name is used to indicate the ACP Domain across which ACP nodes authenticate and authorize each other, for example to build ACP secure channels to each other, see <xref target="certcheck" format="default"/>.  acp-domain-name SHOULD be the FQDN of an Internet domain owned by the network administration of the ACP and ideally reserved to only be used for the ACP. In this specification it serves to be a name for the ACP that ideally is globally unique.  When acp-domain-name is a globally unique name, collision of ACP addresses across different ACP domains can only happen due to ULA hash collisions (see <xref target="scheme" format="default"/>). Using different acp-domain-names, operators can distinguish multiple ACP even when using the same TA.</t>
           <t>To keep the encoding simple, there is no consideration for internationalized acp-domain-names. The acp-node-name is not intended for end user consumption, and there is no protection against someone not owning a domain name to simply choose it. Instead, it serves as a hash seed for the ULA and for diagnostics to the operator. Therefore, any operator owning only an internationalized domain name should be able to pick an equivalently unique 7-bit ASCII acp-domain-name string representing the internationalized domain name.</t>
           <t>"routing-subdomain" is a string that can be constructed from the acp-node-name, and it is used in the hash-creation of the ULA (see below).  The presence of the "rsub" component allows a single ACP domain to employ multiple /48 ULA prefixes.  See <xref target="domain-usage" format="default"/> for example use-cases.</t>
@@ -568,7 +602,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
     </t>
               <ol type="1.%d" spacing="compact">
                 <li>"rsub" needs to be in the "local-part": If the format just had routing-subdomain as the domain part of the acp-node-name, rsub and acp-domain-name could not be separated from each other to determine in the ACP domain membership check which part is the acp-domain-name and which is solely for creating a different ULA prefix.</li>
-                <li>If "acp-address" is empty, and "rsub" is empty too, the "local-part" will have the format ":++extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are empty.</li>
+                <li>If both "acp-address" and "rsub" are omitted from AcpNodeName, the "local-part" will have the format "++extension(s)". The two plus characters are necessary so the node can unambiguously parse that both "acp-address" and "rsub" are omitted.</li>
               </ol>
             </li>
             <li>
@@ -579,7 +613,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
                 <li>The acp-node-name is the identifier of a node's ACP. It includes the necessary components to identify a nodes ACP both from within the ACP as well as from the outside of the ACP.</li>
                 <li>For manual and/or automated diagnostics and backend management of devices and ACPs, it is necessary to have an easily human readable and software parsed standard, single string representation of the information in the acp-node-name. For example, inventory or other backend systems can always identify an entity by one unique string field but not by a combination of multiple fields, which would be necessary if there was no single string representation.</li>
                 <li>If the encoding was not that of such a string, it would be necessary to define a second standard encoding to provide this format (standard string encoding) for operator consumption.</li>
-                <li>Addresses of the form &lt;local&gt;&lt;@domain&gt; have become the preferred format for identifiers of entities in many systems, including the majority of user identification in web or mobile applications such as multi-domain single-sign-on systems.</li>
+                <li>Addresses of the form &lt;local&gt;@&lt;domain&gt; have become the preferred format for identifiers of entities in many systems, including the majority of user identification in web or mobile applications such as multi-domain single-sign-on systems.</li>
               </ol>
             </li>
             <li>
@@ -587,7 +621,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
 
     </t>
               <ol type="3.%d" spacing="compact">
-                <li>It should be possible to use the ACP certificate as an LDevID certificate on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses. The subjectName is for example often used as an entity identifier in non-ACP uses of a the ACP certificate.</li>
+                <li>It should be possible to use the ACP certificate as an LDevID certificate on the system for other uses beside the ACP.  Therefore, the information element required for the ACP should be encoded so that it minimizes the possibility of creating incompatibilities with such other uses. The attributes of the subject field for example are often used in non-ACP applications and should therefore not be occupied by new ACP values.</li>
                 <li>The element should not require additional ASN.1 en/decoding, because libraries to access certificate information especially for embedded devices may not support extended ASN.1 decoding beyond predefined, mandatory fields. subjectAltName / otherName is already used with a single string parameter for several otherNames (see <xref target="RFC3920" format="default"/>, <xref target="RFC7585" format="default"/>, <xref target="RFC4985" format="default"/>, <xref target="RFC8398" format="default"/>).</li>
                 <li>The element required for the ACP should minimize the risk of being misinterpreted by other uses of the LDevID certificate.  It also must not be misinterpreted to actually be an email address, hence the use of the otherName / rfc822Name option in the certificate would be inappropriate.</li>
               </ol>
@@ -653,11 +687,11 @@ END
             <dt>2: </dt>
             <dd>The peer's certificate passes certificate path validation as defined in <xref target="RFC5280" format="default"/>, section 6 against one of the TA associated with the ACP node's ACP certificate (see <xref target="trust-anchors" format="default"/> below). This includes verification of the validity (lifetime) of the certificates in the path.</dd>
             <dt>3: </dt>
-            <dd>If the node certificate indicates a Certificate Revocation List (CRL) Distribution Point (CRLDP)
+            <dd>If the peer's certificate indicates a Certificate Revocation List (CRL) Distribution Point (CRLDP)
              (<xref target="RFC5280" format="default"/>, section 4.2.1.13) or Online Certificate Status Protocol (OCSP) responder
              (<xref target="RFC5280" format="default"/>, section 4.2.2.1), then the peer's certificate MUST be valid according to those
              mechanisms when they are available: An OCSP check for the peer's certificate across the ACP must succeed or the peer certificate must not be listed in the CRL retrieved from the CRLDP. These mechanisms are not available 
-             when the node has no ACP or non-ACP connectivity to retrieve a current CRL
+             when the ACP node has no ACP or non-ACP connectivity to retrieve a current CRL
              or access an OCSP responder and the security association protocol itself has also no way to communicate CRL or OCSP check.</dd>
             <dt>   </dt>
             <dd>Retries to learn revocation via OCSP/CRL SHOULD be made using the same backoff as described in <xref target="neighbor_verification" format="default"/>. If and when the ACP node then learns that an ACP peer's certificate is invalid for which rule 3 had to be skipped during ACP secure channel establishment, then the ACP secure channel to that peer MUST be closed even if this peer is the only connectivity to access CRL/OCSP. This applies (of course) to all ACP secure channels to this peer if there are multiple.  The ACP secure channel connection MUST be retried periodically to support the case that the neighbor acquires a new, valid certificate.</dd>
@@ -671,12 +705,12 @@ END
        </t>
           <dl spacing="compact">
             <dt>5: </dt>
-            <dd>The candidate peer certificate's acp-node-name has a non-empty acp-address field (either 32HEXLC or 0, according to <xref target="acp-dominfo-abnf" format="default"/>).</dd>
+            <dd>The acp-address field of the candidate peer certificate's AcpNodeName is not omitted but either 32HEXDIG or 0, according to <xref target="acp-dominfo-abnf" format="default"/>.</dd>
           </dl>
           <t>Technically, ACP secure channels can only be built with nodes that
          have an acp-address. Rule 5 ensures that this is taken into account
          during ACP domain membership check.</t>
-          <t>Nodes with an empty acp-address field can only use their ACP domain
+          <t>Nodes with an omitted acp-address field can only use their ACP domain
          certificate for non-ACP-secure channel authentication purposes.
          This includes for example NMS type nodes permitted to communicate
          into the ACP via <xref target="ACPconnect" format="default">ACP connect</xref></t>
@@ -692,12 +726,11 @@ END
         </t>
           <ul spacing="compact">
             <li>Steps 1...4 constitute standard certificate validity verification and private key authentication as defined by <xref target="RFC5280" format="default"/> and security association protocols (such as Internet Key Exchange Protocol version 2 <xref target="RFC7296" format="default">IKEv2</xref> when leveraging certificates. </li>
-            <li>Steps 1...4 do not include verification of any pre-existing form of non-public-key-only based identity elements of a certificate such as a web servers domain name prefix often encoded in certificate common name. Steps 5 and 6 are the equivalent steps.</li>
+            <li>Steps 1...4 do not include verification of any pre-existing form of non-public-key-only based identity elements of a certificate such as a web servers domain name prefix often encoded in certificate common name. Step 5 is an equivalent step for the AcpNodeName.</li>
             <li>Step 4 constitutes standard CRL/OCSP checks refined for the case of missing connectivity and limited functionality security association protocols.</li>
-            <li>Step 5 checks for the presence of an ACP identity for the peer.</li>
-            <li>Steps 1...5 authorize to build any secure connection between members of the same ACP domain except for ACP secure channels.</li>
-            <li>Step 6 is the additional verification of the presence of an ACP address.</li>
-            <li>Steps 1...6 authorize to build an ACP secure channel.</li>
+            <li>Steps 1...4 authorize to build any secure connection between members of the same ACP domain except for ACP secure channels.</li>
+            <li>Step 5 is the additional verification of the presence of an ACP address as necessary for ACP secure channels.</li>
+            <li>Steps 1...5 therefore authorize to build an ACP secure channel.</li>
           </ul>
           <t>For brevity, the remainder of this document refers to this process only as authentication instead of as authentication and authorization.</t>
           <section anchor="cert-time" numbered="true" toc="default">
@@ -732,7 +765,7 @@ END
 section 6.1.1 (d), typically in the form of one or more certificate of the TA to perform certificate
 path validation as required by <xref target="certcheck" format="default"/>, rule 2.
 TA information MUST be provisioned to an ACP node (together with its ACP
-domain certificate) by an ACP Registrar during initial enrolment of a candidate
+domain certificate) by an ACP Registrar during initial enrollment of a candidate
 ACP node. ACP nodes MUST also support renewal of TA information via 
 Enrollment over Secure Transport (EST, see <xref target="RFC7030" format="default"/>),
  as described below in <xref target="domcert-maint" format="default"/>.</t>
@@ -793,7 +826,7 @@ via GRASP (see next section) on its ACP address.</t>
 membership check in its TLS connection setup (<xref target="certcheck" format="default"/>, 
 rules 1..4, not rule 5 as this is not for an ACP secure channel setup).
 The EST server certificate MUST also contain the id-kp-cmcRA <xref target="RFC6402" format="default"/>
-extended key usage extension and the EST client MUST check its presence.</t>
+extended key usage attribute and the EST client MUST check its presence.</t>
           <t>The additional check against the id-kp-cmcRA extended key usage extension field
 ensures that clients do not fall prey to an illicit EST server.  While such
 illicit EST servers should not be able to support certificate signing requests (as they
@@ -926,12 +959,27 @@ not only a possible security issue, but it would also not indicate whether
 the resolved address is meant to be reachable across the ACP. Therefore,
 the use of an IPv6 address versus the use of a DNS name doubles as an
 indicator whether or not to reach the CRLDP via the ACP.</t>
-            <t>A CRLDP can be reachable across the ACP either by running it on a
-node with ACP or by connecting its node via an ACP connect interface (see <xref target="ACPconnect" format="default"/>).
-The CRLDP SHOULD use an ACP certificate for its HTTPs connections.
+<t>A CRLDP can be reachable across the ACP either by running it on a
+node with ACP or by connecting its node via an ACP connect interface (see <xref target="ACPconnect" format="default"/>).</t>
+
+<t>When using a private PKI for ACP certificates, the CRL may be need-to-know, for example
+to prohibit insight into the operational practices of the domain by tracking
+the growth of the CRL.  In this case, HTTPS may be chosen to provide
+confidentiality, especially when making the CRL available via the Data-Plane.
+Authentication and authorization SHOULD use ACP certificates and ACP domain membership check.
+The CRLDP MAY omit the CRL verification during authentication of the peer to permit
+retrieval of the CRL by an ACP node with revoked ACP certificate. This can allow for that
+(ex) ACP node to quickly discover its ACP certificate revocation. This may violate
+the desired need-to-know requirement though. ACP nodes MAY support CRLDP operations
+via HTTPS.</t>
+
+<!--
+<t>The CRLDP SHOULD use an ACP certificate for its HTTPs connections.
 The connecting ACP node SHOULD verify that the CRLDP certificate used
 during the HTTPs connection has the same ACP address as indicated in the
 CRLDP URL of the node's ACP certificate if the CRLDP URL uses an IPv6 address.</t>
+-->
+
           </section>
           <section anchor="domcert-lifetime" numbered="true" toc="default">
             <name>Lifetimes</name>
@@ -974,26 +1022,38 @@ re-enrollment. Using the ACP node's domain certificate allows the BRSKI
 registrar to learn that node's acp-node-name,
 so that the BRSKI registrar can re-assign the same ACP address information 
 to the ACP node in the new ACP certificate.</t>
+
             <t>If the BRSKI registrar denies the use of the old ACP certificate,
 the re-enrolling candidate ACP node MUST re-attempt re-enrollment using
 its IDevID certificate as defined in BRSKI during the TLS connection setup.</t>
+
             <t>Both when the BRSKI connection is attempted with the old ACP certificate
 or the IDevID certificate, the re-enrolling candidate ACP node SHOULD authenticate
 the BRSKI registrar during TLS connection setup based on its existing TA
 certificate chain information associated with its old ACP certificate.
 The re-enrolling candidate ACP node SHOULD only fall back to requesting a voucher from the BRSKI registrar 
-when this authentication fails during TLS connection setup.</t>
+when this authentication fails during TLS connection setup. To prohibit 
+attacks that attempt to force the ACP node to forget its prior (expired) certificate
+and TA, the ACP node should alternate between attempting to re-enroll using
+its old keying material and attempting to re-enroll with its IDevID and requesting
+a voucher.</t>
+
             <t>When other mechanisms than BRSKI are used for ACP certificate 
 enrollment, the principles of the re-enrolling candidate ACP node are the same.
 The re-enrolling candidate ACP node attempts to authenticate any ACP Registrar peers
 during re-enrollment protocol/mechanisms via its existing certificate chain/TA information
 and provides its existing ACP certificate and other identification
 (such as the IDevID certificate) as necessary to the registrar.</t>
+
             <t>Maintaining existing TA information is especially important
 when enrollment mechanisms are used that unlike BRSKI do not leverage
-a voucher mechanism to authenticate the ACP registrar and where therefore the
-injection of certificate failures could otherwise make the ACP node easily
-attackable remotely.</t>
+a mechanism (such as the voucher in BRSKI) to authenticate the ACP registrar
+and where therefore the injection of certificate failures could otherwise make the ACP node easily
+attackable remotely by returning the ACP node to a "duckling" state in which
+it accepts to be enrolled by any network it connects to. The (expired) ACP
+certificate and ACP TA SHOULD therefore be maintained and used for re-enrollment
+until new keying material is enrolled.</t>
+
             <t>When using BRSKI or other protocol/mechanisms supporting vouchers,
 maintaining existing TA information allows for re-enrollment
 of expired ACP certificates to be more lightweight, especially in
@@ -1058,8 +1118,9 @@ the following ACP secure channel setup packets - but not any other unnecessary t
 the need to use Multicast Listener Discovery Version 2 (MLDv2, see <xref target="RFC3810" format="default"/>)
 to announce the desire to receive packets for
 that address.  Otherwise DULL GRASP could fail to operate correctly in the presence of
-MLD snooping, non-ACP enabled L2 switches (<xref target="RFC4541" format="default"/>) - because those would stop forwarding DULL GRASP
-packets.  Switches not supporting MLD snooping simply need to operate as pure L2 bridges for
+MLD snooping (<xref target="RFC4541" format="default"/>) switches that are not ACP supporting/enabled 
+ - because those switches would stop forwarding DULL GRASP packets.
+Switches not supporting MLD snooping simply need to operate as pure L2 bridges for
 IPv6 multicast packets for DULL GRASP to work.</t>
         <t>ACP discovery SHOULD NOT be enabled by default on non-native interfaces.  In particular, ACP discovery MUST NOT run inside the ACP across ACP virtual interfaces.  See <xref target="enabling-acp" format="default"/> for further, non-normative suggestions on how to enable/disable ACP at node and interface level.  See <xref target="conf-tunnel" format="default"/> for more details about tunnels (typical non-native interfaces).  See <xref target="acp-l2-switches" format="default"/> for how ACP should be extended on devices operating (also) as L2 bridges.</t>
         <t>Note: If an ACP node also implements BRSKI to enroll its ACP certificate
@@ -1120,6 +1181,8 @@ will be distributed with the flooded objective.  An example of the message is in
         <t>The secure channel methods defined in this document use the objective-values of "IKEv2" and "DTLS".  There is no distinction between IKEv2 native and GRE-IKEv2 because this is purely negotiated via IKEv2.</t>
         <t>A node that supports more than one secure channel protocol method needs to flood multiple versions
     of the "AN_ACP" objective so that each method can be accompanied by its own locator-option.  This can use a single GRASP M_FLOOD message as shown in <xref target="an-acp-example" format="default"/>.</t>
+        <t>The use of DULL GRASP primarily serves to discover the link-local IPv6 address of candidate ACP peers on subnets. The signaling of the supported secure channel option is primarily for diagnostic purposes, but it is also necessary for discovery when the protocol has no well-known transport address, such as in the case of DTLS.</t>
+        <t>Attackers on a subnet may be able to inject malicious DULL GRASP messages that are indistinguishable from non-malicious DULL GRASP messages to create Denial-of-Service (DoS) attacks that force ACP nodes to attempt many unsuccessful ACP secure channel connections. When an ACP node sees multiple AN_ACP objectives for the same secure channel protocol on different transport addresses, it SHOULD prefer connecting via the well-known transport address if the secure channel method has one (such as UDP port 500 for IKEv2).</t>
         <t>Note that a node serving both as an ACP node and BRSKI Join Proxy may choose to distribute the "AN_ACP" objective and the respective BRSKI in the same M_FLOOD message, since GRASP allows multiple objectives in one message.  This may be impractical though if ACP and BRSKI operations are implemented via separate software modules / ASAs.</t>
         <t>The result of the discovery is the IPv6 link-local address of the neighbor as well as its supported secure channel protocols (and non-standard port they are running on).  It is stored in the ACP Adjacency Table (see <xref target="adj-table" format="default"/>), which then drives the further building of the ACP to that neighbor.</t>
         <t>Note that the DULL GRASP objective described intentionally does not include ACP nodes ACP certificate even though this would be useful for diagnostics and to simplify the security exchange in ACP secure channel security association protocols (see <xref target="associations" format="default"/>). The reason is that DULL GRASP messages are periodically multicasted across IPv6 subnets and full certificates could easily lead to fragmented IPv6 DULL GRASP multicast packets due to the size of a certificate.  This would be highly undesirable.</t>
@@ -1142,7 +1205,7 @@ will be distributed with the flooded objective.  An example of the message is in
 </t>
         <ul spacing="compact">
           <li>An ACP node may choose to attempt to initiate the different feasible ACP secure channel protocols it supports according to its local policies sequentially or in parallel, but it MUST support acting as a responder to all of them in parallel.</li>
-          <li>Once the first secure channel protocol succeeds, the two peers know each other's certificates because they are used by all secure channel protocols for mutual authentication.  The node with the lower Node-ID in the ACP address of its ACP certificate becomes Bob, the one with the higher Node-ID in the certificate Alice. A peer with an empty ACP address field in its ACP certificate becomes Bob (this specification does not define such peers, only the interoperability with them).</li>
+          <li>Once the first secure channel protocol succeeds, the two peers know each other's certificates because they are used by all secure channel protocols for mutual authentication.  The node with the lower Node-ID in the ACP address of its ACP certificate becomes Bob, the one with the higher Node-ID in the certificate Alice. A peer with an omitted ACP address field in its ACP certificate becomes Bob (this specification does not define such peers, only the interoperability with them).</li>
           <li>Bob becomes passive, he does not attempt to further initiate ACP secure channel protocols with Alice and does not consider it to be an error when Alice closes secure channels.  Alice becomes the active party, continues to attempt setting up secure channel protocols with Bob until she arrives at the best one from her view that also works with Bob.</li>
         </ul>
         <t>For example, originally Bob could have been the initiator of one ACP secure channel protocol that Bob prefers and the security association succeeded.  The roles of Bob and Alice are then assigned and the connection setup is completed. The protocol could for example be IPsec via IKEv2 ("IP security", see <xref target="RFC4301" format="default"/> and "Internet Key Exchange protocol version 2", see <xref target="RFC7296" format="default"/>.  It is now up to Alice to decide how to proceed.  Even if the IPsec connection from Bob succeeded, Alice might prefer another secure protocol over IPsec (e.g., FOOBAR), and try to set that up with Bob.  If that preference of Alice succeeds, she would close the IPsec connection.  If no better protocol attempt succeeds, she would keep the IPsec connection.</t>
@@ -1213,7 +1276,7 @@ secure channel setup collisions are resolved.</t>
       <section anchor="associations" numbered="true" toc="default">
         <name>Security Association (Secure Channel) protocols</name>
         <t>This section describes how ACP nodes establish secured data connections to automatically discovered or configured peers in the ACP. <xref target="discovery-grasp" format="default"/> above described how IPv6 subnet adjacent peers are discovered automatically. <xref target="remote-acp-neighbors" format="default"/> describes how non IPv6 subnet adjacent peers can be configured.</t>
-        <t><xref target="ACP-virtual-interfaces" format="default"/> describes how secure channels are mapped to virtual IPv6 subnet interfaces in the ACP. The simple case is to map every ACP secure channel into a separate ACP point-to-point virtual interface <xref target="ACP-p2p-virtual-interfaces" format="default"/>. When a single subnet has multiple ACP peers this results in multiple ACP point-to-point virtual interfaces across that underlying multi-party IPv6 subnet. This can be optimized with ACP multi-access virtual interfaces <xref target="ACP-ma-virtual-interfaces" format="default"/> but the benefits of that optimization may not justify the complexity of that option.</t>
+        <t><xref target="ACP-virtual-interfaces" format="default"/> describes how secure channels are mapped to virtual IPv6 subnet interfaces in the ACP. The simple case is to map every ACP secure channel into a separate ACP point-to-point virtual interface <xref target="ACP-p2p-virtual-interfaces" format="default"/>. When a single subnet has multiple ACP peers this results in multiple ACP point-to-point virtual interfaces across that underlying multi-party IPv6 subnet. This can be optimized with ACP multi-access virtual interfaces (<xref target="ACP-ma-virtual-interfaces" format="default"/>) but the benefits of that optimization may not justify the complexity of that option.</t>
         <section anchor="general-considerations" numbered="true" toc="default">
           <name>General considerations</name>
           <t>Due to <xref target="channel-selection" format="default">Channel Selection</xref>, ACP can support an evolving set of security association protocols and does not require support for a single network wide MTI.  ACP nodes only need to implement those protocols required to interoperate with their candidate peers, not with potentially any node in the ACP domain. See <xref target="Profiles" format="default"/> for an example of this.</t>
@@ -1261,7 +1324,7 @@ a specific secure channel protocol.</t>
               <ul spacing="compact">
                 <li>ENCR_NULL AH MUST NOT be used (because it does not provide confidentiality).</li>
                 <li>ENCR_AES_GCM_16 is the only MTI ESP encryption algorithm for ACP via IPsec/ESP (it is already listed as MUST in <xref target="RFC8221" format="default"/>).</li>
-                <li>ENCR_AES_CBC and ENCR_AES_CCM_8 MAY be supported. If either provides higher performance than ENCR_AES_GCM_16 it SHOULD be supported.</li>
+                <li>ENCR_AES_CBC with AUTH_HMAC_SHA2_256_128 (as the ESP authentication algorithm) and ENCR_AES_CCM_8 MAY be supported. If either provides higher performance than ENCR_AES_GCM_16 it SHOULD be supported.</li>
                 <li>ENCR_CHACHA20_POLY1305 SHOULD be supported at equal or higher performance than ENCR_AES_GCM_16. If that performance is not feasible, it MAY be supported.</li>
               </ul>
               <t>IKEv2 indicates an order for the offered algorithms.  The algorithms SHOULD be ordered by performance.  The first algorithm supported by both sides is generally choosen.</t>
@@ -1279,7 +1342,7 @@ a specific secure channel protocol.</t>
       mode, so no additional ESP authentication algorithm is needed, simplifying
       the MTI requirements of IPsec for the ACP.
     </li>
-                <li>There is no MTI requirement against support of ENCR_AES_CBC because
+                <li>There is no MTI requirement for the support of ENCR_AES_CBC because
       ENCR_AES_GCM_16 is assumed to be feasible with less cost/higher
       performance in modern devices hardware accelerated implementations
       compared to ENCR-AES_CBC.
@@ -1336,8 +1399,8 @@ every non-malicious ACP neighbor will attempt to connect as an initiator though,
 allowing to obtain the diagnostic information about the neighbors certificate.</t>
               <t>In IKEv2, ACP nodes are identified by their ACP address.
 The ID_IPv6_ADDR IKEv2 identification payload MUST be used and MUST convey the ACP address.
-If the peer's ACP certificate includes a 32HEXLC ACP address in the acp-node-name (not "0" or empty), the address in the IKEv2 identification payload MUST match it.
-See <xref target="certcheck" format="default"/> for more information about "0" or empty ACP address fields in the acp-node-name.
+If the peer's ACP certificate includes a 32HEXDIG ACP address in the acp-node-name (not "0" or omitted), the address in the IKEv2 identification payload MUST match it.
+See <xref target="certcheck" format="default"/> for more information about "0" or omitted ACP address fields in the acp-node-name.
 </t>
               <t>
 IKEv2 authentication MUST use authentication method 14 ("Digital Signature") for ACP certificates; this authentication method can be used with both RSA and ECDSA certificates, indicated by an ASN.1 object AlgorithmIdentifier.
@@ -1363,13 +1426,13 @@ along with the 2048-bit MODP (group 14).  ECC provides a similar security level 
           <name>ACP via DTLS</name>
           <t>We define the use of ACP via DTLS in the assumption that it is likely the first transport encryption supported in some classes of constrained devices because DTLS is already used in those devices but IPsec is not, and code-space may be limited.</t>
           <t>An ACP node announces its ability to support DTLS v1.2 compliant with the requirements defined in this document as an ACP secure channel protocol in GRASP through the "DTLS" objective-value in the "AN_ACP" objective.</t>
-          <t>To run ACP via UDP and DTLS v1.2 <xref target="RFC6347" format="default"/>, a locally assigned UDP port is used that is announced as a parameter in the GRASP AN_ACP objective to candidate neighbors.  This port can also be any newer version of DTLS as long as that version can negotiate a DTLS v1.2 connection in the presence of an DTLS v1.2 only peer.</t>
+          <t>To run ACP via UDP and DTLS <xref target="RFC6347" format="default"/>, a locally assigned UDP port is used that is announced as a parameter in the GRASP AN_ACP objective to candidate neighbors.  This port can also be any newer version of DTLS as long as that version can negotiate a DTLS v1.2 connection in the presence of an DTLS v1.2 only peer.</t>
           <t>All ACP nodes supporting DTLS as a secure channel protocol MUST 
 adhere to the DTLS implementation recommendations and security considerations of <xref target="RFC7525" format="default">BCP 195</xref> except with respect to the DTLS version. ACP nodes supporting DTLS MUST support DTLS 1.2. They MUST NOT support older versions of DTLS. Implementation MUST comply with BCP 195, <xref target="RFC7525" format="default"/>.</t>
           <t>Unlike for IPsec, no attempts are made to simplify the requirements of the BCP 195 recommendations because the expectation is that DTLS would be using software-only implementations where the ability to reuse of widely adopted implementations is more important than minizing the complexity of a hardware accelerated implementation which is known to be important for IPsec.</t>
           <t>DTLS v1.3 (<xref target="I-D.ietf-tls-dtls13" format="default"/>) is "backward compatible" with
 DTLS v1.2 (see section 1. of DTLS v1.3):  A DTLS implementation supporting both
-DTLS v1.2 and DTLS v1.3 does comply with the above requirements of negoting to
+DTLS v1.2 and DTLS v1.3 does comply with the above requirements of negotiating to
 DTLS v1.2 in the presence of a DTLS v1.2 only peer, but using DTLS v1.3 when
 booth peers support it.</t>
           <t>Version v1.2 is the MTI version of DTLS in this specification because
@@ -1445,7 +1508,9 @@ booth peers support it.</t>
         connection(s) to the IPv6 link-local neighbor address(es) on the underlying
         ACP virtual interface.  If the ACP GRASP virtual interface has two or more neighbors,
         the GRASP link-local multicast messages are replicated to all neighbor TCP connections.</t>
-          <t>TLS for GRASP MUST offer TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and MUST NOT offer options with less than 256 bit symmetric key strength or hash strength of less han SHA384.  TLS for GRASP MUST also include the "Supported Elliptic Curves" extension, it MUST support support the NIST P-256 (secp256r1) and P-384 (secp384r1(24)) curves <xref target="RFC4492" format="default"/>.  In addition, GRASP TLS clients SHOULD send an ec_point_formats extension with a single element, "uncompressed". For further interoperability recommendations, GRASP TLS implementations SHOULD follow <xref target="RFC7525" format="default"/>.</t>
+          <t>TLS for GRASP MUST offer TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and MUST NOT offer options with less than 256 bit symmetric key strength or hash strength of less than SHA384.
+          When TLS 1.3 is  supported, TLS_AES_256_GCM_SHA384 MUST be offered and TLS_CHACHA20_POLY1305_SHA256 MAY be offered.
+          TLS for GRASP MUST also include the "Supported Elliptic Curves" extension, it MUST support support the NIST P-256 (secp256r1) and P-384 (secp384r1(24)) curves <xref target="RFC4492" format="default"/>.  In addition, GRASP TLS clients SHOULD send an ec_point_formats extension with a single element, "uncompressed". For further interoperability recommendations, GRASP TLS implementations SHOULD follow <xref target="RFC7525" format="default"/>.</t>
           <t>TCP and TLS connections for GRASP in the ACP use the IANA assigned TCP port for GRASP (7107).
         Effectively the transport stack is expected to be TLS for connections from/to the ACP
         address (e.g., global scope address(es)) and TCP for connections from/to link-local addresses
@@ -1519,8 +1584,8 @@ booth peers support it.</t>
             but not against attacks from the inside: Compromised ACP members that have (not yet) been
             detected and removed (e.g., via domain certificate revocation / expiry).</t>
             <t>If GRASP peer connections were to use just TCP, compromised ACP members could
-            simply eavesdrop passively on GRASP peer connections for whom they are on-path ("Man In The
-            Middle" - MITM) or intercept and modify them.  With TLS, it is not possible to completely
+            simply eavesdrop passively on GRASP peer connections for whom they are on-path ("man in the
+            middle" - MITM) or intercept and modify them.  With TLS, it is not possible to completely
             eliminate problems with compromised ACP members, but attacks are a lot more complex:</t>
             <t>Eavesdropping/spoofing by a compromised ACP node is still possible because
             in the model of the ACP and GRASP, the provider and consumer of an objective have 
@@ -1690,7 +1755,7 @@ booth peers support it.</t>
           <t>This sub-scheme is meant for "manual" allocation to subnets where the other addressing schemes cannot be used.  The primary use case is for assignment to ACP connect subnets (see <xref target="NMS" format="default"/>).</t>
           <t>"Manual" means that allocations of the Subnet-ID need to be done today with pre-existing, non-autonomic mechanisms.  Every subnet that uses this addressing sub-scheme needs to use a unique Subnet-ID (unless some anycast setup is done).</t>
           <t>The Z bit field was added to distinguish Zone addressing and manual addressing sub-schemes without requiring one more bit in the base scheme and therefore allowing for the Vlong scheme (described below) to have one more bit available.</t>
-          <t>Manual addressing sub-scheme addresses SHOULD NOT be used in ACP certificates. Any node capable to build ACP secure channels and permitted by Registrar policy to participate in building ACP secure channels SHOULD receive an ACP address (prefix) from one of the other ACP addressing sub-schemes.  Nodes not capable (or permitted) to participate in ACP secure channels can connect to the ACP via ACP connect interfaces of ACP edge nodes (see <xref target="ACPconnect" format="default"/>), without setting up an ACP secure channel. Their ACP certificate MUST include an empty acp-address to indicate that their ACP certificate is only usable for non- ACP secure channel authentication, such as end-to-end transport connections across the ACP or Data-Plane.</t>
+          <t>Manual addressing sub-scheme addresses SHOULD NOT be used in ACP certificates. Any node capable to build ACP secure channels and permitted by Registrar policy to participate in building ACP secure channels SHOULD receive an ACP address (prefix) from one of the other ACP addressing sub-schemes.  Nodes not capable (or permitted) to participate in ACP secure channels can connect to the ACP via ACP connect interfaces of ACP edge nodes (see <xref target="ACPconnect" format="default"/>), without setting up an ACP secure channel. Their ACP certificate MUST omit the acp-address field to indicate that their ACP certificate is only usable for non- ACP secure channel authentication, such as end-to-end transport connections across the ACP or Data-Plane.</t>
           <t>Address management of ACP connect subnets is done using traditional assignment methods and existing IPv6 protocols. See <xref target="ACautoconfig" format="default"/> for details.</t>
         </section>
         <!-- manual -->
@@ -1796,7 +1861,7 @@ to perform this RA function, such as credentials for the BRSKI
 connection to the CA for ANI registrars.</t>
           <section anchor="registrars-protocols" numbered="true" toc="default">
             <name>Use of BRSKI or other Mechanism/Protocols</name>
-            <t>Any protocols or mechanisms may be used as ACP registrars,
+            <t>Any protocols or mechanisms may be used by ACP registrars,
 as long as the resulting ACP certificate and TA certificate(s) allow
 to perform the ACP domain membership described in <xref target="certcheck" format="default"/>
 with other ACP domain members, and meet the ACP addressing
@@ -1868,14 +1933,16 @@ IPv6 reachability across the ACP.</t>
 sub-scheme is subject to ACP registrar policy. It could be an ACP domain
 wide policy, or a per ACP node or per ACP node type policy. For example,
 in BRSKI, the ACP registrar is aware of the IDevID certificate of the candidate ACP node,
-which contains a "serialNnumber" that is typically indicating the node's vendor
-and device type and can be used to drive a policy selecting an appropriate
+which typically contains a "serialNumber" attribute in the 
+subjects field distinguished name encoding that is often indicating the node's
+vendor and device type and can be used to drive a policy selecting an appropriate
 addressing sub-scheme for the (class of) node(s).</t>
             <t>ACP registrars SHOULD default to allocate ACP zone sub-address scheme
 addresses with Zone-ID 0.</t>
             <t>ACP registrars that are aware of the IDevID certificate of a candidate ACP device
 SHOULD be able to choose the zone vs. Vlong sub-address scheme for
-ACP nodes based on the "serialNumber" of the IDevID certificate, for example
+ACP nodes based on the <xref target="X.520" format="default"/> "serialNumber" attribute in the 
+subjects field distinguished name encoding of the IDevID certificate, for example
 by the PID (Product Identifier) part which identifies the product type,
 or the complete "serialNumber". The PID for example could identify 
 nodes that allow for specialized ASA requiring multiple addresses or non-autonomic VMs for
@@ -2059,7 +2126,7 @@ registrars and centralized policy control.</t>
         that advertises your new rank.  Then send a DAO with a new path sequence
         about yourself.</t>
             <t>When using ACP multi-access virtual interfaces, local repair can be
-        directly by peer breakage, see <xref target="ACP-ma-virtual-interfaces" format="default"/>.</t>
+               triggered directly by peer breakage, see <xref target="ACP-ma-virtual-interfaces" format="default"/>.</t>
             <t>stretch_rank: none provided ("not stretched").</t>
             <t>Data Path Validation: Not used.</t>
             <t>Trickle: Not used.</t>
@@ -2109,7 +2176,21 @@ registrars and centralized policy control.</t>
           <section anchor="rpl-unknown" numbered="true" toc="default">
             <name>Unknown Destinations</name>
             <t>Because RPL minimizes the size of the routing and forwarding table, prefixes reachable through the same interface as the RPL root are not known on every ACP node.  Therefore traffic to unknown destination addresses can only be discovered at the RPL root.  The RPL root SHOULD have attach safe mechanisms to operationally discover and log such packets.</t>
-            <t>As this requirement raises additional Data-Plane, it does not apply to nodes where the administrative parameter to become root (<xref target="rpl-admin" format="default"/>) can always only be 0b001, e.g.: the node does not support explicit configuration to be root, or to be ACP registrar or to have ACP-connect functionality. If an ACP network is degraded to the point where there are no nodes that could be configured roots, ACP registrars or ACP-connect nodes, traffic to unknown destinations could not be diagnosed, but in the absence of any intelligent nodes supporting other than 0b001 administrative preference, there is likely also no diagnostic function possible.</t>
+
+            <t>As this requirement places additional constraints on the Data-Plane
+              functionality of the RPL root, it does not apply to "normal" nodes
+              that are not configured to have special functionality (i.e., the
+              adminstrative parameter from <xref target="rpl-admin" format="default"/> has value 0b001).
+              If the ACP network is degraded to the point where there are no nodes that
+              could be configured as root, registrar, or ACP-connect nodes, it is
+              possible that the RPL root ( and thus the ACP as a whole) would be
+              unable to detect traffic to unknown destinations.  However, in the
+              absence of nodes with administrative preference other than 0b001,
+              there is also unlikely to be a way to get diagnostic information out
+              of the ACP, so detection of traffic to unknown destinations would not
+              be actionable anyway.
+            </t>
+
           </section>
         </section>
         <!-- rpl -->
@@ -2224,7 +2305,7 @@ of the secure channel protocols (IPsec / DTLS).</t>
           subnets that the node could connect to and then the node would have to negotiate
           with adjacent nodes across those subnet whose address space to use for each subnet.</li>
               <li>Using global scope addresses for subnets between nodes is 
-          unnecessary if those subnets only connect routers, such as ACP secure channels
+          unnecessary if those subnets only connect routers, such as ACP secure channels,
           because they can communicate to remote nodes via their global scope loopback addresses.
           Using global scope addresses for those extern subnets is therefore wasteful
           for the address space and also unnecessarily increasing the size of routing
@@ -2245,7 +2326,7 @@ of the secure channel protocols (IPsec / DTLS).</t>
         or other future protocol - standards or non-standards).</t>
             <t>Note that all the considerations described here are assuming point-to-point
         secure channel associations. Mapping multi-party secure channel associations such as
-        <xref target="RFC6407" format="default"/> is out of scope (but would be easy to add).</t>
+        <xref target="RFC6407" format="default"/> is out of scope.</t>
             <section anchor="ACP-p2p-virtual-interfaces" numbered="true" toc="default">
               <name>ACP point-to-point virtual interfaces</name>
               <t>In this option, each ACP secure channel is
@@ -2468,7 +2549,7 @@ options are not sufficient to achieve this.</t>
           <name>Non-ACP Controller / NMS system</name>
           <t>The Autonomic Control Plane can be used by management systems, such as controllers or network management system (NMS) hosts (henceforth called simply "NMS hosts"), to connect to devices (or other type of nodes) through it.  For this, an NMS host needs to have access to the ACP.  The ACP is a self-protecting overlay network, which allows by default access only to trusted, autonomic systems.  Therefore, a traditional, non-ACP NMS system does not have access to the ACP by default, such as any other external node.</t>
           <t>If the NMS host is not autonomic, i.e., it does not support autonomic negotiation of the ACP, then it can be brought into the ACP by explicit configuration.  To support connections to adjacent non-ACP nodes, an ACP node SHOULD support "ACP connect" (sometimes also called "autonomic connect"):</t>
-          <t>"ACP connect" is an interface level configured workaround for connection of trusted non-ACP nodes to the ACP. The ACP node on which ACP connect is configured is called an "ACP edge node". With ACP connect, the ACP is accessible from those non-ACP nodes (such as NOC systems) on such an interface without those non-ACP nodes having to support any ACP discovery or ACP channel setup.  This is also called "native" access to the ACP because to those NOC systems the interface looks like a normal network interface (without any encryption/novel-signaling).</t>
+          <t>"ACP connect" is an interface level configured workaround for connection of trusted non-ACP nodes to the ACP. The ACP node on which ACP connect is configured is called an "ACP edge node". With ACP connect, the ACP is accessible from those non-ACP nodes (such as NOC systems) on such an interface without those non-ACP nodes having to support any ACP discovery or ACP channel setup.  This is also called "native" access to the ACP (native == without ACP secure channel) because to those NOC systems the interface looks like a normal network interface (without any encryption/novel-signaling).</t>
           <figure anchor="acp-connect">
             <name>ACP connect</name>
             <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -2508,7 +2589,7 @@ mechanism to allow configuration/use of ACP connect interfaces only on nodes exp
 to be deployed with it (those in physically secure locations such as a NOC).  For example,
 the registrar could disable the ability to enable ACP connect on devices during enrollment
 and that property could only be changed through re-enrollment.  See also <xref target="role-assignments" format="default"/>.</t>
-          <t>ACP Edge nodes SHOULD have a configurable option to filter packets with RPI headers (xsee <xref target="rpl-Data-Plane" format="default"/> across an ACP connect interface. These headers are outside the scope of the RPL profile in this specification but may be used in future extensions of this specification.</t>
+          <t>ACP Edge nodes SHOULD have a configurable option to prohibit packets with RPI headers (see <xref target="rpl-Data-Plane" format="default"/> across an ACP connect interface. These headers are outside the scope of the RPL profile in this specification but may be used in future extensions of this specification.</t>
         </section>
         <!-- NMS -->
         <section anchor="software" numbered="true" toc="default">
@@ -2627,12 +2708,14 @@ discovery and secure channel creation are as follows:</t>
         </section>
         <section anchor="conf-tunnel" numbered="true" toc="default">
           <name>Tunneled Remote ACP Neighbor</name>
+
           <t>An IPinIP, GRE or other form of pre-existing tunnel is configured
         between two remote ACP peers and the virtual interfaces representing
         the tunnel are configured for "ACP enable".  This will enable IPv6
         link local addresses and DULL on this tunnel.  In result,  the tunnel
         is used for normal "L2 adjacent" candidate ACP neighbor discovery
         with DULL and secure channel setup procedures described in this document.</t>
+
           <t>Tunneled Remote ACP Neighbor requires two encapsulations:
         the configured tunnel and the secure channel inside of that tunnel.
         This makes it in general less desirable than Configured Remote ACP Neighbor.
@@ -2642,6 +2725,15 @@ discovery and secure channel creation are as follows:</t>
         The tunnel itself may also provide PMTUD while the secure channel
         method may not.  Or the tunnel mechanism is permitted/possible through some
         firewall while the secure channel method may not.</t>
+
+        <t>Tunneling using an insecure tunnel encapsulation increases on average
+        the risk of a MITM downgrade attack somewhere along the underlay path
+        that blocks all but the most easily attacked ACP secure channel option.
+        ACP nodes supporting tunneled remote ACP Neighbors SHOULD support
+        configuration on such tunnel interfaces to restrict or explicitly
+        select the available ACP secure channel protocols 
+        (if the ACP node supports more than one ACP secure channel protocol in the first place).</t>
+
         </section>
         <section anchor="conf-summary" numbered="true" toc="default">
           <name>Summary</name>
@@ -2828,8 +2920,7 @@ The information in the TA of the peer can then ease
 troubleshooting of such issues.</t>
           <t>Another example case is the intended or accidental re-activation of equipment
 whose TA certificate has long expired, such as redundant gear taken from storage
-after years. Potentially without following the correct process set up for
-such cases.</t>
+after years.</t> 
           <t>A third example case is when in a mergers&amp;aquisition case ACP nodes have not
 been correctly provisioned with the mutual TA of previously disjoint ACP. This
 is assuming that the ACP domain names where already aligned so that the ACP
@@ -2902,14 +2993,17 @@ and other sources of CRL information.</t>
    registrar can let the TA sign candidate ACP node certificates.</li>
             <li>The ACP domain-name.</li>
             <li>The Registrar-ID to use. This could default to a MAC address of the ACP registrar.</li>
+
             <li>For recovery, the next-useable Node-IDs for zone (Zone-ID=0) sub-addressing scheme,
      for Vlong /112 and for Vlong /120 sub-addressing scheme. These IDs would only need
      to be provisioned after recovering from a crash. Some other mechanism would 
      be required to remember these IDs in a backup location or to recover them
      from the set of currently known ACP nodes.</li>
+
             <li>Policies if candidate ACP nodes should receive a domain certificate or not,
      for example based on the devices IDevID certificate as in BRSKI. The ACP registrar may have
-     a whitelist or blacklist of devices "serialNumbers" from their IDevID certificate.</li>
+     a whitelist or blacklist of devices <xref target="X.520" format="default"/>  "serialNumbers" attribute in the subjects field distinguished name encoding from their IDevID certificate.</li>
+
             <li>Policies what type of address prefix to assign to a candidate ACP devices,
      based on likely the same information.</li>
             <li>For BRSKI or other mechanisms using vouchers: Parameters to determine
@@ -2983,7 +3077,7 @@ operations are potentially more complex than with a single, resilient
           <ul spacing="compact">
             <li>Which candidate ACP node is permitted or not permitted into an
      ACP domain. This may not be a decision to be taken upfront, so that
-     a per-"serialNumber" policy can be loaded into every ACP registrar.
+     a policy per "serialNumber" attribute in the subjects field distinguished name encoding  can be loaded into every ACP registrar.
      Instead, it may better be decided in real-time including potentially
      a human decision in a NOC.</li>
             <li>Tracking of all enrolled ACP nodes and their certificate information.
@@ -3105,16 +3199,28 @@ they are not currently needed for the Data-Plane.</t>
             <t>Automatically setting "ANI enable" on brownfield nodes where the operator is unaware of BRSKI and MASA operations 
  could also be an unlikely but then critical security issue. If an attacker could impersonate the operator and register
 as the operator at the MASA or otherwise get hold of vouchers and can get enough physical access to the network so
-pledges would register to an attacking registrar, then the attacker could gain access to the network through
-the ACP that the attacker then has access to.</t>
+pledges would register to an attacking registrar, then the attacker could gain access to the
+ ACP, and through the ACP gain access to the Data-Plane.</t>
+
             <t>In networks where the operator explicitly wants to enable the ANI this could not happen, because the operator would create a BRSKI registrar that would discover attack attempts, and the operator would be setting up his registrar with the MASA.  Nodes requiring "ownership vouchers" would not be subject to that attack.  See <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/> for more details.  Note that a global "ACP enable" alone is not subject to these type of attacks, because it always depends on some other mechanism first to provision domain certificates into the device.</t>
           </section>
           <section anchor="greenfield" numbered="true" toc="default">
             <name>Greenfield nodes</name>
-            <t>A "greenfield" node is one that did not have any prior configuration.</t>
-            <t>For greenfield nodes, only "ANI enable" is relevant.  If another mechanism than BRSKI is used to (zero-touch) bootstrap a node, then it is up to that mechanism to provision domain certificates and to set global "ACP enable" as desired.</t>
-            <t>Nodes supporting full ANI functionality set "ANI enable" automatically when they decide that they are greenfield, e.g., that they are powering on from factory condition.  They will then put all native interfaces into "admin down" state and start to perform BRSKI pledge functionality - and once a domain certificate is enrolled they automatically enable ACP.</t>
-            <t>Attempts for BRSKI pledge operations in greenfield state should terminate automatically when another method of configuring the node is used.  Methods that indicate some form of physical possession of the device such as configuration via the serial console port could lead to immediate termination of BRSKI, while other parallel auto configuration methods subject to remote attacks might lead to BRSKI termination only after they were successful.  Details of this may vary widely over different type of nodes.  When BRSKI pledge operation terminates, this will automatically unset "ANI enable" and should terminate any temporarily needed state on the device to perform BRSKI - DULL GRASP, BRSKI pledge and any IPv6 configuration on interfaces.</t>
+
+            <t>An ACP "greenfield" node is one that does not have any prior configuration and that can be bootstrapped into the ACP across the network. To support greenfield nodes, ACP as described in this document needs to be combined with a bootstrap protocol/mechanism that will enroll the node with the ACP keying material - ACP certificate and TA. For ANI nodes, this protocol/mechanism is BRSKI.</t>
+
+            <t>When such a node is powered on and determines it is in greenfield condition, it enables the bootstrap protocol(s)/mechanism(s), and once the ACP keying material is enrolled, greenfield state ends and the ACP is started. When BRSKI is used, the node's state reflects this by setting "ANI enable" upon determination of greenfield state at power on.</t>
+
+            <t>ACP greenfield nodes that in the absence of ACP would have their interfaces in "down" state SHOULD set all native interfaces into "admin down" state and only permit Data-Plane traffic required for the bootstrap protocol/mechanisms.</t>
+
+            <t>ACP nodes supporting greenfield operations MAY want to provide backward compatibility with other forms of configuration/provisioning, especially when only a subset of the nodes are expected to be deployed with ACP. Such an ACP node SHOULD observe attempts to provision/configure the node via interfaces/methods that traditionally indicate physical possession of the node, such as a serial or USB console port or a USB memory stick with a bootstrap configuration. When such an operation is observed before enrollment of the ACP keying material has completed, the node SHOULD put itself into the greenfield state the node would have been in, if ACP/ANI was disabled at boot.</t>
+
+            <t>When a greenfield node enables multiple enrollment/botstrap protocols/mechanisms in parallel, care must be taken not to terminate any protocol/mechanism before another one has progressed to a point where greenfield state is defined to end.</t>
+
+            <t>Nodes that claim to support ANI greenfield operations SHOULD NOT enable in parallel to BRSKI any enrollment/bootstrap protocol/mechanism that allows Trust On First Use (TOFU, <xref target="RFC7435" format="default"/>) over interfaces other than those traditionally indicating physical possession of the node.  Protocols/mechanisms with published default username/password authentication are considered to suffer from TOFU. Securing the bootstrap protocol/mechanism by requiring a voucher (<xref target="RFC8366" format="default"/>) can be used to avoid TOFU.</t>
+
+            <t>In summary, the goal of ACP greenfield support is to allow remote automated enrollment of ACP keying materials, and therefore automated bootstrap into the ACP and to prohibit TOFU during bootstrap with the likely exception (for backward compatibility) of bootstrapping via interfaces traditionally indicating physical possession of the node.</t>
+
           </section>
         </section>
         <section anchor="disabling" numbered="true" toc="default">
@@ -3155,12 +3261,15 @@ VPN routing protocols because every ACP zone would only need to indicate one or 
 /64 ACP Zone Addressing prefix routes into the ACP-Core VPN as opposed to routes
 for every individual ACP node as required in the other ACP addressing schemes.</t>
         <t>Note that the non-autonomous ACP-Core VPN would require additional extensions
-to propagate GRASP messages when GRASP discovery is desired across the zones.
-For example, one could set up on each Zone edge router
-remote ACP tunnel to an appplication level implemented GRASP hub running
-in the networks NOC that is generating GRASP announcements for NOC services into
-the ACP Zones or propagating them between ACP Zones.</t>
-        <t>Such partial deployment may prove to be sufficient or could evolve to become more
+to propagate GRASP messages when GRASP discovery is desired across the zones.</t>
+
+<t>For example, one could set up on each Zone edge router a remote ACP
+tunnel to a GRASP hub. The GRASP hub could be implemented at the application level
+and could run in the NOC of the network. It would serve to propagage
+GRASP announcements between ACP Zones and/or generate GRASP announcements for NOC 
+services.</t>
+
+        <t>Such a partial deployment may prove to be sufficient or could evolve to become more
 autonomous through future standardized or non-standardized enhancements, for example
 by allowing GRASP messages to be propagated across the layer 3 VPN, leveraging for
 example L3VPN Multicast support.</t>
@@ -3198,8 +3307,7 @@ in the crypto material, because the nodes ACP certificates are fromm a single AC
         <t>There are few central dependencies: A CRL may not be available during a network partition; a suitable policy to not immediately disconnect neighbors when no CRL is available can address this issue.  Also, an ACP Registrar or Certification Authority might not be available during a partition.  This may delay renewal of certificates that are to expire in the future, and it may prevent the enrollment of new nodes during the partition.</t>
         <t>Highly resilient ACP designs can be built by using ACP Registrars with embedded sub-CA, as outlined in <xref target="sub-ca" format="default"/>. As long as a partition is left with one or more of such ACP Registrars, it can continue to enroll new candidate ACP nodes as long as the ACP Registrar's sub-CA certificate does not expire. Because the ACP addressing relies on unique Registrar-IDs, a later re-merge of partitions will also not cause problems with ACP addresses assigned during partitioning.</t>
         <t>After a network partition, a re-merge will just establish the previous status, certificates can be renewed, the CRL is available, and new nodes can be enrolled everywhere.  Since all nodes use the same TA, a re-merge will be smooth.</t>
-        <t>Merging two networks with different TA requires the ACP nodes to trust the union of TA.  As long as the routing-subdomain hashes are different, the addressing will not overlap,
-which only happens in the unlikely event of a 40-bit hash collision in SHA256 (see <xref target="addressing" format="default"/>).
+        <t>Merging two networks with different TA requires the ACP nodes to trust the union of TA.  As long as the routing-subdomain hashes are different, the addressing will not overlap. Accidentally, overlaps will only happen in the unlikely event of a 40-bit hash collision in SHA256 (see <xref target="addressing" format="default"/>).
 Note that the complete mechanisms to merge networks is out of scope of this specification.</t>
         <t>It is also highly desirable for implementation of the ACP to be able to run it over interfaces that are administratively down.  If this is not feasible, then it might instead be possible to request explicit operator override upon administrative actions that would administratively bring down an interface across which the ACP is running.  Especially if bringing down the ACP is known to disconnect the operator from the node.  For example any such down administrative action could perform a dependency check to see if the transport connection across which this action is performed is affected by the down action (with default RPL routing used, packet forwarding will be symmetric, so this is actually possible to check).</t>
       </section>
@@ -3210,7 +3318,7 @@ Note that the complete mechanisms to merge networks is out of scope of this spec
           <name>From the outside</name>
           <t>As explained in <xref target="self-creation" format="default"/>, the ACP is based on secure channels built between nodes that have mutually authenticated each other with their domain certificates.  The channels themselves are protected using standard encryption technologies such as DTLS or IPsec which provide additional authentication during channel establishment, data integrity and data confidentiality protection of data inside the ACP and in addition, provide replay protection.</t>
           <t>Attacker will not be able to join the ACP unless they have a valid ACP certificate. On-path attackers without a valid ACP certificate can not inject packets into the ACP due to ACP secure channels. They can also not decrypt ACP traffic except if they can crack the encryption. They can attempt behavioral traffic analysis on the encrypted ACP traffic.</t>
-          <t>The degree to which compromised ACP nodes can impact the ACP depends on the implementation of the ACP nodes and their impairment. When an attacker has only gained administrative privileges to configure ACP nodes remotely, the attacker can disrupt the ACP only through one of the few configuration options to disable it, see <xref target="enabling-acp" format="default"/>, or by configuring of non-autonomic ACP options if those are supported on the impaired ACP nodes, see <xref target="workarounds" format="default"/>. Injecting or ectracting traffic into/from an impaired ACP node is only possible when an impaired ACP node supports ACP connect (see <xref target="ACPconnect" format="default"/>) and the attacker can control traffic into/from one of the ACP nodes interfaces, such as by having physical access to the ACP node.</t>
+          <t>The degree to which compromised ACP nodes can impact the ACP depends on the implementation of the ACP nodes and their impairment. When an attacker has only gained administrative privileges to configure ACP nodes remotely, the attacker can disrupt the ACP only through one of the few configuration options to disable it, see <xref target="enabling-acp" format="default"/>, or by configuring of non-autonomic ACP options if those are supported on the impaired ACP nodes, see <xref target="workarounds" format="default"/>. Injecting or extracting traffic into/from an impaired ACP node is only possible when an impaired ACP node supports ACP connect (see <xref target="ACPconnect" format="default"/>) and the attacker can control traffic into/from one of the ACP nodes interfaces, such as by having physical access to the ACP node.</t>
           <t>The ACP also serves as protection (through authentication and encryption) for protocols relevant to OAM that may not have secured protocol stack options or where implementation or deployment of those options fail on some vendor/product/customer limitations.  This includes protocols such as SNMP (<xref target="RFC3411" format="default"/>), NTP (<xref target="RFC5905" format="default"/>), PTP (<xref target="IEEE-1588-2008" format="default"/>), DNS (<xref target="RFC3596" format="default"/>), DHCPv6 (<xref target="RFC3315" format="default"/>), syslog (<xref target="RFC3164" format="default"/>), Radius (<xref target="RFC2865" format="default"/>), Diameter (<xref target="RFC6733" format="default"/>), TACACS (<xref target="RFC1492" format="default"/>), IPFIX (<xref target="RFC7011" format="default"/>), Netflow (<xref target="RFC3954" format="default"/>) - just to name a few. Not all of these protocol references are necessarily the latest version of protocols but versions that are still widely deployed.</t>
           <t>Protection via the ACP secure hop-by-hop channels for these protocols is meant to be only a stopgap though: The ultimate goal is for these and other protocols to use end-to-end encryption utilizing the domain certificate and rely on the ACP secure channels primarily for zero-touch reliable connectivity, but not primarily for security.</t>
           <t>The remaining attack vector would be to attack the underlying ACP protocols themselves, either via directed attacks or by denial-of-service attacks.  However, as the ACP is built using link-local IPv6 addresses, remote attacks from the Data-Plane are impossible as long as the Data-Plane has no facilities to remotely sent IPv6 link-local packets.  The only exception are ACP connected interfaces which require higher physical protection.  The ULA addresses are only reachable inside the ACP context, therefore, unreachable from the Data-Plane.  Also, the ACP protocols should be implemented to be attack resistant and not consume unnecessary resources even while under attack.</t>
@@ -3257,9 +3365,9 @@ compromised nodes.</t>
         <li>The usage of domain certificates depends on a valid supporting PKI infrastructure.  If the chain of trust of this PKI infrastructure is compromised, the security of the ACP is also compromised.  This is typically under the control of the network administrator.</li>
         <li>ACP nodes receive their certificates from ACP registrars. These ACP registrars are security critical dependencies of the ACP:  Procedures and protocols for ACP registrars are outside the scope of this specification as explained in <xref target="registrars-protocols" format="default"/>, only requirements against the resulting ACP certificates are specified.</li>
 
-        <li>Every ACP registrar (for enrolment of ACP certificates) and ACP EST server (for renewal of ACP certificates) is a security critical entity and its protocols are security critical protocols. Both need to be hardened against attacks, similar to a CA and its protocols. A malicious registrar can enroll malicious nodes to an ACP network (if the CA delegates this policy to the registrar) or break ACP routing for example by assigning duplicate ACP address assignment to ACP nodes via their ACP certificates.</li>
+        <li>Every ACP registrar (for enrollment of ACP certificates) and ACP EST server (for renewal of ACP certificates) is a security critical entity and its protocols are security critical protocols. Both need to be hardened against attacks, similar to a CA and its protocols. A malicious registrar can enroll malicious nodes to an ACP network (if the CA delegates this policy to the registrar) or break ACP routing for example by assigning duplicate ACP address assignment to ACP nodes via their ACP certificates.</li>
 
-        <li>ACP nodes that are ANI nodes rely on BRSKI as the protocol for ACP registrars. For ANI type ACP nodes, the security considerations of BRSKI apply. It enables automated, secure enrolment of ACP certificates.</li>
+        <li>ACP nodes that are ANI nodes rely on BRSKI as the protocol for ACP registrars. For ANI type ACP nodes, the security considerations of BRSKI apply. It enables automated, secure enrollment of ACP certificates.</li>
 
         <li>BRSKI and potentially other ACP registrar protocol options require that nodes have an (X.509v3 based) IDevID. IDevIDs are an option for ACP registrars to securely identify candidate ACP nodes that should be enrolled into an ACP domain.</li>
 
@@ -3267,23 +3375,37 @@ compromised nodes.</t>
 
         <li>Like the IDevID, the ACP certificate should equally be protected from extraction or other abuse by the same ACP node infrastructure. This infrastructure for IDevID and ACP certificate is beneficial independent of the ACP registrar protocol used (BRSKI or other).</li>
 
-        <li>Renewal of ACP certificates requires support for EST, therefore the security considerations of <xref target="RFC7030" format="default"/> related to certificate renewal/rekeying and TP renewal apply to the ACP. EST security considerations when using other than mutual certificate authentication do not apply nor do considerations for initial enrolment via EST apply, except for ANI type ACP nodes because BRSKI leverages EST.</li>
+        <li>Renewal of ACP certificates requires support for EST, therefore the security considerations of <xref target="RFC7030" format="default"/> related to certificate renewal/rekeying and TP renewal apply to the ACP. EST security considerations when using other than mutual certificate authentication do not apply nor do considerations for initial enrollment via EST apply, except for ANI type ACP nodes because BRSKI leverages EST.</li>
+
+        <li>A malicious ACP node could declare itself to be an EST server via GRASP across the ACP if malicious software could be executed on it. CA should therefore authenticate only known trustworthy EST servers, such as nodes with hardware protections against malicious software. When Registrars use their ACP certificate to authenticate towards a CA, the id-kp-cmcRA <xref target="RFC6402" format="default"/> extended key usage attribute allows the CA to determine that the ACP node was permitted during enrollment to act as an ACP registrar.  Without the ability to talk to the CA, a malicious EST server can still attract ACP nodes attempting to renew their keying material, but they will fail to perform successful renewal of a valid ACP certificate. The ACP node attempting to use the malicious EST server can then continue to use a different EST server, and log a failure against a malicious EST server.</li>
 
         <li>A malicious ACP node could declare itself to be an EST server via GRASP across the ACP if malicious software could be executed on it. CA should therefore authenticate only known trustworthy EST servers, such as nodes with hardware protections against malicious software. Without the ability to talk to the CA, a malicious EST server can still attract ACP nodes attempting to renew their keying material, but they will fail to perform successful renewal of a valid ACP certificate. The ACP node attempting to use the malicious EST server can then continue to use a different EST server, and log a failure against a malicious EST server.</li>
 
         <li>Malicious on-path ACP nodes may filter valid EST server announcements across the ACP, but such malicious ACP nodes could equally filter any ACP traffic such as the EST traffic itself. Either attack requires the ability to execute malicious software on an impaired ACP node though.</li>
 
-        <li>In the abscence of malicious software injection, an attacker that can misconfigure an ACP node which is supporting EST server functionality could attempt to configure a malicious CA. This would not result in the ability to successfully renew ACP certificates, but it could result in Denial-of-Service (DoS) attacks by becoming an EST server and making ACP nodes attempting their ACP certificate renewal via this impaired ACP node. This problem can be avoided when the EST server implementation can verify that the CA configured is indeed providing renewal for certificates of the nodes ACP. The ability to do so depends on the EST-Server to CA protocol, which is outside the scope of this document.</li>
+        <li>In the abscence of malicious software injection, an attacker that can misconfigure an ACP node which is supporting EST server functionality could attempt to configure a malicious CA. This would not result in the ability to successfully renew ACP certificates, but it could result in DoS attacks by becoming an EST server and making ACP nodes attempting their ACP certificate renewal via this impaired ACP node. This problem can be avoided when the EST server implementation can verify that the CA configured is indeed providing renewal for certificates of the nodes ACP. The ability to do so depends on the EST-Server to CA protocol, which is outside the scope of this document.</li>
       </ul>
 
 <t>In summary, attacks against the PKI/certificate dependencies of the ACP can be minimized by a variety of hardware/software commponents including options such as TPM for IDevID/ACP-certificate, prohibitions against execution of non-trusted software and design aspects of the EST Server functionality for the ACP to eliminate configuration level impairment.</t>
 
+      <t>Because ACP peers select one out of potentially more than one mutually supported ACP secure channel protocols via the approach described in <xref target="channel-selection"/>, ACP secure channel setup is subject to downgrade attacks by MITM attackers. This can be discovered by additional mechanisms described in <xref target="downgrade"/>.</t>
+
+<t>The security model of the ACP as defined in this document is tailored for use with private PKI. The TA of a private PKI provide the security against maliciously created ACP certificates to give access to an ACP. Such attacks can create fake ACP certificates with correct looking AcpNodeNames, but those certificates would not pass the certificate path validation of the ACP domain membership check (see <xref target="certcheck"/>, point 2).</t>
+
+<t>If public CA are to be used, ACP registrars would need to prove ownership of the domain-name of AcpNodeNames to the public CA. However, maintaining the ULA based address allocation when using a public CA might be considered to be a violation of the private allocation expectation of ULA prefixes. To avoid this issue, further changes to registrar address allocation procedures might be needed, for example using global IPv6 address prefixes owned by the public CA instead of ULA.</t>
+
       <t>There is no prevention of source-address spoofing inside the ACP.  This implies that if an attacker gains access to the ACP, it can spoof all addresses inside the ACP and fake messages from any other node. New protocol/services run across the ACP should therefore use end-to-end authentication inside the ACP. This is already done by GRASP as specified in this document.</t>
+
       <t>The ACP is designed to enable automation of current network management and future autonomic peer-to-peer/distributed network automation. Any ACP member can send ACP IPv6 packet to other ACP members and announce via ACP GRASP services to all ACP members without dependency against centralized components.</t>
+
       <t>The ACP relies on peer-to-peer authentication and authorization using ACP certificates.  This security model is necessary to enable the autonomic ad-hoc any-to-any connectivity between ACP nodes. It provides infrastructure protection through hop by hop authentication and encryption - without relying on third parties. For any services where this complete autonomic peer-to-peer group security model is appropriate, the ACP certificate can also be used unchanged. For example for any type of Data-Plane routing protocol security.</t>
+
       <t>This ACP security model is designed primarily to protect against attack from the outside, but not against attacks from the inside.  To protect against spoofing attacks from compromised on-path ACP nodes, end-to-end encryption inside the ACP is used by new ACP signaling: GRASP across the ACP using TLS. The same is expected from any non-legacy services/protocols using the ACP. Because no group-keys are used, there is no risk for impacted nodes to access end-to-end encrypted traffic from other ACP nodes.</t>
+
       <t>Attacks from impacted ACP nodes against the ACP are more difficult than against the Data-Plane because of the autoconfiguration of the ACP and the absence of configuration options that could be abused that allow to change/break ACP behavior. This is excluding configuration for workaround in support of non-autonomic components.</t>
+
       <t>Mitigation against compromised ACP members is possible through standard automated certificate management mechanisms including revocation and non-renewal of short-lived certificates. In this version of the specification, there are no further optimization of these mechanisms defined for the ACP (but see <xref target="compromised" format="default"/>).</t>
+
       <t>Higher layer service built using ACP certificates should not solely rely on undifferentiated group security when another model is more appropriate/more secure. For example central network configuration relies on a security model where only few especially trusted nodes are allowed to configure the Data-Plane of network nodes (CLIL, Netconf). This can be done through ACP certificates by differentiating them and introduce roles. See <xref target="role-assignments" format="default"/>.</t>
       <!--
 
@@ -3291,15 +3413,19 @@ compromised nodes.</t>
 
 -->
       <t>Operators and provisioning software developers need to be aware of how the provisioning/configuration of network devices impacts the ability of the operator / provisioning software to remotely access the network nodes. By using the ACP, most of the issues  of configuration/provisioning caused loss of connectivity for remote provisioning/configuration will be eliminated, see <xref target="self-creation" format="default"/>. Only few exceptions such as explicit physical interface down configuration will be left <xref target="admin-down" format="default"/>.</t>
+
       <t>Many details of ACP are designed with security in mind and discussed elsewhere in the document:</t>
       <t>IPv6 addresses used by nodes in the ACP are covered as part of the node's domain certificate as described in <xref target="domcert-acpinfo" format="default"/>.  This allows even verification of ownership of a peer's IPv6 address when using a connection authenticated with the domain certificate.</t>
       <t>The ACP acts as a security (and transport) substrate for GRASP inside the ACP such that GRASP is not only protected by attacks from the outside, but also by attacks from compromised inside attackers - by relying not only on hop-by-hop security of ACP secure channels, but adding end-to-end security for those GRASP messages.  See <xref target="GRASP-substrate" format="default"/>.</t>
       <t>ACP provides for secure, resilient zero-touch discovery of EST servers for certificate renewal.  See <xref target="domcert-maint" format="default"/>.</t>
       <t>ACP provides extensible, auto-configuring hop-by-hop protection of the ACP infrastructure via the negotiation of hop-by-hop secure channel protocols.  See <xref target="channel-selection" format="default"/>.</t>
+
       <t>The ACP is designed to minimize attacks from the outside by minimizing its dependency against any non-ACP (Data-Plane) operations/configuration on a node.  See also <xref target="general_addressing" format="default"/>.</t>
+
       <t>In combination with BRSKI, ACP enables a resilient, fully zero-touch network solution for short-lived certificates that can be renewed or re-enrolled even after unintentional expiry (e.g., because of interrupted connectivity).  See <xref target="bootstrap" format="default"/>.</t>
+
       <t>Because ACP secure channels can be long lived, but certificates used may be short lived, secure channels, for example built via IPsec need to be terminated when peer certificates expire. See <xref target="Profiles" format="default"/>.</t>
-      <t>The ACP is designed to minimize attacks from the outside by minimizing its dependency against any non-ACP (Data-Plane) operations/configuration on a node.  See also <xref target="general_addressing" format="default"/>.</t>
+
       <t><xref target="acp-l2-switches-how" format="default"/> describes how to implement a routed
 ACP topology operating on what effectively is a large bridge-domain when using
 L3/L2 routers that operate at L2 in the Data-Plane. In this case, the ACP is
@@ -3421,7 +3547,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           <t>This lead to additional text about ACP registrars in the ACP document:</t>
           <t>1. Defined relationship ACP / ANI (ANI = ACP + BRSKI).</t>
           <t>6.1.4 (new) Overview of TA required for ACP.</t>
-          <t>6.1.5.5 Added explanations/requirements for Re-enrolment.</t>
+          <t>6.1.5.5 Added explanations/requirements for Re-enrollment.</t>
           <t>6.10.7 Normative requirements for ACP registrars (BRSKI or not).</t>
           <t>10.2 Operational expectations against ACP registrars (BRSKI or not).</t>
         </section>
@@ -3457,6 +3583,23 @@ currently one registry table - the "ACP Address Type" table.</t>
       </section>
       <section numbered="true" toc="default">
         <name>draft-ietf-anima-autonomic-control-plane-29</name>
+        <t>Discuss from Ben Kaduk:</t>
+        <t>Many good editorial improvements - thanks!.</t>
+        <t>5. added explanation of what to do upon failed secure channel establishment.</t>
+        <t>6.1.1. refined/extended cert public cey crypto algo and better distinguished algo for the keys of the cert and the key of the signer.</t>
+        <t>6.1.1. and following: explicitly defining "serialNumber" to be the X.520 subject name serialNumber, not the certificate serial Number.</t>
+        <t> 6.1.1. emhasize additional authorization step for EST servers (id-kp-cmcRA).</t>
+        <t>6.1.2 changed AcpNodeName ABNF to again use 32HEXDIG instead of self-defined variation, because authors overlooked that ABNF is case agnostic (which is fine). Added recommendation to encode as lower case. Added full ABNF encoding for extensions (any characters as in "atoms" except the new "+" separator).</t>
+        <t>6.1.5.3. New text to explain reason for use of HTTPS (instead of HTTP) for CRLDP and when and how to use HTTPS then.</t>
+        <t>6.1.5.5. added text explaning why/how and when to maintain TA data upon failing cert renewal (one version with BRSKI, one version with other, ess secure bootstrap protocols).</t>
+        <t>6.3. new text and requirement about the signaling of transport ports in DULL GRASP - benefits (no well-known ports required), and problems (additional DoS attack vector, albeit not worse than pre-existing ones, depending on setup of L2 subnets.).</t>
+        <t>6.7.3.1.1. Specified AUTH_HMAC_SHA2_256_128 (as the ESP authentication algorithm).</t>
+        <t>6.8.2. Added recommendations for TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256 when supporting TLS 1.3.</t>
+        <t>8.2.2. Added explanation about downgrade attack across configured ACP tunnels and what to do against it.</t>
+        <t>9.3.5.2. Rewrote most of section as it originally was too centric on BRSKI. Should now well describe expectations against automated bootstrap. Introduces new requirement not to call node as in support of ANI if is ALSO has TOFU bootstrap.</t>
+        <t>11. Expanded text about malicious EST servers. Added paragraph about ACP secure channel downgrade attacks. Added paragraphs about private PKI as a core to allow security against fake certificates, added paragraph about considerationsproblems when using public PI.</t>
+        <t>A.10.9 New appendix suggesting how to discover ACP secure channel negotiation downgrade attacks.</t>
+        <t></t>
         <t>Discuss from Roman Dayliw:</t>
         <t>6.1.5.1 - Added requirement to only announce SRV.est when a working CA connection.</t>
         <t>15 - Amended security considerations with text about registrar dependencies, security of IDevID/ACP-certificate, EST-Server and GRASP for EST server discovery.</t> 
@@ -3623,7 +3766,7 @@ currently one registry table - the "ACP Address Type" table.</t>
         <t>- removed last two paragraphs about relationship to rfc8247, as his is now written in first paragraph of the section.</t>
         <t>End of Ben Kaduk review related fixes.</t>
         <t> Other:</t>
-        <t>Forgot to update example of ACP domain information to use capitalized hex-digits as required by HEXLC used.</t>
+        <t>Forgot to update example of ACP domain information to use capitalized hex-digits as required by HEXDIG used.</t>
         <t>Added reference to RFC8316 (AN use-cases) to beginning of section 3 (ACP use cases).</t>
         <t>Small Enhanced IPsec parameters description / requirements fixes (from Michael Richardson).</t>
       </section>
@@ -3647,6 +3790,23 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
+
+      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+        <front>
+          <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+          <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+          <seriesInfo name="RFC" value="2119"/>
+          <seriesInfo name="BCP" value="14"/>
+          <author initials="S." surname="Bradner" fullname="S. Bradner">
+            <organization/>
+          </author>
+          <date year="1997" month="March"/>
+          <abstract>
+            <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+          </abstract>
+        </front>
+      </reference>
+
       <reference anchor="RFC3810" target="https://www.rfc-editor.org/info/rfc3810">
         <front>
           <title>Multicast Listener Discovery Version 2 (MLDv2) for IPv6</title>
@@ -3733,6 +3893,34 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
+
+      <reference anchor="RFC4492" target="https://www.rfc-editor.org/info/rfc4492">
+        <front>
+          <title>Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS)</title>
+          <seriesInfo name="DOI" value="10.17487/RFC4492"/>
+          <seriesInfo name="RFC" value="4492"/>
+          <author initials="S." surname="Blake-Wilson" fullname="S. Blake-Wilson">
+            <organization/>
+          </author>
+          <author initials="N." surname="Bolyard" fullname="N. Bolyard">
+            <organization/>
+          </author>
+          <author initials="V." surname="Gupta" fullname="V. Gupta">
+            <organization/>
+          </author>
+          <author initials="C." surname="Hawk" fullname="C. Hawk">
+            <organization/>
+          </author>
+          <author initials="B." surname="Moeller" fullname="B. Moeller">
+            <organization/>
+          </author>
+          <date year="2006" month="May"/>
+          <abstract>
+            <t>This document describes new key exchange algorithms based on Elliptic Curve Cryptography (ECC) for the Transport Layer Security (TLS) protocol.  In particular, it specifies the use of Elliptic Curve Diffie-Hellman (ECDH) key agreement in a TLS handshake and the use of Elliptic Curve Digital Signature Algorithm (ECDSA) as a new authentication mechanism.  This memo provides information for the Internet community.</t>
+          </abstract>
+        </front>
+      </reference>
+
       <reference anchor="RFC4861" target="https://www.rfc-editor.org/info/rfc4861">
         <front>
           <title>Neighbor Discovery for IP version 6 (IPv6)</title>
@@ -4045,6 +4233,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
+
       <reference anchor="RFC8174" target="https://www.rfc-editor.org/info/rfc8174">
         <front>
           <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
@@ -4060,6 +4249,8 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
+
+
       <reference anchor="RFC8221" target="https://www.rfc-editor.org/info/rfc8221">
         <front>
           <title>Cryptographic Algorithm Implementation Requirements and Usage Guidance for Encapsulating Security Payload (ESP) and Authentication Header (AH)</title>
@@ -4345,21 +4536,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
-      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
-        <front>
-          <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-          <seriesInfo name="DOI" value="10.17487/RFC2119"/>
-          <seriesInfo name="RFC" value="2119"/>
-          <seriesInfo name="BCP" value="14"/>
-          <author initials="S." surname="Bradner" fullname="S. Bradner">
-            <organization/>
-          </author>
-          <date year="1997" month="March"/>
-          <abstract>
-            <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
-          </abstract>
-        </front>
-      </reference>
+
       <reference anchor="RFC2315" target="https://www.rfc-editor.org/info/rfc2315">
         <front>
           <title>PKCS #7: Cryptographic Message Syntax Version 1.5</title>
@@ -4604,32 +4781,6 @@ currently one registry table - the "ACP Address Type" table.</t>
           <date year="2006" month="April"/>
           <abstract>
             <t>Optimistic Duplicate Address Detection is an interoperable modification of the existing IPv6 Neighbor Discovery (RFC 2461) and Stateless Address Autoconfiguration (RFC 2462) processes.  The intention is to minimize address configuration delays in the successful case, to reduce disruption as far as possible in the failure case, and to remain interoperable with unmodified hosts and routers.  [STANDARDS-TRACK]</t>
-          </abstract>
-        </front>
-      </reference>
-      <reference anchor="RFC4492" target="https://www.rfc-editor.org/info/rfc4492">
-        <front>
-          <title>Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS)</title>
-          <seriesInfo name="DOI" value="10.17487/RFC4492"/>
-          <seriesInfo name="RFC" value="4492"/>
-          <author initials="S." surname="Blake-Wilson" fullname="S. Blake-Wilson">
-            <organization/>
-          </author>
-          <author initials="N." surname="Bolyard" fullname="N. Bolyard">
-            <organization/>
-          </author>
-          <author initials="V." surname="Gupta" fullname="V. Gupta">
-            <organization/>
-          </author>
-          <author initials="C." surname="Hawk" fullname="C. Hawk">
-            <organization/>
-          </author>
-          <author initials="B." surname="Moeller" fullname="B. Moeller">
-            <organization/>
-          </author>
-          <date year="2006" month="May"/>
-          <abstract>
-            <t>This document describes new key exchange algorithms based on Elliptic Curve Cryptography (ECC) for the Transport Layer Security (TLS) protocol.  In particular, it specifies the use of Elliptic Curve Diffie-Hellman (ECDH) key agreement in a TLS handshake and the use of Elliptic Curve Digital Signature Algorithm (ECDSA) as a new authentication mechanism.  This memo provides information for the Internet community.</t>
           </abstract>
         </front>
       </reference>
@@ -5125,6 +5276,21 @@ currently one registry table - the "ACP Address Type" table.</t>
           </abstract>
         </front>
       </reference>
+
+        <reference anchor="RFC7435" target="https://www.rfc-editor.org/info/rfc7435" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7435.xml">
+          <front>
+            <title>Opportunistic Security: Some Protection Most of the Time</title>
+            <seriesInfo name="DOI" value="10.17487/RFC7435"/>
+            <seriesInfo name="RFC" value="7435"/>
+            <author initials="V." surname="Dukhovni" fullname="V. Dukhovni">
+              <organization/>
+            </author>
+            <date year="2014" month="December"/>
+            <abstract>
+              <t>This document defines the concept "Opportunistic Security" in the context of communications protocols.  Protocol designs based on Opportunistic Security use encryption even when authentication is not available, and use authentication when possible, thereby removing barriers to the widespread use of encryption on the Internet.</t>
+            </abstract>
+          </front>
+        </reference>
       <reference anchor="RFC7575" target="https://www.rfc-editor.org/info/rfc7575">
         <front>
           <title>Autonomic Networking: Definitions and Design Goals</title>
@@ -5545,6 +5711,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           <date month="Nov" year="2019"/>
         </front>
       </reference>
+
       <reference anchor="X.509" target="https://www.itu.int/rec/T-REC-X.509">
         <front>
           <title>Information technology - Open Systems Interconnection - The Directory: Public-key and attribute certificate frameworks</title>
@@ -5555,6 +5722,18 @@ currently one registry table - the "ACP Address Type" table.</t>
           <date month="October" year="2016"/>
         </front>
       </reference>
+
+      <reference anchor="X.520" target="https://www.itu.int/rec/T-REC-X.520">
+        <front>
+          <title>Information technology - Open Systems Interconnection - The Directory: Selected attribute types</title>
+          <seriesInfo name="ITU-T Recommendation X.520," value="ISO/IEC 9594-6"/>
+          <author>
+            <organization>International Telecommunication Union</organization>
+          </author>
+          <date month="October" year="2016"/>
+        </front>
+      </reference>
+
       <reference anchor="I-D.ietf-roll-applicability-template" target="http://www.ietf.org/internet-drafts/draft-ietf-roll-applicability-template-09.txt">
         <front>
           <title>ROLL Applicability Statement Template</title>
@@ -5741,7 +5920,7 @@ such an approach.  A full specification is subject to a separate document:</t>
         <t>An ACP domain is the set of all ACP nodes that can authenticate each other as belonging to the same ACP network using the ACP domain membership check (<xref target="certcheck" format="default"/>).  GRASP inside the ACP is run across all transitively connected ACP nodes in a domain.</t>
         <t>The rsub element in the acp-node-name permits the use of addresses from different ULA prefixes.  One use case is to create multiple physical networks that initially may be separated with one ACP domain but different routing subdomains, so that all nodes can mutual trust their ACP certificates (not depending on rsub) and so that they could connect later together into a contiguous ACP network.</t>
         <t>One instance of such a use case is an ACP for regions interconnected via a non-ACP enabled core, for example due to the absence of product support for ACP on the core nodes. ACP connect configurations as defined in this document can be used to extend and interconnect those ACP islands to the NOC and merge them into a single ACP when later that product support gap is closed.</t>
-        <t>Note that RPL scales very well.  It is not necessary to use multiple routing subdomains to scale ACP domains in a way it would be possible if other routing protocols where used.  They exist only as options for the above mentioned reasons.</t>
+        <t>Note that RPL scales very well.  It is not necessary to use multiple routing subdomains to scale ACP domains in a way that would be required if other routing protocols where used.  They exist only as options for the above mentioned reasons.</t>
         <t>If different ACP domains are to be created that should not allow to connect to each other by default, these ACP domains simply need to have different domain elements in the acp-node-name.  These domain elements can be arbitrary, including subdomains of one another: Domains "example.com" and "research.example.com" are separate domains if both are domain elements in the acp-node-name of certificates.</t>
         <t>It is not necessary to have a separate CA for different ACP domains: an operator can use a single CA to sign certificates for multiple ACP domains that are not allowed to connect to each other because the checks for ACP adjacencies includes comparison of the domain part.</t>
         <t>If multiple independent networks choose the same domain name but had their own CA, these would not form a single ACP domain because of CA mismatch.  Therefore there is no problem in choosing domain names that are potentially also used by others.  Nevertheless it is highly recommended to use domain names that one can have high probability to be unique.  It is recommended to use domain names that start with a DNS domain names owned by the assigning organization and unique within it.  For example "acp.example.com" if you own "example.com".</t>
@@ -5791,7 +5970,7 @@ of the ACP registrar deriving the /48 ULA prefix from the AN domain name.</t>
 existing unique device identifiers (e.g., MAC addresses).  In those cases it may not be desirable
 to assign addresses to devices via the ACP address information field in the way described
 in this document.  The certificate may simply serve to identify the ACP domain, 
-and the address field could be empty/unused. The only fix required in the remaining
+and the address field could be omitted. The only fix required in the remaining
 way the ACP operate is to define another element in the domain certificate for
 the two peers to decide who is Alice and who is Bob during secure channel building. 
 Note though that future work may leverage the acp address to authenticate "ownership"
@@ -5954,6 +6133,7 @@ signaling extensions, such as:</t>
     network wide "topology discovery" mechanisms.</li>
           </ol>
         </section>
+
         <section anchor="compromised" numbered="true" toc="default">
           <name>Avoiding and dealing with compromised ACP nodes</name>
           <t>Compromised ACP nodes pose the biggest risk to the operations of the network.
@@ -5993,6 +6173,14 @@ of short lived  certificates. Future extensions to the ACP could for
 example use GRASP flooding distribution of triggered updates of CRL/OCSP or
 explicit removal indication of the compromised nodes domain certificate.</t>
         </section>
+
+        <section anchor="downgrade" numbered="true" toc="default">
+          <name>Detecting ACP secure channel downgrade attacks</name>
+          <t>MITM attackers can force downgrade attacks for ACP secure channel selection by filtering/modifying DULL GRASP messages and/or actual secure channel data packets. For example if at some point in time DTLS traffic could be easier decrypted than traffic of IKEv2, the MITM could filter all IKEv2 packets to force ACP nodes to use DTLS (assuming the ACP nodes in question supported both DTLS and IKEv2).</t>
+          <t>For cases where such MITM attacks are not capable to inject malicious traffic (but only to decrypt the traffic), a downgrade attack could be discovered after a secure channel connection is established, for example by use of the following type of mechanism:</t>
+          <t>After the secure channel connection is established, the two ACP peers negotiate via an appropriate (To Be Defined) GRASP negotiation which ACP secure channel protocol should have been selected between them (in the absence of a MITM attacker). This negotiation would have to signal the DULL GRASP announced ACP secure channel options by each peer followed by an announcement of the preferred secure channel protocol by the ACP peer that is Alice in the secure channel setup, e.g.: the ACP peer that is deciding which secure channel protocol to pick. If that choosen secure channel protocol is different from the one that actually was choosen, then this mismatch is an indication that there is a MITM attacker or other similar issue (firewall prohibiting the use of specific protocols) that caused a non-preferred secure channel protocol to be chosen. This discovery could then result in mitigation options such as logging and ensueing investigations.</t>
+        </section>
+
       </section>
     </section>
     <!-- further considerations -->
