@@ -62,7 +62,7 @@
         <email>sbjarnason@arbor.net</email>
       </address>
     </author>
-    <date month="Aug" day="20" year="2020"/>
+    <date month="Aug" day="24" year="2020"/>
     <area>Operations and Management</area>
     <workgroup>ANIMA WG</workgroup>
     <abstract>
@@ -3248,22 +3248,17 @@ compromised nodes.</t>
       <name>Security Considerations</name>
       <t>A set of ACP nodes with ACP certificates for the same ACP domain and with ACP functionaliy enabled is automatically "self-building": The ACP is automatically established between neighboring ACP nodes. It is also "self-protecting": The ACP secure channels are authenticated and encrypted. No configuration is required for this.</t>
       <t>The self-protecting property does not include workarounds for non-autonomic components as explained in <xref target="workarounds" format="default"/>. See <xref target="self-protecting" format="default"/> for details of how the ACP protects itself against attacks from the outside and to a more limited degree from the inside as well.</t>
-      <t>However, the security of the ACP depends on a number of other factors:
-                                </t>
+
+      <t>However, the security of the ACP depends on a number of other factors:</t>
+
       <ul spacing="compact">
         <li>The usage of domain certificates depends on a valid supporting PKI infrastructure.  If the chain of trust of this PKI infrastructure is compromised, the security of the ACP is also compromised.  This is typically under the control of the network administrator.</li>
-        <li>ACP nodes receive their certificates from (so called) ACP registrars. Procedures and protocols for ACP registrars are outside the scope of this specification as explained in <xref target="registrars-protocols" format="default"/>. Instead, they are security critical dependencies of the ACP.</li>
-        <li>Every ACP registrar and ACP EST server (see below) is a security critical entity and its protocols are security critical protocols. Both need to be hardened against attacks, similar to a CA and its protocols. A malicious registrar can enroll malicious plegdes to an ACP network or break ACP routing by duplicate ACP address assignment to pledges via their ACP certificates.</li>
-        <li>ACP nodes that are ANI nodes rely on BRSKI as ACP registrars and enrolment protocol. For those type of ACP nodes, the security considerations of BRSKI apply. It enables automated, secure enrolment of ACP certificates.</li>
-        <li>BRSKI and potentially other ACP registrar options requires that nodes have an (X.509v3 based) IDevID. Such an IDevID allows for ACP registrars to authenticate candidate ACP nodes for the purpose of enrolment.</li>
-        <li>For an IDevIDs to securely identify an authentic node (to which the IDevID was originally assied), it needs to utilize hardware mechanisms such as a Trusted Platform Module (TPM) which protects against extraction of the private key of the IDevID and a (hardware/software) infrastructure to prohibit execution of non authenticated software to protect against other abuses of the IDevID (such as proxying malicious use of the IDevID through an impaired authentic ACP node).</li>
-        <li>Like the IDevID, the ACP certificate should be protected from extraction or other abuse by the same ACP node infrastructure. This infrastructure for IDevID and ACP certificate is beneficial independent of the ACP registrar protocol used (BRSKI or other).</li>
-        <li>Renewal of ACP certificates requires support for EST, therefore the security considerations of <xref target="RFC7030" format="default"/> related to certificate/TP renewal/rekeying apply to the ACP. EST security considerations when using other than mutual certificate authentication do not apply nor do considerations for initial enrolment via EST apply.</li>
-        <li>Any malicious ACP node could declare itself to be an EST server across the ACP (for example when malicious software can be executed on it), so it depends on the node security mechanisms of the EST server and the EST server to to CA protocols that only authentic designated ACP nodes can act as a functional EST servers for an ACP. CA for example should not authenticate nodes as EST servers where there is a risk of injection and execution of malicious software.</li>
-        <li>GRASP across the ACP is used to discover EST servers. Malicious on-path ACP nodes may filter valid EST server announcements across the ACP, but such malicious ACP nodes could equally filter any ACP traffic such as the EST traffic itself. Either attack requires the ability to modify ACP software on the impaired ACP node though.</li>
+        <li>Every ACP registrar is criticial infrastructure that needs to be hardened against attacks, similar to a CA. A malicious registrar can enroll enemy plegdes to an ACP network or break ACP routing by duplicate ACP address assignment to pledges via their ACP certificates.</li>
+        <li>Security can be compromised by implementation errors (bugs), as in all products.</li>
       </ul>
+
       <t>There is no prevention of source-address spoofing inside the ACP.  This implies that if an attacker gains access to the ACP, it can spoof all addresses inside the ACP and fake messages from any other node. New protocol/services run across the ACP should therefore use end-to-end authentication inside the ACP. This is already done by GRASP as specified in this document.</t>
-      <t>The ACP is designed to enable automation of current network management and future autonomic peer-to-peer/distributed network automation. Any ACP member can send ACP IPv6 packet to other ACP members and announce via ACP GRASP services to all ACP members without depenency against centralized components.</t>
+      <t>The ACP is designed to enable automation of current network management and future autonomic peer-to-peer/distributed network automation. Any ACP member can send ACP IPv6 packet to other ACP members and announce via ACP GRASP services to all ACP members without dependency against centralized components.</t>
       <t>The ACP relies on peer-to-peer authentication and authorization using ACP certificates.  This security model is necessary to enable the autonomic ad-hoc any-to-any connectivity between ACP nodes. It provides infrastructure protection through hop by hop authentication and encryption - without relying on third parties. For any services where this complete autonomic peer-to-peer group security model is appropriate, the ACP certificate can also be used unchanged. For example for any type of Data-Plane routing protocol security.</t>
       <t>This ACP security model is designed primarily to protect against attack from the outside, but not against attacks from the inside.  To protect against spoofing attacks from compromised on-path ACP nodes, end-to-end encryption inside the ACP is used by new ACP signaling: GRASP across the ACP using TLS. The same is expected from any non-legacy services/protocols using the ACP. Because no group-keys are used, there is no risk for impacted nodes to access end-to-end encrypted traffic from other ACP nodes.</t>
       <t>Attacks from impacted ACP nodes against the ACP are more difficult than against the Data-Plane because of the autoconfiguration of the ACP and the absence of configuration options that could be abused that allow to change/break ACP behavior. This is excluding configuration for workaround in support of non-autonomic components.</t>
@@ -3442,7 +3437,7 @@ currently one registry table - the "ACP Address Type" table.</t>
       <section numbered="true" toc="default">
         <name>draft-ietf-anima-autonomic-control-plane-29</name>
         <t>Conversion to XML v3. Solved empty () taxonomy xref problems. Various formatting fixes for v3.</t>
-        <t>Adding contributors section.</t>
+        <t>Added contributors section.</t>
       </section>
       <section numbered="true" toc="default">
         <name>draft-ietf-anima-autonomic-control-plane-28</name>
