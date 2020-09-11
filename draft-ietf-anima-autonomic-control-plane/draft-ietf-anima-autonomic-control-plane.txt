@@ -228,50 +228,50 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
      10.3.  The Administrator View . . . . . . . . . . . . . . . . . 119
    11. Security Considerations . . . . . . . . . . . . . . . . . . . 120
-   12. IANA Considerations . . . . . . . . . . . . . . . . . . . . . 123
-   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . 124
-   14. Contributors  . . . . . . . . . . . . . . . . . . . . . . . . 124
-   15. Change log [RFC Editor: Please remove]  . . . . . . . . . . . 125
-     15.1.  Summary of changes since entering IESG review  . . . . . 125
-       15.1.1.  Reviews (while in IESG review status) / status . . . 125
-       15.1.2.  BRSKI / ACP registrar related enhancements . . . . . 126
-       15.1.3.  Normative enhancements since start of IESG review  . 126
+   12. IANA Considerations . . . . . . . . . . . . . . . . . . . . . 125
+   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . 126
+   14. Contributors  . . . . . . . . . . . . . . . . . . . . . . . . 126
+   15. Change log [RFC Editor: Please remove]  . . . . . . . . . . . 127
+     15.1.  Summary of changes since entering IESG review  . . . . . 127
+       15.1.1.  Reviews (while in IESG review status) / status . . . 127
+       15.1.2.  BRSKI / ACP registrar related enhancements . . . . . 128
+       15.1.3.  Normative enhancements since start of IESG review  . 128
        15.1.4.  Explanatory enhancements since start of IESG
-               review  . . . . . . . . . . . . . . . . . . . . . . . 127
-     15.2.  draft-ietf-anima-autonomic-control-plane-29  . . . . . . 128
-     15.3.  draft-ietf-anima-autonomic-control-plane-28  . . . . . . 128
-     15.4.  draft-ietf-anima-autonomic-control-plane-27  . . . . . . 129
-     15.5.  draft-ietf-anima-autonomic-control-plane-26  . . . . . . 130
-     15.6.  draft-ietf-anima-autonomic-control-plane-25  . . . . . . 131
-     15.7.  draft-ietf-anima-autonomic-control-plane-24  . . . . . . 134
-     15.8.  draft-ietf-anima-autonomic-control-plane-23  . . . . . . 134
-     15.9.  draft-ietf-anima-autonomic-control-plane-22  . . . . . . 136
-   16. Normative References  . . . . . . . . . . . . . . . . . . . . 138
-   17. Informative References  . . . . . . . . . . . . . . . . . . . 141
-   Appendix A.  Background and Futures (Informative) . . . . . . . . 149
-     A.1.  ACP Address Space Schemes . . . . . . . . . . . . . . . . 149
-     A.2.  BRSKI Bootstrap (ANI) . . . . . . . . . . . . . . . . . . 150
-     A.3.  ACP Neighbor discovery protocol selection . . . . . . . . 151
-       A.3.1.  LLDP  . . . . . . . . . . . . . . . . . . . . . . . . 151
-       A.3.2.  mDNS and L2 support . . . . . . . . . . . . . . . . . 152
-       A.3.3.  Why DULL GRASP  . . . . . . . . . . . . . . . . . . . 152
-     A.4.  Choice of routing protocol (RPL)  . . . . . . . . . . . . 152
-     A.5.  ACP Information Distribution and multicast  . . . . . . . 154
-     A.6.  Extending ACP channel negotiation (via GRASP) . . . . . . 155
-     A.7.  CAs, domains and routing subdomains . . . . . . . . . . . 157
-     A.8.  Intent for the ACP  . . . . . . . . . . . . . . . . . . . 158
-     A.9.  Adopting ACP concepts for other environments  . . . . . . 159
-     A.10. Further (future) options  . . . . . . . . . . . . . . . . 161
-       A.10.1.  Auto-aggregation of routes . . . . . . . . . . . . . 161
+               review  . . . . . . . . . . . . . . . . . . . . . . . 129
+     15.2.  draft-ietf-anima-autonomic-control-plane-29  . . . . . . 130
+     15.3.  draft-ietf-anima-autonomic-control-plane-28  . . . . . . 130
+     15.4.  draft-ietf-anima-autonomic-control-plane-27  . . . . . . 132
+     15.5.  draft-ietf-anima-autonomic-control-plane-26  . . . . . . 132
+     15.6.  draft-ietf-anima-autonomic-control-plane-25  . . . . . . 133
+     15.7.  draft-ietf-anima-autonomic-control-plane-24  . . . . . . 136
+     15.8.  draft-ietf-anima-autonomic-control-plane-23  . . . . . . 136
+     15.9.  draft-ietf-anima-autonomic-control-plane-22  . . . . . . 138
+   16. Normative References  . . . . . . . . . . . . . . . . . . . . 140
+   17. Informative References  . . . . . . . . . . . . . . . . . . . 143
+   Appendix A.  Background and Futures (Informative) . . . . . . . . 151
+     A.1.  ACP Address Space Schemes . . . . . . . . . . . . . . . . 151
+     A.2.  BRSKI Bootstrap (ANI) . . . . . . . . . . . . . . . . . . 152
+     A.3.  ACP Neighbor discovery protocol selection . . . . . . . . 153
+       A.3.1.  LLDP  . . . . . . . . . . . . . . . . . . . . . . . . 153
+       A.3.2.  mDNS and L2 support . . . . . . . . . . . . . . . . . 154
+       A.3.3.  Why DULL GRASP  . . . . . . . . . . . . . . . . . . . 154
+     A.4.  Choice of routing protocol (RPL)  . . . . . . . . . . . . 154
+     A.5.  ACP Information Distribution and multicast  . . . . . . . 156
+     A.6.  Extending ACP channel negotiation (via GRASP) . . . . . . 157
+     A.7.  CAs, domains and routing subdomains . . . . . . . . . . . 159
+     A.8.  Intent for the ACP  . . . . . . . . . . . . . . . . . . . 160
+     A.9.  Adopting ACP concepts for other environments  . . . . . . 161
+     A.10. Further (future) options  . . . . . . . . . . . . . . . . 163
+       A.10.1.  Auto-aggregation of routes . . . . . . . . . . . . . 163
        A.10.2.  More options for avoiding IPv6 Data-Plane
-               dependencies  . . . . . . . . . . . . . . . . . . . . 161
-       A.10.3.  ACP APIs and operational models (YANG) . . . . . . . 162
-       A.10.4.  RPL enhancements . . . . . . . . . . . . . . . . . . 162
-       A.10.5.  Role assignments . . . . . . . . . . . . . . . . . . 163
-       A.10.6.  Autonomic L3 transit . . . . . . . . . . . . . . . . 163
-       A.10.7.  Diagnostics  . . . . . . . . . . . . . . . . . . . . 163
-       A.10.8.  Avoiding and dealing with compromised ACP nodes  . . 164
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 165
+               dependencies  . . . . . . . . . . . . . . . . . . . . 163
+       A.10.3.  ACP APIs and operational models (YANG) . . . . . . . 164
+       A.10.4.  RPL enhancements . . . . . . . . . . . . . . . . . . 164
+       A.10.5.  Role assignments . . . . . . . . . . . . . . . . . . 165
+       A.10.6.  Autonomic L3 transit . . . . . . . . . . . . . . . . 165
+       A.10.7.  Diagnostics  . . . . . . . . . . . . . . . . . . . . 165
+       A.10.8.  Avoiding and dealing with compromised ACP nodes  . . 166
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 167
 
 
 
@@ -1948,10 +1948,10 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    that the service instance is dead and select another instance of the
    same service instead (from another GRASP announcement).
 
-
-
-
-
+   The "SRV.est" objective(s) SHOULD only be announced when the ACP node
+   knows that it can successfully communicate with a CA to perform the
+   EST renewal/rekeying operations for the ACP domain.  See also
+   Section 11.
 
 
 
@@ -6679,7 +6679,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 11.  Security Considerations
 
    A set of ACP nodes with ACP certificates for the same ACP domain and
-   with ACP functionaliy enabled is automatically "self-building": The
+   with ACP functionality enabled is automatically "self-building": The
    ACP is automatically established between neighboring ACP nodes.  It
    is also "self-protecting": The ACP secure channels are authenticated
    and encrypted.  No configuration is required for this.
@@ -6696,23 +6696,23 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
       infrastructure.  If the chain of trust of this PKI infrastructure
       is compromised, the security of the ACP is also compromised.  This
       is typically under the control of the network administrator.
-   *  Every ACP registrar is criticial infrastructure that needs to be
-      hardened against attacks, similar to a CA.  A malicious registrar
-      can enroll enemy plegdes to an ACP network or break ACP routing by
-      duplicate ACP address assignment to pledges via their ACP
+   *  ACP nodes receive their certificates from ACP registrars.  These
+      ACP registrars are security critical dependencies of the ACP:
+      Procedures and protocols for ACP registrars are outside the scope
+      of this specification as explained in Section 6.10.7.1, only
+      requirements against the resulting ACP certificates are specified.
+   *  Every ACP registrar (for enrolment of ACP certificates) and ACP
+      EST server (for renewal of ACP certificates) is a security
+      critical entity and its protocols are security critical protocols.
+      Both need to be hardened against attacks, similar to a CA and its
+      protocols.  A malicious registrar can enroll malicious nodes to an
+      ACP network (if the CA delegates this policy to the registrar) or
+      break ACP routing for example by assigning duplicate ACP address
+      assignment to ACP nodes via their ACP certificates.
+   *  ACP nodes that are ANI nodes rely on BRSKI as the protocol for ACP
+      registrars.  For ANI type ACP nodes, the security considerations
+      of BRSKI apply.  It enables automated, secure enrolment of ACP
       certificates.
-   *  Security can be compromised by implementation errors (bugs), as in
-      all products.
-
-   There is no prevention of source-address spoofing inside the ACP.
-   This implies that if an attacker gains access to the ACP, it can
-   spoof all addresses inside the ACP and fake messages from any other
-   node.  New protocol/services run across the ACP should therefore use
-   end-to-end authentication inside the ACP.  This is already done by
-   GRASP as specified in this document.
-
-
-
 
 
 
@@ -6721,6 +6721,89 @@ Eckert, et al.          Expires 25 February 2021              [Page 120]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
+
+   *  BRSKI and potentially other ACP registrar protocol options require
+      that nodes have an (X.509v3 based) IDevID.  IDevIDs are an option
+      for ACP registrars to securely identify candidate ACP nodes that
+      should be enrolled into an ACP domain.
+   *  For IDevIDs to securely identify the node to which it IDevID is
+      assigned, the node it needs to (1) utilize hardware support such
+      as a Trusted Platform Module (TPM) to protect against extraction/
+      cloning of the private key of the IDevID and (2) a hardware/
+      software infrastructure to prohibit execution of non authenticated
+      software to protect against malicious use of the IDevID.
+   *  Like the IDevID, the ACP certificate should equally be protected
+      from extraction or other abuse by the same ACP node
+      infrastructure.  This infrastructure for IDevID and ACP
+      certificate is beneficial independent of the ACP registrar
+      protocol used (BRSKI or other).
+   *  Renewal of ACP certificates requires support for EST, therefore
+      the security considerations of [RFC7030] related to certificate
+      renewal/rekeying and TP renewal apply to the ACP.  EST security
+      considerations when using other than mutual certificate
+      authentication do not apply nor do considerations for initial
+      enrolment via EST apply, except for ANI type ACP nodes because
+      BRSKI leverages EST.
+   *  A malicious ACP node could declare itself to be an EST server via
+      GRASP across the ACP if malicious software could be executed on
+      it.  CA should therefore authenticate only known trustworthy EST
+      servers, such as nodes with hardware protections against malicious
+      software.  Without the ability to talk to the CA, a malicious EST
+      server can still attract ACP nodes attempting to renew their
+      keying material, but they will fail to perform successful renewal
+      of a valid ACP certificate.  The ACP node attempting to use the
+      malicious EST server can then continue to use a different EST
+      server, and log a failure against a malicious EST server.
+   *  Malicious on-path ACP nodes may filter valid EST server
+      announcements across the ACP, but such malicious ACP nodes could
+      equally filter any ACP traffic such as the EST traffic itself.
+      Either attack requires the ability to execute malicious software
+      on an impaired ACP node though.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 121]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
+
+   *  In the abscence of malicious software injection, an attacker that
+      can misconfigure an ACP node which is supporting EST server
+      functionality could attempt to configure a malicious CA.  This
+      would not result in the ability to successfully renew ACP
+      certificates, but it could result in Denial-of-Service (DoS)
+      attacks by becoming an EST server and making ACP nodes attempting
+      their ACP certificate renewal via this impaired ACP node.  This
+      problem can be avoided when the EST server implementation can
+      verify that the CA configured is indeed providing renewal for
+      certificates of the nodes ACP.  The ability to do so depends on
+      the EST-Server to CA protocol, which is outside the scope of this
+      document.
+
+   In summary, attacks against the PKI/certificate dependencies of the
+   ACP can be minimized by a variety of hardware/software commponents
+   including options such as TPM for IDevID/ACP-certificate,
+   prohibitions against execution of non-trusted software and design
+   aspects of the EST Server functionality for the ACP to eliminate
+   configuration level impairment.
+
+   There is no prevention of source-address spoofing inside the ACP.
+   This implies that if an attacker gains access to the ACP, it can
+   spoof all addresses inside the ACP and fake messages from any other
+   node.  New protocol/services run across the ACP should therefore use
+   end-to-end authentication inside the ACP.  This is already done by
+   GRASP as specified in this document.
 
    The ACP is designed to enable automation of current network
    management and future autonomic peer-to-peer/distributed network
@@ -6736,6 +6819,20 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    where this complete autonomic peer-to-peer group security model is
    appropriate, the ACP certificate can also be used unchanged.  For
    example for any type of Data-Plane routing protocol security.
+
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 122]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
    This ACP security model is designed primarily to protect against
    attack from the outside, but not against attacks from the inside.  To
@@ -6770,14 +6867,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    how the provisioning/configuration of network devices impacts the
    ability of the operator / provisioning software to remotely access
    the network nodes.  By using the ACP, most of the issues of
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 121]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    configuration/provisioning caused loss of connectivity for remote
    provisioning/configuration will be eliminated, see Section 6.  Only
    few exceptions such as explicit physical interface down configuration
@@ -6790,6 +6879,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    node's domain certificate as described in Section 6.1.2.  This allows
    even verification of ownership of a peer's IPv6 address when using a
    connection authenticated with the domain certificate.
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 123]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
    The ACP acts as a security (and transport) substrate for GRASP inside
    the ACP such that GRASP is not only protected by attacks from the
@@ -6826,14 +6925,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    operating on what effectively is a large bridge-domain when using L3/
    L2 routers that operate at L2 in the Data-Plane.  In this case, the
    ACP is subject to much higher likelyhood of attacks by other nodes
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 122]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    "stealing" L2 addresses than in the actual routed case.  Especially
    when the bridged network includes non-trusted devices such as hosts.
    This is a generic issue in L2 LANs.  L2/L3 devices often already have
@@ -6844,6 +6935,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    specifically to protect the ACP.  Likewise the GRASP DULL instance
    needs to ensure that the IPv6 address in the locator-option matches
    the source IPv6 address of the DULL GRASP packet.
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 124]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
 12.  IANA Considerations
 
@@ -6879,17 +6980,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    The IANA is requested to create an ACP Parameter Registry with
    currently one registry table - the "ACP Address Type" table.
 
-
-
-
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 123]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    "ACP Address Type" Table.  The value in this table are numeric values
    0...3 paired with a name (string).  Future values MUST be assigned
    using the Standards Action policy defined by [RFC8126].  The
@@ -6898,6 +6988,19 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    0: ACP Zone Addressing Sub-Scheme (ACP RFC 1: ACP Vlong Addressing
    Sub-Scheme (ACP RFC Figure 12) / ACP Manual Addressing Sub-Scheme
    (ACP RFC Section 6.10.4) Section 6.10.5)
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 125]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
 13.  Acknowledgements
 
@@ -6938,14 +7041,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    For RPL contributions and all things BRSKI/bootstrap including
    validation code, ongoing document text support and technical input.
 
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 124]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    Michael C. Richardson
    Sandelman Software Works
 
@@ -6954,6 +7049,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
    For the RPL technology choices and text.
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 126]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
    Pascal Thubert
    Cisco Systems, Inc
@@ -6994,17 +7097,22 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    IESG: Open DISCUSS hopefully resolved by this version: Eric Rescorla
    (SEC, left IESG), Benjamin Kaduk (SEC).
 
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 125]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    Other: Michael Richardson (WG), Brian Carpenter (WG), Pascal Thubert
    (WG), Frank Xialiang (WG), Elwyn Davies (GEN), Joel Halpern (RTGdir),
    Yongkang Zhang (WG), William Atwood (WG).
+
+
+
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 127]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
 15.1.2.  BRSKI / ACP registrar related enhancements
 
@@ -7046,24 +7154,21 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
    6.1.5.6 Added explanations of behavior under failing certificates.
 
-
-
-
-
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 126]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    6.1.2 Allow ACP adddress '0' in ACP domain information field:
    presence of address indicates permission to build ACP secure channel
    to node, 0 indicates that the address of the node is assigned by
    (future) other means than certificate.  Non-autonomic nodes have no
    address at all (that was in -13), and can only connect via ACP
    connect interfaces to ACP.
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 128]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
    6.1.3 Distinction of real ACP nodes (with address) and those with
    domain certificate without address added as a new rule to ACP domain
@@ -7107,19 +7212,19 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    6.10.5 introduced 'F' bit position as a better visual representation
    in the Vlong address space.
 
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 127]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
-
    6.11.1.1 extensive overhaul to improve readability of use of RPL
    (from IESG feedback of non-routing/RPL experts).
 
    6.12.2 Added caution about unconfiguring Data-Plane IPv6 addresses
    and impact to ACP (limitation of current ACP design, and pointint to
    more details in 10.2).
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 129]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
 
    10.4 New explanations / summary of configurations for ACP (aka: all
    config is undesirable and only required for integrating with non-
@@ -7136,6 +7241,17 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    implementing (section 6) and operating (section 10) the ACP.
 
 15.2.  draft-ietf-anima-autonomic-control-plane-29
+
+   Discuss from Roman Dayliw:
+
+   6.1.5.1 - Added requirement to only announce SRV.est when a working
+   CA connection.
+
+   15 - Amended security considerations with text about registrar
+   dependencies, security of IDevID/ACP-certificate, EST-Server and
+   GRASP for EST server discovery.
+
+   Other:
 
    Conversion to XML v3.  Solved empty () taxonomy xref problems.
    Various formatting fixes for v3.
@@ -7158,17 +7274,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    6.7.3.1.2.  Added requirement for ACP nodes supporting IKEv2 to
    support RFC8247 (not sure how that got dropped from prior versions.
 
-   Replaced minimum crypto requirements definition via specific AES
-   options with more generic "symmetric key/hash strength" requirements.
 
 
 
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 128]
+Eckert, et al.          Expires 25 February 2021              [Page 130]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
+
+   Replaced minimum crypto requirements definition via specific AES
+   options with more generic "symmetric key/hash strength" requirements.
 
    6.10.7.3.  Added example how to derive addressing scheme from IDevID
    (PID).  Added explanation how to deal with non-persistant registrar
@@ -7212,19 +7327,22 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    Removed now unnecessary references for earlier rrc822Name otherName
    choice.
 
+
+
+
+
+
+
+Eckert, et al.          Expires 25 February 2021              [Page 131]
+
+Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
+
+
 15.4.  draft-ietf-anima-autonomic-control-plane-27
 
    Too many revisions with too many fixes.  Lets do a one-word change
    revision for a change now if it helps to accelerate the review
    process.
-
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 129]
-
-Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
-
 
    Added "subjectAltName /" to make it unambiguous that AcpNodeName is
    indeed a SAN (from Russ).
@@ -7269,18 +7387,14 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
    Appenices.  Minor changes for rfc822Name to otherName change.
 
-   Various minor verbal fixes/enhancements.
 
 
-
-
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 130]
+Eckert, et al.          Expires 25 February 2021              [Page 132]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
+
+   Various minor verbal fixes/enhancements.
 
 15.6.  draft-ietf-anima-autonomic-control-plane-25
 
@@ -7328,15 +7442,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
    paragraph why ACP nodes may prefer GRE over native (wonder how that
    was missing..).
 
-   9.1.1 Added section to explain need for secure channel peer
-   diagnostics via signaling of TA.  Four examples given.
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 131]
+Eckert, et al.          Expires 25 February 2021              [Page 133]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
+
+   9.1.1 Added section to explain need for secure channel peer
+   diagnostics via signaling of TA.  Four examples given.
 
    Paul Wouters mentioned that ipkcs7 had to be used in some interop
    cases with windows CA, but that is an issue of ACP Registrar having
@@ -7384,15 +7499,15 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
    2.  Added definitions for RPI and RPL.
 
-   6.1.1. added note about end-to-end authentication to distinguish
-   channel security from overall ACP security model.
 
 
-
-Eckert, et al.          Expires 25 February 2021              [Page 132]
+Eckert, et al.          Expires 25 February 2021              [Page 134]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
+
+   6.1.1. added note about end-to-end authentication to distinguish
+   channel security from overall ACP security model.
 
    6.5 Fixed bugs in channel selection signaling step description (Alice
    vs. Bob).
@@ -7442,10 +7557,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-
-
-
-Eckert, et al.          Expires 25 February 2021              [Page 133]
+Eckert, et al.          Expires 25 February 2021              [Page 135]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7501,7 +7613,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 134]
+Eckert, et al.          Expires 25 February 2021              [Page 136]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7557,7 +7669,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 135]
+Eckert, et al.          Expires 25 February 2021              [Page 137]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7613,7 +7725,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 136]
+Eckert, et al.          Expires 25 February 2021              [Page 138]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7669,7 +7781,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 137]
+Eckert, et al.          Expires 25 February 2021              [Page 139]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7725,7 +7837,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 138]
+Eckert, et al.          Expires 25 February 2021              [Page 140]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7781,7 +7893,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 139]
+Eckert, et al.          Expires 25 February 2021              [Page 141]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7837,7 +7949,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 140]
+Eckert, et al.          Expires 25 February 2021              [Page 142]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7893,7 +8005,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 141]
+Eckert, et al.          Expires 25 February 2021              [Page 143]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -7949,7 +8061,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 142]
+Eckert, et al.          Expires 25 February 2021              [Page 144]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8005,7 +8117,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 143]
+Eckert, et al.          Expires 25 February 2021              [Page 145]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8061,7 +8173,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 144]
+Eckert, et al.          Expires 25 February 2021              [Page 146]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8117,7 +8229,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 145]
+Eckert, et al.          Expires 25 February 2021              [Page 147]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8173,7 +8285,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 146]
+Eckert, et al.          Expires 25 February 2021              [Page 148]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8229,7 +8341,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 147]
+Eckert, et al.          Expires 25 February 2021              [Page 149]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8285,7 +8397,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 148]
+Eckert, et al.          Expires 25 February 2021              [Page 150]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8341,7 +8453,7 @@ A.1.  ACP Address Space Schemes
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 149]
+Eckert, et al.          Expires 25 February 2021              [Page 151]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8397,7 +8509,7 @@ A.2.  BRSKI Bootstrap (ANI)
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 150]
+Eckert, et al.          Expires 25 February 2021              [Page 152]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8453,7 +8565,7 @@ A.3.1.  LLDP
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 151]
+Eckert, et al.          Expires 25 February 2021              [Page 153]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8509,7 +8621,7 @@ A.4.  Choice of routing protocol (RPL)
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 152]
+Eckert, et al.          Expires 25 February 2021              [Page 154]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8565,7 +8677,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 153]
+Eckert, et al.          Expires 25 February 2021              [Page 155]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8621,7 +8733,7 @@ A.5.  ACP Information Distribution and multicast
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 154]
+Eckert, et al.          Expires 25 February 2021              [Page 156]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8677,7 +8789,7 @@ A.6.  Extending ACP channel negotiation (via GRASP)
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 155]
+Eckert, et al.          Expires 25 February 2021              [Page 157]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8733,7 +8845,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 156]
+Eckert, et al.          Expires 25 February 2021              [Page 158]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8789,7 +8901,7 @@ A.7.  CAs, domains and routing subdomains
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 157]
+Eckert, et al.          Expires 25 February 2021              [Page 159]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8845,7 +8957,7 @@ A.8.  Intent for the ACP
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 158]
+Eckert, et al.          Expires 25 February 2021              [Page 160]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8901,7 +9013,7 @@ A.9.  Adopting ACP concepts for other environments
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 159]
+Eckert, et al.          Expires 25 February 2021              [Page 161]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -8957,7 +9069,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 160]
+Eckert, et al.          Expires 25 February 2021              [Page 162]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -9013,7 +9125,7 @@ A.10.2.  More options for avoiding IPv6 Data-Plane dependencies
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 161]
+Eckert, et al.          Expires 25 February 2021              [Page 163]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -9069,7 +9181,7 @@ A.10.4.  RPL enhancements
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 162]
+Eckert, et al.          Expires 25 February 2021              [Page 164]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -9125,7 +9237,7 @@ A.10.7.  Diagnostics
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 163]
+Eckert, et al.          Expires 25 February 2021              [Page 165]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -9181,7 +9293,7 @@ A.10.8.  Avoiding and dealing with compromised ACP nodes
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 164]
+Eckert, et al.          Expires 25 February 2021              [Page 166]
 
 Internet-Draft      An Autonomic Control Plane (ACP)         August 2020
 
@@ -9237,4 +9349,4 @@ Authors' Addresses
 
 
 
-Eckert, et al.          Expires 25 February 2021              [Page 165]
+Eckert, et al.          Expires 25 February 2021              [Page 167]
