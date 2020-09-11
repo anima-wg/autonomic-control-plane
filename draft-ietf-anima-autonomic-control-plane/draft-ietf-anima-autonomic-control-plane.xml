@@ -3712,7 +3712,7 @@ currently one registry table - the "ACP Address Type" table.</t>
         <t>11. Expanded text about malicious EST servers. Added paragraph about ACP secure channel downgrade attacks. Added paragraphs about private PKI as a core to allow security against fake certificates, added paragraph about considerationsproblems when using public PI.</t>
         <t>A.10.9 New appendix suggesting how to discover ACP secure channel negotiation downgrade attacks.</t>
         <t></t>
-        <t>Discuss from Roman Dayliw:</t>
+        <t>Discuss from Roman Danyliw:</t>
         <t>6.1.5.1 - Added requirement to only announce SRV.est when a working CA connection.</t>
         <t>15 - Amended security considerations with text about registrar dependencies, security of IDevID/ACP-certificate, EST-Server and GRASP for EST server discovery.</t> 
         <t>Other:</t>

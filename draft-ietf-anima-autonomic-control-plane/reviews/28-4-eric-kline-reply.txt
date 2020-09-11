@@ -1,0 +1,366 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Erik Kline <ek.ietf@gmail.com>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	anima-chairs@ietf.org, anima@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Erik Kline's Discuss on
+ draft-ietf-anima-autonomic-control-plane-28: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <159730676576.12387.18205135091671983859@ietfa.amsl.com>
+
+Thanks, Erik
+
+Listing all diffs just in case and so i don't have to create separate mail headers ;-)
+replies to discuss/comments after diff URLs.
+
+Cheers
+    Toerless
+
+Full diff -28 to current -29 version:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-28.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-29.txt
+
+(this includes conversion XMLv2->v3 and addition of contributor section).
+
+Diff for Roman Danyliw discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9c70415d6de706e7890ed2081b4a4c25cb9d434b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Ben Kaduk discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Barry Leiba discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Erik Kline discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Robert Wilton comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5f5e36478e8294b6f8b8228612088286e5854473/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+
+On Thu, Aug 13, 2020 at 01:19:25AM -0700, Erik Kline via Datatracker wrote:
+> Erik Kline has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-28: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> [ section 2 ]
+> 
+> * "It is the approximate IPv6 counterpart of the IPv4 private address
+>   ([RFC1918])."
+> 
+>   I understand the intent but I don't think this statement is complete. I
+>   think we shouldn't let this sentence out into the wild as is since it could
+>   be read without any context nor even any pretense of interest in nuance.
+> 
+>   May I suggest:
+> 
+>   "It is often thought of as the approximate IPv6 counterpart of the IPv4
+>   private address space ([RFC1918]), though it is in fact meaningfully
+>   different in important and subtle ways [and upon which this document relies]."
+
+Thanks for not trying to talk me out of the comparison, which i successfully
+used to explain ULA to many customers. Your proposal is a bit too verbose for
+the terminoloy section, so it's now:
+
+It is often thought of as the approximate IPv6 counterpart of the IPv4 private address (<xref target="RFC1918" format="default"/>). There are important differences though that are beneficial for and exploited by the ACP, such as the ULA Global ID prefix, which are the first 48-bits of a ULA address. In this document it is abbreviated as "ULA prefix".
+
+> [ section 6.10.2 ]
+> 
+> * Please clarify the table at the end of this section.  It looks like only
+>   two Types are listed, but should all 4 bit values be present?
+
+>   Where are the
+>   Z, F, and V bits in the address?
+> 
+>   I realize these are defined in the following sections, so it probably
+>   suffices to say something like "The Z, F, and V bits are allocated from
+>   within the sub-scheme portion of the address according to the following
+>   sections..." or something.
+> 
+>   Unassigned/unused Type values should maybe be listed in the table as
+>   "Reserved"?
+
+Nice suggestion. Table and explanation is now:
+
++------+-----------------+-----------+-------------------+
+| Type | Name            |F-bit|   Z | V-bits   | Prefix |
++------+-----------------+-----+-----+----------+--------+
+| 0x00 | ACP-Zone        | N/A |   0 | 1 bit    | /127   |
++------+-----------------+-----+-----+----------+--------+
+| 0x00 | ACP-Manual      | N/A |   1 | N/A      |  /64   |
++------+-----------------+-----+-----+----------+--------+
+| 0x01 | ACP-VLong-8     |   0 | N/A | 8 bits   | /120   |
++------+-----------------+-----+-----+----------+--------+
+| 0x01 | ACP-VLong-16    |   1 | N/A | 16 bits  | /112   |
++------+-----------------+-----+-----+----------+--------+
+| 0x10 | Reserved / For future definition/allocation     |
++------+-----------------+-----+-----+----------+--------+
+| 0x11 | Reserved / For future definition/allocation     |
++------+-----------------+-----+-----+----------+--------+
+
+F-Bit and Z are two encoding fields explained below for
+the Sub-Schemes that introduce/use them. V-bits is the number
+of bits of addresses allocated to the ACP node.
+Prefix is the prefix the ACP node is announcing into the
+RPL routing protocol.
+---
+
+Prefix of course also from your discuss below.
+
+> [ section 8.1.3 ]
+> 
+> * Why is an RIO for ::/0 with a lifetime of 0 required?  Doesn't it suffice
+>   it set the default router lifetime to 0?  Separately, are all nodes required
+>   to be Type C?
+
+Check the new text, i hope it explains everything.
+
+Yes, type A and B do not support per-prefix auto selection of router,
+The lifetime of 0 is used so only Type C hosts will invalidate the
+default route for the ACP edge node, but not Type A/B hosts. Maybe there
+is another parameter combination that achieves this goal, but this was
+the easiest for me to assess/describe.
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> [ section 1 ]
+> 
+> * "as good as possible" might be "as well as possible", but I'm unsure if I
+>   have any grammatical basis for this (adverbial phrase vs adjectival phrase?).
+
+I recommend Barry Leiba as your goto english grammar guru ;-)
+(fixed through his review).
+
+> * "ACPs functions" -> "ACP's functions"?
+
+Ack.
+> 
+> * "overview how" perhaps: "overview of how"
+
+Ack.
+
+> * "propriety extensions" -> "proprietary extensions"
+
+Ack.
+
+> [ section 2 ]
+> 
+> * "On virtual nodes their equivalent." isn't really a complete sentence.  I
+>   think if you just join it to the previous sentence with ";" it works
+>   grammatically.
+
+Ack.
+
+> [ section 6.1.1 ]
+> 
+> * s/devices "serialNumber"/device's "serialNumber"/
+
+Ack
+
+> [ section 6.1.2 ]
+> 
+> * The example "fd89b714F3db00000200000064000000" contains an uppercase "F"
+>   and therefore doesn't conform to 32HEXLC, I believe.
+
+Yepp, fixed to lowercase through other reviewer feedback, but also
+notinh its really case sensitive and encoding SHOULD use lowercase.
+
+> * 2. 2.1, "a nodes ACP" -> "a node's ACP" (it is correct in the immediately
+>   preceding sentence).
+
+Ack
+
+> [ section 6.1.3 ]
+> 
+> * The rsub field, even if deliberately not pertinent, is a bit conspicuous by
+>   its absence from this section I think. It might good to state so explicitly
+>   (at least I, as a reader, was expecting to see some mention of it).
+
+Sure:
+
+          <t>The optional rsub field of the AcpNodeName is not relevant to the
+          ACP domain membership check because it only serves to structure routing and
+          addressing within an ACP but not to segment mutual authentication/authorization
+          (hence the name "routing subdomain").</t>
+
+> [ section 6.1.5.1 ]
+> 
+> * I think the 32 hex lowercase IPv6 addresses in the examples are each missing
+>   a single hex character (31 instead of 32)?  Or maybe that's not what these
+>   fields are (or I've miscounted)?
+
+Ooww bummer.... Thanks.
+
+> [ section 6.3 ]
+> 
+> * "does not include ACP nodes ACP certificate" perhaps -> "does not include
+>   the ACP node's ACP certificate"
+
+Ack
+
+> * With respect to DULL GRASP message fragmentation due to certificate
+>   inclusion: is it of any value to include the fingerprint of the ACP cert,
+>   for diagnostics...?
+
+IMHO not for diagnostics. When you need the diagnostics, it is unlikely
+you have some backend system available to map fingerprint to cert. At
+least for the dagnostics cases i would worry about ("how did this router
+reappier. It is assumed destroyed, we eliminated all records of it, etc. pp.).
+
+I would rather pull the certificate or other diagnostics info from a new
+GRASP objective through a unicast GRASP connection on demand.
+
+However... rethinking your idea i think the fingerprint could be
+a nice optimization to optimize the case when the certificate changes
+Today this would require waiting MRT.
+
+In any case, i took the opportunity to extend the CDDL to support
+extension points to the AN_ACP GRASP objective, so that such optimizations
+could be added later on without creating incompatibilities with 
+existing implementations.
+
+This could have been done already by just
+using a separate GRASP objective, but given how the fingerprint
+is really a great example of a logical extension to the AN_ACP objective
+given how it would optionally optimize the objective (creating ACP
+connections), this was a good argument to do the extension points.
+
+> [ section 6.5 ]
+> 
+> * s/to easier distinguish/to more easily distinguish/
+
+Ack.
+
+> [ section 6.6 ]
+> 
+> * Feel free to phrase the backoff implementation in reference to RFC 8415
+>   section 15 semantics (I think: IRT = 10 seconds, MRT = 640 seconds).
+
+Nice. Using these terms now. I am not giving credit to RFC8415 though because
+i am always a bit fearful of referencing a big RFC for a tiny bit. Might
+confuse readers.  Always good to have small RFC as references for reusable
+technologies/algorithms (IMHO).
+
+> [ section 6.7.3.2 ]
+> 
+> * Should Responder-IPv6-ACP-LL-addr be in the TSr set?
+
+Oops. Thanks. Ack.
+
+I wish there was an effective bug repellent for drafts....Sigh.
+
+> [ section 6.10.1 ]
+> 
+> * "not expected to be end-user host." --> "... hosts."
+
+Ack.
+
+> [ section 6.11.1.11 ]
+> 
+> * What does a manual configuration (6.10.4) advertise?  Just its /128?
+
+<t>For ACP-Manual address prefixes configured on an ACP node, for example for ACP connect subnets (see <xref target="NMS" format="default"/>), the node announces the /64 subnet prefix.</t>
+
+> * Where does the /96 come from?
+
+Leftover bug. I had to rewrite that paragraph to make it more explanatory anyhow and to separate it from the new text about manual address space prefixes. It now reads:
+
+            <t>Every ACP node MUST install a black hole (aka null) route if there are unused parts of the ACP address space assigned to the ACP node via its AcpNodeName. This is superceeded by longer prefixes assigned to interfaces for the address space actually used by the node.  For example, when the node has an ACP-VLong-8 address space, it installs a /120 black hole route. If it then for example only uses the ACP address (first address from the space), it would assign that address via a /128 address prefix to the ACP loopback interface (see <xref target="ACP-loopback" format="default"/>). None of those longer prefixes are announced into RPL.</t>
+
+> [ section 6.12.3 ]
+> 
+> * "meant to be prioritize reliability" -> "meant to prioritize reliability"
+
+Ack.
+
+> [ section 6.12.5.1 ]
+> 
+> * s/adddress/address/
+
+Ack
+> 
+> * (see Figure 15 --> (see Figure 15)
+
+Ack
+
+> * on other type -> on other types
+
+Ack
+
+> [ section 6.12.5.2.2 ]
+> 
+> * "ACP nodes MAY reduce the amount of link-local IPv6 multicast packets
+>    from ND by learning the IPv6 link-local neighbor address to ACP
+>    secure channel mapping from other messages such as the source address
+>    of IPv6 link-local multicast RPL messages - and therefore forego the
+>    need to send Neighbor Solicitation messages."
+> 
+>    Isn't this only true on links with configurations such that a node can trust
+>    that the source link layer address of the received RPL message is guaranteed
+>    to be that of the original sender?
+
+This is all about messages coming in via ACP secure channels, so at best we
+are talking about buggy or impaired ACP nodes. Impairment at this level
+would require malicious software injection, so it is highly unlikely (see below).
+If that does happen, i figure that you could equally create bogus ND or
+RPL or for that matter any other message you send across a channel.
+
+Given how the Node-ID of the acp-address is always unique, we could
+do followup work whereby the link-local addresses are just the Node-ID,
+that would make the link-local source address of packets from an
+ACP secure channel verifyable (same Node-ID as the acp-address in the
+cert of the secure channel peer). I didn't write this into this spec though
+because i wanted to keep the implementation requirements as low as possible
+for this spec and changing link-local-scope address schemes was seen
+as an additional pain point by implementers. And i couldn't make a strong
+point about the security benefit given the above assessment of unikelyness.
+Especially when the platforms on which we worked where specifically
+targetting NOT to allow malicious software injection. If/when ACP
+goes to e.g.: randomn untrusted software IoT or cloud VM systems, 
+this may become a different assessment.
+
+> [ Appendix A.1 ]
+> 
+> * Yeah, I gotta say I didn't understand why the acp-address scheme wouldn't
+>   support giving each ACP loopback its own /64 from the start.  That's
+>   14-16 bits of /64s in a single rsub ULA's /48 which would seem pretty simple
+>   to implement (a /64 per router in some deployments).
+
+Cost of allowing deployment without any centralized component outside
+of a CA and leveraging the existing unique global MAC EUI allocated to
+routers for registrars to avoid operators having to think about any addressing hooks.
+
+Take a CA, make any number of routers registrars, just configure them
+to use the same ACP domain name and CA, and you're done. If you want to
+overcome failure of the CA, each of the registrars could automatically
+span a sub-CA. - Addresses... ? What addresses.. never had to configure addresses.. ;-)
+
+
+Thanks again, Erik
+Toerless

@@ -1,0 +1,105 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Roman Danyliw <rdd@cert.org>
+Cc: The IESG <iesg@ietf.org>,
+	"draft-ietf-anima-autonomic-control-plane@ietf.org" <draft-ietf-anima-autonomic-control-plane@ietf.org>,
+	"anima-chairs@ietf.org" <anima-chairs@ietf.org>,
+	"anima@ietf.org" <anima@ietf.org>,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Roman Danyliw's Discuss on
+ draft-ietf-anima-autonomic-control-plane-27: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <96a6eb7f4f2c4cd0907a0f2a19900fe6@cert.org>
+
+Thanks Roman
+
+Listing all diffs just in case and so i don't have to create separate mail headers ;-)
+replies to discuss/comments after diff URLs.
+
+Cheers
+    Toerless
+
+Full diff -28 to current -29 version:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-28.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-29.txt
+
+(this includes conversion XMLv2->v3 and addition of contributor section).
+
+Diff for Roman Danyliw discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9c70415d6de706e7890ed2081b4a4c25cb9d434b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Ben Kaduk discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Barry Leiba discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Erik Kline discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Robert Wilton comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5f5e36478e8294b6f8b8228612088286e5854473/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+
+On Tue, Aug 11, 2020 at 01:22:22AM +0000, Roman Danyliw wrote:
+> Hi Toerless!
+> 
+> Thanks for your detailed follow-up both in the form of the -28 and the helpful explanations below.  I think everything is cleaned up but the last discuss, I will update my ballot so it's easier to manage.
+> 
+> Roman
+[... snip ...]
+
+> I reread the Section 11 with your explanation in mind and see your perspective -- it's difficult to be specific without mandating a specific protocol.  However, there seems to be two concrete, normative elements of this architecture -- EST and GRASP.  The latter for bootstrapping and the formal for renewal.  It isn't clear then why their Sec Considerations don't apply.  Furthermore, the protocols and practices of the bootstrapping process are out of scope of this document but seem like a security building block on which ACP is being built.
+
+Please check out the out the expanded version of the bullet list in section 11,
+it should close the discuss. 
+
+As Brian already explained on the list, ACP is rather the security mechanism of
+ACP-GRASP, so it is ACPs choice of TLS for ACP-GRASP end-to-end that provides the
+security to ACP-GRASP. I therefore just detailled the explanation how intercepting
+or faking GRASP announcements for EST can cause issues.
+
+As a corollary to the now hopefully good explanation of how registrars are out of scope,
+i do now include text that says about BRSKI what i think is appropriate and helpfull
+(aka: for 'ANI class' ACP nodes).
+
+The main points that you didn't mention explicitly but that dawned on me when reviewing
+the issue was mentioning of the security of the ACP certificate and beenfits and
+security of an IDevID.
+
+Given how you are always interested for security to be normative if possible:
+I think it is quite appropriate to discuss those node implementation
+issues ONLY informally (and not normatively) in the security considerations
+section, because aspects such as secure boot, enforcment of (only) trusted software
+execution and TPM for storage of certificates is really out of scope of this
+doc, and AFAIK also IETF (and i wouldn't know what an appropriate set of 
+TCG standards is that we might want to refer to...). Aka: None of these aspects
+are specific to ACP  but apply really to any secure and trustworthy system that
+deals with certificates.
+
+Lastly, there is also a new requirement in 6.1.5.1 that is meant to prohibit the
+misconfiguration or attack vector of making a node announce being an EST server,
+when it can actually not talk to the right CA (not sure if this is easy to implement
+though...).
+
+[... snip ...]
+> > > ** Section 11.  Per ???Security can be compromised by implementation
+> > > errors (bugs), as in all products???, given the generic nature of this
+> > > statement, couldn???t it also be a configuration error in the product too?
+> > 
+> > ;-) Not really because the claim of ACP is that all the core parts of ACP have no
+> > configuration. See section 9.5.
+> 
+> Short of some formally verified systems, this statement seems true of almost every system.  I didn't consider it actionable and would have removed it (again just editorial feedback in this case).
+
+Sentence removed.
+
+Thanks a lot for the review!
+
+Cheers
+    Toerless

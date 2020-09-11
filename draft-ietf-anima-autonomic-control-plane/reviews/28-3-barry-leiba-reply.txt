@@ -1,0 +1,535 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Barry Leiba <barryleiba@computer.org>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	anima-chairs@ietf.org, anima@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Barry Leiba's Discuss on
+ draft-ietf-anima-autonomic-control-plane-28: (with DISCUSS and COMMENT)
+Reply-To: 
+In-Reply-To: <159729038171.27222.4709796804527924124@ietfa.amsl.com>
+
+Thanks, Barry
+
+Listing all diffs just in case and so i don't have to create separate mail headers ;-)
+replies to discuss/comments after diff URLs.
+
+Cheers
+    Toerless
+
+Full diff -28 to current -29 version:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-28.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-29.txt
+
+(this includes conversion XMLv2->v3 and addition of contributor section).
+
+Diff for Roman Danyliw discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9c70415d6de706e7890ed2081b4a4c25cb9d434b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Ben Kaduk discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Barry Leiba discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Erik Kline discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Robert Wilton comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5f5e36478e8294b6f8b8228612088286e5854473/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+
+On Wed, Aug 12, 2020 at 08:46:21PM -0700, Barry Leiba via Datatracker wrote:
+> Barry Leiba has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-28: Discuss
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> DISCUSS:
+> ----------------------------------------------------------------------
+> 
+> This DISCUSS should be easy to resolve: it's mostly that I find the text in
+> Section 6.5 related to Bob and Alice to be confusing and unclear.  I see that
+> EKR also found it so and asked for the step-by-step diagram, which does help. 
+> But I find the whole Bob/Alice thing to be messy and wish you could instead use
+> some functionally descriptive terms for the roles, rather than using arbitrary
+> names that aren't meaningful and lead the reader to say, "Wait, which one is
+> Bob now?"
+
+Great catch. Alice and Bob are often used in app area (SIP etc.), and i think also
+in scurity area, but they are only "softly" associated with specific roles
+(Alice is typically initiator). In the desccribed mechanism, the roles are
+explicitly assigned as part of the negotiation, so its problematic trying to do this
+with Alice/Bob.
+
+The immediate replacement coming to mind was of course Master / Slave *sigh*.
+(life was easier when we only had to care about technology.)
+
+The new terminology is now "Decider" and "Follower". We looked up Decider as a perfect
+valid Oxford English dictionary word and IMHO the most precise representation of
+what the role is. Hopefully nobody wants to raise concern about this also being a Bushism.
+
+Check the section rewrite.
+It includes renaming, rewrite to address your points below, and two process refinements
+i stumbled across doing the rewrite: how to sanely deal with terminating the negotiation
+and not to do optimizations across multiple interfaces.
+
+> Specifically:
+> 
+> ??? Section 6.5 ???
+> 
+>       The node with the
+>       lower Node-ID in the ACP address of its ACP certificate becomes
+>       Bob, the one with the higher Node-ID in the certificate Alice.  A
+>       peer with an empty ACP address field in its ACP certificate
+>       becomes Bob (this specification does not define such peers, only
+>       the interoperability with them).
+> 
+> What???s with ???becomes Bob??? and ???Alice??? here?  Without any introduction I don???t
+> know what???s going on.  Do you mean something like, ???One node has a lower
+> Node-ID in the ACP address of its ACP certificate than the other.  For this
+> discussion, we will call that node ???Bob???, and the other ???Alice???.??? ?  Or do you
+> mean something else?  And then what does the next sentence mean?
+
+New text:
+
+<li>Once the first ACP secure channel protocol connection passes peer authentication, the two peers know each other's certificate because those ACP certificates are used by all secure channel protocols for mutual authentication.  The peer with the higher Node-ID in the ACP address of its ACP certificate takes on the role of the Decider towards the other peer. The other peer takes on the role of Follower. The Decider selects which secure channel protocol to ultimately use.</t>
+
+>    For example, originally Bob could have been the initiator of one ACP
+>    secure channel protocol that Bob prefers and the security association
+>    succeeded.  The roles of Bob and Alice are then assigned and the
+>    connection setup is completed.
+> 
+> Again I???m confused: you???re talking about Bob doing something, and *then* the
+> role of Bob is assigned?  What does that mean?  How can we talk about Bob doing
+> something before we know who Bob is?
+
+Yepp. Need to distinguish between name and roles. New text does this.
+
+> And are there no more descriptive terms to use here, as opposed to ???Bob??? and
+> ???Alice????  Something like ???initiator??? and ???responder???, or whatever, which might
+> be easier to follow?
+
+In the first textual example i now simply also use "Node 1", "Node 2" as the
+names of the nodes. I guess i could change all text to use Alice/Bob as the names
+(not the roles), but i do not feel strongly about it after my first fail to use them
+in this context. And the whole long list example already uses Node 1 / Node 2.
+
+> I also have a few easy-to-address issues here:
+> 
+> ??? Section 6.7.3.1.2 ???
+> 
+>    The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP),
+>    listed as a SHOULD, is to be configured, along with the 2048-bit MODP
+>    (group 14).
+> 
+> I don???t understand the requirement level here, because I???m not sure what ???is to
+> be configured??? means.  You mention ???SHOULD???, but then ???is to be configured???
+> seems to say that it has to be supported.  And you seem to be saying that he
+> same requirement, whatever it is, applies to both group 19 and group 14... but
+> I???m not certain about that.  Can you please rephrase this to make the
+> requirements clearer?
+
+Changed to:
+
+The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP), MUST be support.  Reason: ECC provides a similar security level...
+
+> ??? Section 6.7.5 ???
+> 
+>    A baseline ACP node MUST support IPsec natively and MAY support IPsec
+>    via GRE.  If GRE is supported, it MAY be preferred over native IPec.
+
+Removed second sentence, would be duplicate from 6.7.3.2.
+>
+> But Section 6.7.3.2 says:
+> 
+>    If IKEv2 initiator and responder support IPsec over GRE, it has to be
+>    preferred over native IPsec.
+>
+> Which is it?  ???MAY??? be preferred?  Or ???has to be preferred????
+
+Improved explanation/added pointer:
+
+<t>If IKEv2 initiator and responder support IPsec over GRE, it will be preferred over native IPsec because of the way how IKEv2 negotiates transport mode as used by this IPsec over GRE profile) versus tunnel mode as used by native IPsec (see <xref target="RFC7296" format="default"/>, section 1.3.1).
+
+Aka: not a requirement, but rather (IMHO) a limitation of IKEv2
+
+Tunnel mode always mandatory and you can only "up-negotiate" to transport mode.
+quite an IPv4/Internet centric technology choice i learned during review with
+ipsecme folks (tunnel mode being more resilient against NAT/FW etc..).
+
+> ??? Section 6.10.6 ???
+> 
+>    IANA is asked need to assign a new "type" for each new addressing
+>    sub-scheme.  With the current allocations, only 2 more schemes are
+>    possible, so the last addressing scheme MUST provide further
+>    extensions (e.g., by reserving bits from it for further extensions).
+> 
+> I don???t understand the first sentence.  It doesn???t parse, for one thing, so
+> please fix that.  And it would be better to clearly match it with the
+> corresponding request in the IANA Considerations section.
+> 
+> For the second sentence (the DISCUSS part), I???m very skeptical that this is the
+> right approach: if you???re already acknowledging that ???only??? 2 schemes are
+> possible now, it seems time *now* to prepare the way for additional ones,
+> rather than waiting.  What???s the reasoning for putting in a warning rather than
+> just doing it, especially as you???re setting up a new registry anyway?
+
+Thinking...
+
+So i just deleted the whole paragraph:
+
+- The first sentence is duplicating the IANA allocation section, 
+  and from my memory of RFC its not typical to do this (or even to point to
+  the IANA section).
+
+- The rfc2119 MUST against future work (allocation) is of questionable value. 
+  After all, a future RFC doing that last allocation could simply update
+  the ACP RFC and invalidate the MUST. I don't even want to look up why
+  i updated it from SHOULD to MUST to make another reviewer more happy.
+  Given how this process meta discussion doesn't seem to fit in a simple
+  paragraph where it can make all reviewers happy, its better done outside
+  the RFC.
+
+Wrt. to your argument about thinking further even now:
+Through the time of the ACP spec, we did add more addressing options
+because of WG/IETF review/discussion that we felt strongly about
+(Vlong and Manual).  So IMHO we first need more implementation/deployment
+experience before we do anything more on addressing. I don't think we will
+need other spaces at all.
+
+Having said that:
+
+doing such an extension scheme is not really that difficult, we have
+done it in the past in other protocols. But it does not make sense
+to define an extension scheme before having an idea about the missing/
+desired semantics (and hence space numbers vs. space sizes needed). 
+
+Note also that there is another extension point, and that is to simply
+use a new code-point in the otherName. 
+
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> We have to use ???virtual out-of-band??? more often, because ???VOOB??? is a great
+> acronym.
+
+;-)
+
+> ??? Section 1 ???
+> 
+>    is therefore intended to combine as good as possible the resilience
+> 
+> Nit: this needs an adverb rather than an adjective, ???as well as possible???.
+
+Thanks.
+
+>    the ACPs functions instead of implementing them seperately for each
+> 
+> Nit: ???separately???.  In the list that follows you should also put a comma after
+> ???traffic??? to make it clear what the third list item is, as there are five
+> ???and???s in there.
+
+Done.
+
+> ??? Section 1.1 ???
+> 
+>    Infrastructure (PKI) code for the ACP certificate, the GRASP
+>    protocol, UDP, TCP and TLS 1.2 ([RFC5246], for security and
+> 
+> Why specifically TLS 1.2?  Probably this should say ???TLS??? without a version,
+> and reference the now-current TLS 1.3 spec (8446), but it shouldn???t be tied to
+> a specific TLS version.
+
+Already fixed for BenK.
+
+> Similarly, mentions of DTLS shouldn???t be tied to the version number.
+
+Hah. That one Ben overlooked.
+
+> Alternatively for both, they could say ???version 1.2 or greater???.  I do see that
+> some places in the document mention 1.2 as a minimum, so I'm just looking for a
+> little clean-up here to make sure it's clear that we don't want to use <1.2,
+> but anything from 1.2 on is fine.
+
+I now removed all the version numbers in the introductory text because of your and Bens feedback.
+
+See below for more discussion/changes.
+
+>    Plane itself would not need to change, it could continue to be IPv4
+>    only.  For such IPv4 only devices, the IPv6 protocol itself would be
+>    additional implementation footprint only used for the ACP.
+> 
+> Nit: this is a comma splice.  Either change the comma to a semicolon or change
+> ???, it??? to ???and???.
+
+Done (and).
+
+> Also, ???IPv4-only??? should be hyphenated when it???s a modifier,
+> as it is in the second case (but not the first).
+
+Done.
+
+> I don???t understand ???would be additional implementation footprint only used for
+> the ACP.???  I think ???that is only used??? would help, but I also don???t think
+> ???footprint??? is the right word here.
+
+Changed to "that is only required"
+
+I was using footprint because i thought it was the most commonly used term to
+characterize broad system wide impact, e.g.: footprint ==
+
+{development=(coding,testing), HW-resources (ASIC), runtime-resources=(memory,disk,cpu),
+ operational/deployment-cost,...}
+
+as in... (carbon footprint, ecological footprint, digital footprint, IETF footprint, ;-)
+
+[ In the early years of ACP we had a lot of concerns by representatives of IPv4
+  only device types for any of these aspects. Luckily it died down (time working
+  for IPv6). Hope we do not need to fine-tune this further. Unless you have a short,
+  better word suggestion. Let me know. ]
+
+>    The ACP design can be applicable to (cpu, memory) constrained devices
+>    and (bitrate, reliability) constrained networks
+> 
+> This is an odd use of parentheses, and it threw me at first, before I realized
+> it???s an attempt at grouping and shorthand.  Better to avoid it, as you also
+> need some hyphens anyway:
+> 
+> NEW1
+>    The ACP design can be applicable to cpu- and memory-constrained devices
+>    and to bitrate- and reliability- constrained networks
+> END
+> 
+> Or if you find the hyphens awkward, maybe reword to avoid using modifiers:
+> 
+> NEW2
+>    The ACP design can be applicable to devices constrained with respect
+>    to cpu and memory, and to networks constrained with respect to bitrate
+>    and reliability.
+> END
+
+NEW2 looks good. Thanks.
+
+> (And I really don???t think the rest of the sentence (???but this document...???)
+> adds anything, and I???d just skip it.)
+
+I better keep it. It serves as protection against the easy rathole discussion about what
+we mean to be the constrained type of devices ACP would fit to. That ends up quickly
+in referring to rfc7228 and having a couple years of discussions about how well
+the code space required for various ACP components may or may not fit. And then we
+need to make existence proof of all those "smaller than openssl" implementaton
+options etc. pp...
+
+> ??? Section 2 ???
+> 
+>    Normative sections are labelled "(Normative)" and use
+>    [RFC2119]/[RFC8174] keywords.
+> 
+> A small thing you can ignore if you like, but I would skip the citations here
+> and just say, ???and use BCP 14 key words.???  You???ll have the proper citations
+> with the boilerplate later.
+
+Done.
+
+>       A CA uses its private key to sign the certificates
+>       it issues, relying parties use the public key in the CA
+>       certificate to validate the signature.
+> 
+> Comma splice; please split the sentences.
+
+Done.
+
+>       This signing certificate
+>       can be considered to be an identifier of the CA, so the term CA is
+>       also loosely used to refer to the certificate used by the CA for
+>       signing.
+> 
+> Really?  I???ve never seen a signing cert called a ???CA???.  In any case, I wouldn???t
+> like to see that usage encouraged.  Does this really need to be here?
+
+Well... i removed the sentence after doing another scan through the
+whole document that it is not necessarry (no use of CA without
+"CA certificate" referring to the CA certificate).
+Hopefully i did not miss anything.
+
+This sentence was protection against overlooking any of these occurances.
+
+> ??? Section 4 ???
+> 
+>    ACP5:  The ACP must provide security: Messages coming through the ACP
+>           must be authenticated to be from a trusted node, and should
+>           (very strong should) be encrypted.
+> 
+> That last bit feels odd; I suggest instead, ???and it is very strongly
+> recommended that they be encrypted.???
+
+Done
+> 
+>    written ASA could potentially all communicate exclusively via GRASP
+> 
+> Nit: ???ASAs???
+
+Done
+
+> ??? Section 6.1 ???
+> 
+>    The LDevID certificate is called the ACP certificate, the TA is the
+>    Certification Authority (CA) root certificate of the ACP domain.
+> 
+> Comma splice.
+
+Done
+
+> ??? Section 6.8.2 ???
+> 
+>    GRASP unicast messages inside the ACP are transported
+>    via TLS which MUST comply with [RFC7525] execept that only TLS 1.2
+>    ([RFC5246]) is REQUIRED and TLS 1.3 ([RFC8446] is RECOMMENDED.
+> 
+> This ties into my earlier comment about text that seems to tie this to the TLS
+> version.  I strongly recommend that you say early on (not here in 6.8.2) what???s
+> here in the quoted text and elsewhere: that, for TLS and DTLS, 1.2 is REQUIRED,
+> 1.3 is RECOMMENDED, and 1.1 and earlier MUST NOT be used.  Include text ???up
+> there??? about backward compatibility and making sure 1.2-only situations can be
+> accommodated via negotiation.  Possibly add a sentence about supporting
+> post-1.3 versions when they are developed.  And then don???t say anything about
+> versions elsewhere in the document.
+
+I ended up creating a new section right at the start of section 6 about TLS and
+moved all TLS requirements into it. The main benefit is hat this now applies
+not only to GRASP, but EST, OCSP/CRLDP (if they use TLS) and BRSKI (for ANI nodes).
+
+Had to move also the TLS specific crypto parameter requirements (to support the
+certs/crypto suites desirable / requested by Ben).
+
+For DTLS, i didn't feel such big movement was beneficial given how its only
+used by one component: the somewhat "inspirational" DTLS secure channels. So i
+just removed the repetitious versioning text from other places of the spec
+and just point to the DTLS as secure channel section.
+
+> ??? Section 6.10.1 ???
+> 
+>    o  Addresses in the ACP are not considered sensitive on privacy
+>       grounds because ACP nodes are not expected to be end-user host.
+> 
+> Is there something missing here?  This looks like an incomplete sentence.  Or
+> should it just be ???end user hosts????  If that???s it, I suggest wording it as
+> ???...not expected to host end users.???  It might also help to say, ???ACP nodes are
+> part of the data center infrastructure [or some such] and are not expected...???
+
+Amended to:
+
+Addresses in the ACP are not considered sensitive on privacy grounds because ACP nodes are not expected to be end-user hosts and ACP addresses do therefore not represent end-users or groups of end-users.
+
+> ??? Section 6.11.1.7 ???
+> 
+>    Global Repair: we assume stable links and ranks (metrics), so no need
+>    to periodically rebuild DODAG.  DODAG version only incremented under
+>    catastrophic events (e.g., administrative action).
+> 
+> This is one of the most egregious of the poor-grammar issues in the document. 
+> I???m generally not happy with expecting the RPC to turn text like this into
+> proper English, and wish that working groups would be more careful about it. 
+> Something like this, in this case, perhaps?:
+
+This is text from a design meeting Pascal and I had at the prior IETF meeting
+and that was included in -08 in 2017. Yes, it is shorthand because the whole
+section conveys a long list of protocol parameters. I did like
+the idea of having shorthand (as opposed to my usual long winding writing style),
+and i think to remember to have seen shorthand in other RFC in similar places
+(description of long list of protocol parameters).
+
+There where several reviews commenting on the RPL section.
+You are the first one who i think complains about this shorthand.
+
+> NEW
+>    Global Repair: we assume stable links and ranks (metrics), so there is
+>    no need to periodically rebuild the DODAG.  The DODAG version is only
+>    incremented under catastrophic events (e.g., administrative action).
+> END
+
+Sure. Thanks.
+
+> And is administrative action really an example of a catastrophic event?  It
+> would seem that administrative action would be a *response* to such an event. 
+> What???s an example of an event itself?  Or is it ???catastrophic??? that???s the wrong
+> word, maybe?
+
+I really can't comment. Will have to ask the RP experts.
+
+> (The ???Local Repair??? paragraph also has some incomplete sentences and missing
+> articles.)
+
+Ok, fixed.
+
+> ??? Section 6.12.5.1 ???
+> 
+>    2.  IPv6 implementations do commonly not allow to assign the same
+> 
+> A common English usage issue: ???allow to assign??? (in general, ???allow
+> <infinitive>???) doesn???t work in English, because the infinitive needs a subject
+> (???allow <some entity> to assign???).  If you don???t have a subject to put there,
+> you can say, ???IPv6 implementations commonly do not allow assignment of the
+> same...??? (which also fixes the issue that ???commonly??? shouldn???t split ???do not???).
+
+Thanks for explaining, fixed.
+
+> ??? Section 8.1.1 ???
+> 
+>    interface looks like a normal network interface (without any
+>    encryption/novel-signaling).
+> 
+> What is ???novel-signaling????
+
+fixed to:
+
+... access to the ACP because to those NOC systems the interface looks like a normal network interface without any ACP secure channel that is encapsulating the traffic
+
+>    This is sometimes called "RPF filtering".  This MAY be changed
+>    through administrative measures.
+> 
+> Two things here:  One is that this feels like a ???may??? (or ???might??? or ???can???... a
+> statement, not a directive) rather than a BCP 14 key word.  The other is that I
+> don???t follow what it is that may be changed: what does ???this??? refer to in the
+> second sentence?
+> 
+Changed to:
+
+This filtering rule MAY be changed through administrative measures. The more any such administrative action enable reachability of non ACP nodes to the ACP, the more this may cause security issues.
+
+Changed paragraph to:
+
+When an ACP Edge node receives a packet from an ACP connect interface, the ACP Edge node
+MUST only forward the packet into the ACP if the packet has an IPv6 source address from that interface (this is sometimes called "RPF filtering").  This filtering rule MAY be changed through administrative measures. The more any such administrative action enable reachability of non ACP nodes to the ACP, the more this may cause security issues.
+
+Aka: The MAY is a followup to the prior MUST. That i think is what justifies rfc2119: The MUST/MA describe a security requirement: highly constrained accessibility of ACP by default, relaxation only by administrative action. Last new sentence explains why (security issues).
+
+Thanks a lot for the review. Alas, finding the right text/solutions is
+sometimes not as fast as one would like. Some of these replies required
+me to sleep over them..
+
+Thanks a lot!
+
+Cheers
+    Toerless

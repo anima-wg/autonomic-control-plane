@@ -7603,7 +7603,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)      September 2020
    negotiation downgrade attacks.
 
 
-   Discuss from Roman Dayliw:
+   Discuss from Roman Danyliw:
 
    6.1.5.1 - Added requirement to only announce SRV.est when a working
    CA connection.

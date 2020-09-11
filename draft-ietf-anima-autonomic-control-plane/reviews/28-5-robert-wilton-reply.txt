@@ -1,0 +1,181 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Robert Wilton <rwilton@cisco.com>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	anima-chairs@ietf.org, anima@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Robert Wilton's No Objection on
+ draft-ietf-anima-autonomic-control-plane-28: (with COMMENT)
+Reply-To: 
+In-Reply-To: <159708388539.28258.3242297268864037873@ietfa.amsl.com>
+
+Thanks, Robert
+
+Listing all diffs just in case and so i don't have to create separate mail headers ;-)
+replies to discuss/comments after diff URLs.
+
+Cheers
+    Toerless
+
+Full diff -28 to current -29 version:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-28.txt&url2=https://tools.ietf.org/id/draft-ietf-anima-autonomic-control-plane-29.txt
+
+(this includes conversion XMLv2->v3 and addition of contributor section).
+
+Diff for Roman Danyliw discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/9c70415d6de706e7890ed2081b4a4c25cb9d434b/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Ben Kaduk discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5d35d3d617d57e8b3544eaa292f50ce7ef425943/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Barry Leiba discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/e5771b9b83e5007979a5478d78d592378752d75e/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Erik Kline discuss/comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/87c607bfc6d2c25cf6dee4690523b86ba27c9fb0/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+Diff for Robert Wilton comments reply:
+
+http://tools.ietf.org/tools/rfcdiff/rfcdiff.pyht?url1=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/986cdcbf9cf4380d317db8f63bac78dd09755018/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt&url2=https://raw.githubusercontent.com/anima-wg/autonomic-control-plane/5f5e36478e8294b6f8b8228612088286e5854473/draft-ietf-anima-autonomic-control-plane/draft-ietf-anima-autonomic-control-plane.txt
+
+
+On Mon, Aug 10, 2020 at 11:24:45AM -0700, Robert Wilton via Datatracker wrote:
+> Robert Wilton has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-28: No Objection
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> Hi,
+> 
+> I appreciate that this document has already gone through quite a lot of
+> reviews.  Just a few minor nits (for the version of the doc that was originally
+> on the telechat before IETF 108):
+> 
+>     6.1.  ACP Domain, Certificate and Network
+> 
+>        This document uses the term ACP in many places where the Autonomic
+>        Networking reference documents [RFC7575] and
+>        [I-D.ietf-anima-reference-model] use the word autonomic.  This is
+>        done because those reference documents consider (only) fully
+>        autonomic networks and nodes, but support of ACP does not require
+>        support for other components of autonomic networks except for relying
+>        on GRASP and providing security and transport for GRASP.  Therefore
+>        the word autonomic might be misleading to operators interested in
+>        only the ACP.
+> 
+> Should this paragraph be somewhere earlier in the document?
+
+Good question:
+
+The ACP spec serves to answer part of the Autonomic Network architecture
+from NMRG and the reference model yet the terminology in this doc is
+eliminating "autonomous". This and the following paragraph are create
+the linkage between the larger architecture and original reason for the
+ACP and the broader applicability of the spec.
+
+yada yada... i feel it is appropriate to be at the top of the normative text
+because of this linkage. And broader applicability beyond them.
+
+>     6.1.2.  ACP Certificate AcpNodeName
+> 
+>     The acp-node-name is not
+>     intended for end user consumption, and there is no protection against
+>     someone not owning a domain name to simpy choose it.
+> 
+> The latter part of this sentence doesn't seem to scan particularly well.
+
+Changed to:
+
+The acp-node-name is not intended for end user consumption. There is no protection against an operator to pick any domain name for an ACP whether or not the operator can claim to own the domain name. Instead, the domain name only serves
+> 
+>     6.7.3.1.1.  RFC8221 (IPsec/ESP)
+> 
+>     AH MUST NOT be used (because it does not provide confidentiality).
+> 
+> Do you need AH in the terminology or define what it means?
+
+The folks on ipsecme@ietf.org made it sound as if AH was Voldemort
+ - the less you mention about it, the better. So i just expanded the word inline:
+
+The IP Authentication Header (AH) MUST NOT be used
+
+>     6.7.4.  ACP via DTLS
+> 
+>        We define the use of ACP via DTLS in the assumption that it is likely
+>        the first transport encryption supported in some classes of
+>        constrained devices because DTLS is already used in those devices but
+>        IPsec is not, and code-space may be limited.
+> 
+> DTLS in the assumption => DTLS, on the assumption
+> This paragraph could possibly do with a little more wordsmithing.
+
+          <t>This document defines the use of ACP via DTLS, on the assumption that it is likely the first transport encryption supported in some classes of constrained devices: DTLS is commonly used in constrained devices when IPsec is not. Code-space on those devices may be also be too limited to support more than the minimum number of required protocols.</t>
+
+>     6.10.1.  Fundamental Concepts of Autonomic Addressing
+> 
+> For a PE device or NID, how does it know which interfaces to run ACP over?
+
+See discussion in thread.
+
+>        o  OAM protocols do not require IPv4: The ACP may carry OAM
+>           protocols.  All relevant protocols (SNMP, TFTP, SSH, SCP, Radius,
+>           Diameter, ...) are available in IPv6.  See also [RFC8368] for how
+>           ACP could be made to interoperate with IPv4 only OAM.
+> 
+> Should this include a YANG management protocol like NETCONF?
+
+Yes.
+
+> Radius => RADIUS (in a few places)
+
+Added.
+
+>     6.11.1.14.  Unknown Destinations
+> 
+>        As this requirement raises additional Data-Plane, it does not apply
+>        to nodes where the administrative parameter to become root
+>        (Section 6.11.1.12) can always only be 0b001, e.g.: the node does not
+>        support explicit configuration to be root, or to be ACP registrar or
+>        to have ACP-connect functionality.
+> 
+> The first sentence doesn't quite scan.
+
+Fixed by reply to another reviewers nit.
+
+> Nits:
+> retrieved bei neighboring nodes =>  retrieved by neighboring nodes
+
+Ditto
+
+> "serialNumber" contains usually => "serialNumber" usually contains
+
+Ack.
+
+> remotely sent IPv6 link-local => remotely send IPv6 link-local
+
+Ack.
+
+Thanks!
+    Toerless
