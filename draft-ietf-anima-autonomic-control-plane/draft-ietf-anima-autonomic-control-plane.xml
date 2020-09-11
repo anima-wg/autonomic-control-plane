@@ -81,7 +81,7 @@
 
       <t>This document describes a modular design for a self-forming, self-managing and self-protecting ACP,  which is a virtual out-of-band network designed to be as independent as possible of configuration, addressing and routing to avoid the self-dependency problems of current IP  networks while still operating in-band on the same physical network that it is controlling and managing. The ACP design is therefore intended to combine as well as possible the resilience of out-of-band management networks with the low-cost of traditional IP in-band network management.  The details how this is achieved are described in <xref target="self-creation" format="default"/>.</t>
       <t>In a fully autonomic network node without legacy control or management functions/protocols, the Data-Plane would be for example just a forwarding plane for "Data" IPv6 packets, aka: packets other than the control and  management plane packets that are forwarded by the ACP itself.  In such networks/nodes, there would be no non-autonomous control or non-autonomous management plane.</t>
-      <t>Routing protocols for example would be built inside the ACP as so-called autonomous functions via autonomous service agents, leveraging the ACPs functions instead of implementing them seperately for each protocol: discovery, automatically established authenticated and encrypted local and distant peer connectivity for control and management traffic, and common control/management protocol session and presentation functions.</t>
+      <t>Routing protocols for example would be built inside the ACP as so-called autonomous functions via autonomous service agents, leveraging the ACP's functions instead of implementing them seperately for each protocol: discovery, automatically established authenticated and encrypted local and distant peer connectivity for control and management traffic, and common control/management protocol session and presentation functions.</t>
       <t>When ACP functionality is added to nodes that have non-autonomous management plane and/or control plane functions (henceforth called non-autonomous nodes), the ACP instead is best abstracted as a special Virtual Routing and Forwarding (VRF) instance (or virtual router) and the complete pre-existing non-autonomous management and/or control plane is considered to be part of the Data-Plane to avoid introduction of more complex, new terminology only for this case.</t>
       <t>Like the forwarding plane for "Data" packets, the non-autonomous control and management plane functions can then be managed/used via the ACP. This terminology is consistent with pre-existing documents such as <xref target="RFC8368" format="default"/>.</t>
       <t>In both instances (autonomous and non-autonomous nodes), the ACP is built such that it is operating in the absence of the Data-Plane, and in the case of existing non-autonomous (management, control) components in the Data-Plane also in the presence of any (mis-)configuration thereof.</t>
@@ -92,9 +92,9 @@
         <li>A controller or network management system can use it to securely bootstrap network devices in remote locations, even if the (Data-Plane) network in between is not yet configured; no Data-Plane dependent bootstrap configuration is required.  An example of such a secure bootstrap process is described in <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/>.</li>
         <li>An operator can use it to access remote devices using protocols such as Secure SHell (SSH) or Network Configuration Protocol (NETCONF) running across the ACP, even if the network is misconfigured or not configured.</li>
       </ol>
-      <t>This document describes these purposes as use cases for the ACP in <xref target="usage" format="default"/>, it defines the requirements in <xref target="requirements" format="default"/>. <xref target="overview" format="default"/> gives an overview how the ACP is constructed.</t>
+      <t>This document describes these purposes as use cases for the ACP in <xref target="usage" format="default"/>, it defines the requirements in <xref target="requirements" format="default"/>. <xref target="overview" format="default"/> gives an overview of how the ACP is constructed.</t>
       <t>The normative part of this document starts with <xref target="self-creation" format="default"/>, where the ACP is specified. <xref target="acp-l2-switches" format="default"/> explains how to support ACP on L2 switches (normative). <xref target="workarounds" format="default"/> explains how non-ACP nodes and networks can be integrated (normative).</t>
-      <t>The remaining sections are non-normative: <xref target="benefit" format="default"/> reviews benefits of the ACP (after all the details have been defined), <xref target="operational" format="default"/> provides operational recommendations, <xref target="further" format="default"/> provides additional explanations and describes additional details or future standard or propriety extensions that were considered not to be appropriate for standardization in this document but were considered important to document. There are no dependencies against <xref target="further" format="default"/> to build a complete working and interoperable
+      <t>The remaining sections are non-normative: <xref target="benefit" format="default"/> reviews benefits of the ACP (after all the details have been defined), <xref target="operational" format="default"/> provides operational recommendations, <xref target="further" format="default"/> provides additional explanations and describes additional details or future standard or proprietary extensions that were considered not to be appropriate for standardization in this document but were considered important to document. There are no dependencies against <xref target="further" format="default"/> to build a complete working and interoperable
 ACP according to this document.</t>
       <t>The ACP provides secure IPv6 connectivity, therefore it can be used not only as the secure connectivity for self-management as required for the ACP in <xref target="RFC7575" format="default"/>, but it can also be used as the secure connectivity for traditional (centralized) management. The ACP can be implemented and operated without any other components of autonomic networks, except for the GRASP protocol. ACP relies on per-link DULL GRASP (see <xref target="discovery-grasp" format="default"/>) to autodiscover ACP neighbors, and includes the ACP GRASP instance to provide service discovery for clients of the ACP (see <xref target="GRASP" format="default"/>) including for its own maintenance of ACP certificates.</t>
       <t>The document <xref target="RFC8368" format="default">"Using Autonomic Control Plane for Stable Connectivity of Network OAM"</xref> describes how the ACP alone can be used to provide secure and stable connectivity for autonomic and non-autonomic OAM applications, specifically for the case of current non-autonomic networks/nodes. That document also explains how existing management solutions can leverage the ACP in parallel with traditional management models, when to use the ACP and how to integrate with potentially IPv4 only OAM backends.</t>
@@ -119,7 +119,7 @@ but this document does not attempt to define the most constrained type of device
       <t>[RFC Editor: Please add ACP, BRSKI, GRASP, MASA to https://www.rfc-editor.org/materials/abbrev.expansion.txt.]</t>
       <t>[RFC Editor: What is the recommended way to reference a hanging text, e.g.: to 
        a definition in the list of definitions ? Up to -28, this document was using XMLv2
-       and the the only option I could find for RFC/XML to point to a hanging text was 
+       and the only option I could find for RFC/XML to point to a hanging text was 
        format="title" , which leads to references such as '-&gt;"ACP certificate" ()', aka:
        redundant empty parenthsis. Many reviewer where concerned about this.
        I created a ticket to ask for an xml2rfc enhancement to avoid this
@@ -297,7 +297,7 @@ but this document does not attempt to define the most constrained type of device
         <dd>"Manufacturer Installed Certificate".  This is another word to describe an IDevID in referenced materials.  This term is not used in this document.
             </dd>
         <dt>native interface:</dt>
-        <dd>Interfaces existing on a node without configuration of the already running node.  On physical nodes these are usually physical interfaces.  On virtual nodes their equivalent.
+        <dd>Interfaces existing on a node without configuration of the already running node.  On physical nodes these are usually physical interfaces; on virtual nodes their equivalent.
             </dd>
         <dt>NOC:</dt>
         <dd>Network Operations Center.
@@ -376,8 +376,10 @@ but this document does not attempt to define the most constrained type of device
         <dt>ULA: (Global ID prefix)</dt>
         <dd>
             A "Unique Local Address" (ULA) is an IPv6 address in the block fc00::/7, defined in
-            <xref target="RFC4193" format="default"/>.  It is the approximate IPv6 counterpart of the IPv4 private address
-            (<xref target="RFC1918" format="default"/>). The ULA Global ID prefix are the first 48-bits of a ULA address. In this document it is abbreviated as "ULA prefix". 
+            <xref target="RFC4193" format="default"/>.  It is often thought of as the approximate IPv6 counterpart of the
+            IPv4 private address (<xref target="RFC1918" format="default"/>). There are important differences though that
+            are beneficial for and exploited by the ACP, such as the ULA Global ID prefix, which are the first 48-bits of
+            a ULA address. In this document it is abbreviated as "ULA prefix". 
             </dd>
         <dt>(ACP) VRF:</dt>
         <dd>The ACP is modeled in this document as a "Virtual Routing and Forwarding" instance (VRF). This means that it is based on a "virtual router" consisting of a separate IPv6 forwarding table to which the ACP virtual interfaces are attached and an associated IPv6 routing table separate from the Data-Plane. Unlike the VRFs on MPLS/VPN-PE (<xref target="RFC4364" format="default"/>) or LISP XTR (<xref target="RFC6830" format="default"/>), the ACP VRF does not have any special "core facing" functionality or routing/mapping protocols shared across multiple VRFs. In vendor products a VRF such as the ACP-VRF may also be referred to as a so called VRF-lite.
@@ -564,7 +566,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
 
           <t>For further certificate details, ACP certificates may follow the recommendations from <xref target="CABFORUM" format="default"/>.</t>
 
-          <t>For diagnostic and other operational purposes, it is beneficial to copy the device identifying fields of the node's IDevID certificate into the ACP certificate, such as the <xref target="X.520" format="default"/>, section 6.2.9 "serialNumber" attribute in the subjects field distinguished name encoding. Note that this is not the certificate serial number.  See also <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/> section 2.3.1. This can be done for example if it would be acceptable for the devices "serialNumber" to be signalled via the Link Layer Discovery Protocol (LLDP, <xref target="LLDP" format="default"/>) because like LLDP signalled information, the ACP certificate information can be retrieved by neighboring nodes without further authentication and be used either for beneficial diagnostics or for malicious attacks. Retrieval of the ACP certificate is possible via a (failing) attempt to set up an ACP secure channel, and the "serialNumber" contains usually device type information that may help to faster determine working exploits/attacks against the device.</t>
+          <t>For diagnostic and other operational purposes, it is beneficial to copy the device identifying fields of the node's IDevID certificate into the ACP certificate, such as the <xref target="X.520" format="default"/>, section 6.2.9 "serialNumber" attribute in the subjects field distinguished name encoding. Note that this is not the certificate serial number.  See also <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/> section 2.3.1. This can be done for example if it would be acceptable for the device's "serialNumber" to be signalled via the Link Layer Discovery Protocol (LLDP, <xref target="LLDP" format="default"/>) because like LLDP signalled information, the ACP certificate information can be retrieved by neighboring nodes without further authentication and be used either for beneficial diagnostics or for malicious attacks. Retrieval of the ACP certificate is possible via a (failing) attempt to set up an ACP secure channel, and the "serialNumber" contains usually device type information that may help to faster determine working exploits/attacks against the device.</t>
 
           <t>Note that there is no intention to constrain authorization within the ACP or autonomic networks using the ACP to just the ACP domain membership check as defined in this document. It can be extended or modified with additional requirements. Such future authorizations can use and require additional elements in certificates or policies or even additional certificates. See the additional check agagainst the id-kp-cmcRA <xref target="RFC6402" format="default"/> extended key usage attribute (<xref target="domcert-maint" format="default"/>) and for possible future extensions, see <xref target="role-assignments" format="default"/>.</t>
 
@@ -623,7 +625,7 @@ hop-by-hop ACP secure channels (<xref target="neighbor_verification" format="def
 
     </t>
               <ol type="2.%d" spacing="compact">
-                <li>The acp-node-name is the identifier of a node's ACP. It includes the necessary components to identify a nodes ACP both from within the ACP as well as from the outside of the ACP.</li>
+                <li>The acp-node-name is the identifier of a node's ACP. It includes the necessary components to identify a node's ACP both from within the ACP as well as from the outside of the ACP.</li>
                 <li>For manual and/or automated diagnostics and backend management of devices and ACPs, it is necessary to have an easily human readable and software parsed standard, single string representation of the information in the acp-node-name. For example, inventory or other backend systems can always identify an entity by one unique string field but not by a combination of multiple fields, which would be necessary if there was no single string representation.</li>
                 <li>If the encoding was not that of such a string, it would be necessary to define a second standard encoding to provide this format (standard string encoding) for operator consumption.</li>
                 <li>Addresses of the form &lt;local&gt;@&lt;domain&gt; have become the preferred format for identifiers of entities in many systems, including the majority of user identification in web or mobile applications such as multi-domain single-sign-on systems.</li>
@@ -735,6 +737,12 @@ END
           determine their ACP address are outside the scope of this
           specification, but this option is defined here so that any 
           ACP nodes can build ACP secure channels to them according to Rule 5.</t>
+
+          <t>The optional rsub field of the AcpNodeName is not relevant to the
+          ACP domain membership check because it only serves to structure routing and 
+          addressing within an ACP but not to segment mutual authentication/authorization 
+          (hence the name "routing subdomain").</t>
+          
           <t>In summary:
         </t>
           <ul spacing="compact">
@@ -1174,8 +1182,11 @@ will be distributed with the flooded objective.  An example of the message is in
     objective-flags = sync-only ; as in the GRASP specification
     sync-only =  4    ; M_FLOOD only requires synchronization
     loop-count = 1    ; limit to link-local operation
-    objective-value = method
-    method = "IKEv2" / "DTLS"  ; or future standard methods
+    objective-value = method / [ method, extensions ]
+    extensions = 1*any
+    method = method-name / [ method-name, method-params] 
+    method-name = "IKEv2" / "DTLS" | any 
+    method-params = 1*any
  ]]></artwork>
         </figure>
         <t>The objective-flags field is set to indicate synchronization.</t>
@@ -1186,7 +1197,9 @@ will be distributed with the flooded objective.  An example of the message is in
      out of three messages are dropped in transit.</t>
         <t>The session-id is a random number used for loop prevention (distinguishing a message from a prior instance of the same message).  In DULL this field is irrelevant but has to be set according to the GRASP specification.</t>
         <t>The originator MUST be the IPv6 link local address of the originating ACP node on the sending interface.</t>
-        <t>The 'objective-value' parameter is a string indicating the protocol available at the specified or implied locator. It is a protocol supported by the node to negotiate a secure channel. IKEv2 as shown above is the protocol used to negotiate an IPsec secure channel.</t>
+        <t>The method-name in the 'objective-value' parameter is a string indicating the protocol available at the specified or implied locator. It is a protocol supported by the node to negotiate a secure channel. IKEv2 as shown above is the protocol used to negotiate an IPsec secure channel.</t>
+        <t>Method-params allows to carry method specific parameters. This specification does not define any method-params for "IKEv2" or "DTLS". Method-params for these two methods that are not understood by an ACP node MUST be ignored by it.</t>
+        <t>extensions allows to define method independent parameters. This specification does not define any extensions. Extensions not understood by an ACP node MUST be ignored by it.</t>
         <t>The locator-option is optional and only required when the secure channel protocol is not offered at a well-defined port number, or if there is no well-defined port number.</t>
 
         <t>IKEv2 is the actual protocol used to negotiate an Internet Protocol security architecture (IPsec) connection.  GRASP therefore indicates "IKEv2" and not "IPsec". If "IPsec" was used, this too could mean use of the obsolete older version IKE (v1) (<xref target="RFC2409" format="default"/>).  IKEv2 has an IANA assigned port number 500, but in the above example, the candidate ACP neighbor is offering ACP secure channel negotiation via IKEv2 on port 15000 (purely to show through the example that GRASP allows to indicate the port number and it does not have to be the IANA assigned one).</t>
@@ -1202,7 +1215,7 @@ will be distributed with the flooded objective.  An example of the message is in
         <t>Attackers on a subnet may be able to inject malicious DULL GRASP messages that are indistinguishable from non-malicious DULL GRASP messages to create Denial-of-Service (DoS) attacks that force ACP nodes to attempt many unsuccessful ACP secure channel connections. When an ACP node sees multiple AN_ACP objectives for the same secure channel protocol on different transport addresses, it SHOULD prefer connecting via the well-known transport address if the secure channel method has one (such as UDP port 500 for IKEv2).</t>
         <t>Note that a node serving both as an ACP node and BRSKI Join Proxy may choose to distribute the "AN_ACP" objective and the respective BRSKI in the same M_FLOOD message, since GRASP allows multiple objectives in one message.  This may be impractical though if ACP and BRSKI operations are implemented via separate software modules / ASAs.</t>
         <t>The result of the discovery is the IPv6 link-local address of the neighbor as well as its supported secure channel protocols (and non-standard port they are running on).  It is stored in the ACP Adjacency Table (see <xref target="adj-table" format="default"/>), which then drives the further building of the ACP to that neighbor.</t>
-        <t>Note that the DULL GRASP objective described intentionally does not include ACP nodes ACP certificate even though this would be useful for diagnostics and to simplify the security exchange in ACP secure channel security association protocols (see <xref target="associations" format="default"/>). The reason is that DULL GRASP messages are periodically multicasted across IPv6 subnets and full certificates could easily lead to fragmented IPv6 DULL GRASP multicast packets due to the size of a certificate.  This would be highly undesirable.</t>
+        <t>Note that the DULL GRASP objective described intentionally does not include the ACP node's ACP certificate even though this would be useful for diagnostics and to simplify the security exchange in ACP secure channel security association protocols (see <xref target="associations" format="default"/>). The reason is that DULL GRASP messages are periodically multicasted across IPv6 subnets and full certificates could easily lead to fragmented IPv6 DULL GRASP multicast packets due to the size of a certificate.  This would be highly undesirable.</t>
       </section>
       <!-- discovery-grasp -->
       <section anchor="selection" numbered="true" toc="default">
@@ -1238,7 +1251,7 @@ will be distributed with the flooded objective.  An example of the message is in
 <t>The Decider SHOULD NOT send actual payload packets across a secure channel until it has decided to use it. The Follower MAY delay linking the ACP secure channel into the ACP virtual interface until it sees the first payload packet from the Decider up to a maximum of 5 seconds to avoid unnecessarily linking a secure channel that will be terminated as undesired by the Decider shortly afterwards.</t>
 
         <?rfc needLines="48" ?>
-        <t>The following sequence of steps show this example in more detail. Each step is tagged with [&lt;step#&gt;{:&lt;connection&gt;}]. The connection is included to easier distinguish which of the two competing connections the step belong to, one initiated by Node 1, one initiated by Node 2.
+        <t>The following sequence of steps show this example in more detail. Each step is tagged with [&lt;step#&gt;{:&lt;connection&gt;}]. The connection is included to more easily distinguish which of the two competing connections the step belong to, one initiated by Node 1, one initiated by Node 2.
    </t>
         <figure anchor="sequence-of-steps">
           <name>Secure Channel sequence of steps</name>
@@ -1298,7 +1311,7 @@ will be distributed with the flooded objective.  An example of the message is in
       <!-- channel-selection -->
       <section anchor="neighbor_verification" numbered="true" toc="default">
         <name>Candidate ACP Neighbor verification</name>
-        <t>Independent of the security association protocol chosen, candidate ACP neighbors need to be authenticated based on their domain certificate.  This implies that any secure channel protocol MUST support certificate based authentication that can support the ACP domain membership check as defined in <xref target="certcheck" format="default"/>.  If it fails, the connection attempt is aborted and an error logged. Attempts to reconnect MUST be throttled. The RECOMMENDED default is exponential base 2 backoff with a minimum delay of 10 seconds and a maximum delay of 640 seconds.</t>
+        <t>Independent of the security association protocol chosen, candidate ACP neighbors need to be authenticated based on their domain certificate.  This implies that any secure channel protocol MUST support certificate based authentication that can support the ACP domain membership check as defined in <xref target="certcheck" format="default"/>.  If it fails, the connection attempt is aborted and an error logged. Attempts to reconnect MUST be throttled. The RECOMMENDED default is exponential base 2 backoff with an initial retransmission time (IRT) of 10 seconds and a maximum retransmission time (MRT) of 640 seconds.</t>
         <t>Failure to authenticate an ACP neighbor when acting in the role of a responder
 of the security authentication protocol MUST NOT impact the attempts of the ACP node
 to attempt establishing a connection as an initiator. Only failed connection attempts as
@@ -1449,7 +1462,7 @@ The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP), MUST be sup
             <name>IPsec with GRE encapsulation</name>
             <t>In network devices it is often more common to implement high performance virtual interfaces on top of GRE encapsulation than on top of a "native" IPsec association (without any other encapsulation than those defined by IPsec).  On those devices it may be beneficial to run the ACP secure channel on top of GRE protected by the IPsec association.</t>
             <t>The requirements for ESP/IPsec/IKEv2 with GRE are the same as for native IPsec (see <xref target="IPsec" format="default"/>) except that IPsec transport mode and next protocol GRE (47) are to be negotiated. Tunnel mode is not required because of GRE. Traffic Selectors are:</t>
-            <t>TSi = (47, 0-65535, Initiator-IPv6-LL-addr ... Initiator-ACP-LL-addr)</t>
+            <t>TSi = (47, 0-65535, Initiator-IPv6-LL-addr ... Initiator-IPv6-LL-addr)</t>
             <t>TSr = (47, 0-65535, Responder-IPv6-LL-addr ... Responder-IPv6-LL-addr)</t>
             <t>If IKEv2 initiator and responder support IPsec over GRE, it will be preferred over native IPsec because of the way how IKEv2 negotiates transport mode as used by this IPsec over GRE profile) versus tunnel mode as used by native IPsec (see <xref target="RFC7296" format="default"/>, section 1.3.1).  The ACP IPv6 traffic has to be carried across GRE according to <xref target="RFC7676" format="default"/>.</t>
           </section>
@@ -1712,21 +1725,30 @@ booth peers support it.</t>
           The following summarizes the addressing Sub-Schemes:
 </t>
           <figure anchor="addr-scheme-summary">
-            <name>Addressing schemes</name>
+            <name>Addressing Sub-Schemes</name>
             <artwork name="" type="" align="left" alt=""><![CDATA[
-+------+-----+-----------------+-------+------------+
-| Type | Z   | name            | F-bit | V-bit size |
-+------+-----+-----------------+-------+------------+
-| 0x00 | 0   | ACP-Zone        | N/A   | 1 bit      |
-+------+-----+-----------------+-------+------------+
-| 0x00 | 1   | ACP-Manual      | N/A   | 1 bit      |
-+------+-----+-----------------+-------+------------+
-| 0x01 | N/A | ACP-VLong-8     | 0     | 8 bits     |
-+------+-----+-----------------+-------+------------+
-| 0x01 | N/A | ACP-VLong-16    | 1     | 16 bits    |
-+------+-----+-----------------+-------+------------+
++------+-----------------+-----------+-------------------+
+| Type | Name            |F-bit|   Z | V-bits   | Prefix |
++------+-----------------+-----+-----+----------+--------+
+| 0x00 | ACP-Zone        | N/A |   0 | 1 bit    | /127   |
++------+-----------------+-----+-----+----------+--------+
+| 0x00 | ACP-Manual      | N/A |   1 | N/A      |  /64   |
++------+-----------------+-----+-----+----------+--------+
+| 0x01 | ACP-VLong-8     |   0 | N/A | 8 bits   | /120   |
++------+-----------------+-----+-----+----------+--------+
+| 0x01 | ACP-VLong-16    |   1 | N/A | 16 bits  | /112   |
++------+-----------------+-----+-----+----------+--------+
+| 0x10 | Reserved / For future definition/allocation     |
++------+-----------------+-----+-----+----------+--------+
+| 0x11 | Reserved / For future definition/allocation     |
++------+-----------------+-----+-----+----------+--------+
   ]]></artwork>
           </figure>
+<t>F-Bit and Z are two encoding fields explained below for
+the Sub-Schemes that introduce/use them. V-bits is the number
+of bits of addresses allocated to the ACP node.
+Prefix is the prefix the ACP node is announcing into the
+RPL routing protocol.</t>
         </section>
         <!-- base-scheme -->
         <section anchor="zone-scheme" numbered="true" toc="default">
@@ -1795,7 +1817,7 @@ booth peers support it.</t>
           <t>"Manual" means that allocations of the Subnet-ID need to be done today with pre-existing, non-autonomic mechanisms.  Every subnet that uses this addressing sub-scheme needs to use a unique Subnet-ID (unless some anycast setup is done).</t>
           <t>The Z bit field was added to distinguish Zone addressing and manual addressing sub-schemes without requiring one more bit in the base scheme and therefore allowing for the Vlong scheme (described below) to have one more bit available.</t>
           <t>Manual addressing sub-scheme addresses SHOULD NOT be used in ACP certificates. Any node capable to build ACP secure channels and permitted by Registrar policy to participate in building ACP secure channels SHOULD receive an ACP address (prefix) from one of the other ACP addressing sub-schemes.  Nodes not capable (or permitted) to participate in ACP secure channels can connect to the ACP via ACP connect interfaces of ACP edge nodes (see <xref target="ACPconnect" format="default"/>), without setting up an ACP secure channel. Their ACP certificate MUST omit the acp-address field to indicate that their ACP certificate is only usable for non- ACP secure channel authentication, such as end-to-end transport connections across the ACP or Data-Plane.</t>
-          <t>Address management of ACP connect subnets is done using traditional assignment methods and existing IPv6 protocols. See <xref target="ACautoconfig" format="default"/> for details.</t>
+          <t>Address management of ACP connect subnets is done using traditional assignment methods and existing IPv6 protocols. See <xref target="ACautoconfig" format="default"/> for details. Therefore the notion of V-bit many addresses assigned to the ACP nodes does not apply to this Sub-Scheme.</t>
         </section>
         <!-- manual -->
         <section anchor="Vlong" numbered="true" toc="default">
@@ -2186,8 +2208,13 @@ registrars and centralized policy control.</t>
           </section>
           <section anchor="rpl-ipv6" numbered="true" toc="default">
             <name>IPv6 address configuration</name>
-            <t>Every ACP node (RPL node) announces an IPv6 prefix covering the address(es) used in the ACP node.  The prefix length depends on the chosen addressing sub-scheme of the ACP address provisioned into the certificate of the ACP node, e.g., /127 for Zone Addressing Sub-Scheme or /112 or /120 for Vlong addressing sub-scheme.  See <xref target="addressing" format="default"/> for more details.</t>
-            <t>Every ACP node MUST install a black hole (aka null) route for whatever ACP address space that it advertises (i.e.: the /96 or /127).  This is avoid routing loops for addresses that an ACP node has not (yet) used.</t>
+
+            <t>Every ACP node (RPL node) announces an IPv6 prefix covering the addresses assigned to the ACP node via the AcpNodeName.  The prefix length depends on the addressing sub-scheme of the acp-address, /127 for Zone Addressing Sub-Scheme and /112 or /120 for Vlong addressing sub-scheme.  See <xref target="addressing" format="default"/> for more details.</t>
+
+            <t>Every ACP node MUST install a black hole (aka null) route if there are unused parts of the ACP address space assigned to the ACP node via its AcpNodeName. This is superceeded by longer prefixes assigned to interfaces for the address space actually used by the node.  For example, when the node has an ACP-VLong-8 address space, it installs a /120 black hole route. If it then for example only uses the ACP address (first address from the space), it would assign that address via a /128 address prefix to the ACP loopback interface (see <xref target="ACP-loopback" format="default"/>). None of those longer prefixes are announced into RPL.</t>
+
+             <t>For ACP-Manual address prefixes configured on an ACP node, for example for ACP connect subnets (see <xref target="NMS" format="default"/>), the node announces the /64 subnet prefix.</t>
+
           </section>
           <section anchor="rpl-admin" numbered="true" toc="default">
             <name>Administrative parameters</name>
@@ -2266,7 +2293,7 @@ of the secure channel protocols (IPsec / DTLS).</t>
         <section anchor="general_MTU" numbered="true" toc="default">
           <name>MTU</name>
           <t>The MTU for ACP secure channels MUST be derived locally from the underlying link MTU minus the secure channel encapsulation overhead.</t>
-          <t>ACP secure Channel protocols do not need to perform MTU discovery because they are built across L2 adjacencies - the MTU on both sides connecting to the L2 connection are assumed to be consistent.  Extensions to ACP where the ACP is for example tunneled need to consider how to guarantee MTU consistency.  This is an issue of tunnels, not an issue of running the ACP across a tunnel.  Transport stacks running across ACP can perform normal PMTUD (Path MTU Discovery).  Because the ACP is meant to be prioritize reliability over performance, they MAY opt to only expect IPv6 minimum MTU (1280) to avoid running into PMTUD implementation bugs or underlying link MTU mismatch problems.</t>
+          <t>ACP secure Channel protocols do not need to perform MTU discovery because they are built across L2 adjacencies - the MTU on both sides connecting to the L2 connection are assumed to be consistent.  Extensions to ACP where the ACP is for example tunneled need to consider how to guarantee MTU consistency.  This is an issue of tunnels, not an issue of running the ACP across a tunnel.  Transport stacks running across ACP can perform normal PMTUD (Path MTU Discovery).  Because the ACP is meant to prioritize reliability over performance, they MAY opt to only expect IPv6 minimum MTU (1280) to avoid running into PMTUD implementation bugs or underlying link MTU mismatch problems.</t>
         </section>
         <section anchor="general_multipath" numbered="true" toc="default">
           <name>Multiple links between nodes</name>
@@ -2283,13 +2310,13 @@ of the secure channel protocols (IPsec / DTLS).</t>
             <t>For autonomous operations of the ACP, as described in <xref target="self-creation" format="default"/>
         and <xref target="acp-l2-switches" format="default"/>, the ACP node uses the first address from
         the N bit ACP prefix (N = 128 - number of Vbits of the ACP address) assigned to the node.
-        This address is assigned with an adddress prefix of N or larger to a loopback interface.</t>
+        This address is assigned with an address prefix of N or larger to a loopback interface.</t>
             <t>Other addresses from the prefix can be used by the ACP of the node as desired. 
         The autonomous operations of the ACP does not require additional global scope
          IPv6 addresses, they are instead intended for ASA or non-autonomous functions.
         Non fully autonomic components of the ACP such as ACP connect interfaces
-        (see <xref target="acp-connect" format="default"/> may also introduce additional
-        global scope IPv6 addresses on other type of interfaces into the ACP.</t>
+        (see <xref target="acp-connect" format="default"/>) may also introduce additional
+        global scope IPv6 addresses on other types of interfaces into the ACP.</t>
             <t>[RFC Editor: please remove this paragraph: Note to reviewers:
         Please do not complain again about an obsolete RFC number in the following paragraph. The text should
         make it clear that the reference was choosen to indicate a particular point in time,
@@ -2334,7 +2361,7 @@ of the secure channel protocols (IPsec / DTLS).</t>
           often because they do already expect that a single loopback address can be used,
           especially to provide a stable address under failure of external interfaces or links.</li>
               <li>Even when an application supports multiple addresses to a peer, it
-          can only use one adddress for a connection at a time with the most widely deployed 
+          can only use one address for a connection at a time with the most widely deployed 
           transport protocols TCP and UDP. While <xref target="RFC6824" format="default"/> solves this problem,
           it is not widely adopted for router OAM services implementations.</li>
               <li>To completely autonomously assign global scope addresses to subnets
@@ -2641,8 +2668,32 @@ and that property could only be changed through re-enrollment.  See also <xref t
         <section anchor="ACautoconfig" numbered="true" toc="default">
           <name>Auto Configuration</name>
           <t>ACP edge nodes, NMS hosts and software components that as described in the previous section are meant to be composed via virtual interfaces SHOULD support on the ACP connect subnet StateLess Address Autoconfiguration (SLAAC - <xref target="RFC4862" format="default"/>) and route auto configuration according to <xref target="RFC4191" format="default"/>.</t>
-          <t>The ACP edge node acts as the router on the ACP connect subnet, providing the (auto-)configured prefix for the ACP connect subnet to NMS hosts and/or software components.  The ACP edge node uses route prefix option of RFC4191 to announce the default route (::/) with a lifetime of 0 and aggregated prefixes for routes in the ACP routing table with normal lifetimes.  This will ensure that the ACP edge node does not become a default router, but that the NMS hosts and software components will route the prefixes used in the ACP to the ACP edge node.</t>
-          <t>Aggregated prefix means that the ACP edge node needs to only announce the /48 ULA prefixes used in the ACP but none of the actual /64 (Manual Addressing Sub-Scheme), /127 (ACP Zone Addressing Sub-Scheme), /112 or /120 (Vlong Addressing Sub-Scheme) routes of actual ACP nodes.  If ACP interfaces are configured with non ULA prefixes, then those prefixes cannot be aggregated without further configured policy on the ACP edge node.  This explains the above recommendation to use ACP ULA prefix covered prefixes for ACP connect interfaces: They allow for a shorter list of prefixes to be signaled via RFC4191 to NMS hosts and software components.</t>
+
+          <t>The ACP edge node acts as the router towards the ACP on the ACP connect subnet,
+          providing the (auto-)configured prefix for the ACP connect subnet and
+          (auto-)configured routes into the ACP to NMS hosts and/or software components.</t>
+         
+          <t> The ACP edge node uses the Route Information Option (RIO) of RFC4191 to announce
+          aggregated prefixes for address prefixes used in the ACP (with normal RIO lifetimes.
+          In addition, the ACP edge node also uses a RIO to announce the default route (::/0) with
+          a lifetime of 0.</t>
+
+          <t>These RIOs allow to connect Type C hosts to the ACP via an ACP connect subnet on one interface
+          and another network (Data Plane / NMS network) on the same or another interface of the Type C host, relying on other
+          routers than the ACP edge node. The RIOs ensure that these hosts will only route the prefixes used in the ACP to
+          the ACP edge node.</t>
+          <t>Type A/B host ignore the RIOs and will consider the ACP node to be their default router for 
+          all destination.  This is sufficient when type A/B hosts only need to connect to the ACP but not other networks.
+          Attaching Type A/B hosts to both the ACP and other networks, requires either explicit
+          ACP prefix route configuration on the Type A/B hosts or the combined ACP/Data-Plane interface on the ACP edge node,
+          see <xref target="SingleIF" format="default"/>.</t>
+  
+          <t>Aggregated prefix means that the ACP edge node needs to only announce
+          the /48 ULA prefixes used in the ACP but none of the actual /64
+           (Manual Addressing Sub-Scheme), /127 (ACP Zone Addressing Sub-Scheme),
+           /112 or /120 (Vlong Addressing Sub-Scheme) routes of actual ACP nodes.
+           If ACP interfaces are configured with non ULA prefixes, then those prefixes cannot be aggregated without further configured policy on the ACP edge node.  This explains the above recommendation to use ACP ULA prefix covered prefixes for ACP connect interfaces: They allow for a shorter list of prefixes to be signaled via RFC4191 to NMS hosts and software components.</t>
+
           <t>The ACP edge nodes that have a Vlong ACP address MAY allocate a subset of their /112 or /120 address prefix to ACP connect interface(s) to eliminate the need to non-autonomically configure/provision the address prefixes for such ACP connect interfaces.</t>
           <!--  See <xref target="up4291"/> for considerations how this updates the IPv6 address architecture and ULA specification.</t> -->
         </section>
@@ -2670,7 +2721,7 @@ and that property could only be changed through re-enrollment.  See also <xref t
 
                                 ]]></artwork>
           </figure>
-          <t>Using two physical and/or virtual subnets (and therefore interfaces) into NMS Hosts (as per <xref target="NMS" format="default"/>) or Software (as per <xref target="software" format="default"/>) may be seen as additional complexity, for example with legacy NMS Hosts that support only one IP interface.</t>
+          <t>Using two physical and/or virtual subnets (and therefore interfaces) into NMS Hosts (as per <xref target="NMS" format="default"/>) or Software (as per <xref target="software" format="default"/>) may be seen as additional complexity, for example with legacy NMS Hosts that support only one IP interface, or it may be insufficient to support <xref target="RFC4191" format="default"/> Type A or B host (see <xref target="ACautoconfig" format="default"/>).</t>
           <t>To provide a single subnet into both ACP and Data-Plane, the ACP Edge node needs to de-multiplex packets from NMS hosts into ACP VRF and Data-Plane.  This is sometimes called "VRF select".  If the ACP VRF has no overlapping IPv6 addresses with the Data-Plane (it should have no overlapping addresses), then this function can use the IPv6 Destination address.  The problem is Source Address Selection on the NMS Host(s) according to RFC6724.</t>
           <t>Consider the simple case: The ACP uses only one ULA prefix, the ACP IPv6 prefix for the Combined ACP and Data-Plane interface is covered by that ULA prefix.  The ACP edge node announces both the ACP IPv6 prefix and one (or more) prefixes for the Data-Plane.  Without further policy configurations on the NMS Host(s), it may select its ACP address as a source address for Data-Plane ULA destinations because of Rule 8 of RFC6724.  The ACP edge node can pass on the packet to the Data-Plane, but the ACP source address should not be used for Data-Plane traffic, and return traffic may fail.</t>
           <t>If the ACP carries multiple ULA prefixes or non-ULA ACP connect prefixes, then the correct source address selection becomes even more problematic.</t>
@@ -3313,7 +3364,7 @@ by allowing GRASP messages to be propagated across the layer 3 VPN, leveraging f
 example L3VPN Multicast support.</t>
         <t>Finally, these partial deployments can be merged into a single contiguous complete
 autonomous ACP (given appropriate ACP support across the core) without changes
-in the crypto material, because the nodes ACP certificates are fromm a single ACP.</t>
+in the crypto material, because the node's ACP certificates are fromm a single ACP.</t>
       </section>
       <section anchor="configuration" numbered="true" toc="default">
         <name>Configuration and the ACP (summary)</name>
@@ -3421,7 +3472,7 @@ compromised nodes.</t>
 
         <li>Malicious on-path ACP nodes may filter valid EST server announcements across the ACP, but such malicious ACP nodes could equally filter any ACP traffic such as the EST traffic itself. Either attack requires the ability to execute malicious software on an impaired ACP node though.</li>
 
-        <li>In the abscence of malicious software injection, an attacker that can misconfigure an ACP node which is supporting EST server functionality could attempt to configure a malicious CA. This would not result in the ability to successfully renew ACP certificates, but it could result in DoS attacks by becoming an EST server and making ACP nodes attempting their ACP certificate renewal via this impaired ACP node. This problem can be avoided when the EST server implementation can verify that the CA configured is indeed providing renewal for certificates of the nodes ACP. The ability to do so depends on the EST-Server to CA protocol, which is outside the scope of this document.</li>
+        <li>In the abscence of malicious software injection, an attacker that can misconfigure an ACP node which is supporting EST server functionality could attempt to configure a malicious CA. This would not result in the ability to successfully renew ACP certificates, but it could result in DoS attacks by becoming an EST server and making ACP nodes attempting their ACP certificate renewal via this impaired ACP node. This problem can be avoided when the EST server implementation can verify that the CA configured is indeed providing renewal for certificates of the node's ACP. The ability to do so depends on the EST-Server to CA protocol, which is outside the scope of this document.</li>
       </ul>
 
 <t>In summary, attacks against the PKI/certificate dependencies of the ACP can be minimized by a variety of hardware/software commponents including options such as TPM for IDevID/ACP-certificate, prohibitions against execution of non-trusted software and design aspects of the EST Server functionality for the ACP to eliminate configuration level impairment.</t>
@@ -3507,7 +3558,7 @@ currently one registry table - the "ACP Address Type" table.</t>
       <name>Acknowledgements</name>
       <t>This work originated from an Autonomic Networking project at Cisco Systems, which started in early 2010.  Many people contributed to this project and the idea of the Autonomic Control Plane, amongst which (in alphabetical order): Ignas Bagdonas, Parag Bhide, Balaji BL, Alex Clemm, Yves Hertoghs, Bruno Klauser, Max Pritikin, Michael Richardson, Ravi Kumar Vadapalli.</t>
       <t>Special thanks to Brian Carpenter, Elwyn Davies, Joel Halpern and Sheng Jiang for their thorough reviews.</t>
-      <t>Many thanks Ben Kaduk, Roman Danyliv and Eric Rescorla for their thorough SEC AD reviews and to Valery Smyslov, Tero Kivinen, Paul Wouters and Yoav Nir for review of IPsec and IKEv2 parameters and helping to understand those and other security protocol details better.</t>
+      <t>Many thanks Ben Kaduk, Roman Danyliv and Eric Rescorla for their thorough SEC AD reviews, Russ Housley and Erik Kline for their reviews and to Valery Smyslov, Tero Kivinen, Paul Wouters and Yoav Nir for review of IPsec and IKEv2 parameters and helping to understand those and other security protocol details better.</t>
       <t>Further input, review or suggestions were received from: Rene Struik, Benoit Claise, William Atwood and Yongkang Zhang.</t>
     </section>
     <!-- ack -->
@@ -3595,7 +3646,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           <t>6.1.1 Hex digits in ACP domain information field now upper-case (no specific reason except that both options are equally good, but capitalized ones are used in rfc5234).</t>
           <t>6.1.5.3 Added explanations about CRLs.</t>
           <t>6.1.5.6 Added explanations of behavior under failing certificates.</t>
-          <t>6.1.2 Allow ACP adddress '0' in ACP domain information field: presence of address indicates permission to build ACP secure channel to node, 0 indicates that the address of the node is assigned by (future) other means than certificate.  Non-autonomic nodes have no address at all (that was in -13), and can only connect via ACP connect interfaces to ACP.</t>
+          <t>6.1.2 Allow ACP address '0' in ACP domain information field: presence of address indicates permission to build ACP secure channel to node, 0 indicates that the address of the node is assigned by (future) other means than certificate.  Non-autonomic nodes have no address at all (that was in -13), and can only connect via ACP connect interfaces to ACP.</t>
           <t>6.1.3 Distinction of real ACP nodes (with address) and those with domain certificate without address added as a new rule to ACP domain membership check.</t>
           <t>6.6 Added throttling of secure-channel setup attempts.</t>
           <t>6.11.1.14 Removed requirement to handle unknown destination ACP traffic in low-end nodes that would never be RPL roots.</t>
@@ -3621,6 +3672,16 @@ currently one registry table - the "ACP Address Type" table.</t>
       </section>
       <section numbered="true" toc="default">
         <name>draft-ietf-anima-autonomic-control-plane-29</name>
+        <t>Discuss/Comments from Erik Kline:</t>
+        <t>Editorial suggestions and nits. Thanks!.</t>
+        <t>6.1.3 Added text about how/why rsub is irrelevant for domain membership check.</t>
+        <t>6.3 Added extension points to AN_ACP DULL GRASP objective because for example ACP domain certificate could be a nice optional additional parameter and prior syntax would have forced us to encode into separate objective unnecessarily.</t>
+        <t>6.7 Using RFC8415 terminology for exponential backoff parameters.</t>
+        <t>6.11.2 Amended ACP Sub-Addressing table with future code points, explanations and prefix announced into RPL.</t>
+        <t>6.12.1.11. Reworked text to better explain how black hole route works and added expanation for prefix for manual address scheme.</t>
+        <t>8.1.3. Reworked explanation of RIOs for ACP connect interfaces for Type C vs. Type A/B hosts.</t>
+        <t>8.1.4. Added explanation how this "VRF select" option is required for auto-attachment of Type A/B hosts to ACP and other networks.</t>
+        <t></t>
         <t>Discuss/Comments from Barry Leiba:</t>
         <t>Various editorial nits - thanks.</t>
         <t>6.1 New section pulling in TLS requirements, no need anymore to duplicat for ACP GRASP, EST, BRSKI (ACP/ANI nodes) and (if desired) OCSP/CRLDP. Added rule to start use secure channel only after negotiation has finished. Added rules not to optimize negotiation across multiple L2 interfaces to the same peer.</t>
@@ -5810,7 +5871,7 @@ non-conflicting address prefixes. This design does not leave enough
 bits to simultaneously support a large number of nodes (Node-ID)
 plus a large prefix of local addresses for every node plus a
 large enough set of bits to identify a routing Zone. In result,
-Zone, Vlong 8/16 attempt to support all features, but in via 
+Zone, Vlong 8/16 attempt to support all features, but via 
 separate prefixes.</t>
         <t>In networks that always expect to rely on a centralized PMS
 as described above (<xref target="pms" format="default"/>), the 48/46-bits for
