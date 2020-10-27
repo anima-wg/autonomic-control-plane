@@ -1,0 +1,472 @@
+From: Toerless Eckert <tte@cs.fau.de>
+To: Benjamin Kaduk <kaduk@mit.edu>
+Cc: The IESG <iesg@ietf.org>,
+	draft-ietf-anima-autonomic-control-plane@ietf.org,
+	anima-chairs@ietf.org, anima@ietf.org,
+	Sheng Jiang <jiangsheng@huawei.com>
+Bcc: 
+Subject: Re: Benjamin Kaduk's Yes on
+ draft-ietf-anima-autonomic-control-plane-29: (with COMMENT)
+Reply-To: 
+In-Reply-To: <160159178470.16845.16995175102690434365@ietfa.amsl.com>
+
+Hi Ben
+
+THanks for the comments. I am very confident that -30 resolves all of them
+to your satisfaction. 
+
+Wrt. to the unfinished suggested replacement text for A.6:
+
+Given how the WG could not agree to keep A.6, primarily because it
+thought it was too advanced for a first RFC (and hence didn't even
+want to boher thinking of refining text for it in an appendix),
+ and given how it does not make sense to wait you (who certainly has
+better things to do) finishing text that at best becomes
+an appendix, i have now resolved this point as follows:
+
+I have created a new appendix B. "Unfinished Considerations" which is
+tagged to be removed in the RFC. I have removed my old A.6 text and replaced
+it with B.1 which is your text. In addition, the point you raised as a
+comment about ACP address verification is answered with a a new section
+B.2, and the text about public CA from the main text that Michael Richardson
+and Eric Vyncke wanted to see removed from the main text is improved
+by moved into a new B.3.
+
+Finally, there is a new reference to this (hopefully last) ACP draft
+version in the document, so that the final RFC can have references to
+the draft appendix B without them actually being in the RFC.
+
+Maybe this self-reference is unconvential, but hopefully a good way
+to make a clear cut with what we have in the RFC without loosing the
+state of (unfinished) discussion about these unfinished points.
+
+Eric will have the last word on this, worst case i will just have
+to remove references to [ACPDRAFT] from the target RFC version, in
+any case all unifinished text is clearly in one place, not in the RFC,
+but present in the last draft version.
+
+See inline for answers to your comments.
+
+I will ask EricV to consider -30 to be finished for his approval and
+move to RFC editor queue.
+
+Cheers
+   Toerless
+
+On Thu, Oct 01, 2020 at 03:36:25PM -0700, Benjamin Kaduk via Datatracker wrote:
+> Benjamin Kaduk has entered the following ballot position for
+> draft-ietf-anima-autonomic-control-plane-29: Yes
+> 
+> When responding, please keep the subject line intact and reply to all
+> email addresses included in the To and CC lines. (Feel free to cut this
+> introductory paragraph, however.)
+> 
+> 
+> Please refer to https://www.ietf.org/iesg/statement/discuss-criteria.html
+> for more information about IESG DISCUSS and COMMENT positions.
+> 
+> 
+> The document, along with other ballot positions, can be found here:
+> https://datatracker.ietf.org/doc/draft-ietf-anima-autonomic-control-plane/
+> 
+> 
+> 
+> ----------------------------------------------------------------------
+> COMMENT:
+> ----------------------------------------------------------------------
+> 
+> We're down to largely editorial stuff at this point, and I'm happy with the overall
+> state of things.
+> 
+> A couple of the new bits in the -29 might benefit from targeted review (noted
+> inline), e.g., for CDDL, TSV, or INT-specific aspects.
+> 
+> Section 6.1
+> 
+>    TLS MUST offer TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 and
+>    TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 and MUST NOT offer options
+>    with less than 256 bit symmetric key strength or hash strength of
+>    less than SHA384.  When TLS 1.3 is supported, TLS_AES_256_GCM_SHA384
+> 
+> One could potentially say "hash strength of less than 384 bits" instead
+> of anchoring the reference point at SHA384, but I'm not terribly
+> concerned about it.
+
+Done
+
+>    TLS MUST also include the "Supported Elliptic Curves" extension, it
+>    MUST support the NIST P-256 (secp256r1(22)) and P-384 (secp384r1(24))
+>    curves [RFC4492].  In addition, TLS clients SHOULD send an
+>    ec_point_formats extension with a single element, "uncompressed".
+> 
+> We can say "TLS 1.2 clients" for the ec_point_format extension (nit: no 's').
+
+Done
+
+> Section 6.2.1
+> 
+> Thank you for clarifying the "serialNumber" attribute; I think that will
+> be helpful for a lot of people.
+> 
+>    ACP nodes MUST NOT support certificates with RSA public keys whose
+>    modulus is less than 2048 bits, or certificates whose ECC public keys
+>    are in groups whose order is less than 256 bits.  RSA signing
+>    certificates with 2048-bit public keys MUST be supported, and such
+> 
+> I think I mentioned this previously (and sorry for the repetition if I
+> did), but just in case I didn't: this 256-bit group order requirement
+> excludes Ed25519 and friends.  If you're fine with that, that's okay; I
+> just want to make sure it's an informed choice.
+
+Thanks. The way i see it: We have spent a lot of time in draft process
+and will not get more experience unless we move forward with RFC. From
+a security perspective i think it is better to have a first RFC
+block against too insecure algos, even at the cost of the text not
+being perfect and cutting out "secure enough" option because we could
+not come up with either an exhaustive list or all-inclusive
+mathemathical representationf for todays best conditions of
+"secure enough".
+
+Aka It is a lot harder to expire in future RFCs not secure
+enough algo options than it is to add in later RFC additional secure
+enough algos. 
+
+And given how nobody brought up Ed25519 so far, maybe it a poor
+"but i am secure enough and even better" victim for this RFC. If so,
+then hopefully someone will come forward later and we do a small
+update RFC adding updating this ACP RFC.
+
+>    ACP nodes MUST support RSA certificates that are signed by RSA
+>    signatures over the SHA-256 digest of the contents, and SHOULD
+>    additionally support SHA-384 and SHA-512 digests in such signatures.
+>    The same requirements for certificate signatures apply to ECDSA
+>    certificates, and additionally, ACP nodes MUST support ECDSA
+>    signatures on ECDSA certificates.
+> 
+> I think "same requirements for digest usage in certificate signatures"
+> is more accurate.
+
+Done.
+
+>    In support of ECDH key establishment, ACP certificates with ECC keys
+>    MUST indicate to be Elliptic Curve Diffie-Hellman capable (ECDH): If
+>    the X.509v3 keyUsage extension is present, the keyAgreement bit MUST
+>    be set.
+> 
+> I think I may have failed to think about and comment on this previously,
+> but doing direct ECDH with the (static) key in the certificate is pretty
+> uncommon -- as I understand it you don't need this bit set in order to
+> use the TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 ciphersuite, for
+> example.  To be clear, I'm not saying it's inherently wrong to make this
+> requirement, just that I don't think it's needed for the use-cases
+> presented in this document.  (It may also make it harder to get such
+> certificates issued in the future, though it's hard to predict what
+> path CA policies will take in the future.)
+
+Thanks. I did not understand this dependency correctly. I have reworded
+the text so as to remove the normative requirement and just made it
+an informative paragraph, probably making operators shy
+away from this option when they are worried about CA support:
+
+<t>To support ECDH directly with the the key in the ACP certificate,
+ACP certificates with ECC keys need to indicate to be Elliptic Curve Diffie-Hellman 
+capable (ECDH): If the X.509v3 keyUsage extension is present, the keyAgreement bit
+must then be set. Note that this option is not required for any of the
+required ciphersuites in this document and may not be supported by all CA.</t>
+
+> Section 6.2.3
+> 
+> It might be nice to say something about in what cases the transport
+> address used to reach the peer can/cannot be validated against the
+> acp-address in the peer's ACP certificate.  I think there are some
+> classes of interactions for which that check can be done and would add
+> value, even though there are definitely some classes of interaction for
+> which it is not viable.
+
+See new Appendix B.4 referenced via [ACPDRAFT] in 6.2.3.
+
+Given how there are a lot of considerations and given how these had
+not good review (although i think what i write was regurgitated several
+years ago in WG, but not written down), its one of those "section B" appendices
+that will not be in the RFC.
+
+As can hopefully easiy be deduced from the text there is nothing we should
+be worried about for the scope of the ACP, but at a higher (ASA/ANI) layer.
+
+> Section 6.2.5.3
+> 
+>    When using a private PKI for ACP certificates, the CRL may be need-
+>    to-know, for example to prohibit insight into the operational
+>    practices of the domain by tracking the growth of the CRL.  In this
+>    case, HTTPS may be chosen to provide confidentiality, especially when
+>    making the CRL available via the Data-Plane.  Authentication and
+>    authorization SHOULD use ACP certificates and ACP domain membership
+>    check.  [...]
+> 
+> (I assume that the SHOULD here is still only in the case where the CRL
+> is need-to-know; no text changes needed if that's correct.)
+
+Yes.
+
+> Section 6.2.5.5
+> 
+>    To prohibit attacks that attempt to force the ACP node to forget its
+>    prior (expired) certificate and TA, the ACP node should alternate
+>    between attempting to re-enroll using its old keying material and
+>    attempting to re-enroll with its IDevID and requesting a voucher.
+> 
+> I think that as written, this doesn't fully "prohibit" such attacks (but
+> does make them harder and is good advice).  I suppose some nodes might
+> continue trying with the old key material for some time even after
+> obtaining a new voucher, but the state-keeping requirements for that are
+> big enough that we shouldn't require it.  So I'd suggest just a small
+> change like s/To prohibit/As a countermeasure against/.
+
+Nice. Done. 
+
+>    Maintaining existing TA information is especially important when
+>    enrollment mechanisms are used that unlike BRSKI do not leverage a
+>    mechanism (such as the voucher in BRSKI) to authenticate the ACP
+>    registrar and where therefore the injection of certificate failures
+>    could otherwise make the ACP node easily attackable remotely by
+>    returning the ACP node to a "duckling" state in which it accepts to
+>    be enrolled by any network it connects to.  The (expired) ACP
+>    certificate and ACP TA SHOULD therefore be maintained and used for
+>    re-enrollment until new keying material is enrolled.
+> 
+> (editorial) the wording here should probably be checked; right now it
+> seeems to be saying "use X for re-enrollment until [re-enrollment
+> succeeds]" which makes me wonder how the new keying material would come
+> into play.
+
+Changed last sentence to:
+
+The (expired) ACP certificate and ACP TA SHOULD therefore be maintained and attempted to be used as one possible credential for re-enrollment until new keying material is aquired.
+
+This is still just a stub for complex scenarios such as keying material expiry
+during change of ownership situations or the like. But i think its
+a first good starting point.
+
+> Section 6.4
+> 
+> Figure 7 has some nits, now -- '|' is not a CDDL keyword.
+
+Fix superceeded by next issue below.
+
+> Also, we should probably get a CDDL expert to look at it, since both
+> method-params and extensions are 1*any, and I'm not 100% sure what the
+> order of binding is (Appendix A of RFC 8610 suggests that it is a
+> prioritized choice in CDDL, so things after the first comma would always
+> be parameters, not extensions).
+
+Thanks
+
+I prefer not requiring readers to understand details of parsing rules
+when it can easily be avoided by unambiguous syntax. So it's now:
+
+    objective-value = method-name / [ method, *extension ]
+    method = method-name / [ method-name, *method-param ]
+    method-name = "IKEv2" / "DTLS" / id
+    extension = any
+    method-param = any
+    id = text .regexp "[A-Za-z@_$]([-.]*[A-Za-z0-9@_$])*"
+
+I think the original syntax also had the ambiguity of method
+potentially being empty because of any having been a choice.
+Fixed now.
+
+This was with help of CarstenB and BrianC.
+
+>    Attackers on a subnet may be able to inject malicious DULL GRASP
+>    messages that are indistinguishable from non-malicious DULL GRASP
+>    messages to create Denial-of-Service (DoS) attacks that force ACP
+>    nodes to attempt many unsuccessful ACP secure channel connections.
+>    When an ACP node sees multiple AN_ACP objectives for the same secure
+>    channel protocol on different transport addresses, it SHOULD prefer
+>    connecting via the well-known transport address if the secure channel
+>    method has one (such as UDP port 500 for IKEv2).
+> 
+> This new text should probably be run by some TSV-area reviewer (e.g.,
+> AD).
+
+Well, i am giving up. You saw the responses i got on dnsop. I can not
+spend even more wasted time setting context and getting folks to even
+start answering the questions and step out of their experience zone, and
+hen stop answering when they run out of arguments to reject it.
+
+There are so many IANA allocated well-known ports for foo-over-DTLS for
+likely very similar reasons (no need to have attackable port discovery).
+
+I have moved the explanation to a (to be removed) appendix B.4 left an
+[ACPDRAFT] reference in section 11 and amended the text with the consideration
+that in the future we could ask for such an IANA acp-dtls port if we felt
+there was a more a higher likelyhood for attack then all those places that
+equally run unprotected (mDNS etc..).
+
+> Section 6.8.3.1
+> 
+>    The IKEv2 Diffie-Hellman key exchange group 19 (256-bit random ECP),
+>    MUST be support.  Reason: ECC provides a similar security level to
+> 
+> nit: "supported".
+
+Ack.
+
+> Section 6.8.3.2
+> 
+>    If IKEv2 initiator and responder support IPsec over GRE, it will be
+>    preferred over native IPsec because of the way how IKEv2 negotiates
+>    transport mode as used by this IPsec over GRE profile) versus tunnel
+>    mode as used by native IPsec (see [RFC7296], section 1.3.1).  The ACP
+> 
+> nit: missing open paren?
+
+Ack.
+
+> Section 9.2.2
+> 
+>    *  Policies if candidate ACP nodes should receive a domain
+>       certificate or not, for example based on the devices IDevID
+>       certificate as in BRSKI.  The ACP registrar may have a whitelist
+>       or blacklist of devices [X.520] "serialNumbers" attribute in the
+>       subjects field distinguished name encoding from their IDevID
+>       certificate.
+> 
+> I note we had that long ietf@ thread about terminology, that included
+> "whitelist" and "blacklist", and trust you to make an informed choice
+> about terminology usage.
+
+How could i miss the biggest fun in town ;-)
+
+When Barry complained about the terminology for the channel selection logic,
+the new terminology immediately coming to mind was of course "master", "slave",
+and given how this was novel work from this doc and a unique functionality,
+i could come up with "decider"/"follower" instead (enlightened by the thread
+you mention).
+
+For this case, i consider it to be very pre-established/known legacy functionality/
+terminology and i think these terms are even used in vendor documentation ( i remember
+i wrote whitelist for BRSKI like enrollment filtering into vendor documentation).
+So i would only want to pick new terms when the IETF and/or RFC editor has consistent
+replacement strategies. Otherwise we will introduce a variety of new
+replacement words via various drafts for well understood established
+functionality (eg: so far i was able to easily search RFC repository for
+black/whitelist. For the same functionality i want to be able in the future
+to just search for two more new words! - as my personal key usecase ;-).
+
+Aka: no change now, but i will bring this up with RFC editor, and if RFC
+editor has a consistent renaming plan, then i'd be happy to have this applied.
+
+> Section 9.3.5.2
+> 
+>    When a greenfield node enables multiple enrollment/botstrap
+>    protocols/mechanisms in parallel, care must be taken not to terminate
+>    any protocol/mechanism before another one has progressed to a point
+>    where greenfield state is defined to end.
+> 
+> (editorial) Do we give a clear definition of when greenfield state is
+> defined to end, that would apply to arbitrary such mechanisms?  We might
+> want to reword a little bit.
+
+Right.
+
+<t>ACP greenfield state ends either through successful enrolment of ACP keying material (certificate, TA) or detection of a permitted termination of ACP greenfield operations.</t>
+
+That is followd by existing recommendation text for termination via physcial access and then followed by:
+
+<t>When an ACP greenfield node enables multiple automated ACP or non-ACP enrollment/botstrap protocols/mechanisms in parallel, care must be taken not to terminate any protocol/mechanism before another one has succeeded to enroll ACP keying material or has progressed to a point where it is permitted to be a termination reason for ACP greenfield operations.</t>
+
+<t>Highly secure ACP greenfield nodes may not permit any reason to terminate ACP greenfield operations, including physical acces.</t>
+
+(last sentence just to make sure readers will not think of ACP of only something built for backward compatibility, but that it depends on node choices.).
+
+> Section 11
+> 
+> Wow, so much new good stuff here; thanks!
+> 
+>    *  For IDevIDs to securely identify the node to which it IDevID is
+>       assigned, the node it needs to (1) utilize hardware support such
+>       as a Trusted Platform Module (TPM) to protect against extraction/
+>       cloning of the private key of the IDevID and (2) a hardware/
+>       software infrastructure to prohibit execution of non authenticated
+>       software to protect against malicious use of the IDevID.
+> 
+> nit: s/node it needs to/node needs to/
+
+Ack.
+
+>    *  A malicious ACP node could declare itself to be an EST server via
+>       GRASP across the ACP if malicious software could be executed on
+>       it.  CA should therefore authenticate only known trustworthy EST
+>       servers, such as nodes with hardware protections against malicious
+>       software.  Without the ability to talk to the CA, a malicious EST
+>       server can still attract ACP nodes attempting to renew their
+>       keying material, but they will fail to perform successful renewal
+>       of a valid ACP certificate.  The ACP node attempting to use the
+>       malicious EST server can then continue to use a different EST
+>       server, and log a failure against a malicious EST server.
+> 
+> We have two copies of basically this text.  The second one (that I
+> quoted) does not have a note about id-kp-cmcRA, and is the one that
+> should be removed.
+
+Hrmpf. I am sure i did eliminated this dupication already... Sigh.
+
+>    If public CA are to be used, ACP registrars would need to prove
+>    ownership of the domain-name of AcpNodeNames to the public CA.
+>    However, maintaining the ULA based address allocation when using a
+>    public CA might be considered to be a violation of the private
+>    allocation expectation of ULA prefixes.  To avoid this issue, further
+>    changes to registrar address allocation procedures might be needed,
+>    for example using global IPv6 address prefixes owned by the public CA
+>    instead of ULA.
+> 
+> I don't expect any problems here, but it might be good to get some
+> INT-area (e.g., AD) eyes on this text.
+
+See the discuss on the list, where ultimately EricV is recommending to
+remove this paragraph from the RFC. I agree fully given how this can be a long
+rathole of discussions before public CA operators/specs would agree on anything.
+
+So there is now an "out of scope, see [ACPDRAFT], B.5" text
+in the two places in the main text of the doc that where mentioning
+public CA. And appendix B.5 with the above text, improved and amended
+wih what i think, also including an answer to Michael Richardson's
+contention about ULA and public CA signing of them.
+
+> Section 12
+> 
+>    0: ACP Zone Addressing Sub-Scheme (ACP RFC 1: ACP Vlong Addressing
+>    Sub-Scheme (ACP RFC Figure 12) / ACP Manual Addressing Sub-Scheme
+>    (ACP RFC Section 6.11.4) Section 6.11.5)
+> 
+> Something went awry here (maybe just formatting?), as the '1' is
+> supposed to be the initial value allocated by this document, not a
+> reference to RFC 1.
+
+Fixed.
+
+> Section 16
+> 
+> RFC 4492 is obsoleted by RFC 8422.
+
+Fixed.
+
+> Section A.6
+> 
+>    When the two peers successfully establish the GRASP/TSL session, they
+>    will negotiate the channel mechanism to use using objectives such as
+> 
+> nit: s/TSL/TLS/
+
+Fixed.
+
+
+> Section A.10.9
+> 
+> Thank you for adding this discussion; it is a good treatment of the
+> issues and considerations in play.
+
+Thanks.
+
+Thanks a lot for all the thorough review!
