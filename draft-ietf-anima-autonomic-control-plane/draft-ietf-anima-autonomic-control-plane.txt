@@ -319,16 +319,16 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    mutual dependences can disrupt OAM and control operations and
    especially disrupt remote management access to the affected node
    itself and potentially a much larger number of nodes for whom the
-   affected node is on the network path.  For an example of inband
-   management failing in the face of operator induced misconfiguration,
-   see [FCC], for example III.B.15 on page 8.
+   affected node is on the network path.
 
-   Traditionally, physically separate, so-called out-of-band
-   (management) networks have been used to avoid these problems or at
-   least to allow recovery from such problems.  Worst case, personnel
-   are sent on site to access devices through out-of-band management
-   ports (also called craft ports, serial console, management ethernet
-   port).  However, both options are expensive.
+   For an example of inband management failing in the face of operator
+   induced misconfiguration, see [FCC], for example III.B.15 on page 8:
+   "...engineers almost immediately recognized that they had
+   misdiagnosed the problem.  However, they were unable to resolve the
+   issue by restoring the link because the network management tools
+   required to do so remotely relied on the same paths they had just
+   disabled".
+
 
 
 
@@ -337,6 +337,13 @@ Eckert, et al.            Expires 25 April 2021                 [Page 6]
 
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
+
+   Traditionally, physically separate, so-called out-of-band
+   (management) networks have been used to avoid these problems or at
+   least to allow recovery from such problems.  Worst case, personnel
+   are sent on site to access devices through out-of-band management
+   ports (also called craft ports, serial console, management ethernet
+   port).  However, both options are expensive.
 
    In increasingly automated networks either centralized management
    systems or distributed autonomic service agents in the network
@@ -378,13 +385,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    or control plane is considered to be part of the Data-Plane to avoid
    introduction of more complex, new terminology only for this case.
 
-   Like the forwarding plane for "Data" packets, the non-autonomous
-   control and management plane functions can then be managed/used via
-   the ACP.  This terminology is consistent with pre-existing documents
-   such as [RFC8368].
-
-
-
 
 
 
@@ -393,6 +393,11 @@ Eckert, et al.            Expires 25 April 2021                 [Page 7]
 
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
+
+   Like the forwarding plane for "Data" packets, the non-autonomous
+   control and management plane functions can then be managed/used via
+   the ACP.  This terminology is consistent with pre-existing documents
+   such as [RFC8368].
 
    In both instances (autonomous and non-autonomous nodes), the ACP is
    built such that it is operating in the absence of the Data-Plane, and
@@ -437,11 +442,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    document.  There are no dependencies against Appendix A to build a
    complete working and interoperable ACP according to this document.
 
-   The ACP provides secure IPv6 connectivity, therefore it can be used
-   not only as the secure connectivity for self-management as required
-   for the ACP in [RFC7575], but it can also be used as the secure
-   connectivity for traditional (centralized) management.  The ACP can
-   be implemented and operated without any other components of autonomic
 
 
 
@@ -450,6 +450,11 @@ Eckert, et al.            Expires 25 April 2021                 [Page 8]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   The ACP provides secure IPv6 connectivity, therefore it can be used
+   not only as the secure connectivity for self-management as required
+   for the ACP in [RFC7575], but it can also be used as the secure
+   connectivity for traditional (centralized) management.  The ACP can
+   be implemented and operated without any other components of autonomic
    networks, except for the GRASP protocol.  ACP relies on per-link DULL
    GRASP (see Section 6.4) to autodiscover ACP neighbors, and includes
    the ACP GRASP instance to provide service discovery for clients of
@@ -493,11 +498,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    and confidentiality mechanism used by the ACP is defined to be
    negotiable, therefore it can be extended to environments with
    different protocol preferences.  The minimum implementation
-   requirements in this document attempt to achieve maximum
-   interoperability by requiring support for multiple options depending
-   on the type of device: IPsec, see [RFC4301], and Datagram Transport
-   Layer Security (DTLS, see Section 6.8.4).
-
 
 
 
@@ -505,6 +505,11 @@ Eckert, et al.            Expires 25 April 2021                 [Page 9]
 
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
+
+   requirements in this document attempt to achieve maximum
+   interoperability by requiring support for multiple options depending
+   on the type of device: IPsec, see [RFC4301], and Datagram Transport
+   Layer Security (DTLS, see Section 6.8.4).
 
    The implementation footprint of the ACP consists of Public Key
    Infrastructure (PKI) code for the ACP certificate including
@@ -549,11 +554,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    to cpu and memory, and to networks constrained with respect to
    bitrate and reliability, but this document does not attempt to define
    the most constrained type of devices or networks to which the ACP is
-   applicable.  RPL and DTLS for ACP secure channels are two protocol
-   choices already making ACP more applicable to constrained
-   environments.  Support for constrained devices in this specification
-   is opportunistic, but not complete, because the reliable transport
-   for GRASP (see Section 6.9.2) only specifies TCP/TLS.  See
 
 
 
@@ -562,6 +562,11 @@ Eckert, et al.            Expires 25 April 2021                [Page 10]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   applicable.  RPL and DTLS for ACP secure channels are two protocol
+   choices already making ACP more applicable to constrained
+   environments.  Support for constrained devices in this specification
+   is opportunistic, but not complete, because the reliable transport
+   for GRASP (see Section 6.9.2) only specifies TCP/TLS.  See
    Appendix A.8 for discussions about how future standards or
    proprietary extensions/variations of the ACP could better meet
    different expectations from those on which the current design is
@@ -604,11 +609,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    do not refer to them as devices unless the context specifically calls
    for a physical system.
 
-   This document introduces or uses the following terms (sorted
-   alphabetically).  Terms introduced are explained on first use, so
-   this list is for reference only.
-
-   ACP:  "Autonomic Control Plane".  The Autonomic Function as defined
 
 
 
@@ -618,6 +618,11 @@ Eckert, et al.            Expires 25 April 2021                [Page 11]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   This document introduces or uses the following terms (sorted
+   alphabetically).  Terms introduced are explained on first use, so
+   this list is for reference only.
+
+   ACP:  "Autonomic Control Plane".  The Autonomic Function as defined
       in this document.  It provides secure zero-touch (automated)
       transitive (network wide) IPv6 connectivity for all nodes in the
       same ACP domain as well as a GRASP instance running across this
@@ -660,12 +665,7 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
       include non-ULA prefixes if those are configured on ACP connect
       interfaces.  See Section 8.1.1.
    ACP secure channel:  A channel authenticated via ->"ACP certificates"
-      providing integrity protection and confidentiality through
-      encryption.  These are established between (normally) adjacent ACP
-      nodes to carry traffic of the ACP VRF securely and isolated from
-      Data-Plane traffic in-band over the same link/path as the Data-
-      Plane.
-   ACP secure channel protocol:  The protocol used to build an ACP
+
 
 
 
@@ -674,6 +674,12 @@ Eckert, et al.            Expires 25 April 2021                [Page 12]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+      providing integrity protection and confidentiality through
+      encryption.  These are established between (normally) adjacent ACP
+      nodes to carry traffic of the ACP VRF securely and isolated from
+      Data-Plane traffic in-band over the same link/path as the Data-
+      Plane.
+   ACP secure channel protocol:  The protocol used to build an ACP
       secure channel, e.g., Internet Key Exchange Protocol version 2
       (IKEv2) with IPsec or Datagram Transport Layer Security (DTLS).
    ACP virtual interface:  An interface in the ACP VRF mapped to one or
@@ -716,12 +722,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
       autonomically via Autonomic Functions and Intent.  See Section 1
       for more detailed explanations.
    device:  A physical system, or physical node.
-   Enrollment:  The process through which a node authenticates itself to
-      a network with an initial identity, which is often called IDevID
-      certificate, and acquires from the network a network specific
-      identity, which is often called LDevID certificate, and
-      certificates of one or more Trust Anchor(s).  In the ACP, the
-      LDevID certificate is called the ACP certificate.
 
 
 
@@ -730,6 +730,12 @@ Eckert, et al.            Expires 25 April 2021                [Page 13]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   Enrollment:  The process through which a node authenticates itself to
+      a network with an initial identity, which is often called IDevID
+      certificate, and acquires from the network a network specific
+      identity, which is often called LDevID certificate, and
+      certificates of one or more Trust Anchor(s).  In the ACP, the
+      LDevID certificate is called the ACP certificate.
    EST:  "Enrollment over Secure Transport" ([RFC7030]).  IETF standard-
       track protocol for enrollment of a node with an LDevID
       certificate.  BRSKI is based on EST.
@@ -772,12 +778,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
       these are usually physical interfaces; on virtual nodes their
       equivalent.
    NOC:  Network Operations Center.
-   node:  A system supporting the ACP according to this document.  Can
-      be virtual or physical.  Physical nodes are called devices.
-   Node-ID:  The identifier of an ACP node inside that ACP.  It is the
-      last 64 (see Section 6.11.3) or 78-bits (see Section 6.11.5) of
-      the ACP address.
-   OAM:  Operations, Administration and Management.  Includes Network
 
 
 
@@ -786,6 +786,12 @@ Eckert, et al.            Expires 25 April 2021                [Page 14]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   node:  A system supporting the ACP according to this document.  Can
+      be virtual or physical.  Physical nodes are called devices.
+   Node-ID:  The identifier of an ACP node inside that ACP.  It is the
+      last 64 (see Section 6.11.3) or 78-bits (see Section 6.11.5) of
+      the ACP address.
+   OAM:  Operations, Administration and Management.  Includes Network
       Monitoring.
    Operational Technology (OT):  https://en.wikipedia.org/wiki/
       Operational_Technology: "The hardware and software dedicated to
@@ -828,12 +834,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
       See Section 6.12.1.13.
    RPL:  "Routing Protocol for Low-Power and Lossy Networks".  The
       routing protocol used in the ACP.  See Section 6.12.
-   sUDI:  "secured Unique Device Identifier".  This is another word to
-      describe an IDevID in referenced material.  This term is not used
-      in this document.
-   TA:  "Trust Anchor".  A Trust Anchor is an entity that is trusted for
-
-
 
 
 
@@ -842,6 +842,10 @@ Eckert, et al.            Expires 25 April 2021                [Page 15]
 Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
 
 
+   sUDI:  "secured Unique Device Identifier".  This is another word to
+      describe an IDevID in referenced material.  This term is not used
+      in this document.
+   TA:  "Trust Anchor".  A Trust Anchor is an entity that is trusted for
       the purpose of certificate validation.  Trust Anchor Information
       such as self-signed certificate(s) of the Trust Anchor is
       configured into the ACP node as part of Enrollment.  See
@@ -885,10 +889,6 @@ Internet-Draft      An Autonomic Control Plane (ACP)        October 2020
    supported by an ACP.  To understand how these are derived from and
    relate to the larger set of use cases for autonomic networks, please
    refer to [RFC8316].
-
-
-
-
 
 
 
