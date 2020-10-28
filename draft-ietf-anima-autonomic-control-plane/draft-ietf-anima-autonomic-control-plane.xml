@@ -79,7 +79,9 @@
       <name>Introduction (Informative)</name>
       <t>Autonomic Networking is a concept of self-management: Autonomic functions self-configure, and negotiate parameters and settings across the network. <xref target="RFC7575" format="default"/> defines the fundamental ideas and design goals of Autonomic Networking.  A gap analysis of Autonomic Networking is given in <xref target="RFC7576" format="default"/>.  The reference architecture for Autonomic Networking in the IETF is specified in the document <xref target="I-D.ietf-anima-reference-model" format="default"/>.</t>
       <t>Autonomic functions need an autonomically built communications infrastructure.  This infrastructure needs to be secure, resilient and re-usable by all autonomic functions.  Section 5 of <xref target="RFC7575" format="default"/> introduces that infrastructure and calls it the Autonomic Control Plane (ACP).  More descriptively it would be the "Autonomic communications infrastructure for OAM and Control".  For naming consistency with that prior document, this document continues to use the name ACP though.</t>
-      <t>Today, the OAM and control plane of IP networks is what is typically called in-band management/signaling: Its management and control protocol traffic depends on the routing and forwarding tables, security, policy, QoS and potentially other configuration that first has to be established through the very same management and control protocols. Misconfigurations including unexpected side effects or mutual dependences can disrupt OAM and control operations and especially disrupt remote management access to the affected node itself and potentially a much larger number of nodes for whom the affected node is on the network path.  Traditionally, physically separate, so-called out-of-band (management) networks have been used to avoid these problems or at least to allow recovery from such problems. Worst case, personnel are sent on site to access devices through out-of-band management ports (also called craft ports, serial console, management ethernet port).  However, both options are expensive.</t>
+      <t>Today, the OAM and control plane of IP networks is what is typically called in-band management/signaling: Its management and control protocol traffic depends on the routing and forwarding tables, security, policy, QoS and potentially other configuration that first has to be established through the very same management and control protocols. Misconfigurations including unexpected side effects or mutual dependences can disrupt OAM and control operations and especially disrupt remote management access to the affected node itself and potentially a much larger number of nodes for whom the affected node is on the network path. For an example of inband management failing in the face of operator induced misconfiguration, see <xref target="FCC"/>, for example III.B.15 on page 8.</t> 
+
+<t>Traditionally, physically separate, so-called out-of-band (management) networks have been used to avoid these problems or at least to allow recovery from such problems. Worst case, personnel are sent on site to access devices through out-of-band management ports (also called craft ports, serial console, management ethernet port).  However, both options are expensive.</t>
       <t>In increasingly automated networks either centralized management systems or distributed autonomic service agents in the network require a control plane which is independent of the configuration of the network they manage, to avoid impacting their own operations through the configuration actions they take.</t>
 
       <t>This document describes a modular design for a self-forming, self-managing and self-protecting ACP,  which is a virtual out-of-band network designed to be as independent as possible of configuration, addressing and routing to avoid the self-dependency problems of current IP  networks while still operating in-band on the same physical network that it is controlling and managing. The ACP design is therefore intended to combine as well as possible the resilience of out-of-band management networks with the low-cost of traditional IP in-band network management.  The details how this is achieved are described in <xref target="self-creation" format="default"/>.</t>
@@ -3718,6 +3720,7 @@ currently one registry table - the "ACP Address Type" table.</t>
         <t>B.2 - new text discussing why there is no network layer address verification in ACP domain membership check (will not be in RFC).</t>
         <t>B.4 - Text discussing DULL GRASP attacks via port sweeps and what do do against it.</t>
         <t>Other.</t>
+        <t>1. Added sentence about FCC outage report from June as example for in-band management.</t>
         <t>15. added reference to github where document was developed (removed in RFC, part of changelog).</t>
       </section>
       <section numbered="true" toc="default">
@@ -5888,6 +5891,18 @@ currently one registry table - the "ACP Address Type" table.</t>
           <annotation>Refer to the IETF working group draft for the few sections removed from this document for various reasons. They capture the state of discussion about unresolved issues that may need to be revisited in future work.
           </annotation>
         </reference>
+
+      <reference anchor="FCC" target="https://docs.fcc.gov/public/attachments/DOC-367699A1.docx">
+        <front>
+          <title>FCC STAFF REPORT ON NATIONWIDE T-MOBILE NETWORK OUTAGE ON JUNE 15, 2020 (PS Docket No. 20-183)</title>
+          <author>
+            <organization>FCC</organization>
+          </author>
+          <date year="2020" />
+        </front>
+        <annotation>The FCC's Public Safety and Homeland Security Bureau issues a report on a nationwide T-Mobile outage that occurred on June 15, 2020. Action by: Public Safety and Homeland Security Bureau.</annotation>
+      </reference>
+
 
       <reference anchor="I-D.ietf-roll-applicability-template" target="http://www.ietf.org/internet-drafts/draft-ietf-roll-applicability-template-09.txt">
         <front>
