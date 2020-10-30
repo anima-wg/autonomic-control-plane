@@ -3,7 +3,9 @@
     which is available here: http://xml.resource.org. -->
 
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent" [
-  <!ENTITY rfc8422 PUBLIC '' 'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8422.xml'>
+  <!-- Not needed, found better option how to do this
+     <!ENTITY rfc8422 PUBLIC '' 'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8422.xml'>
+  -->
 ]>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -123,8 +125,8 @@ but this document does not attempt to define the most constrained type of device
     <!-- intro -->
     <section anchor="terminology" numbered="true" toc="default">
       <name>Acronyms and Terminology (Informative)</name>
-      <t>[RFC Editor: Please add ACP, BRSKI, GRASP, MASA to https://www.rfc-editor.org/materials/abbrev.expansion.txt.]</t>
-      <t>[RFC Editor: What is the recommended way to reference a hanging text, e.g. to 
+      <t>[RFC-Editor: Please add ACP, BRSKI, GRASP, MASA to https://www.rfc-editor.org/materials/abbrev.expansion.txt.]</t>
+      <t>[RFC-Editor: What is the recommended way to reference a hanging text, e.g. to 
        a definition in the list of definitions? Up to -28, this document was using XMLv2
        and the only option I could find for RFC/XML to point to a hanging text was 
        format="title", which leads to references such as '-&gt;"ACP certificate" ()', aka:
@@ -135,7 +137,7 @@ but this document does not attempt to define the most constrained type of device
        format="none", but that format is declared to be deprecated in XMLv3. So i am not
        aware of any working AND "non-deprecated" option.]</t>
 
-      <t>[RFC Editor: Question: Is it possible to change the first occurrences of
+      <t>[RFC-Editor: Question: Is it possible to change the first occurrences of
         [RFCxxxx] references to "rfcxxx title" [RFCxxxx]? the XML2RFC format does
         not seem to offer such a format, but I did not want to duplicate 50 first
         references - one reference for title mentioning and one
@@ -771,6 +773,7 @@ END
           </ul>
           <t>For brevity, the remainder of this document refers to this process only as authentication instead of as authentication and authorization.</t>
 
+          <t>[RFC-Editor: Please remove the following paragraph].</t>
           <t>Note that the ACP domain membership check does not verify the network layer address of the security association. See <xref target="ACPDRAFT"/>, Appendix B.2 for explanations.</t>
 
           <section anchor="cert-time" numbered="true" toc="default">
@@ -839,7 +842,8 @@ of acp-node-name, can be used.</t>
           <t>These requirements can be achieved by using a TA private to the owner of
 the ACP domain or potentially through appropriate contractual agreements between
 the involved parties (Registrar and CA).  Using public CA is out of scope of this
-document. See <xref target="ACPDRAFT"/>, Appendix B.3 for further considerations.</t>
+document. [RFC-Editor: please remove the following sentence]. See <xref target="ACPDRAFT"/>, Appendix B.3 for further considerations.</t>
+
           <t>A single owner can operate multiple independent ACP domains from the same
 set of TA. Registrars must then know which ACP a node needs to be enrolled into.</t>
         </section>
@@ -1138,7 +1142,7 @@ connected to this node), the information in the adjacency table can be supplemen
       </section>
       <section anchor="discovery-grasp" numbered="true" toc="default">
         <name>Neighbor Discovery with DULL GRASP</name>
-        <t>[RFC Editor: GRASP draft is in RFC editor queue, waiting for dependencies, including ACP. Please ensure that references to I-D.ietf-anima-grasp that include section number references (throughout this document) will be updated in case any last-minute changes in GRASP would make those section references change.</t>
+        <t>[RFC-Editor: GRASP draft is in RFC editor queue, waiting for dependencies, including ACP. Please ensure that references to I-D.ietf-anima-grasp that include section number references (throughout this document) will be updated in case any last-minute changes in GRASP would make those section references change.</t>
         <t>Discovery Unsolicited Link-Local (DULL) GRASP is a limited subset of GRASP intended to operate across an
 insecure link-local scope.  See section 2.5.2 of <xref target="I-D.ietf-anima-grasp" format="default"/> for its
 formal definition.  The ACP uses one instance of DULL GRASP for every L2 interface
@@ -1230,7 +1234,7 @@ will be distributed with the flooded objective.  An example of the message is in
         <t>The secure channel methods defined in this document use the objective-values of "IKEv2" and "DTLS".  There is no distinction between IKEv2 native and GRE-IKEv2 because this is purely negotiated via IKEv2.</t>
         <t>A node that supports more than one secure channel protocol method needs to flood multiple versions
     of the "AN_ACP" objective so that each method can be accompanied by its own locator-option.  This can use a single GRASP M_FLOOD message as shown in <xref target="an-acp-example" format="default"/>.</t>
-        <t>The use of DULL GRASP primarily serves to discover the link-local IPv6 address of candidate ACP peers on subnets. The signaling of the supported secure channel option is primarily for diagnostic purposes, but it is also necessary for discovery when the protocol has no well-known transport address, such as in the case of DTLS. See <xref target="ACPDRAFT"/>, Appendix B.4.</t>
+        <t>The use of DULL GRASP primarily serves to discover the link-local IPv6 address of candidate ACP peers on subnets. The signaling of the supported secure channel option is primarily for diagnostic purposes, but it is also necessary for discovery when the protocol has no well-known transport address, such as in the case of DTLS. [RFC-Editor: Please remove the following sentence]. See <xref target="ACPDRAFT"/>, Appendix B.4.</t>
 
         <t>Note that a node serving both as an ACP node and BRSKI Join Proxy may choose to distribute the "AN_ACP" objective and the respective BRSKI in the same M_FLOOD message, since GRASP allows multiple objectives in one message.  This may be impractical though if ACP and BRSKI operations are implemented via separate software modules / ASAs.</t>
         <t>The result of the discovery is the IPv6 link-local address of the neighbor as well as its supported secure channel protocols (and non-standard port they are running on).  It is stored in the ACP Adjacency Table (see <xref target="adj-table" format="default"/>), which then drives the further building of the ACP to that neighbor.</t>
@@ -1519,7 +1523,9 @@ booth peers support it.</t>
       the fact that DTLS connections are mostly link-local (short RTT).</li>
           </ul>
           <t>Nevertheless, newer versions of DTLS, such as DTLS v1.3 have stricter security requirements and use of the latest standard protocol version is for IETF security standards in general recommended. Therefore, ACP implementations are advised to support all the newer versions of DTLS that can still negotiate down to DTLS v1.2.</t>
+
           <t>[RFC-editor: if by the time of AUTH48, DTLS 1.3 would have evolved to be an RFC, then not only would the references to the DTLS v1.3 draft be changed to the RFC number, but that RFC is then going to be put into the normative list of references and the above paragraph is going to be amended to say: Implementations SHOULD support [DTLSv1.3-RFC]. This is not done right now, because there is no benefit in potentially waiting in RFC-editor queue for that RFC given how the text already lays out a non-normative desire to support DTLSv1.3.]</t>
+
           <t>There is no additional session setup or other security association besides this simple DTLS setup.  As soon as the DTLS session is functional, the ACP peers will exchange ACP IPv6 packets as the payload of the DTLS transport connection.  oAny DTLS defined security association mechanisms such as re-keying are used as they would be for any transport application relying solely on DTLS.</t>
           <!-- RFC 6125 is a common reference for TLS server-identification/verification procedures, but it covers only names, and only server identities; as such, it's not really a good fit here.  In fact, we can't really do much name validation since the connection is over link-local IPv6 addresses anyway. -->
         </section>
@@ -1991,7 +1997,7 @@ and so on. If the ACP registrar uses BRSKI, it signals the ACP
 acp-node-name field to the Pledge via the EST /csrattrs command
 (see <xref target="I-D.ietf-anima-bootstrapping-keyinfra" format="default"/>,
 section 5.9.2 - "EST CSR Attributes").</t>
-            <t>[RFC Editor: please update reference to section 5.9.2 accordingly with latest BRSKI draft at time of publishing, or RFC]</t>
+            <t>[RFC-Editor: please update reference to section 5.9.2 accordingly with latest BRSKI draft at time of publishing, or RFC]</t>
           </section>
           <section anchor="registrars-policy" numbered="true" toc="default">
             <name>Addressing Sub-Scheme Policies</name>
@@ -2336,7 +2342,7 @@ of the secure channel protocols (IPsec / DTLS).</t>
         Non fully autonomic components of the ACP such as ACP connect interfaces
         (see <xref target="acp-connect" format="default"/>) may also introduce additional
         global scope IPv6 addresses on other types of interfaces into the ACP.</t>
-            <t>[RFC Editor: please remove this paragraph: Note to reviewers:
+            <t>[RFC-Editor: please remove this paragraph: Note to reviewers:
         Please do not complain again about an obsolete RFC number in the following paragraph. The text should
         make it clear that the reference was chosen to indicate a particular point in time,
         but not to recommend/use a particularly obsolete protocol spec.]</t>
@@ -3499,10 +3505,11 @@ compromised nodes.</t>
 
 <t>In summary, attacks against the PKI/certificate dependencies of the ACP can be minimized by a variety of hardware/software components including options such as TPM for IDevID/ACP-certificate, prohibitions against execution of non-trusted software and design aspects of the EST Server functionality for the ACP to eliminate configuration level impairment.</t>
 
-      <t>Because ACP peers select one out of potentially more than one mutually supported ACP secure channel protocols via the approach described in <xref target="channel-selection"/>, ACP secure channel setup is subject to downgrade attacks by MITM attackers. This can be discovered after such an attack by additional mechanisms described in <xref target="downgrade"/>. Alternatively, more advanced channel selection mechanisms can be devised. See <xref target="ACPDRAFT"/> Appendix B.1. Both options are out of scope of this document.</t>
+      <t>Because ACP peers select one out of potentially more than one mutually supported ACP secure channel protocols via the approach described in <xref target="channel-selection"/>, ACP secure channel setup is subject to downgrade attacks by MITM attackers. This can be discovered after such an attack by additional mechanisms described in <xref target="downgrade"/>. Alternatively, more advanced channel selection mechanisms can be devised. [RFC-Editor: Please remove the following sentence]. See <xref target="ACPDRAFT"/> Appendix B.1. Both options are out of scope of this document.</t>
 
 <t>The security model of the ACP as defined in this document is tailored for use with private PKI. The TA of a private PKI provide the security against maliciously created ACP certificates to give access to an ACP. Such attacks can create fake ACP certificates with correct looking AcpNodeNames, but those certificates would not pass the certificate path validation of the ACP domain membership check (see <xref target="certcheck"/>, point 2).</t>
 
+<t>[RFC-Editor: please remove the following paragraph].</t>
 <t>Using public CA is out of scope of this document. See <xref target="ACPDRAFT"/>, Appendix B.3 for further considerations.</t>
 
       <t>There is no prevention of source-address spoofing inside the ACP.  This implies that if an attacker gains access to the ACP, it can spoof all addresses inside the ACP and fake messages from any other node. New protocol/services run across the ACP should therefore use end-to-end authentication inside the ACP. This is already done by GRASP as specified in this document.</t>
@@ -3613,7 +3620,7 @@ currently one registry table - the "ACP Address Type" table.</t>
       <organization abbrev="Sandelman">Sandelman Software Works</organization>
       <address>
         <email>mcr+ietf@sandelman.ca</email>
-        <uri>http://www.sandelman.ca/</uri>
+        <uri>http://www.sandelman.ca/mcr/</uri>
       </address>
     </contact>
 
@@ -3638,7 +3645,7 @@ currently one registry table - the "ACP Address Type" table.</t>
     <!-- contributors -->
 
     <section anchor="changes" numbered="true" toc="default">
-      <name>Change log [RFC Editor: Please remove]</name>
+      <name>Change log [RFC-Editor: Please remove]</name>
       <t>This document was developed on <eref target="https://github.com/anima-wg/autonomic-control-plane/tree/master/draft-ietf-anima-autonomic-control-plane"/>. That github repository also contains the document review/reply emails.</t>
 
       <section numbered="true" toc="default">
@@ -3699,6 +3706,8 @@ currently one registry table - the "ACP Address Type" table.</t>
         <name>draft-ietf-anima-autonomic-control-plane-30</name>
         <t>-29 did pass all IESG DISCUSS. This version cleans up reamining comments.</t>
         <t>Planned to be removed section Appendix A.6 was moved into new Appendix B.1 to be amended by further A.2, A.3 containing text felt to be unfit for publication in RFC (see below). Added reference to this last draft, and referencing those sections ([ACPDRAFT]).</t>
+        <t>Final discussion with responsible AD (Eric Vyncke): marked all references to [ACPDRAFT] as to be removed from RFC,
+as this would be too unconventional. Likewise also [ACPDRAFT] reference itself. Added explanation to appendix B.</t>
         <t>Comments from Erik Kline:</t>
         <t>2. Fine tuned ULA definition.</t>
         <t>Comments Michael Richardson / Eric Vyncke.</t>
@@ -4440,7 +4449,7 @@ currently one registry table - the "ACP Address Type" table.</t>
         </front>
       </reference>
 
-      &rfc8422;
+      <xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8422.xml"/>
 
       <reference anchor="RFC8446" target="https://www.rfc-editor.org/info/rfc8446">
         <front>
@@ -4582,7 +4591,7 @@ currently one registry table - the "ACP Address Type" table.</t>
           </author>
           <date month="October" day="24" year="2019"/>
           <abstract>
-            <t>Public-key certificates need to be revoked when they are compromised, that is, when the associated private key is exposed to an unauthorized entity.  However the revocation process is often unreliable.  An alternative to revocation is issuing a sequence of certificates, each with a short validity period, and terminating this sequence upon compromise.  This memo proposes an ACME extension to enable the issuance of short-term and automatically renewed (STAR) X.509 certificates.  [RFC Editor: please remove before publication]  While the draft is being developed, the editor's version can be found at https://github.com/yaronf/I-D/tree/master/STAR.</t>
+            <t>Public-key certificates need to be revoked when they are compromised, that is, when the associated private key is exposed to an unauthorized entity.  However the revocation process is often unreliable.  An alternative to revocation is issuing a sequence of certificates, each with a short validity period, and terminating this sequence upon compromise.  This memo proposes an ACME extension to enable the issuance of short-term and automatically renewed (STAR) X.509 certificates.  [RFC-Editor: please remove before publication]  While the draft is being developed, the editor's version can be found at https://github.com/yaronf/I-D/tree/master/STAR.</t>
           </abstract>
         </front>
       </reference>
@@ -5876,7 +5885,7 @@ currently one registry table - the "ACP Address Type" table.</t>
         </front>
       </reference>
 
-        <reference anchor="ACPDRAFT"  target="http://www.ietf.org/internet-drafts/draft-ietf-anima-autonomic-control-plane-30.txt">
+        <reference anchor="ACPDRAFT"  target="https://tools.ietf.org/html/draft-ietf-anima-autonomic-control-plane-30.pdf">
           <front>
             <title>An Autonomic Control Plane (ACP)</title>
             <seriesInfo name="Internet-Draft" value="draft-ietf-anima-autonomic-control-plane-30"/>
@@ -5890,7 +5899,7 @@ currently one registry table - the "ACP Address Type" table.</t>
               <organization/>
             </author>
           </front>
-          <annotation>Refer to the IETF working group draft for the few sections removed from this document for various reasons. They capture the state of discussion about unresolved issues that may need to be revisited in future work.
+          <annotation>[RFC-Editor: Please remove this complete reference from the RFC] Refer to the IETF working group draft for the few sections removed from this document for various reasons. They capture the state of discussion about unresolved issues that may need to be revisited in future work.
           </annotation>
         </reference>
 
@@ -6331,7 +6340,6 @@ explicit removal indication of the compromised nodes domain certificate.</t>
           <t>After the secure channel connection is established, the two ACP peers negotiate via an appropriate (To Be Defined) GRASP negotiation which ACP secure channel protocol should have been selected between them (in the absence of a MITM attacker). This negotiation would have to signal the DULL GRASP announced ACP secure channel options by each peer followed by an announcement of the preferred secure channel protocol by the ACP peer that is the Decider in the secure channel setup, e.g. the ACP peer that is deciding which secure channel protocol to pick. If that chosen secure channel protocol is different from the one that actually was chosen, then this mismatch is an indication that there is a MITM attacker or other similar issue (firewall prohibiting the use of specific protocols) that caused a non-preferred secure channel protocol to be chosen. This discovery could then result in mitigation options such as logging and ensuing investigations.</t>
         </section>
 
-
       </section>
     </section>
     <!-- further considerations -->
@@ -6339,11 +6347,17 @@ explicit removal indication of the compromised nodes domain certificate.</t>
     <section anchor="unfinished" numbered="true" toc="default">
       <name>Unfinished considerations (To Be Removed From RFC)</name>
 
-        <t>[RFC Editor: This appendix and its subsections to be removed for the RFC.</t>
+        <t>[RFC-Editor: This whole appendix B. and its subsections to be removed for the RFC.</t>
 
       <t>This appendix contains unfinished considerations that are removed from the RFC,
          they are maintained in this draft as a log of the state of discussion and
-         point of reference.</t>
+         point of reference. Together with this appendix, also the references pointing to
+         it are marked to be removed from the RFC because no consensus could be reached that
+         a self-reference to a draft version of the RFC is an appropriate breadcrumb
+         to point to unfinished considerations.</t>
+
+       <t>The authors plan to move these considerations into a new target informational
+         draft, please look for draft-eckert-anima-acp-considerations.</t>
 
         <section anchor="ben-kaduk" numbered="true" toc="default">
           <name>Considerations for improving secure channel negotiation</name>
@@ -6401,7 +6415,7 @@ explicit removal indication of the compromised nodes domain certificate.</t>
   primary ACP address to be used by the node for end-to-end connections
   across ACP secure channels. Nevertheless, there is no verification of an
   ACP peers address specified in this document. This section explains the
-  current understanding why this is not done.</t>
+  current understanding as to why this is not done.</t>
 
   <t>Not all ACP nodes will have an actual IPv6 address in the acp-address field
   of their AcpNodeName. Those who do not include nodes that do not support
